@@ -10,6 +10,7 @@
 | git-branch | [브랜치 작업과 인덱스·작업 파일 보존](git-branch/README.md) |
 | git-sync | [원격 동기화와 분기·태그·로컬 작업 보존](git-sync/README.md) |
 | git-conflict | [merge·rebase·cherry-pick 충돌 절차](git-conflict/README.md) |
+| git-pr | [PR 변경 범위·본문 준비와 검증 한계](git-pr/README.md) |
 
 최소한 다음 상황을 확인합니다.
 
