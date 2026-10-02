@@ -26,4 +26,4 @@ jobs:
           node-version: "22.22.2"
           package-manager-cache: false
       - name: Run all checks
-        run: make check
+        run: uv run --locked check.py
