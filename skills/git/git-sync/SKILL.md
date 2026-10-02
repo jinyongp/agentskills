@@ -1,6 +1,6 @@
 ---
 name: git-sync
-description: "Fetch, pull, or push an identified Git branch when the user asks to synchronize with a remote. Classify ahead, behind, and divergent histories; preserve local work and avoid unrequested history rewriting."
+description: Fetch, pull, push, or check synchronization for an identified Git branch. Distinguish ahead, behind, and diverged histories while preserving local work.
 license: MIT
 metadata:
   author: jinyongp
@@ -9,87 +9,42 @@ metadata:
 
 # Git Sync
 
-Synchronize the requested branch with the identified remote while preserving work.
+## Scope
 
-## When to use
-
-Use for fetching, pulling, pushing, or checking branch synchronization. Establish
-the direction: downloading updates does not authorize uploading commits. If
-"sync" leaves that direction ambiguous, inspect first and ask before uploading.
-For status-only requests, report whether remote information is cached or freshly
-fetched. Creating commits, deleting remote branches, and publishing tags are
-separate actions.
-
-## Prerequisites
-
-Use Git in the target worktree, following repository instructions and network
-permissions. Inspect `git status --short --branch`, `git branch -vv`, remote names,
-and the requested branch's configured upstream. A remote URL can contain credentials;
-do not expose them in logs or reports. Do not assume the remote is `origin` or
-the base is `main`.
-
-Do not integrate changes during an unrelated merge, rebase, or cherry-pick.
-Detached HEAD, missing upstream, multiple candidate remotes, or a mismatch between
-pull and push targets require identifying the exact branch before mutation.
+- Use Git in the target worktree and follow repository/network instructions.
+- Establish direction, branch, fetch remote, and actual push destination. Do not
+  assume origin/main or that pull and push use the same target. Ambiguous "sync"
+  needs a direction before upload; status-only reports whether refs are cached.
+- Creating commits, deleting remote branches, tags, and force-push require their
+  own authorization. Preserve local work; do not auto-stash, commit, or discard it.
+- Pause integration during an unrelated operation. Resolve detached HEAD, missing
+  upstream, or multiple candidate destinations before mutating references.
 
 ## Procedure
 
-1. Record HEAD, staged and unstaged changes, and untracked paths. Select the remote
-   and branch from the user's request or verified tracking configuration. Inspect
-   the fetch and push destinations separately; resolve multiple push destinations
-   before uploading. Keep Git configuration unchanged
-   unless establishing tracking is part of the request.
-2. Fetch the selected remote with `git fetch <remote>` when current remote state
-   is needed. Fetch failure leaves integration pending: explain authentication,
-   network, or missing-reference errors without repeatedly retrying the same action.
-   Do not add pruning or fetch every remote to a single-branch request.
-3. Compare with the verified remote-tracking reference:
+1. Inspect HEAD and local-change summaries first; read only affected detail.
+   Select verified targets without changing configuration, except requested tracking.
+   Avoid exposing credential-bearing remote URLs.
+2. Fetch the selected remote when fresh state is needed. On failure, report the
+   error and stop integration; do not use stale refs as current or repeatedly retry.
+   Add neither pruning nor unrelated remotes to the request.
+3. Use `git rev-list --left-right --count HEAD...<remote-ref>`: local-only/remote-only
+   counts classify equal (0/0), ahead (>0/0), behind (0/>0), or diverged (>0/>0).
+   Inspect only relevant differing commits. Report shallow-history comparison limits.
+4. For an unspecified pull strategy, use `git merge --ff-only <remote-ref>` when
+   behind and local work is safe. Equal/ahead needs no download integration.
+   Divergence needs established repository policy or an explicit merge/rebase choice.
+   Rewriting published commits requires authorization; stop requested integration
+   at conflicts unless resolving them is also in scope.
+5. For push, inspect outgoing commits and the exact destination, resolving multiple
+   push URLs first. Use `git push --no-follow-tags <remote> HEAD:refs/heads/<branch>`.
+   Set tracking only within the requested new-branch scope. On rejection, fetch and
+   reassess; normal push does not authorize force. An authorized force-push needs
+   a lease tied to the reviewed remote commit; a changed tip invalidates the plan.
+6. Check resulting refs, ahead/behind counts, and preserved local changes. Verify
+   the actual push target, and run checks appropriate to integrated changes.
 
-   ```bash
-   git rev-list --left-right --count HEAD...<remote-ref>
-   git log --oneline --left-right HEAD...<remote-ref>
-   ```
+## Result
 
-   The left count is local-only commits; the right count is remote-only commits.
-   Zero on both sides means equal; only the right is nonzero means behind; only
-   the left is nonzero means ahead; both nonzero means diverged. If a shallow
-   boundary prevents comparison, report that limit before choosing integration.
-4. For a pull or update request without a specified integration strategy, use
-   `git merge --ff-only <remote-ref>` when behind and the worktree is ready. Equal
-   or ahead needs no download integration. Before integrating, resolve any local
-   staged, unstaged, or untracked work that could be affected; do not automatically
-   stash, create a commit, or discard it. Fetch alone can leave that work in place.
-5. A diverged branch needs the repository's established policy or an explicit
-   choice of merge or rebase. Explain which commits differ if neither settles it.
-   Rebase of published history requires explicit authorization. During a requested
-   merge or rebase, stop at conflicts, preserve the operation state, and report
-   the paths. Resolving them requires the corresponding task scope.
-6. For a push request, inspect the outgoing commits and the actual push destination.
-   Use an explicit refspec such as
-   `git push --no-follow-tags <remote> HEAD:refs/heads/<branch>` for
-   the selected branch. Set tracking only when requested or needed to establish
-   the requested new branch. Leave other branches and tags unchanged. On rejection,
-   fetch and reassess; a normal push request does not authorize force-push.
-
-Force-push is a separate, explicitly authorized action. If requested, identify
-the target and expected remote commit, account for collaborators' work, and use
-a lease tied to that expected commit. A changed remote tip invalidates the plan;
-do not weaken the lease or substitute unconditional force.
-
-## Output
-
-Report the local branch, remote target, before/after commit IDs, direction, and
-ahead/behind result. Distinguish fetched references, integrated changes, and
-uploaded commits. If blocked, identify the unresolved strategy or failure and
-the local work that remains preserved.
-
-## Verification
-
-After integration, check status and the resulting commits, then run checks
-appropriate to incoming changes. After a push, verify the selected destination's
-branch tip; do not assume the pull upstream is also the push destination. Compare
-local changes with the inspected state and report any remaining divergence.
-
-Command reference: [git fetch](https://git-scm.com/docs/git-fetch),
-[git merge](https://git-scm.com/docs/git-merge),
-[git push](https://git-scm.com/docs/git-push).
+Report branch/target, commit IDs, fetched/integrated/uploaded actions, actual checks,
+preserved local work, and remaining divergence or blockers.

@@ -7,7 +7,7 @@ from pathlib import Path
 import re
 import shutil
 
-from scripts.validate_skills import SLUG, validate_repository
+from scripts.validate_skills import MAX_DESCRIPTION_CHARS, SLUG, validate_repository
 
 
 ROOT = Path(__file__).resolve().parent
@@ -24,8 +24,8 @@ def prepare_skill(
             raise ValueError(
                 f"Invalid {label}: use 1-64 lowercase letters, digits, and single hyphens."
             )
-    if description is not None and (not description.strip() or len(description) > 1024):
-        raise ValueError("Description must contain 1-1024 characters.")
+    if description is not None and (not description.strip() or len(description) > MAX_DESCRIPTION_CHARS):
+        raise ValueError(f"Description must contain 1-{MAX_DESCRIPTION_CHARS} characters.")
 
     category_dir = root / "skills" / category
     if not category_dir.is_dir():

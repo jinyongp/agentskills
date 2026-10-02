@@ -4,7 +4,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from scripts.validate_skills import validate_repository
+from scripts.validate_skills import MAX_BODY_CHARS, MAX_DESCRIPTION_CHARS, validate_repository
 
 
 TEMPLATE = Path(__file__).resolve().parents[1] / "templates" / "skill.md.tmpl"
@@ -27,6 +27,27 @@ class ValidateSkillsTests(unittest.TestCase):
 
     def test_empty_scaffold_is_valid(self):
         self.assertEqual(validate_repository(self.root), (0, []))
+
+    def test_description_budget_accepts_boundary_and_rejects_excess(self):
+        path = self.add_skill()
+        content = path.read_text()
+        start, rest = content.split("description:", 1)
+        _, tail = rest.split("license:", 1)
+        for length in (MAX_DESCRIPTION_CHARS, MAX_DESCRIPTION_CHARS + 1):
+            path.write_text(start + "description: " + "x" * length + "\nlicense:" + tail)
+            errors = validate_repository(self.root)[1]
+            self.assertEqual(any("description exceeds" in e for e in errors), length > MAX_DESCRIPTION_CHARS)
+
+    def test_body_budget_keeps_conditional_references_separate(self):
+        path = self.add_skill()
+        header = path.read_text().split("\n---\n", 1)[0] + "\n---\n"
+        references = path.parent / "references"
+        references.mkdir()
+        (references / "detail.md").write_text("d" * (MAX_BODY_CHARS * 2))
+        for length in (MAX_BODY_CHARS, MAX_BODY_CHARS + 1):
+            path.write_text(header + "b" * length + "\n")
+            errors = validate_repository(self.root)[1]
+            self.assertEqual(any("body exceeds" in e for e in errors), length > MAX_BODY_CHARS)
 
     def test_missing_catalog_is_rejected(self):
         (self.root / "skills").rmdir()

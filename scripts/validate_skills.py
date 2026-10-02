@@ -10,6 +10,8 @@ from skills_ref import read_properties, validate
 
 SLUG = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*")
 SKIP_DIRS = {".git", ".venv", "node_modules", "__pycache__"}
+MAX_DESCRIPTION_CHARS = 300
+MAX_BODY_CHARS = 4000
 
 
 def validate_repository(root: Path) -> tuple[int, list[str]]:
@@ -47,6 +49,7 @@ def validate_repository(root: Path) -> tuple[int, list[str]]:
                 if problems:
                     continue
                 properties = read_properties(path.parent)
+                content = path.read_text(encoding="utf-8")
             except (OSError, UnicodeError) as exc:
                 errors.append(f"{relative}: cannot read skill: {exc}")
                 continue
@@ -62,6 +65,12 @@ def validate_repository(root: Path) -> tuple[int, list[str]]:
             metadata = properties.metadata
             if not isinstance(metadata, dict) or metadata.get("category") != category:
                 errors.append(f"{relative}: metadata.category must equal '{category}'")
+
+            if len(properties.description) > MAX_DESCRIPTION_CHARS:
+                errors.append(f"{relative}: description exceeds {MAX_DESCRIPTION_CHARS} characters")
+            body = re.split(r"(?m)^---[ \t]*$", content, maxsplit=2)[-1].strip()
+            if len(body) > MAX_BODY_CHARS:
+                errors.append(f"{relative}: body exceeds {MAX_BODY_CHARS} characters; move conditional detail to references")
 
     for category in sorted(skills.iterdir()):
         if not category.is_dir():

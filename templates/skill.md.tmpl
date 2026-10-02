@@ -11,28 +11,21 @@ metadata:
 
 # My Skill
 
-Replace each guidance paragraph below with instructions for this skill.
+## Scope
 
-## When to use
-
-Describe the task, expected inputs, and boundaries. Identify adjacent tasks
-that should use another workflow.
-
-## Prerequisites
-
-List required tools, access, and information. Remove this section if the
-skill has no special prerequisites.
+State the trigger, required inputs/tools, and action boundary in a short list.
+Keep only guidance that changes the agent's decisions.
 
 ## Procedure
 
-1. Establish the relevant input and constraints.
-2. Perform the task using concrete, ordered steps.
-3. Check the result against the user's request.
+1. Start with a bounded summary. Bundle a script when repeated mechanical
+   inspection or large-output reduction needs it; execute it without reading its source.
+2. Request only relevant detail. State output limits, omissions, and pagination.
+   Link references with the condition that requires them, not as mandatory reading.
+3. Perform the task within scope; preserve necessary context and existing work.
+4. Verify the requested result and handle concrete failures.
 
-## Output
+## Result
 
-Define the expected result and include a small example if useful.
-
-## Verification
-
-Describe checks that demonstrate success and how to handle failures.
+Define the result, evidence, and remaining blockers briefly. Keep the body within
+4,000 characters; move conditional detail into references rather than losing context.

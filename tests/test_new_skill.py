@@ -111,7 +111,7 @@ class NewSkillTests(unittest.TestCase):
 
     def test_invalid_descriptions_fail_before_creation(self):
         before = self.snapshot()
-        for description in (" ", "x" * 1025):
+        for description in (" ", "x" * 301, "x" * 1025):
             with self.subTest(description_length=len(description)):
                 with self.assertRaisesRegex(ValueError, "Description"):
                     prepare_skill(self.root, "workflow", "my-skill", description)
