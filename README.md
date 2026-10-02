@@ -26,7 +26,7 @@ npx skills add jinyongp/agentskills --skill <skill-name> --agent codex --global
 | --- | --- | --- |
 | [workflow](skills/workflow/README.md) | 저장소 조사, 계획, 검증, 작업 마감 | 아직 없음 |
 | [frontend](skills/frontend/README.md) | 프레임워크, UI, 접근성 | 아직 없음 |
-| [git](skills/git/README.md) | 커밋, 브랜치, PR | [git-commit](skills/git/git-commit/SKILL.md), [git-branch](skills/git/git-branch/SKILL.md) |
+| [git](skills/git/README.md) | 커밋, 브랜치, PR | [git-commit](skills/git/git-commit/SKILL.md), [git-branch](skills/git/git-branch/SKILL.md), [git-sync](skills/git/git-sync/SKILL.md) |
 | [writing](skills/writing/README.md) | 개발 문서, 문장 편집 | 아직 없음 |
 | [tooling](skills/tooling/README.md) | 개발 도구 설정과 운영 | 아직 없음 |
 
