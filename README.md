@@ -52,6 +52,10 @@ uv run --locked python -m unittest discover -s tests -v
 
 스킬을 설치하는 사용자는 이 유지보수 도구를 설치할 필요가 없습니다.
 
+GitHub Actions에서도 형식 검증과 테스트를 실행합니다.
+분류별 탐색과 선택 설치를 확인하는 CLI 시험은 임시 프로젝트에서 실행합니다.
+로컬 실행 방법과 필요한 환경은 [작성 가이드](CONTRIBUTING.md#설치-경로-확인)에 있습니다.
+
 ## 라이선스
 
 이 저장소는 [MIT License](LICENSE)를 사용합니다.

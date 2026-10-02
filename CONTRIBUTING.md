@@ -90,6 +90,25 @@ uv run --locked skills-ref validate skills/<category>/<skill-name>
 스킬을 추가한 뒤 루트 README와 분류 README에 이름, 설명, 설치 명령을 갱신합니다.
 외부 자료를 포함하면 원본 라이선스와 저작권 고지도 함께 보관합니다.
 
+## 설치 경로 확인
+
+CLI 설치 시험에는 Node.js 22.20 이상과 npm이 필요합니다.
+아래 명령은 임시 폴더에 분류별 스킬 두 개를 만들고,
+고정한 `skills@1.7.0`으로 목록 탐색과 한 스킬의 선택 설치를 확인합니다.
+
+```bash
+uv run --locked python scripts/smoke_install.py
+```
+
+선택한 스킬의 `SKILL.md`, 참조 자료, 스크립트, 에셋이 그대로 복사되는지와
+선택하지 않은 스킬이 설치되지 않는지를 확인합니다.
+설치 대상은 임시 프로젝트이며, 시험이 끝나면 삭제됩니다.
+첫 실행 시 npm에서 CLI를 내려받으므로 네트워크 연결이 필요합니다.
+CLI 버전을 바꿀 때는 `scripts/smoke_install.py`의 `CLI_PACKAGE`를 갱신하고 다시 시험합니다.
+
+GitHub Actions는 main 브랜치 push, PR, 수동 실행에서 형식 검증, 검증기 테스트,
+설치 시험을 실행합니다. 실제 스킬은 추가한 뒤 별도로 로컬 설치와 실행 평가를 확인합니다.
+
 ## 변경과 커밋
 
 하나의 스킬 변경에 필요한 지침, 자료, 검증, 목록 갱신은 같은 커밋에 포함합니다.
