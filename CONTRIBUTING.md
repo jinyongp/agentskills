@@ -63,8 +63,27 @@ skills/<category>/<skill-name>/
 
 ## 추가 전 확인
 
-공식 참조 도구의 `skills-ref validate skills/<category>/<skill-name>`으로
-스킬의 형식을 확인합니다.
+유지보수 도구에는 Python 3.11 이상과 [uv](https://docs.astral.sh/uv/)가 필요합니다.
+저장소 루트에서 개발 의존성을 설치하고 검증을 실행합니다.
+
+```bash
+uv sync --locked
+uv run --locked python scripts/validate_skills.py
+uv run --locked python -m unittest discover -s tests -v
+```
+
+저장소 검증은 공식 `skills-ref` 검증기를 사용하고, 분류별 배치, 영문 이름,
+저장소 전체 이름 중복, `metadata.category` 일치도 확인합니다.
+스킬이 없는 초기 상태는 정상으로 처리하고, 스킬 폴더를 만들었다면 `SKILL.md`를 요구합니다.
+개별 스킬만 검사할 때는 다음 명령을 사용합니다.
+
+```bash
+uv run --locked skills-ref validate skills/<category>/<skill-name>
+```
+
+`skills-ref`는 공식 저장소의 특정 커밋에 고정한 개발용 참조 도구입니다.
+설치되는 스킬의 실행 의존성에는 포함되지 않습니다.
+파일 참조가 실제로 존재하는지는 작성자가 별도로 확인합니다.
 실제 실행은 [평가 가이드](evals/README.md)에 따라 별도로 확인합니다.
 형식 검증은 지침의 실행 품질이나 모든 에이전트에서의 호환성을 보장하지 않습니다.
 

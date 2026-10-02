@@ -41,6 +41,17 @@ npx skills add jinyongp/agentskills --skill <skill-name> --agent codex --global
 스킬 폴더 안의 `scripts/`, `references/`, `assets/`에 필요한 파일을 함께 넣으면
 개별 설치 후에도 사용할 수 있습니다.
 
+저장소 유지보수에는 Python 3.11 이상과 uv를 사용합니다.
+형식과 배치 검증은 다음 명령으로 실행합니다.
+
+```bash
+uv sync --locked
+uv run --locked python scripts/validate_skills.py
+uv run --locked python -m unittest discover -s tests -v
+```
+
+스킬을 설치하는 사용자는 이 유지보수 도구를 설치할 필요가 없습니다.
+
 ## 라이선스
 
 이 저장소는 [MIT License](LICENSE)를 사용합니다.
