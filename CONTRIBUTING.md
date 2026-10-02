@@ -14,13 +14,23 @@
 이름과 분류를 실제 스킬에 맞게 바꿉니다.
 
 ```bash
-mkdir -p skills/workflow/my-skill
-cp templates/skill.md.tmpl skills/workflow/my-skill/SKILL.md
+uv run new_skill.py workflow my-skill
 ```
 
-복사한 파일에서 `name`을 폴더명과 같게 바꾸고,
-`metadata.category`를 분류 폴더명으로 수정합니다.
-템플릿의 안내 문장은 실제 지침으로 교체합니다.
+`name`, `metadata.category`, 제목을 설정한 `SKILL.md`와
+`evals/my-skill/README.md` 평가 양식을 생성하고 루트·분류 README에 목록 항목을 추가합니다.
+분류는 기존 폴더 중에서 선택하며, 같은 이름이나 기존 평가 폴더가 있으면 생성을 중단합니다.
+준비에는 Python 3.11 이상과 uv가 필요합니다.
+
+설명도 함께 지정할 수 있습니다.
+
+```bash
+uv run new_skill.py workflow my-skill --description "기능과 사용 시점을 설명합니다."
+```
+
+생성된 파일의 안내 문장을 실제 지침으로 교체하고 평가 사례를 채웁니다.
+자료 폴더는 필요한 경우에만 추가합니다. 이 명령은 작성할 틀을 준비하며,
+지침 작성, 실제 실행 평가, 커밋과 공개 배포는 이후 작업입니다.
 
 ## 파일 구성
 
@@ -97,7 +107,8 @@ uv run --locked skills-ref validate skills/<category>/<skill-name>
 실제 실행은 [평가 가이드](evals/README.md)에 따라 별도로 확인합니다.
 형식 검증은 지침의 실행 품질이나 모든 에이전트에서의 호환성을 보장하지 않습니다.
 
-스킬을 추가한 뒤 루트 README와 분류 README에 이름, 설명, 설치 명령을 갱신합니다.
+준비 명령이 등록한 README 목록에서 설명을 다듬습니다.
+이후 스킬 이름이나 분류를 변경하면 루트·분류 README의 링크와 설치 명령도 갱신합니다.
 외부 자료를 포함하면 원본 라이선스와 저작권 고지도 함께 보관합니다.
 
 ## 설치 경로 확인

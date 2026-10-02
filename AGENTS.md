@@ -8,6 +8,7 @@ This repository distributes standalone Agent Skills through the skills CLI.
 - Keep each skill self-contained. Bundle runtime references, scripts, and assets inside its directory.
 - Use skill-root-relative paths for bundled files. Repository instructions are for maintainers, not installed skill dependencies.
 - Keep templates under `templates/` with a `.tmpl` extension.
+- Prepare new skills with `uv run new_skill.py <category> <name>`, then write the generated instructions and evaluation cases.
 - Update the root and category catalogs when adding, moving, or removing a skill.
 - Follow `CONTRIBUTING.md` for authoring and verification.
 - Run `uv run check.py` for full verification, or `uv run check.py validate` for skill format and catalog checks. CI adds `--locked` to enforce the committed dependency lockfile.

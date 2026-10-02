@@ -4,8 +4,7 @@
 [Agent Skills 규격](https://agentskills.io/specification)을 따르며,
 [skills CLI](https://github.com/vercel-labs/skills)로 설치합니다.
 
-현재는 저장소 구조와 작성 템플릿을 준비한 상태이며, 설치 가능한 스킬은 아직 없습니다.
-스킬이 추가되고 GitHub에 반영되면 아래 명령으로 목록을 확인하고 설치할 수 있습니다.
+스킬을 작성해 GitHub에 반영하면 아래 명령으로 목록을 확인하고 설치할 수 있습니다.
 
 ```bash
 # 스킬 목록 확인
@@ -36,8 +35,14 @@ npx skills add jinyongp/agentskills --skill <skill-name> --agent codex --global
 
 ## 스킬 추가
 
-[작성 가이드](CONTRIBUTING.md)에 따라 [템플릿](templates/skill.md.tmpl)을 복사하고
-사용 시점, 실행 절차, 결과 확인 방법을 작성합니다.
+저장소 루트에서 분류와 이름을 지정하면 스킬 파일, 평가 양식, 목록 항목을 준비합니다.
+
+```bash
+uv run new_skill.py workflow my-skill
+```
+
+생성된 `SKILL.md`에 사용 시점, 실행 절차, 결과 확인 방법을 작성합니다.
+상세 옵션과 작성 규칙은 [작성 가이드](CONTRIBUTING.md)에 있습니다.
 스킬 폴더 안의 `scripts/`, `references/`, `assets/`에 필요한 파일을 함께 넣으면
 개별 설치 후에도 사용할 수 있습니다.
 
