@@ -83,19 +83,19 @@ def prepare_skill(
         raise ValueError(f"Unexpected catalog row format for '{category}'.")
     entry = f"[{name}](skills/{category}/{name}/SKILL.md)"
     previous = cells[3].strip()
-    cells[3] = f" {entry if previous == '아직 없음' else previous + ', ' + entry} "
+    cells[3] = f" {entry if previous == 'None yet' else previous + ', ' + entry} "
     rows[index] = "|".join(cells) + "\n"
 
     if original_category.count(START) != 1 or original_category.count(END) != 1:
         raise ValueError(f"skills/{category}/README.md needs one skills catalog block.")
     before, block = original_category.split(START)
     table, after = block.split(END)
-    if "| 스킬 | 설명 | 설치 |" not in table:
+    if "| Skill | Description | Install |" not in table:
         raise ValueError(f"skills/{category}/README.md is missing its catalog table.")
-    table = table.replace("| 아직 없음 | | |\n", "")
+    table = table.replace("| None yet | | |\n", "")
     summary = (
         html.escape(" ".join(description.split())).replace("|", "\\|")
-        if description else "작성 중"
+        if description else "In progress"
     )
     install = f"npx skills add jinyongp/agentskills --skill {name}"
     table = table.rstrip() + f"\n| [{name}]({name}/SKILL.md) | {summary} | `{install}` |\n"

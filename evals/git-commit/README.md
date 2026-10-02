@@ -1,78 +1,78 @@
-# git-commit 실행 평가
+# git-commit evaluation
 
-아래 요청에 대해 지침의 Git 절차를 임시 저장소에서 스크립트로 재현했습니다.
-검사는 커밋 내용, HEAD, 인덱스의 바이너리 패치, 작업 파일의 바이트를 비교합니다.
-별도 에이전트의 자동 스킬 선택이나 판단 품질을 측정한 결과는 아닙니다.
+The instructions' Git procedures were replayed by scripts in temporary repositories.
+Checks compare commit contents, HEAD, cached binary patches, and working-file bytes.
+These results do not measure independent agent selection or judgment.
 
-| 상황 | 요청 | 기대 결과 | 실제 결과 |
+| Scenario | Request | Expected result | Actual result |
 | --- | --- | --- | --- |
-| 대표 요청 | “변경을 작업별로 나눠 커밋해줘.” 기능·테스트·새 fixture와 독립 문서 변경 제공 | 기능·테스트·fixture는 같은 커밋, 문서는 별도 커밋 | 절차 재현 통과. 커밋 2개에 각각 지정한 파일만 포함되고 작업 트리가 깨끗함 |
-| 범위 제한 | “feature.txt만 커밋해줘.” 제외한 텍스트·바이너리·새 파일을 미리 스테이징하고 일부에 추가 미스테이징 변경 제공 | feature.txt만 커밋하고 제외한 인덱스와 작업 파일을 보존 | 절차 재현 통과. 제외한 cached binary patch와 작업 파일 바이트가 전후 동일 |
-| 스테이징만 요청 | “feature.txt를 스테이징해줘.” | 인덱스만 변경하고 커밋은 생성하지 않음 | 절차 재현 통과. HEAD는 동일하고 지정한 파일만 스테이징됨 |
-| 메시지만 요청 | “현재 스테이징된 변경의 커밋 메시지만 써줘.” | 읽기 작업으로 메시지를 준비하고 HEAD·인덱스·작업 파일은 보존 | 메시지 작성에 필요한 상태·diff·history 조회 후 세 상태가 동일함. 메시지 품질은 별도 평가 전 |
-| 스테이징 범위 | “스테이징된 변경만 커밋해줘.” 같은 파일에 추가 미스테이징 변경 제공 | 스테이징된 스냅샷만 커밋하고 추가 변경은 보존 | 절차 재현 통과. 커밋 내용이 인덱스의 기존 스냅샷과 같고 작업 파일 바이트가 유지됨 |
-| 훅 실패 | 범위를 제한한 커밋에서 pre-commit 훅이 종료 코드 1 반환 | 훅을 우회하지 않고 실패 보고, 제외한 스테이징 복원 | 절차 재현 통과. HEAD 불변, 요청한 변경은 스테이징 유지, 제외한 패치·작업 파일 동일 |
-| 입력 부족 | Git 저장소가 아닌 폴더에서 “커밋해줘.” | 저장소 확인 단계에서 실패하고 변경하지 않음 | `git rev-parse --show-toplevel` 실패 확인. 스테이징·커밋 미실행 |
-| 적용 범위 밖 | “새 브랜치 만들어줘.” 또는 “원격에 push해줘.” | 커밋 준비 스킬을 적용하지 않고 요청에 맞는 작업으로 처리 | description·본문 경계 검토 완료. 자동 선택 평가는 미실행 |
+| Typical request | "Split changes into task-based commits." Feature, test, new fixture, and independent documentation changes | Feature, test, and fixture in one commit; documentation in another | Replay passed. Two commits contain only their designated files; worktree clean |
+| Restricted scope | "Commit only feature.txt." Excluded text, binary, and new files already staged; some have additional unstaged changes | Commit only feature.txt; preserve excluded index entries and working files | Replay passed. Excluded cached binary patch and working-file bytes unchanged |
+| Staging only | "Stage feature.txt." | Change the index without creating a commit | Replay passed. HEAD unchanged; only the requested file staged |
+| Message only | "Draft a commit message for staged changes." | Prepare a message through read-only inspection; preserve HEAD, index, and files | All three states unchanged after status, diff, and history inspection. Message quality not evaluated |
+| Staged changes only | "Commit staged changes only." Same file also has unstaged changes | Commit the staged snapshot and preserve additional changes | Replay passed. Commit matches the original index snapshot; working-file bytes preserved |
+| Hook failure | Scoped commit with a pre-commit hook that exits 1 | Report failure without bypassing the hook; restore excluded staging | Replay passed. HEAD unchanged, requested changes still staged, excluded patch and files unchanged |
+| Missing input | "Commit changes" outside a Git repository | Fail repository detection without making changes | `git rev-parse --show-toplevel` failed; no staging or commit attempted |
+| Out of scope | "Create a branch" or "Push to the remote" | Handle the requested operation without invoking this skill | Description and scope boundaries reviewed; automatic selection not evaluated |
 
-## 재현 조건
+## Replay setup
 
-커밋 분리, 범위 제한, 훅 실패, 준비 작업별로 독립된 임시 저장소를 만들고
-`main`의 초기 커밋을 준비했습니다. 준비 작업 저장소에서는 스테이징, 메시지용
-조회, 스테이징된 변경의 커밋을 순서대로 확인했습니다.
-작성자 이름·이메일과 서명 비활성화 설정은 해당 임시 저장소에만 적용했습니다.
-전역 Git 설정과 시스템 Git 설정은 이 검사 프로세스에서 제외했습니다.
+Separate temporary repositories covered commit grouping, restricted scope, hook failure,
+and preparation. Each started with an initial commit on `main`.
+The preparation fixture exercised staging, message inspection, and a staged-only commit
+in sequence. Author identity and disabled signing were configured only in these fixtures.
+Global and system Git configuration were excluded from the check process.
 
-범위 제한 사례는 제외한 파일을 스테이징한 뒤 텍스트와 바이너리 파일을 다시
-수정하여 인덱스와 작업 파일이 다른 상태로 구성했습니다. 다음 순서로 재현했습니다.
+The restricted-scope fixture staged excluded files, then modified text and binary files again
+so the index and working files differed. The replay followed these steps:
 
-1. 제외한 경로의 `git diff --cached --binary -- <paths>`와 작업 파일 바이트 저장.
-2. `git restore --staged -- <paths>`로 해당 경로만 임시 언스테이징.
-3. 요청한 파일을 스테이징하고 `git diff --cached --check` 실행.
-4. 임시 메시지 파일을 사용해 `git commit -F <message-file>` 실행.
-5. 성공·실패 모두 `git apply --cached <saved-patch>`로 제외한 스테이징 복원.
-6. 제외한 패치·파일의 전후 동일성과 커밋 포함 경로 확인.
+1. Save `git diff --cached --binary -- <paths>` and working-file bytes for excluded paths.
+2. Temporarily unstage only those paths with `git restore --staged -- <paths>`.
+3. Stage the requested file and run `git diff --cached --check`.
+4. Commit using a temporary message file with `git commit -F <message-file>`.
+5. Restore excluded staging with `git apply --cached <saved-patch>` after success or failure.
+6. Compare excluded patches and files, and verify committed paths.
 
-훅 실패 사례는 임시 저장소의 `.git/hooks/pre-commit`에 `exit 1`을 넣었습니다.
+The hook-failure fixture used `exit 1` in its temporary `.git/hooks/pre-commit`.
 
-## 실행 환경
+## Environment
 
-- 평가 날짜: 2026-10-03 (Asia/Seoul)
-- 에이전트와 버전: Codex 현재 세션에서 지침 검토 및 절차 재현. 모델 버전 미기록,
-  독립 에이전트 평가 미실행.
-- 도구: Linux/WSL, Git 2.43.0, Python 3.11.17, Node.js 22.22.2,
-  skills CLI 1.7.0.
+- Evaluation date: 2026-10-03 (Asia/Seoul).
+- Agent and version: instruction review and scripted replay in the current Codex session.
+  Model version not recorded; independent agent evaluation not run.
+- Tools: Linux/WSL, Git 2.43.0, Python 3.11.17, Node.js 22.22.2, skills CLI 1.7.0.
 
-## 결과
+## Results
 
-### 요약 스크립트 검증
+### Inspection helper verification
 
-Conventional Commits는 요청 또는 저장소 관례가 있을 때만 읽는 참고 문서로
-추가했습니다. 공식 1.0.0 규격과 대조하여 feat/fix와 선택적 타입, scope,
-breaking 표시·footer 규칙을 확인했습니다. 명령형·72자 권장은 저장소 관례와 구분했습니다.
-문서 검토 결과이며 별도 에이전트의 메시지 분류·작성 평가는 포함하지 않습니다.
+Conventional Commits guidance was added as a conditional reference for explicit requests
+or repository conventions. Review against specification 1.0.0 covered feat/fix,
+optional types, scopes, breaking changes, and footers. Imperative phrasing and the
+72-character recommendation were distinguished from specification requirements.
+This was document review; independent agent message classification and drafting were not evaluated.
 
-기본 조사는 `scripts/inspect_worktree.py` 실행으로 대체했습니다. 별도 에이전트 평가와
-구분하여 `tests/test_git_inspection.py`에서 실제 임시 Git 저장소를 사용하는
-검사 11개를 Python 3.11.17과 3.14.8에서 실행했고 모두 통과했습니다.
-실제 CLI 개별 설치 후 참고 문서·스크립트의 바이트 동일성과 의존성 없는 실행도 확인했습니다.
+Default inspection now runs `scripts/inspect_worktree.py`.
+All 11 tests in `tests/test_git_inspection.py` passed against real temporary Git repositories
+on Python 3.11.17 and 3.14.8. Individual CLI installation also verified byte-identical
+references and scripts, and execution without extra dependencies.
 
-- 기본 출력에 파일 내용·전체 diff가 포함되지 않고 HEAD·인덱스·작업 파일이 불변.
-- 한글 경로 140개와 긴 diff·이력·템플릿에서 JSON 응답이 매번 4,000자 이내.
-- 파일 페이지를 모두 읽으면 중복·누락 없이 140개 경로를 복원.
-- 선택 diff 페이지를 이어 붙이면 실제 Git diff와 동일하며 staged/unstaged를 구분.
-- rename 원본 경로, 공백·개행·glob 문자 경로, 충돌과 활성 merge 상태를 보존.
-- unborn·detached HEAD·linked worktree·미설정 템플릿 처리, 잘못된 입력의 제한된 오류 출력.
+- Default output excludes file contents and full diffs; HEAD, index, and files remain unchanged.
+- Each JSON response stays within 4,000 characters with 140 Korean filenames and long diffs, history, and templates.
+- Reading every file page recovers all 140 exact paths without duplicates or omissions.
+- Concatenating selected diff pages reproduces Git's diff and distinguishes staged from unstaged changes.
+- Rename source paths, spaces, newlines, glob characters, conflicts, and active merge state are preserved.
+- Unborn and detached HEAD, linked worktrees, unset templates, and bounded errors for invalid inputs are handled.
 
-추가 시점의 테스트는 아래 초기 절차 재현과 별개입니다. 자동 선택과 메시지 품질은
-여전히 독립 평가 전입니다.
+These later helper checks are separate from the initial replay below.
+Automatic selection and message quality still require independent evaluation.
 
-### 초기 절차 재현
+### Initial replay
 
-- `uv run --locked check.py`: 형식 검증, 기존 테스트 27개, CLI 설치 시험 통과.
-- skill-creator의 `quick_validate.py`: 통과.
-- 실제 저장소를 로컬 설치 소스로 지정해 `--list`로 `git-commit` 탐색 확인.
-- 임시 프로젝트에 `--skill git-commit --agent codex --copy --yes`로 설치한 뒤
-  `SKILL.md`와 `LICENSE`가 원본과 바이트 단위로 동일함을 확인.
-- 위 Git 절차 재현 검사 통과. 자동 선택, 메시지 품질, 겹치는 범위에서의 에이전트
-  판단은 이후 독립 실행 평가로 확인해야 합니다.
+- `uv run --locked check.py`: format validation, the then-existing 27 tests, and CLI installation check passed.
+- skill-creator's `quick_validate.py`: passed.
+- Actual repository used as a local installation source; `--list` discovered `git-commit`.
+- Installation into a temporary project with `--skill git-commit --agent codex --copy --yes`
+  produced byte-identical `SKILL.md` and `LICENSE`.
+- Git procedure replays passed. Automatic selection, message quality, and agent judgment
+  with overlapping scopes require later independent evaluation.

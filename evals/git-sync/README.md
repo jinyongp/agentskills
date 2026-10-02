@@ -1,31 +1,32 @@
-# git-sync 실행 평가
+# git-sync evaluation
 
-로컬 bare 저장소를 원격으로 사용하고 별도 작업 저장소 두 개로 절차를 재현했습니다.
-실제 GitHub 원격이나 사용자의 원격 저장소에는 쓰지 않았습니다.
-자동 스킬 선택이나 별도 에이전트의 판단 품질은 평가하지 않았습니다.
+Procedures were replayed with a local bare remote and two working repositories.
+No writes were made to GitHub or user remotes.
+Automatic selection and independent agent judgment were not evaluated.
 
-| 상황 | 요청 | 기대 결과 | 실제 결과 |
+| Scenario | Request | Expected result | Actual result |
 | --- | --- | --- | --- |
-| 뒤처진 브랜치 | “원격 변경 받아줘.” 원격에만 커밋 1개 제공 | fetch 후 0/1 판정, fast-forward 갱신 | 절차 재현 통과. 로컬 HEAD가 원격 커밋과 동일 |
-| push | “현재 브랜치 올려줘.” 로컬 커밋과 주석 태그, push.followTags=true 제공 | 지정한 원격 브랜치만 갱신하고 태그 보존 | `--no-follow-tags`와 명시적 refspec으로 push 성공, 원격 태그 없음 확인 |
-| 분기 | 양쪽에 독립 커밋 1개씩 제공 | 1/1 판정 후 무단 병합·rebase·force-push 없이 중단 | ff-only 갱신과 일반 push 모두 실패, 로컬·원격 커밋 불변 |
-| 작업 중 fetch | 로컬 파일이 스테이징된 상태에서 “fetch해줘.” | HEAD·인덱스를 보존하며 참조만 갱신 | 절차 재현 통과. HEAD와 cached binary patch 동일 |
-| 적용 범위 밖 | “지금 변경 커밋해줘.” | 커밋 준비 요청으로 처리 | 경계 검토 완료. 자동 선택 평가 미실행 |
-| 인증·연결 실패 | 원격에 접근할 수 없는 상태에서 “pull해줘.” | 실패 원인 설명, 기존 참조로 통합하지 않음 | 독립 에이전트·네트워크 실패 평가는 미실행 |
+| Behind remote | "Pull remote changes." One remote-only commit | Fetch, identify 0 ahead / 1 behind, and fast-forward | Replay passed. Local HEAD matches the remote commit |
+| Push | "Push the current branch." Local commit, annotated tag, and push.followTags=true | Update only the requested remote branch; leave tags unchanged | Push with `--no-follow-tags` and an explicit refspec succeeded; remote tag absent |
+| Diverged | One independent commit on each side | Identify 1 ahead / 1 behind; stop without unauthorized merge, rebase, or force-push | ff-only update and normal push both failed; local and remote commits unchanged |
+| Fetch during work | "Fetch" with local files staged | Update refs while preserving HEAD and index | Replay passed. HEAD and cached binary patch unchanged |
+| Out of scope | "Commit current changes." | Handle as commit preparation | Boundaries reviewed; automatic selection not evaluated |
+| Authentication or connection failure | "Pull" when the remote is inaccessible | Explain failure; do not integrate using stale refs | Independent agent and network-failure evaluation not run |
 
-## 실행 환경
+## Environment
 
-- 평가 날짜: 2026-10-03 (Asia/Seoul)
-- 에이전트와 버전: Codex 현재 세션, 모델 버전 미기록. 스크립트로 절차 재현.
-- 도구: Linux/WSL, Git 2.43.0, Python 3.11.17, skills CLI 1.7.0.
+- Evaluation date: 2026-10-03 (Asia/Seoul).
+- Agent and version: current Codex session, model version not recorded; scripted replay.
+- Tools: Linux/WSL, Git 2.43.0, Python 3.11.17, skills CLI 1.7.0.
 
-## 결과
+## Results
 
-`uv run check.py validate`와 skill-creator의 `quick_validate.py`가 통과했습니다.
-실제 스킬의 CLI 탐색·선택 설치 후 `SKILL.md`와 `LICENSE`의 바이트 동일성을
-확인했습니다.
+`uv run check.py validate` and skill-creator's `quick_validate.py` passed.
+CLI discovery and selective installation of the actual skill produced byte-identical
+`SKILL.md` and `LICENSE`.
 
-임시 bare 원격의 main에 초기 커밋을 push하고, 두 작업 저장소에서 원격 단독 변경,
-로컬 단독 변경, 양쪽 분기 상태를 순서대로 구성했습니다. 일반 push 및 ff-only
-실패가 기존 커밋을 바꾸지 않는지 확인했습니다. force-push, 공개 원격 인증,
-네트워크 실패, 독립 에이전트 평가는 실행하지 않았습니다.
+After pushing an initial commit to main on the temporary bare remote, the two working
+repositories exercised remote-only changes, local-only changes, and divergence.
+Checks verified that failed normal pushes and ff-only updates preserved existing commits.
+Force-push, public remote authentication, network failures, and independent agent evaluation
+were not run.

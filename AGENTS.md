@@ -2,6 +2,7 @@
 
 This repository distributes standalone Agent Skills through the skills CLI.
 
+- Write all documentation, skill instructions, references, catalogs, and evaluation notes in English.
 - Keep installable skills at `skills/<category>/<skill-name>/SKILL.md`.
 - Keep skill names unique across the repository and equal to their directory names.
 - Use lowercase ASCII letters, digits, and single hyphens for skill and category names.

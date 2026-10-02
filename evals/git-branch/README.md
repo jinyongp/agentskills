@@ -1,30 +1,30 @@
-# git-branch 실행 평가
+# git-branch evaluation
 
-지침의 Git 절차를 독립된 임시 저장소에서 스크립트로 재현했습니다.
-자동 스킬 선택이나 별도 에이전트의 판단 품질은 평가하지 않았습니다.
+The Git procedures were replayed by scripts in isolated temporary repositories.
+Automatic selection and independent agent judgment were not evaluated.
 
-| 상황 | 요청 | 기대 결과 | 실제 결과 |
+| Scenario | Request | Expected result | Actual result |
 | --- | --- | --- | --- |
-| 생성 | “현재 작업에서 feature/example 만들어서 전환해줘.” 스테이징·추가 미스테이징·새 파일 제공 | HEAD와 기존 작업을 보존하며 새 브랜치 생성 | 절차 재현 통과. HEAD·cached binary patch·작업 파일 전후 동일 |
-| 이름 변경·삭제 | 생성한 브랜치 이름을 바꾸고 main으로 돌아가 로컬 브랜치 삭제 | 지정한 참조만 변경·삭제하고 작업 보존 | 절차 재현 통과. 새 이름과 삭제 상태, 스테이징 보존 확인 |
-| 중복 이름 | “같은 이름으로 브랜치 만들어줘.” 이미 동일한 브랜치 존재 | 기존 브랜치를 덮어쓰지 않고 중단 | `git switch -c` 실패, HEAD 보존 확인 |
-| 다른 worktree | “occupied로 전환해줘.” 해당 브랜치는 다른 worktree에서 사용 중 | 전환 실패 보고, 기존 작업 보존 | 실제 전환 거부 확인. 현재 브랜치와 cached patch 불변 |
-| 적용 범위 밖 | “원격에 브랜치 올려줘.” | 원격 동기화 요청으로 처리 | 경계 검토 완료. 자동 선택 평가 미실행 |
-| 필요한 입력 부족 | “다른 기준에서 브랜치 만들어줘.” 기준 브랜치 미지정 | 기준을 확인한 뒤 생성 | 독립 에이전트 평가 미실행 |
+| Create | "Create and switch to feature/example from the current work." Staged, additional unstaged, and new files provided | Create the branch while preserving HEAD and existing work | Replay passed. HEAD, cached binary patch, and working files unchanged |
+| Rename and delete | Rename the new branch, return to main, and delete the local branch | Change only the requested refs; preserve work | Replay passed. Rename, deletion, and staging preservation verified |
+| Duplicate name | "Create a branch with the same name." Branch already exists | Stop without overwriting the existing branch | `git switch -c` failed; HEAD preserved |
+| Other worktree | "Switch to occupied." Branch is checked out in another worktree | Report switch failure; preserve work | Switch rejected. Current branch and cached patch unchanged |
+| Out of scope | "Push this branch to the remote." | Handle as remote synchronization | Boundaries reviewed; automatic selection not evaluated |
+| Missing input | "Create a branch from a different base." Base unspecified | Ask for the base before creating | Independent agent evaluation not run |
 
-## 실행 환경
+## Environment
 
-- 평가 날짜: 2026-10-03 (Asia/Seoul)
-- 에이전트와 버전: Codex 현재 세션, 모델 버전 미기록. 스크립트로 절차 재현.
-- 도구: Linux/WSL, Git 2.43.0, Python 3.11.17, skills CLI 1.7.0.
+- Evaluation date: 2026-10-03 (Asia/Seoul).
+- Agent and version: current Codex session, model version not recorded; scripted replay.
+- Tools: Linux/WSL, Git 2.43.0, Python 3.11.17, skills CLI 1.7.0.
 
-## 결과
+## Results
 
-`uv run check.py validate`와 skill-creator의 `quick_validate.py`가 통과했습니다.
-실제 로컬 저장소를 CLI 소스로 지정한 목록 탐색·선택 설치 후 `SKILL.md`와
-`LICENSE`의 바이트 동일성을 확인했습니다.
+`uv run check.py validate` and skill-creator's `quick_validate.py` passed.
+CLI discovery and selective installation from the actual local repository produced
+byte-identical `SKILL.md` and `LICENSE`.
 
-임시 저장소의 HEAD에서 생성·전환·이름 변경·병합된 로컬 브랜치 삭제를 수행하고,
-중복 생성 및 다른 worktree의 브랜치 전환을 시도했습니다. 사용자 작업 보존과
-Git의 실패 결과를 확인했습니다. 원격 변경, 강제 삭제, 독립 에이전트 평가는
-실행하지 않았습니다.
+The fixture exercised creation at HEAD, switching, renaming, and deletion of a merged
+local branch, plus duplicate creation and switching to a branch occupied by another worktree.
+Checks verified work preservation and Git failure results.
+Remote changes, forced deletion, and independent agent evaluation were not run.

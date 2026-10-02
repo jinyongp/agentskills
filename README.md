@@ -1,65 +1,67 @@
 # Agent Skills
 
-작업 목적과 기술별로 관리하는 jinyongp의 Agent Skills 모음입니다.
-[Agent Skills 규격](https://agentskills.io/specification)을 따르며,
-[skills CLI](https://github.com/vercel-labs/skills)로 설치합니다.
+jinyongp's Agent Skills collection, organized by task and technology.
+Skills follow the [Agent Skills specification](https://agentskills.io/specification)
+and install through the [skills CLI](https://github.com/vercel-labs/skills).
 
-스킬을 작성해 GitHub에 반영하면 아래 명령으로 목록을 확인하고 설치할 수 있습니다.
+Once skills are published to GitHub, use these commands to browse and install them:
 
 ```bash
-# 스킬 목록 확인
+# List available skills
 npx skills add jinyongp/agentskills --list
 
-# 대화형으로 스킬 선택
+# Select skills interactively
 npx skills add jinyongp/agentskills
 
-# 특정 스킬 설치: <skill-name>을 목록에 있는 이름으로 바꿉니다.
+# Install a specific skill: replace <skill-name> with a listed name.
 npx skills add jinyongp/agentskills --skill <skill-name>
 
-# Codex에 전역 설치
+# Install globally for Codex
 npx skills add jinyongp/agentskills --skill <skill-name> --agent codex --global
 ```
 
-## 분류
+## Categories
 
-| 분류 | 범위 | 스킬 |
+| Category | Scope | Skills |
 | --- | --- | --- |
-| [workflow](skills/workflow/README.md) | 저장소 조사, 계획, 검증, 작업 마감 | 아직 없음 |
-| [frontend](skills/frontend/README.md) | 프레임워크, UI, 접근성 | 아직 없음 |
-| [git](skills/git/README.md) | 커밋, 브랜치, 원격 동기화, 충돌, PR | [git-commit](skills/git/git-commit/SKILL.md), [git-branch](skills/git/git-branch/SKILL.md), [git-sync](skills/git/git-sync/SKILL.md), [git-conflict](skills/git/git-conflict/SKILL.md), [git-pr](skills/git/git-pr/SKILL.md) |
-| [writing](skills/writing/README.md) | 개발 문서, 문장 편집 | 아직 없음 |
-| [tooling](skills/tooling/README.md) | 개발 도구 설정과 운영 | 아직 없음 |
+| [workflow](skills/workflow/README.md) | Repository inspection, planning, verification, closeout | None yet |
+| [frontend](skills/frontend/README.md) | Frameworks, UI, accessibility | None yet |
+| [git](skills/git/README.md) | Commits, branches, remote synchronization, conflicts, PRs | [git-commit](skills/git/git-commit/SKILL.md), [git-branch](skills/git/git-branch/SKILL.md), [git-sync](skills/git/git-sync/SKILL.md), [git-conflict](skills/git/git-conflict/SKILL.md), [git-pr](skills/git/git-pr/SKILL.md) |
+| [writing](skills/writing/README.md) | Developer documentation, editing | None yet |
+| [tooling](skills/tooling/README.md) | Development tool setup and operation | None yet |
 
-스킬은 `skills/<category>/<skill-name>/SKILL.md`에 배치합니다.
-분류는 저장소에서 목록을 관리하기 위한 구분이며, 설치할 때는 스킬 이름을 선택합니다.
+Skills live at `skills/<category>/<skill-name>/SKILL.md`.
+Categories organize the repository catalog; select a skill by its unique name when installing.
 
-## 스킬 추가
+## Add a skill
 
-저장소 루트에서 분류와 이름을 지정하면 스킬 파일, 평가 양식, 목록 항목을 준비합니다.
+From the repository root, specify a category and name to prepare the skill,
+evaluation notes, and catalog entries:
 
 ```bash
 uv run new_skill.py workflow my-skill
 ```
 
-생성된 `SKILL.md`에 사용 시점, 실행 절차, 결과 확인 방법을 작성합니다.
-상세 옵션과 작성 규칙은 [작성 가이드](CONTRIBUTING.md)에 있습니다.
-스킬 폴더 안의 `scripts/`, `references/`, `assets/`에 필요한 파일을 함께 넣으면
-개별 설치 후에도 사용할 수 있습니다.
+Write the triggers, procedure, and result checks in the generated `SKILL.md`.
+See the [authoring guide](CONTRIBUTING.md) for options and rules.
+Bundle required files in the skill's `scripts/`, `references/`, or `assets/`
+directories so they remain available after individual installation.
 
-전체 검증은 저장소 루트에서 한 명령으로 실행합니다.
-Python 3.11 이상, uv, Node.js 22.20 이상과 npm이 필요합니다.
+Run all checks from the repository root with one command.
+This requires Python 3.11+, uv, Node.js 22.20+, and npm.
 
 ```bash
 uv run check.py
 ```
 
-개발 의존성을 자동으로 준비하고 형식 검증, 테스트, 임시 프로젝트 설치 시험을 실행합니다.
-빠르게 형식과 배치만 확인하려면 `uv run check.py validate`를 사용합니다.
-GitHub Actions도 같은 스크립트를 실행하며, `--locked` 옵션으로 커밋된 의존성 버전을 확인합니다.
-세부 실행 방법은 [작성 가이드](CONTRIBUTING.md#추가-전-확인)에 있습니다.
-스킬을 설치하는 사용자는 이 유지보수 도구를 설치할 필요가 없습니다.
+The command prepares development dependencies and runs format validation, tests,
+and installation checks in a temporary project.
+For a quick format and layout check, use `uv run check.py validate`.
+GitHub Actions runs the same script with `--locked` to enforce committed dependency versions.
+See the [verification instructions](CONTRIBUTING.md#verify-before-committing) for details.
+Skill users do not need these maintenance tools.
 
-## 라이선스
+## License
 
-이 저장소는 [MIT License](LICENSE)를 사용합니다.
-외부 자료를 포함하는 스킬은 원본의 라이선스와 저작권 고지를 함께 유지해야 합니다.
+This repository uses the [MIT License](LICENSE).
+Skills that include third-party material must preserve its original license and copyright notices.

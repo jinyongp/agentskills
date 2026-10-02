@@ -1,37 +1,39 @@
-# 스킬 실행 평가
+# Skill evaluations
 
-형식 검증과 별개로, 스킬의 지침이 원하는 결과를 만드는지 확인합니다.
-스킬을 추가할 때 `evals/<skill-name>/`에 입력과 기대 결과를 기록합니다.
-스킬별 사례와 결과는 각 폴더에 기록합니다.
+Evaluate whether instructions produce the intended results separately from format validation.
+When adding a skill, record inputs and expected results in `evals/<skill-name>/`.
+Keep each skill's cases and results in its own folder.
 
-| 스킬 | 평가 기록 |
+| Skill | Evaluation record |
 | --- | --- |
-| git-commit | [요청별 범위, 커밋 분리, 제외한 변경 보존](git-commit/README.md) |
-| git-branch | [브랜치 작업과 인덱스·작업 파일 보존](git-branch/README.md) |
-| git-sync | [원격 동기화와 분기·태그·로컬 작업 보존](git-sync/README.md) |
-| git-conflict | [merge·rebase·cherry-pick 충돌 절차](git-conflict/README.md) |
-| git-pr | [PR 변경 범위·본문 준비와 검증 한계](git-pr/README.md) |
+| git-commit | [Request scope, commit grouping, excluded changes](git-commit/README.md) |
+| git-branch | [Branch operations and index/worktree preservation](git-branch/README.md) |
+| git-sync | [Remote synchronization, divergence, tags, local work](git-sync/README.md) |
+| git-conflict | [Merge, rebase, and cherry-pick conflict procedures](git-conflict/README.md) |
+| git-pr | [PR scope, body preparation, and validation limits](git-pr/README.md) |
 
-최소한 다음 상황을 확인합니다.
+Cover at least these cases:
 
-- 대표 요청: 스킬이 적용되어 사용자가 요청한 결과를 만듭니다.
-- 인접 요청: 적용 범위 밖의 요청에서는 스킬을 실행하지 않습니다.
-- 입력 부족 또는 도구 실패: 필요한 정보를 요청하거나 실패 원인을 설명합니다.
-- 입력 예산: 기본 조회와 추가 조회의 크기를 측정하고, 대량 입력에서도 상한과
-  누락 표시를 확인합니다. 필요한 정보를 페이지별로 복원할 수 있어야 합니다.
+- Typical request: the skill applies and produces the requested result.
+- Adjacent request: an out-of-scope request does not invoke the skill.
+- Missing input or tool failure: request necessary information or explain the failure.
+- Input budget: measure default and follow-up output sizes. Verify limits and omission
+  reporting with large inputs, and recover required information page by page.
 
-평가 기록에는 요청, 기대 결과, 사용한 에이전트와 버전, 실제 결과를 포함합니다.
-스크립트를 제공하는 스킬은 정상 입력과 실패 입력에서의 동작도 검증합니다.
+Record the request, expected result, agent and version, and actual result.
+For skills with scripts, also verify normal and failure inputs.
 
-## 작성 기준 적용 확인
+## Authoring policy verification
 
-2026-10-03에 Git 스킬 본문을 요약 우선 절차로 정리하고 입력 예산을 적용했습니다.
-기준은 description 300자, SKILL.md 본문 4,000자이며 공식 형식 제한과 별개입니다.
-`uv run check.py test`의 테스트 40개가 통과했고, 경계값 허용·초과 거부,
-생성 실패 시 기존 파일 보존, 조사 스크립트의 제한된 출력과 정보 복원을 확인했습니다.
-자동 스킬 선택·독립 에이전트 판단 품질은 이 결과에 포함하지 않습니다.
+On 2026-10-03, the Git skills were revised to start with summaries and use input budgets.
+Repository limits are 300 characters for descriptions and 4,000 for SKILL.md bodies,
+separate from the official format limits.
+All 40 tests in `uv run check.py test` passed, covering accepted boundary values,
+rejected overflows, preservation on generation failure, bounded inspection output,
+and information recovery. These results do not measure automatic skill selection
+or independent agent judgment.
 
-Git 스킬 5개의 본문 합계는 초기 커밋 `6669a64`의 23,042자에서 12,429자로
-약 46% 줄었습니다. frontmatter와 조건부 참고 문서는 이 비교에서 제외했습니다.
-최종 `uv run --locked check.py`, 실제 조사 스크립트 개별 설치·실행,
-로컬 문서 링크와 스킬별 MIT 고지 확인이 통과했습니다.
+The five Git skill bodies decreased from 23,042 characters at initial commit `6669a64`
+to 12,429 characters, about 46%. This comparison excludes frontmatter and conditional references.
+The final `uv run --locked check.py`, individual installation and execution of the inspection
+helper, local documentation links, and per-skill MIT notices all passed verification.

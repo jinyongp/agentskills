@@ -1,159 +1,158 @@
-# 스킬 작성 가이드
+# Skill authoring guide
 
-각 스킬은 하나의 작업을 수행하는 독립된 폴더로 작성합니다.
-에이전트가 설명만 읽고 사용 시점을 판단할 수 있고,
-해당 스킬만 설치해도 작업에 필요한 파일을 읽을 수 있어야 합니다.
+Each skill is an independent folder for one task. Its description must let an agent
+recognize when to use it, and installing that skill alone must provide all required files.
+Write documentation, skill instructions, references, catalogs, and evaluation notes in English.
 
-## 새 스킬 만들기
+## Create a skill
 
-가장 가까운 분류를 선택하고, 저장소 전체에서 고유한 이름을 정합니다.
-이름은 영문 소문자, 숫자, 하이픈으로 구성하며 1~64자여야 합니다.
-하이픈은 처음과 끝에 넣거나 연속으로 사용하지 않습니다.
+Choose the closest existing category and a name that is unique across the repository.
+Names must contain 1–64 lowercase ASCII letters, digits, or single hyphens.
+Hyphens cannot appear at either end or consecutively.
 
-아래 예시는 `workflow`에 `my-skill`을 만드는 명령입니다.
-이름과 분류를 실제 스킬에 맞게 바꿉니다.
+This example creates `my-skill` in `workflow`; replace both values as needed:
 
 ```bash
 uv run new_skill.py workflow my-skill
 ```
 
-`name`, `metadata.category`, 제목을 설정한 `SKILL.md`와
-`evals/my-skill/README.md` 평가 양식을 생성하고 루트·분류 README에 목록 항목을 추가합니다.
-분류는 기존 폴더 중에서 선택하며, 같은 이름이나 기존 평가 폴더가 있으면 생성을 중단합니다.
-준비에는 Python 3.11 이상과 uv가 필요합니다.
+The command sets `name`, `metadata.category`, and the title in `SKILL.md`,
+creates `evals/my-skill/README.md`, and adds root and category catalog entries.
+It requires an existing category and rejects duplicate names or existing evaluation folders.
+Preparation requires Python 3.11+ and uv.
 
-설명도 함께 지정할 수 있습니다.
+You can also supply a description:
 
 ```bash
-uv run new_skill.py workflow my-skill --description "기능과 사용 시점을 설명합니다."
+uv run new_skill.py workflow my-skill --description "Describe the task and when to use it."
 ```
 
-생성된 파일의 안내 문장을 실제 지침으로 교체하고 평가 사례를 채웁니다.
-자료 폴더는 필요한 경우에만 추가합니다. 이 명령은 작성할 틀을 준비하며,
-지침 작성, 실제 실행 평가, 커밋과 공개 배포는 이후 작업입니다.
+Replace the generated guidance with actual instructions and fill in the evaluation cases.
+Add resource directories only when needed. This command prepares the files;
+writing instructions, evaluating behavior, committing, and publishing are subsequent steps.
 
-## 파일 구성
+## File layout
 
 ```text
 skills/<category>/<skill-name>/
 ├── SKILL.md
-├── scripts/       # 실행 코드가 필요한 경우
-├── references/    # 필요한 순간에 읽는 상세 자료
-└── assets/        # 서식, 예제 데이터, 이미지
+├── scripts/       # Executable helpers, when needed
+├── references/    # Detailed material loaded when needed
+└── assets/        # Templates, sample data, images
 ```
 
-`SKILL.md`는 실제 스킬 폴더에만 배치합니다.
-루트나 분류 폴더에 배치하면 CLI가 하위 스킬을 발견하는 데 영향을 줍니다.
-템플릿은 `skill.md.tmpl`처럼 별도 확장자로 보관합니다.
+Place `SKILL.md` only in actual skill directories.
+Putting it at the repository or category root affects CLI discovery of nested skills.
+Keep templates under a separate extension, such as `skill.md.tmpl`.
 
-스킬 내부의 파일은 스킬 루트 기준 상대경로로 참조합니다.
-개별 설치 시 함께 제공되도록 필요한 파일을 해당 스킬 안에 포함합니다.
-로컬 절대경로, 저장소 루트의 `AGENTS.md`, 다른 스킬 폴더는 실행에 필요한 의존성으로
-사용하지 않습니다.
+Reference bundled files relative to the skill root, and include them inside the skill
+so they are copied during individual installation. Runtime dependencies must not rely
+on author-specific absolute paths, the repository's `AGENTS.md`, or other skill folders.
 
-## 메타데이터와 지침
+## Metadata and instructions
 
-`SKILL.md`는 YAML frontmatter와 Markdown 본문으로 구성합니다.
+`SKILL.md` contains YAML frontmatter and a Markdown body.
 
-- `name`: 스킬 폴더명과 같은 이름입니다.
-- `description`: 무엇을 하는지와 언제 사용하는지를 1~300자로 설명합니다.
-- `metadata.author`: 작성자를 문자열로 기록합니다.
-- `metadata.category`: 분류 폴더명을 문자열로 기록합니다.
-- `compatibility`: 필요한 실행 환경이 있을 때만 기록합니다. 최대 500자입니다.
-- `license`: 스킬의 라이선스를 기록합니다. 저장소의 기본 라이선스는 MIT입니다.
+- `name`: matches the skill directory name.
+- `description`: explains the task and when to use the skill in 1–300 characters.
+- `metadata.author`: author name as a string.
+- `metadata.category`: category directory name as a string.
+- `compatibility`: required environment, if applicable; at most 500 characters.
+- `license`: the skill's license; MIT is the repository default.
 
-분류와 영문 이름 제약은 이 저장소의 작성 규칙입니다.
-그 외 형식은 [Agent Skills 규격](https://agentskills.io/specification)을 따릅니다.
-추가 관리 정보는 `metadata` 안에 문자열로 넣습니다.
+Category metadata and ASCII naming constraints are repository rules.
+Other format requirements follow the [Agent Skills specification](https://agentskills.io/specification).
+Store additional maintenance metadata as string values under `metadata`.
 
-본문에는 적용 범위, 사전 조건, 핵심 절차, 결과·실패 확인만 적습니다.
-일반 지식과 반복 설명은 빼고, 판단에 영향을 주는 맥락과 변경 보존 조건은 유지합니다.
-짧은 목록과 단계로 작성하며 본문은 4,000자 이내로 유지합니다.
-이 설명·본문 상한은 이 저장소의 작성 기준이며 형식 검증과 CI에서 확인합니다.
+Keep the body to scope, prerequisites, essential steps, and result or failure checks.
+Omit general knowledge and repetition while preserving context that affects decisions
+and conditions for protecting existing work. Use short lists and steps, within 4,000 characters.
+The description and body limits are repository policy, enforced by validation and CI.
 
-## 에이전트 입력 예산
+## Agent input budget
 
-기본 입력은 작업 판단에 필요한 최소 요약으로 시작하고, 필요한 범위만 추가 조회합니다.
-규격의 최대 길이를 목표로 채우거나 스크립트로 전체 출력 위치만 옮기지 않습니다.
+Start with the smallest summary needed to decide the next action, then request relevant detail.
+Do not aim to fill specification limits or move an unchanged full dump into a script.
 
-- 조건부 상세 절차는 `references/`로 분리하고 본문에 읽어야 할 조건을 적습니다.
-  모든 참고 문서를 시작할 때 한꺼번에 읽게 하지 않습니다.
-- 반복되는 기계적 수집·정리나 큰 출력 축소는 자체 포함된 `scripts/`로 처리합니다.
-  기본적으로 실행만 하며, 소스는 수정·오류 조사에 필요할 때 읽습니다.
-- 조사 스크립트의 기본 출력은 상태·개수·판단에 필요한 항목으로 구성합니다.
-  전체 diff, 긴 로그, 파일 내용은 선택한 대상의 상세 조회에서만 제공합니다.
-- 출력 상한을 정하고 누락 여부·전체 개수·다음 조회 위치를 제공합니다.
-  경로·변경·오류를 조용히 잘라 완전한 결과처럼 보이게 하지 않습니다.
-  추가 조회도 범위와 크기를 제한하며, 필요한 페이지를 확인하기 전에는 변경하지 않습니다.
-- 정상·대량 입력·실패에서 출력 크기, 정보 복원, 변경 보존을 검사하고 평가에 기록합니다.
-  형식상 분량을 줄이려고 중요한 맥락을 삭제하지 않습니다.
+- Move conditional detail into `references/` and state when to read it.
+  Do not load every reference at startup.
+- Use self-contained `scripts/` for repeated mechanical inspection or large-output reduction.
+  Execute them by default; read their source when editing or investigating failures.
+- Default inspection output should contain state, counts, and facts needed for decisions.
+  Return full diffs, long logs, or file contents only for selected detail requests.
+- Define output limits and report omissions, total counts, and the next page position.
+  Never silently shorten paths, changes, or errors and present them as complete.
+  Bound follow-up requests too, and inspect required pages before making changes.
+- Test normal inputs, large inputs, and failures for output size, information recovery,
+  and preservation of existing work. Record the results in evaluation notes.
+  Retain essential context when reducing length.
 
-토큰 수는 에이전트의 tokenizer와 필요한 상세 조회에 따라 달라집니다.
-검증 가능한 문자 상한과 선택적 조회로 불필요한 기본 입력 증가를 막습니다.
-`git-commit`의 조사 스크립트는 JSON 응답을 개행·escape 포함 4,000자 이내로 제한합니다.
+Token counts vary by the agent's tokenizer and the detail required.
+Enforce character limits and selective queries to avoid unnecessary default input.
+The `git-commit` inspection helper limits each JSON response to 4,000 characters,
+including escaped characters and the trailing newline.
 
-## 추가 전 확인
+## Verify before committing
 
-전체 검증에는 Python 3.11 이상, [uv](https://docs.astral.sh/uv/),
-Node.js 22.20 이상과 npm이 필요합니다.
-저장소 루트에서 다음 명령을 실행합니다.
+Full verification requires Python 3.11+, [uv](https://docs.astral.sh/uv/),
+Node.js 22.20+, and npm. Run from the repository root:
 
 ```bash
 uv run check.py
 ```
 
-개발 의존성을 자동으로 준비한 뒤 형식 검증, 검증기 테스트, CLI 설치 시험을 실행합니다.
-어느 단계에서든 실패하면 명령이 실패 상태로 끝납니다.
-각 검증을 따로 실행할 수도 있습니다.
+The command prepares development dependencies, validates formats, runs tests,
+and checks CLI installation. Any failed step makes the command fail.
+You can run each check separately:
 
-| 명령 | 확인하는 내용 |
+| Command | Checks |
 | --- | --- |
-| `uv run check.py validate` | 스킬 형식과 분류별 배치 |
-| `uv run check.py test` | 검증기와 실행 스크립트의 정상·실패 사례 |
-| `uv run check.py smoke` | CLI 탐색, 선택 설치, 자료 복사 |
+| `uv run check.py validate` | Skill formats and category layout |
+| `uv run check.py test` | Normal and failure cases for validators and runtime scripts |
+| `uv run check.py smoke` | CLI discovery, selective installation, resource copying |
 
-`validate`와 `test`에는 Node.js와 npm이 필요하지 않습니다.
-저장소 검증은 공식 `skills-ref` 검증기를 사용하고, 분류별 배치, 영문 이름,
-저장소 전체 이름 중복, `metadata.category` 일치도 확인합니다.
-스킬이 없는 초기 상태는 정상으로 처리하고, 스킬 폴더를 만들었다면 `SKILL.md`를 요구합니다.
-개별 스킬만 검사할 때는 다음 명령을 사용합니다.
+`validate` and `test` do not require Node.js or npm.
+Repository validation uses the official `skills-ref` validator and checks category layout,
+ASCII names, repository-wide name uniqueness, and matching `metadata.category`.
+An empty initial catalog is valid; an existing skill directory must contain `SKILL.md`.
+To validate one skill:
 
 ```bash
 uv run --locked skills-ref validate skills/<category>/<skill-name>
 ```
 
-`skills-ref`는 공식 저장소의 특정 커밋에 고정한 개발용 참조 도구입니다.
-설치되는 스킬의 실행 의존성에는 포함되지 않습니다.
-파일 참조가 실제로 존재하는지는 작성자가 별도로 확인합니다.
-실제 실행은 [평가 가이드](evals/README.md)에 따라 별도로 확인합니다.
-형식 검증은 지침의 실행 품질이나 모든 에이전트에서의 호환성을 보장하지 않습니다.
+`skills-ref` is a development reference tool pinned to a commit in the official repository.
+It is not a runtime dependency of installed skills.
+Authors must check that referenced files exist and evaluate actual behavior using
+the [evaluation guide](evals/README.md).
+Format validation does not establish instruction quality or compatibility with every agent.
 
-준비 명령이 등록한 README 목록에서 설명을 다듬습니다.
-이후 스킬 이름이나 분류를 변경하면 루트·분류 README의 링크와 설치 명령도 갱신합니다.
-외부 자료를 포함하면 원본 라이선스와 저작권 고지도 함께 보관합니다.
+Refine the catalog descriptions added by the preparation command.
+When renaming, moving, or removing skills, update root and category catalog links
+and installation commands. Preserve third-party licenses and copyright notices.
 
-## 설치 경로 확인
+## Verify installation
 
-CLI 설치 시험에는 Node.js 22.20 이상과 npm이 필요합니다.
-아래 명령은 임시 폴더에 분류별 스킬 두 개를 만들고,
-고정한 `skills@1.7.0`으로 목록 탐색과 한 스킬의 선택 설치를 확인합니다.
+The CLI installation check requires Node.js 22.20+ and npm.
+It creates two categorized fixture skills in a temporary folder, then uses pinned
+`skills@1.7.0` to check discovery and selective installation:
 
 ```bash
 uv run check.py smoke
 ```
 
-선택한 스킬의 `SKILL.md`, 참조 자료, 스크립트, 에셋이 그대로 복사되는지와
-선택하지 않은 스킬이 설치되지 않는지를 확인합니다.
-설치 대상은 임시 프로젝트이며, 시험이 끝나면 삭제됩니다.
-첫 실행 시 npm에서 CLI를 내려받으므로 네트워크 연결이 필요합니다.
-CLI 버전을 바꿀 때는 `scripts/smoke_install.py`의 `CLI_PACKAGE`를 갱신하고 다시 시험합니다.
+The check compares the selected skill's `SKILL.md`, references, scripts, and assets
+byte for byte, and confirms that the other skill was not installed.
+The temporary project is deleted afterward. The first run needs a network connection
+to download the CLI from npm. To change the CLI version, update `CLI_PACKAGE`
+in `scripts/smoke_install.py` and rerun the check.
 
-GitHub Actions는 main 브랜치 push, PR, 수동 실행에서 `uv run --locked check.py`를 실행합니다.
-`--locked` 옵션은 `pyproject.toml`과 커밋된 의존성 잠금 파일의 일치를 확인합니다.
-실제 스킬은 추가한 뒤 별도로 로컬 설치와 실행 평가를 확인합니다.
+GitHub Actions runs `uv run --locked check.py` on main branch pushes, PRs, and manual runs.
+`--locked` checks that `pyproject.toml` matches the committed dependency lockfile.
+After adding a real skill, verify its local installation and behavior separately.
 
-## 변경과 커밋
+## Changes and commits
 
-하나의 스킬 변경에 필요한 지침, 자료, 검증, 목록 갱신은 같은 커밋에 포함합니다.
-서로 독립된 스킬이나 도구 변경은 별도 커밋으로 나눕니다.
-커밋 제목은 `feat(workflow): add my-skill`과 같은 Conventional Commits 형식을 사용합니다.
+Include a skill's instructions, resources, checks, and catalog updates in the same commit.
+Keep independent skill or tooling changes in separate commits.
+Use Conventional Commit titles, such as `feat(workflow): add my-skill`.

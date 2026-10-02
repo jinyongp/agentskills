@@ -1,38 +1,38 @@
-# git-pr 실행 평가
+# git-pr evaluation
 
-임시 저장소에서 PR 변경 범위와 본문 파일 준비를 재현하고, 설치된 gh의 옵션을
-확인했습니다. 공개 GitHub PR 생성·수정은 실행하지 않았습니다.
-자동 스킬 선택이나 별도 에이전트의 제목·본문 작성 품질은 평가하지 않았습니다.
+PR change ranges and body-file preparation were replayed in a temporary repository,
+and installed gh options were inspected. Public GitHub PR creation and updates were not run.
+Automatic selection and independent agent title/body quality were not evaluated.
 
-| 상황 | 요청 | 기대 결과 | 실제 결과 |
+| Scenario | Request | Expected result | Actual result |
 | --- | --- | --- | --- |
-| 변경 범위 | “feature의 PR 설명 준비해줘.” main에 별도 커밋, feature에 기능 커밋 제공 | merge-base 기준으로 feature의 변경만 설명 | 절차 재현 통과. main...feature에는 기능 파일만 포함, main..feature에는 기능 커밋만 포함 |
-| 커밋되지 않은 변경 | 기능 파일의 미스테이징 변경과 새 untracked 파일 추가 제공 | PR에 포함된 것으로 설명하지 않고 파일 보존 | 비교 결과에서 두 변경 제외 확인. HEAD·작업 파일 보존 |
-| 본문 준비 | 여러 문단, backtick, $(...)를 포함하는 본문 제공 | 실제 개행과 문자를 보존하는 파일 준비 | 임시 본문 파일의 개행과 literal 문자 보존 확인 |
-| 게시 명령 | 생성·수정 명령의 명시적 옵션 사용 | 대상·base·head·제목·본문 파일 지정 가능 | 로컬 gh 도움말에서 create/edit 옵션 확인. 실제 원격 쓰기 미실행 |
-| 기존 PR | “이 브랜치 PR 만들어줘.” 일치하는 열린 PR 존재 | 중복 생성 없이 기존 PR 확인 | 지침 검토 완료. GitHub 조회·독립 에이전트 평가 미실행 |
-| 적용 범위 밖 | “이 PR 코드 리뷰해줘.” | 코드 리뷰 요청으로 처리 | 경계 검토 완료. 자동 선택 평가 미실행 |
-| 인증 실패 | PR 쓰기 권한 없이 “PR 만들어줘.” | 본문은 준비하고 실패 이유 설명 | 실제 인증 실패·독립 에이전트 평가 미실행 |
+| Change range | "Prepare the feature PR description." Independent main commit and feature commit | Describe only feature changes from the merge base | Replay passed. main...feature contains only the feature file; main..feature contains only the feature commit |
+| Uncommitted changes | Additional unstaged feature edits and a new untracked file | Exclude these changes from the PR description; preserve files | Both excluded from comparisons. HEAD and working files preserved |
+| Body preparation | Multiple paragraphs, backticks, and $(...) in the body | Write a file preserving actual newlines and literal characters | Temporary body file preserves newlines and literal characters |
+| Publishing options | Explicit create/edit command options | Specify target, base, head, title, and body file where supported | Options verified in local gh create/edit help; no remote writes |
+| Existing PR | "Create a PR for this branch" with a matching open PR | Find the existing PR without creating a duplicate | Instructions reviewed; GitHub queries and independent agent evaluation not run |
+| Out of scope | "Review this PR's code." | Handle as code review | Boundaries reviewed; automatic selection not evaluated |
+| Authentication failure | "Create a PR" without write access | Prepare the body and explain the failure | Actual authentication failure and independent agent evaluation not run |
 
-## 실행 환경
+## Environment
 
-- 평가 날짜: 2026-10-03 (Asia/Seoul)
-- 에이전트와 버전: Codex 현재 세션, 모델 버전 미기록. 스크립트로 절차 재현.
-- 도구: Linux/WSL, Git 2.43.0, Python 3.11.17, skills CLI 1.7.0,
-  GitHub CLI 2.102.0.
+- Evaluation date: 2026-10-03 (Asia/Seoul).
+- Agent and version: current Codex session, model version not recorded; scripted replay.
+- Tools: Linux/WSL, Git 2.43.0, Python 3.11.17, skills CLI 1.7.0, GitHub CLI 2.102.0.
 
-## 결과
+## Results
 
-`uv run check.py validate`와 skill-creator의 `quick_validate.py`가 통과했습니다.
-최종 `uv run --locked check.py`에서 스킬 5개 형식 검증, 기존 테스트 27개,
-CLI 설치 시험이 통과했습니다. 목록·문서의 로컬 링크와 스킬별 MIT 고지도 확인했습니다.
-실제 스킬의 CLI 탐색·선택 설치 후 `SKILL.md`와 `LICENSE`의 바이트 동일성을
-확인했습니다.
+`uv run check.py validate` and skill-creator's `quick_validate.py` passed.
+At initial evaluation, `uv run --locked check.py` passed validation of all five skills,
+the then-existing 27 tests, and CLI installation checks.
+Local catalog/documentation links and per-skill MIT notices were also checked.
+CLI discovery and selective installation of the actual skill produced byte-identical
+`SKILL.md` and `LICENSE`.
 
-main에서 feature를 만든 뒤 기능 커밋을 추가하고, main에 독립 문서 커밋을
-추가했습니다. feature에서 미스테이징·untracked 변경을 만든 상태로 두 점 log와
-세 점 diff를 확인했습니다. 준비 작업은 원격 접근 없이 수행했습니다.
+The fixture branched feature from main, added a feature commit, and added an independent
+documentation commit to main. With unstaged and untracked changes on feature, it checked
+two-dot log and three-dot diff output. Preparation required no remote access.
 
-GitHub PR 생성·수정·중복 조회·읽기 확인·인증 실패와 독립 에이전트의 작성 품질은
-평가하지 않았습니다. 실제 쓰기 평가는 별도의 테스트 저장소에서 해당 작업이
-요청되었을 때 진행합니다.
+GitHub PR creation, editing, duplicate queries, readback, authentication failures,
+and independent agent writing quality were not evaluated.
+Live write evaluation requires an explicitly requested task in a separate test repository.

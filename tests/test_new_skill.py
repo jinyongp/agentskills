@@ -66,7 +66,16 @@ class NewSkillTests(unittest.TestCase):
         for name in ("repo-survey", "repo-plan"):
             self.assertIn(f"[{name}]({name}/SKILL.md)", content)
             self.assertIn(f"skills/workflow/{name}/SKILL.md", (self.root / "README.md").read_text())
-        self.assertNotIn("| 아직 없음 |", content)
+        self.assertNotIn("| None yet |", content)
+        root_row = next(
+            row for row in (self.root / "README.md").read_text().splitlines()
+            if row.startswith("| [workflow](skills/workflow/README.md) |")
+        )
+        self.assertEqual(
+            root_row.split("|")[3].strip(),
+            "[repo-survey](skills/workflow/repo-survey/SKILL.md), "
+            "[repo-plan](skills/workflow/repo-plan/SKILL.md)",
+        )
 
     def test_invalid_names_and_unknown_categories_do_not_mutate_files(self):
         before = self.snapshot()

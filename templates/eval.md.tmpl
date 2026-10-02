@@ -1,30 +1,30 @@
-# my-skill 실행 평가
+# my-skill evaluation
 
-스킬의 지침을 작성한 뒤 아래 요청과 기대 결과를 실제 사례로 채웁니다.
+After writing the instructions, fill in the requests and expected results with real cases.
 
-| 상황 | 요청 | 기대 결과 | 실제 결과 |
+| Scenario | Request | Expected result | Actual result |
 | --- | --- | --- | --- |
-| 대표 요청 | 작성 필요 | 작성 필요 | 실행 전 |
-| 적용 범위 밖 요청 | 작성 필요 | 스킬을 적용하지 않음 | 실행 전 |
-| 입력 부족 또는 도구 실패 | 작성 필요 | 작성 필요 | 실행 전 |
-| 대량 입력·출력 예산 | 작성 필요 | 출력 상한·누락 표시·필요한 정보 복원 | 실행 전 |
+| Typical request | Fill in | Fill in | Not run |
+| Out-of-scope request | Fill in | Do not invoke this skill | Not run |
+| Missing input or tool failure | Fill in | Fill in | Not run |
+| Large input and output budget | Fill in | Bounded output, omission reporting, required information recovery | Not run |
 
-## 입력량 확인
+## Input budget
 
-- SKILL.md 본문 문자 수:
-- 기본 조회 출력 상한과 실제 크기:
-- 추가 조회 조건과 페이지별 상한:
-- 전체 diff·로그·참고 문서를 기본 입력에서 제외했는지:
-- 대량 입력·실패 시 누락 표시, 정보 복원, 기존 작업 보존 결과:
+- SKILL.md body character count:
+- Default inspection output limit and measured size:
+- Follow-up conditions and per-page limits:
+- Full diffs, logs, and references excluded from default input:
+- Large-input and failure results for omission reporting, information recovery, and work preservation:
 
-조사 스크립트가 없으면 해당 항목은 적용하지 않는 이유를 기록합니다.
+If the skill has no inspection script, explain which checks do not apply and why.
 
-## 실행 환경
+## Environment
 
-- 평가 날짜:
-- 에이전트와 버전:
-- 필요한 도구와 버전:
+- Evaluation date:
+- Agent and version:
+- Required tools and versions:
 
-## 결과
+## Results
 
-실행 결과, 통과 여부, 발견한 문제와 수정 내용을 기록합니다.
+Record observed behavior, pass or fail status, issues found, and fixes.
