@@ -41,20 +41,18 @@ npx skills add jinyongp/agentskills --skill <skill-name> --agent codex --global
 스킬 폴더 안의 `scripts/`, `references/`, `assets/`에 필요한 파일을 함께 넣으면
 개별 설치 후에도 사용할 수 있습니다.
 
-저장소 유지보수에는 Python 3.11 이상과 uv를 사용합니다.
-형식과 배치 검증은 다음 명령으로 실행합니다.
+전체 검증은 저장소 루트에서 한 명령으로 실행합니다.
+Python 3.11 이상, uv, Make, Node.js 22.20 이상과 npm이 필요합니다.
 
 ```bash
-uv sync --locked
-uv run --locked python scripts/validate_skills.py
-uv run --locked python -m unittest discover -s tests -v
+make check
 ```
 
+개발 의존성을 자동으로 준비하고 형식 검증, 테스트, 임시 프로젝트 설치 시험을 실행합니다.
+빠르게 형식과 배치만 확인하려면 `make validate`를 사용합니다.
+GitHub Actions도 같은 `make check` 명령을 사용합니다.
+세부 실행 방법은 [작성 가이드](CONTRIBUTING.md#추가-전-확인)에 있습니다.
 스킬을 설치하는 사용자는 이 유지보수 도구를 설치할 필요가 없습니다.
-
-GitHub Actions에서도 형식 검증과 테스트를 실행합니다.
-분류별 탐색과 선택 설치를 확인하는 CLI 시험은 임시 프로젝트에서 실행합니다.
-로컬 실행 방법과 필요한 환경은 [작성 가이드](CONTRIBUTING.md#설치-경로-확인)에 있습니다.
 
 ## 라이선스
 

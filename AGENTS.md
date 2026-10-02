@@ -10,6 +10,7 @@ This repository distributes standalone Agent Skills through the skills CLI.
 - Keep templates under `templates/` with a `.tmpl` extension.
 - Update the root and category catalogs when adding, moving, or removing a skill.
 - Follow `CONTRIBUTING.md` for authoring and verification.
+- Run `make check` for full verification, or `make validate` for skill format and catalog checks.
 - Preserve third-party licenses and attribution. Original repository content uses MIT.
 - Use `rg` for searches and preserve unrelated changes.
 - Validate each meaningful work unit before committing it. Keep independent changes in separate Conventional Commits.

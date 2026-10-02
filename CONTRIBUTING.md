@@ -63,15 +63,25 @@ skills/<category>/<skill-name>/
 
 ## 추가 전 확인
 
-유지보수 도구에는 Python 3.11 이상과 [uv](https://docs.astral.sh/uv/)가 필요합니다.
-저장소 루트에서 개발 의존성을 설치하고 검증을 실행합니다.
+전체 검증에는 Python 3.11 이상, [uv](https://docs.astral.sh/uv/), Make,
+Node.js 22.20 이상과 npm이 필요합니다.
+저장소 루트에서 다음 명령을 실행합니다.
 
 ```bash
-uv sync --locked
-uv run --locked python scripts/validate_skills.py
-uv run --locked python -m unittest discover -s tests -v
+make check
 ```
 
+개발 의존성을 자동으로 준비한 뒤 형식 검증, 검증기 테스트, CLI 설치 시험을 실행합니다.
+어느 단계에서든 실패하면 명령이 실패 상태로 끝납니다.
+각 검증을 따로 실행할 수도 있습니다.
+
+| 명령 | 확인하는 내용 |
+| --- | --- |
+| `make validate` | 스킬 형식과 분류별 배치 |
+| `make test` | 검증기의 정상·실패 사례 |
+| `make smoke` | CLI 탐색, 선택 설치, 자료 복사 |
+
+`make validate`와 `make test`에는 Node.js와 npm이 필요하지 않습니다.
 저장소 검증은 공식 `skills-ref` 검증기를 사용하고, 분류별 배치, 영문 이름,
 저장소 전체 이름 중복, `metadata.category` 일치도 확인합니다.
 스킬이 없는 초기 상태는 정상으로 처리하고, 스킬 폴더를 만들었다면 `SKILL.md`를 요구합니다.
@@ -97,7 +107,7 @@ CLI 설치 시험에는 Node.js 22.20 이상과 npm이 필요합니다.
 고정한 `skills@1.7.0`으로 목록 탐색과 한 스킬의 선택 설치를 확인합니다.
 
 ```bash
-uv run --locked python scripts/smoke_install.py
+make smoke
 ```
 
 선택한 스킬의 `SKILL.md`, 참조 자료, 스크립트, 에셋이 그대로 복사되는지와
@@ -106,8 +116,8 @@ uv run --locked python scripts/smoke_install.py
 첫 실행 시 npm에서 CLI를 내려받으므로 네트워크 연결이 필요합니다.
 CLI 버전을 바꿀 때는 `scripts/smoke_install.py`의 `CLI_PACKAGE`를 갱신하고 다시 시험합니다.
 
-GitHub Actions는 main 브랜치 push, PR, 수동 실행에서 형식 검증, 검증기 테스트,
-설치 시험을 실행합니다. 실제 스킬은 추가한 뒤 별도로 로컬 설치와 실행 평가를 확인합니다.
+GitHub Actions는 main 브랜치 push, PR, 수동 실행에서 `make check`를 실행합니다.
+실제 스킬은 추가한 뒤 별도로 로컬 설치와 실행 평가를 확인합니다.
 
 ## 변경과 커밋
 
