@@ -39,8 +39,10 @@ metadata:
    file pages; never stage unreviewed changes. Run `git diff --cached --check`
    and required relevant checks. Preserve changes on failure; inspect hook edits
    before retrying and keep normal hooks enabled.
-5. Follow repository instructions, template, and message style. Use an imperative
-   subject and a body only for useful context. Write a temporary message file,
+5. Follow repository instructions, template, and message style. Read
+   [conventional-commits.md](references/conventional-commits.md) only when requested
+   or used by the repository. Use an imperative subject and a body only for useful
+   context. Write a temporary message file,
    then `git commit -F <file>` when committing was requested. Preparation-only
    requests stop at the requested index state or message; do not create empty commits.
 6. Restore excluded staging on success or failure. Refresh the summary and verify
