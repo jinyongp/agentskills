@@ -1,10 +1,6 @@
 ---
 name: git-commit
-description: >-
-  Stage or unstage changes, split coherent commits, and draft repository-style
-  commit messages when the user asks to commit, stage, unstage, split commits,
-  or write a commit message. Inspect the whole worktree and preserve excluded
-  changes. Use for commit preparation, not branch management or publishing.
+description: Stage, unstage, split pending commits, or draft commit messages when requested. Inspect changes, preserve excluded work, and follow repository message conventions.
 license: MIT
 metadata:
   author: jinyongp
@@ -13,106 +9,44 @@ metadata:
 
 # Git Commit
 
-Prepare repository-style commits while preserving the user's scope and work.
+## Scope
 
-## When to use
+- Match the requested action. Message-only leaves index/worktree unchanged;
+  staging alone creates no commit; committing alone does not authorize push.
+- Unrestricted commit scope includes tracked and untracked work. Explicit paths,
+  hunks, exclusions, or staged-only requests override it; existing staging is a draft.
+- Use Git and Python 3.11+. Follow target repository instructions and checks.
+  Pause affected commits for conflicts, an unrelated active operation, unsupported
+  detached HEAD, secrets, or failed checks. Missing initial history is normal.
+- Source edits, amend/history rewriting, force, and hook bypass need authorization.
 
-Use for committing, staging, unstaging, splitting pending changes into commits,
-or drafting commit messages. Match the requested action: a message-only request
-leaves both index and worktree unchanged; staging or unstaging alone does not
-authorize a commit. A commit request does not authorize a push.
+## Procedure
 
-Branch creation, merge, rebase, squash, and publication need their own requested
-workflow. Amend, history rewriting, hook bypasses, and force-push require explicit
-authorization. Do not edit source files merely to make a commit succeed.
+1. Run `python3 <skill-root>/scripts/inspect_worktree.py --repo <repo>`; execute the bundled
+   helper without loading its source. Start with its bounded summary, not full diffs.
+2. Inspect all candidate paths, then only their relevant content/diff. Follow
+   non-null `next_offset` values before treating a requested scope as reviewed.
+   Read [inspection.md](references/inspection.md) for file pages, selected diffs,
+   history, or a configured template. Read template text only when present, more
+   history only when the sample cannot establish style. Untracked files need bounded
+   content reads; protect secrets and accidental local files. Force-add only explicitly
+   requested, appropriate ignored files. Failed/incomplete inspection is not a clean state.
+3. Group by behavior; keep related code/tests/docs together, split independent
+   hunks, and commit prerequisites first. Preserve excluded staged and working
+   changes. Read [scoped-staging.md](references/scoped-staging.md) only when an
+   excluded staged change needs temporary separation. Pause on unsafe overlap.
+4. Stage explicit paths or hunks. Inspect this group's cached diff in bounded
+   file pages; never stage unreviewed changes. Run `git diff --cached --check`
+   and required relevant checks. Preserve changes on failure; inspect hook edits
+   before retrying and keep normal hooks enabled.
+5. Follow repository instructions, template, and message style. Use an imperative
+   subject and a body only for useful context. Write a temporary message file,
+   then `git commit -F <file>` when committing was requested. Preparation-only
+   requests stop at the requested index state or message; do not create empty commits.
+6. Restore excluded staging on success or failure. Refresh the summary and verify
+   actual commit contents, preserved work, and remaining groups; continue only within scope.
 
-## Prerequisites
+## Result
 
-Use Git and a shell inside the target worktree. Follow the repository's existing
-instructions, validation commands, and execution environment.
-
-Pause the affected commit if Git is unavailable, the directory is not a worktree,
-there are unresolved conflicts, or an unrequested merge, rebase, or cherry-pick
-is in progress. Accept a detached HEAD only when the user has agreed to it.
-For an initial commit, missing history is expected.
-
-## Inspect before staging
-
-Find the repository root, then inspect staged, unstaged, and untracked changes:
-
-```bash
-git rev-parse --show-toplevel
-git status --short --branch
-git diff --stat
-git diff --cached --stat
-git diff
-git diff --cached
-git ls-files --others --exclude-standard
-git diff --name-only --diff-filter=U
-git log --format='%h %s' -n 20
-git config --show-origin --get-all commit.template
-```
-
-Read the configured commit template if present; its non-comment text can impose
-message requirements. An unset template is normal. Inspect untracked files
-before staging; names and statistics alone do not establish their contents.
-
-Identify credentials, private keys, local configuration, caches, generated
-artifacts, and unexpected large binaries. Keep accidental files out of commits.
-If an in-scope file contains a secret, pause that commit and explain the affected
-path without reproducing the secret. Stage ignored files only when the user
-explicitly includes them and their contents are appropriate.
-
-## Choose scope and groups
-
-An unrestricted commit request covers tracked and untracked changes. Explicit
-paths, hunks, concerns, exclusions, or a request for only staged changes override
-that default. Treat the existing index as a draft unless the user chose it as
-the scope. Inspect the whole worktree to understand context, but mutate only the
-requested scope.
-
-Group by behavior rather than file type. Keep code, tests, fixtures, generated
-output, configuration, and documentation together when they implement one change.
-Split independent concerns, including independent hunks in one file. Commit
-prerequisites before dependent groups.
-
-An ordinary `git commit` includes the entire index. Before a scoped commit,
-account for every staged hunk. For excluded staged changes on separate paths,
-save their binary-capable cached patch outside the worktree, temporarily unstage
-only those paths, commit the chosen group, then reapply the patch to the index.
-Verify that their staged diff and worktree contents match the saved state. Restore
-excluded staging even if validation or the commit fails; keep the saved patch
-until restoration is verified. If scopes overlap or exact restoration is unclear,
-pause the affected commit instead of guessing or discarding work.
-
-## Stage, validate, and commit
-
-For each group:
-
-1. Compare the index and worktree before staging. Use explicit paths for whole
-   files and `git add -p` or `git apply --cached` for selected hunks. Whole-file
-   staging must not absorb excluded or later-group changes.
-2. Inspect `git diff --cached --stat`, `git diff --cached`, and
-   `git diff --cached --check`. Confirm the index contains exactly this group.
-3. Run the relevant checks required by the repository. State any skipped checks
-   and their reason. If checks fail, preserve the changes and report the failure;
-   fixing source files or bypassing hooks needs the corresponding authorization.
-4. Follow repository instructions, its commit template, and recent message style.
-   When appropriate, use `type(scope): imperative description`. Explain motivation,
-   migration, or material side effects in the body only when useful.
-5. Write the message to a temporary file and use `git commit -F <message-file>`.
-   Keep normal hooks enabled. If a hook fails or modifies files, inspect the new
-   state before retrying; do not claim a successful commit until Git confirms it.
-6. Restore any temporarily excluded staging. Check status, staged and unstaged
-   diffs, and the new commit's actual contents. Continue until the requested
-   groups are committed or a specific blocker prevents progress.
-
-For a staging, unstaging, or message-only request, stop after that requested result
-and its verification. An empty scope needs a clear explanation, not an empty commit.
-
-## Report the result
-
-List each new commit's hash and subject, why changes were grouped, and checks that
-actually ran. Report remaining in-scope changes and their blockers, and confirm
-excluded work is preserved. For preparation-only requests, describe the resulting
-index state or provide the drafted message without implying a commit was made.
+Report hashes/subjects or the prepared message/index state, checks actually run,
+preserved exclusions, and remaining blockers. Do not imply a commit or push occurred.

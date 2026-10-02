@@ -45,6 +45,25 @@
 
 ## 결과
 
+### 요약 스크립트 검증
+
+기본 조사는 `scripts/inspect_worktree.py` 실행으로 대체했습니다. 별도 에이전트 평가와
+구분하여 `tests/test_git_inspection.py`에서 실제 임시 Git 저장소를 사용하는
+검사 11개를 Python 3.11.17과 3.14.8에서 실행했고 모두 통과했습니다.
+실제 CLI 개별 설치 후 참고 문서·스크립트의 바이트 동일성과 의존성 없는 실행도 확인했습니다.
+
+- 기본 출력에 파일 내용·전체 diff가 포함되지 않고 HEAD·인덱스·작업 파일이 불변.
+- 한글 경로 140개와 긴 diff·이력·템플릿에서 JSON 응답이 매번 4,000자 이내.
+- 파일 페이지를 모두 읽으면 중복·누락 없이 140개 경로를 복원.
+- 선택 diff 페이지를 이어 붙이면 실제 Git diff와 동일하며 staged/unstaged를 구분.
+- rename 원본 경로, 공백·개행·glob 문자 경로, 충돌과 활성 merge 상태를 보존.
+- unborn·detached HEAD·linked worktree·미설정 템플릿 처리, 잘못된 입력의 제한된 오류 출력.
+
+추가 시점의 테스트는 아래 초기 절차 재현과 별개입니다. 자동 선택과 메시지 품질은
+여전히 독립 평가 전입니다.
+
+### 초기 절차 재현
+
 - `uv run --locked check.py`: 형식 검증, 기존 테스트 27개, CLI 설치 시험 통과.
 - skill-creator의 `quick_validate.py`: 통과.
 - 실제 저장소를 로컬 설치 소스로 지정해 `--list`로 `git-commit` 탐색 확인.
