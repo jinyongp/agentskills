@@ -7,6 +7,7 @@
 | 스킬 | 평가 기록 |
 | --- | --- |
 | git-commit | [요청별 범위, 커밋 분리, 제외한 변경 보존](git-commit/README.md) |
+| git-branch | [브랜치 작업과 인덱스·작업 파일 보존](git-branch/README.md) |
 
 최소한 다음 상황을 확인합니다.
 
