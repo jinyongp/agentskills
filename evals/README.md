@@ -33,6 +33,9 @@ For skills with scripts, also verify normal and failure inputs.
 
 ## Authoring policy verification
 
+See [saved-records verification](saved-records/README.md) for the shared artifact
+location, individual installation, generation, and file preservation checks.
+
 On 2026-10-03, the Git skills were revised to start with summaries and use input budgets.
 Repository limits are 300 characters for descriptions and 4,000 for SKILL.md bodies,
 separate from the official format limits.

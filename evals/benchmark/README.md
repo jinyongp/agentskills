@@ -31,7 +31,8 @@ remains inconclusive. No system tuning or implementation change was performed.
 
 ## Input budget
 
-- SKILL.md body: 3,464 characters including surrounding whitespace.
+- SKILL.md body at measurement replay: 3,464 characters including surrounding whitespace,
+  before adding the shared saved-records convention.
 - Native selected comparison: 116 characters; complete measurement files: 3,458 and
   3,461 bytes. Run warnings remain in the original logs and are included in the conclusion.
 - Synthetic large-suite files: 76,086 and 81,284 bytes, each with 201 cases. The additional

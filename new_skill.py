@@ -47,6 +47,9 @@ def prepare_skill(
         raise ValueError("Fix existing catalog errors before adding a skill:\n" + "\n".join(errors))
 
     content = (root / "templates" / "skill.md.tmpl").read_text(encoding="utf-8")
+    content = content.rstrip() + "\n\n" + (
+        root / "templates" / "saved-records.md.tmpl"
+    ).read_text(encoding="utf-8")
     content = content.replace("name: my-skill\n", f"name: {name}\n", 1)
     content = content.replace("category: workflow\n", f"category: {category}\n", 1)
     content = content.replace("# My Skill\n", f"# {name.replace('-', ' ').title()}\n", 1)

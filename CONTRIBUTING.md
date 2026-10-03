@@ -81,6 +81,43 @@ skills focused on required capabilities rather than a mandatory product.
 The specification's experimental `allowed-tools` field depends on client support;
 it is not a portable enforcement mechanism.
 
+## Saved task records
+
+Generated records belong to the target project, separate from installed skill files.
+Follow an explicit user destination or project convention first. Otherwise use:
+
+```text
+<project-root>/.agents/artifacts/<run-id>/<skill-name>/
+```
+
+For a new run, create a fresh ID from a UTC timestamp plus a unique suffix, for example
+`20261003T090000Z-a7f2c9`. Reserve its directory without replacing an existing one;
+retry a collision with a different suffix. An explicitly supplied run ID can group
+multiple skills working on the same task. Use the current checkout root, or the selected
+working directory outside a repository. Resolve actual paths before returning them.
+
+Persist only requested records or evidence needed by the workflow. Inline inspection,
+planning, and handoff results remain inline by default. Disposable command files belong
+in the OS temporary directory. Source changes and requested deliverables keep their
+normal project destinations; this convention covers task records, not all created files.
+
+A saved `summary.md`, when useful, contains only the goal, result/status, essential
+decisions or reproduction details, remaining gaps/next action, and links to raw evidence.
+Omit empty fields and link recoverable repository facts. Keep tool exports in their native
+format and logs separate. A handoff packet may be `handoff.md` without a duplicate summary.
+Read selected summaries first and only relevant raw evidence afterward. Folder existence
+does not prove completion; record failed or partial runs accurately.
+
+Preserve existing records unless an update was requested. Report exact output paths.
+Records stay local; committing or publishing them requires an explicit request.
+Respect existing ignore rules. This repository ignores `/.agents/artifacts/`; installing
+a skill does not modify another project's ignore configuration.
+
+Every installed skill carries the short convention itself, so individual installation
+needs no shared skill or root document. `templates/saved-records.md.tmpl` is the canonical
+maintenance fragment; `new_skill.py` appends it during preparation. Keep existing copies
+aligned when revising the convention and within the skill body budget.
+
 ## Agent input budget
 
 Start with the smallest summary needed to decide the next action, then request relevant detail.

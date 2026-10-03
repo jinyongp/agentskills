@@ -61,6 +61,14 @@ GitHub Actions runs the same script with `--locked` to enforce committed depende
 See the [verification instructions](CONTRIBUTING.md#verify-before-committing) for details.
 Skill users do not need these maintenance tools.
 
+## Saved task records
+
+When a workflow needs saved records, skills default to
+`.agents/artifacts/<run-id>/<skill-name>/` in the target project.
+User destinations and project conventions take precedence. Inline results stay
+inline unless saving is requested or needed by the workflow. Records remain local.
+See the [record convention](CONTRIBUTING.md#saved-task-records) for run IDs and contents.
+
 ## License
 
 This repository uses the [MIT License](LICENSE).

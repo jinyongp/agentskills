@@ -60,3 +60,12 @@ Use only the fields needed for this task:
    Confirm pending external outcomes before retrying them.
 4. Update the handoff when transferring again. Name inaccessible context and
    required recovery instead of claiming the transfer is complete.
+
+## Saved records
+
+Save only when requested or needed by this workflow. User/project paths take
+precedence; default: `<project-root>/.agents/artifacts/<run-id>/<skill-name>/`.
+Use a UTC timestamp plus unique suffix for a new run; reuse an explicitly shared ID.
+Add a short `summary.md` linking raw evidence when useful. Preserve existing files
+unless updating them was requested. Return exact paths; commit or publish records
+only when requested. Disposable command files use OS temp.
