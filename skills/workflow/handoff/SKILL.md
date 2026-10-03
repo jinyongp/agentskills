@@ -1,6 +1,6 @@
 ---
 name: handoff
-description: Prepare or resume a task handoff when work must continue in another session or agent. Preserve current intent, decisions, work state, evidence, permissions, and the next action.
+description: Prepare or resume work in another session or agent. Preserve context absent from the shared repository and provide targeted ways to find existing facts.
 license: MIT
 metadata:
   author: jinyongp
@@ -11,58 +11,52 @@ metadata:
 
 ## Scope
 
-- Prepare a portable continuation packet or resume from one. A progress update alone
-  does not need a handoff.
-- Carry decision-relevant context, including details unavailable from files. Do not
-  assume the receiver can access earlier messages, tools, attachments, or local paths.
-- Preparing a packet does not authorize sending it, starting agents, publishing,
-  committing, or changing the task. Use existing authorization for any delivery.
+- Continue the same task in a shared repository. Keep the context needed to decide
+  and act; use repository sources for facts the receiver can recover.
+- Preparing a handoff uses existing authorization; it does not grant permission
+  to send messages, start agents, publish, commit, or expand the task.
 
 ## Prepare
 
-1. Identify the active objective and latest accepted user instructions. Preserve
-   scope, success criteria, permissions, and constraints with their applicable scope.
-   Express selected decisions positively; include rationale needed to avoid rework.
-   Leave superseded proposals out of active context.
-2. Check only facts that affect resumption. Reuse fresh evidence and use bounded,
-   targeted inspection for volatile state. Separate observed facts, assumptions,
-   pending checks, and unresolved questions.
-3. Write the packet below in English. Use an inline packet unless a file or delivery
-   target was requested. Include exact paths/refs and essential commands; link bulky
-   evidence with a reason to read it. Omit empty fields.
-4. Check portability: identify which files, artifacts, and services the receiver can
-   access. Uncommitted work needs a shared worktree or an accessible patch/file
-   snapshot; commit IDs alone do not carry it. Include essential unavailable context
-   directly, or mark the missing dependency and how to obtain it. Exclude credentials.
-5. Read the packet as the receiver: can they locate the work, preserve it, distinguish
-   verified from pending results, and take the next action without prior chat?
-   Fix gaps before delivery. Report the packet location and any transfer gaps.
+1. Identify the active goal, current user decisions and their necessary rationale,
+   temporary constraints, unresolved questions, and next action. Preserve only
+   context unavailable from the repository. Express current choices positively.
+2. For recoverable facts, give a precise lookup: file and section, narrow search,
+   or scoped command. Include only lookups needed to resume. Repository instructions,
+   plans, code, Git state, environment setup, and durable logs stay at their sources.
+3. Keep the handoff short and in English; omit empty fields. Use an inline packet
+   unless a file or delivery target was requested. Include only relevant lookup
+   commands, without executing broad inspections just to fill the handoff.
+4. Record unlogged historical evidence when it affects the next decision: check
+   command, result, scope, and tested revision or state. A current repository query
+   cannot prove a past test passed. Record pending checks and blockers as such.
+5. Verify that the receiver can find the relevant work and take the next step
+   without earlier chat. If another checkout lacks local changes or an attachment,
+   identify the missing artifact and its transfer method. Exclude credentials.
 
-## Continuation packet
+## Packet
 
-- **Goal:** requested outcome, success criteria, current scope.
-- **Decisions and constraints:** current user choices and necessary rationale;
-  authorized actions and approvals still required; unresolved questions labeled.
-- **State:** completed, in progress, pending, blocked; relevant changes and ownership.
-- **Workspace:** repository/location, branch and HEAD, committed and uncommitted work,
-  staged state, unrelated user changes to preserve. Include only applicable fields.
-- **Evidence:** checks already run, command/scope, result, tested revision or snapshot;
-  failures, skipped checks, and remaining validation. Planned is not passed.
-- **Resume inputs:** essential paths/artifacts with purpose; environment/tool versions,
-  setup commands, access limits, and active jobs with status/check method if relevant.
-- **Next action:** first concrete step, remaining order, and any condition requiring
-  user input. Include a short request telling the receiver to resume this task.
+Use only the fields needed for this task:
+
+- **Context:** goal or remaining intent absent from existing plans; current decisions,
+  reasons, constraints, authorization boundaries, and unresolved questions.
+- **Next:** first concrete action, remaining order where unclear, and blocking input.
+- **Lookups:** exact source or bounded query, its purpose, and when it is needed.
+  Use task-relevant selectors only; avoid copied file inventories, Git state,
+  source text, logs, and instructions already available in the repository.
+- **Evidence:** relevant results not stored elsewhere, their tested state, remaining
+  checks, and pending external actions with a way to confirm their outcome.
 
 ## Resume
 
-1. Read the packet and applicable destination instructions. Confirm workspace/ref,
-   available artifacts, dirty/staged work, and any active jobs with targeted checks.
-   Process IDs and local paths may belong to the source machine.
-2. Compare actual state with the snapshot. Resolve material conflicts with current
-   instructions or changes before affected edits. Request only missing information
-   that blocks progress; continue independent work where possible.
-3. Continue from the recorded next action within current authorization. Reuse valid
-   evidence; rerun checks when the tested state or environment changed. Confirm the
-   outcome of pending external actions before retrying them.
-4. Preserve existing work and update the packet when handing off again. If context
-   remains inaccessible, name the gap instead of claiming a complete transfer.
+1. Read the packet and applicable repository instructions. Follow relevant lookups
+   to recover current state; inspect only the paths and refs needed for the next
+   action. Preserve staged, unstaged, untracked, and unrelated user work.
+2. Resolve material conflicts between the recorded intent and current instructions
+   or workspace before affected edits. Ask only for missing context that blocks
+   progress; continue independent work when possible.
+3. Start with the next action within current authorization. Reuse evidence only
+   when its tested scope and state still apply; otherwise rerun the relevant check.
+   Confirm pending external outcomes before retrying them.
+4. Update the handoff when transferring again. Name inaccessible context and
+   required recovery instead of claiming the transfer is complete.

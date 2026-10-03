@@ -1,60 +1,50 @@
 # handoff evaluation
 
-Instruction review and scripted snapshot replay were performed in this Codex session.
-A fresh Python process inspected only a prepared packet and its shared fixture workspace.
-This verifies mechanical state checks, not independent agent summarization, automatic
-skill selection, or autonomous continuation.
+Instruction review and a lookup-based replay used a shared temporary repository.
+A fresh Python process read a compact packet and executed its targeted Git queries.
+This checks information recovery and work preservation; it does not measure independent
+agent summarization, automatic selection, or autonomous continuation.
 
 | Scenario | Request | Expected result | Actual result |
 | --- | --- | --- | --- |
-| Typical handoff | "Prepare this feature task for another session." Staged and unstaged edits, an untracked file, and an unrelated user note | Carry intent, decisions, permissions, pending validation, exact state, and the next action | Packet fields reviewed; fresh-process snapshot checks passed without changing HEAD, index, or files |
-| Resume stale state | "Continue from this packet." Feature file changed after preparation | Detect mismatch before editing and preserve newer work | Scripted mismatch detection passed; newer file bytes preserved |
-| Separate workspace | "Resume elsewhere." Uncommitted changes exist only on the source machine | Require accessible worktree or patch/file snapshot; identify missing inputs | Portability instructions reviewed; cross-machine transfer not run |
-| Out of scope | "Show task progress." No continuation requested | Give a progress update without a handoff or agent launch | Scope reviewed; automatic selection not evaluated |
-| Missing context | Required attachment or artifact is inaccessible | Include essential content if available, otherwise identify the gap and obtain it before dependent work | Instructions reviewed; independent agent failure handling not run |
-| Long context | Conversation includes superseded proposals, long logs, current decisions, and unresolved questions | Keep current decisions, necessary rationale, scope, and next action; retrieve bulky evidence only when needed | Canonical-state and targeted-inspection instructions reviewed; large-conversation agent evaluation not run |
+| Shared repository | "Prepare this feature task for another session." Staged, unstaged, untracked, and unrelated user work | Carry missing intent and next action; provide relevant queries instead of copied repository state | A 419-character fixture packet recovered relevant state without changing HEAD, index, or files |
+| Newer work | "Resume from this handoff." Feature edited after preparation | Query current state and preserve the newer edit | The unchanged packet recovered the new edit; all existing work remained unchanged |
+| Existing documentation | Goal, setup, or constraints already recorded in the repository | Give exact source/section and purpose only when needed | Instructions reviewed; agent lookup selection not evaluated |
+| Historical evidence | A check passed earlier, with no durable log | Keep command, result, tested scope/state, and remaining checks; current queries cannot establish past success | Evidence rule reviewed; stale-evidence judgment not evaluated by an independent agent |
+| Missing artifact | Another checkout lacks uncommitted work or an attachment | Identify the missing input and transfer method before dependent edits | Instructions reviewed; cross-machine transfer not run |
+| Long context | Logs and superseded proposals accompany current decisions and unresolved questions | Preserve current missing context and necessary rationale; access existing evidence selectively | Instructions reviewed; large-conversation fidelity not measured |
 | Pending external action | Source reports an unfinished remote operation | Confirm its outcome before retrying within current authorization | Resume instructions reviewed; live external actions not run |
 
 ## Replay setup
 
-A temporary repository contained an initial commit on main, a staged feature edit,
-additional unstaged edits in the same file, an untracked file, and an unrelated user note.
-The packet recorded the repository, branch, HEAD, staged and unstaged binary patches,
-untracked paths, and file contents as a small fixture snapshot. It also recorded intent,
-a selected decision, local-only authorization, validation not yet run, and the next action.
+A temporary repository contained a staged feature edit, an additional unstaged edit,
+an untracked file, and an unrelated user note. The packet held intent, local authorization,
+the next action, pending validation, and three queries scoped to relevant paths.
+It contained no copied HEAD, branch, patches, file contents, or Git status output.
 
-A separate Python process read the packet and compared it with the actual repository.
-The sender then confirmed unchanged staged content and working-file bytes.
-After the feature file changed again, the receiver rejected the stale snapshot,
-and the new contents remained unchanged. No historical conversation was supplied
-to the checking process. No model inferred or executed the next action.
+A fresh process ran the supplied status, staged diff, and working diff queries in the
+shared repository. The checking harness independently compared HEAD, index, and all
+working-file bytes before and after. After another feature edit, the same packet
+recovered the newer contents and preserved the workspace again.
+No model selected the queries or decided the next implementation action.
 
 ## Input budget
 
-- Description: 177 characters; SKILL.md body: 3,680 characters.
-- No bundled inspection helper or references: the task requires synthesizing current
-  intent and evidence, rather than repeating a fixed mechanical inspection.
-- Instructions require bounded, targeted checks and conditionally accessed evidence.
-  They do not impose an arbitrary packet limit that could discard essential context.
-- No runtime output cap or pagination contract applies to this skill.
-  Default packet length and preservation under large conversations remain unmeasured.
-- Replay verified preservation and stale-state detection in a small shared workspace.
-  It does not establish complete context transfer across machines or agents.
+- Description: 152 characters; SKILL.md body: 3,088 characters.
+- Measured fixture packet: 419 characters; this is an example, not a universal cap.
+- Repository facts stay at their sources, with task-specific selectors and lookup methods.
+- Unrecorded intent, necessary rationale, temporary constraints, and historical evidence
+  remain inline when they affect resumption.
+- No bundled runtime helper or pagination contract: this skill synthesizes context
+  and selects lookups. Large-query output and agent-written packet sizes remain unmeasured.
 
-## Environment
+## Environment and results
 
-- Evaluation date: 2026-10-03 (Asia/Seoul).
-- Agent and version: current Codex session; model version not recorded.
-- Tools: Linux/WSL, Git 2.43.0, Python 3.11.17, Node.js 22.22.2, skills CLI 1.7.0.
-- Replay used isolated temporary repositories; no user repository state or external services changed.
-
-## Results
-
-- `uv run --locked check.py`: six skills validated, all 40 tests and CLI installation checks passed.
-- skill-creator's `quick_validate.py`, local documentation links, and the bundled MIT license passed checks.
-- Actual repository discovery with skills CLI 1.7.0 found `handoff`.
-- Selective installation with `--skill handoff --agent codex --copy --yes`
-  produced byte-identical `SKILL.md` and `LICENSE`; an unselected skill was absent.
-- Snapshot inspection and stale-state replay passed.
-- Independent sender/receiver agent behavior, automatic selection, large-context
-  fidelity, and live cross-session delivery remain unevaluated.
+- Evaluation date: 2026-10-03 (Asia/Seoul), current Codex session; model version not recorded.
+- Replay: Linux/WSL, Git 2.43.0, Python 3.11.17; isolated temporary worktree, no external writes.
+- Lookup recovery and work-preservation replay passed.
+- skill-creator's `quick_validate.py` passed.
+- `uv run --locked check.py`: six skills validated; all 40 tests and CLI installation checks passed.
+- Local documentation links and MIT license copies passed checks.
+- Independent agent continuation, large-context fidelity, live delivery, and cross-machine
+  recovery remain unevaluated.
