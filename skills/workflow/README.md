@@ -12,6 +12,7 @@ Skills for repository inspection, planning, test design, verification, code revi
 | [debug](debug/SKILL.md) | Reproduce symptoms, confirm causes, apply scoped fixes, and verify regressions | `npx skills add jinyongp/agentskills --skill debug` |
 | [benchmark](benchmark/SKILL.md) | Compare code performance with matched workloads, repeated samples, and preserved evidence | `npx skills add jinyongp/agentskills --skill benchmark` |
 | [test](test/SKILL.md) | Assess coverage gaps and design behavior tests with proportionate maintenance cost | `npx skills add jinyongp/agentskills --skill test` |
+| [test-integration](test-integration/SKILL.md) | Protect real boundary behavior and wiring beyond isolated or static checks | `npx skills add jinyongp/agentskills --skill test-integration` |
 <!-- skills:end -->
 
 Add skills at `skills/workflow/<skill-name>/SKILL.md`.

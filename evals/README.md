@@ -20,6 +20,7 @@ Keep each skill's cases and results in its own folder.
 | git-worktree | [Registry paging, checkout lifecycle, locks, and local data](git-worktree/README.md) |
 | benchmark | [Tool selection, matched measurements, noise, and retained raw results](benchmark/README.md) |
 | test | [Meaningful coverage, stable contracts, reuse, and maintenance cost](test/README.md) |
+| test-integration | [Real boundaries, consumer outcomes, isolation, and coverage reuse](test-integration/README.md) |
 
 Cover at least these cases:
 
