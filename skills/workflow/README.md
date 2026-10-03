@@ -13,6 +13,7 @@ Skills for repository inspection, planning, test design, verification, code revi
 | [benchmark](benchmark/SKILL.md) | Compare code performance with matched workloads, repeated samples, and preserved evidence | `npx skills add jinyongp/agentskills --skill benchmark` |
 | [test](test/SKILL.md) | Assess coverage gaps and design behavior tests with proportionate maintenance cost | `npx skills add jinyongp/agentskills --skill test` |
 | [test-integration](test-integration/SKILL.md) | Protect real boundary behavior and wiring beyond isolated or static checks | `npx skills add jinyongp/agentskills --skill test-integration` |
+| [test-maintenance](test-maintenance/SKILL.md) | Reduce concrete suite maintenance costs while preserving meaningful failure detection | `npx skills add jinyongp/agentskills --skill test-maintenance` |
 <!-- skills:end -->
 
 Add skills at `skills/workflow/<skill-name>/SKILL.md`.

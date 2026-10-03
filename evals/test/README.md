@@ -27,7 +27,8 @@ The repository suite executes it as part of normal verification.
 
 ## Budget and limits
 
-SKILL.md body: 3,708 characters including surrounding whitespace.
+SKILL.md body at initial evaluation: 3,708 characters including surrounding whitespace,
+before adding the integration and suite-maintenance scope distinction.
 No helper or additional testing dependency is bundled: selecting worthwhile assertions
 depends on requirements, existing coverage, and failure mechanisms rather than a universal
 mechanical scan. Instructions request targeted inspection and bounded execution reports.

@@ -1,6 +1,6 @@
 ---
 name: test
-description: "Design, add, or revise tests that protect meaningful behavior with proportionate maintenance cost. Assess whether to reuse existing checks, add coverage, delegate to static tools, or skip an unnecessary test."
+description: "Assess test needs and choose a useful testing boundary. Design behavior checks when a specialized workflow is unnecessary; reuse existing coverage or static validation before adding tests."
 license: MIT
 metadata:
   author: jinyongp
@@ -15,6 +15,8 @@ metadata:
   tools and repository conventions; preserve unrelated code, tests, and configuration.
 - Assess lasting coverage before adding it. Running existing checks alone does not
   require new test code. Test pruning follows the requested maintenance scope.
+- Choose coverage here when the boundary is unclear. Integration work exercises real
+  dependencies; suite maintenance assesses existing tests and their ongoing cost.
 
 ## Principles
 
