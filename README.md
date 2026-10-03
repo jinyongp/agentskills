@@ -24,7 +24,7 @@ npx skills add jinyongp/agentskills --skill <skill-name> --agent codex --global
 
 | Category | Scope | Skills |
 | --- | --- | --- |
-| [workflow](skills/workflow/README.md) | Repository inspection, planning, verification, handoff, closeout | [handoff](skills/workflow/handoff/SKILL.md) |
+| [workflow](skills/workflow/README.md) | Repository inspection, planning, verification, handoff, closeout | [handoff](skills/workflow/handoff/SKILL.md), [verify](skills/workflow/verify/SKILL.md) |
 | [frontend](skills/frontend/README.md) | Frameworks, UI, accessibility | None yet |
 | [git](skills/git/README.md) | Commits, branches, remote synchronization, conflicts, PRs | [git-commit](skills/git/git-commit/SKILL.md), [git-branch](skills/git/git-branch/SKILL.md), [git-sync](skills/git/git-sync/SKILL.md), [git-conflict](skills/git/git-conflict/SKILL.md), [git-pr](skills/git/git-pr/SKILL.md) |
 | [writing](skills/writing/README.md) | Developer documentation, editing | None yet |
