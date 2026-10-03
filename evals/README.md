@@ -25,6 +25,7 @@ Keep each skill's cases and results in its own folder.
 | test-unit | [Stable logic boundaries, meaningful cases, and isolated state](test-unit/README.md) |
 | test-contract | [Consumer expectations, provider conformance, and version scope](test-contract/README.md) |
 | test-e2e | [Real entrypoints, observable completion, isolation, and system scope](test-e2e/README.md) |
+| test-property | [Justified invariants, generated domains, shrinking, and failure replay](test-property/README.md) |
 
 Cover at least these cases:
 

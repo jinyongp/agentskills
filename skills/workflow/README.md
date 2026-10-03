@@ -17,6 +17,7 @@ Skills for repository inspection, planning, test design, verification, code revi
 | [test-unit](test-unit/SKILL.md) | Protect isolated logic and state without fixing internal implementation choices | `npx skills add jinyongp/agentskills --skill test-unit` |
 | [test-contract](test-contract/SKILL.md) | Verify actual provider behavior against justified consumer compatibility expectations | `npx skills add jinyongp/agentskills --skill test-contract` |
 | [test-e2e](test-e2e/SKILL.md) | Verify critical user journeys through actual entrypoints and observable results | `npx skills add jinyongp/agentskills --skill test-e2e` |
+| [test-property](test-property/SKILL.md) | Explore meaningful invariants with generated cases and reproducible counterexamples | `npx skills add jinyongp/agentskills --skill test-property` |
 <!-- skills:end -->
 
 Add skills at `skills/workflow/<skill-name>/SKILL.md`.
