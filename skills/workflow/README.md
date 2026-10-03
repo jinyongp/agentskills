@@ -15,6 +15,7 @@ Skills for repository inspection, planning, test design, verification, code revi
 | [test-integration](test-integration/SKILL.md) | Protect real boundary behavior and wiring beyond isolated or static checks | `npx skills add jinyongp/agentskills --skill test-integration` |
 | [test-maintenance](test-maintenance/SKILL.md) | Reduce concrete suite maintenance costs while preserving meaningful failure detection | `npx skills add jinyongp/agentskills --skill test-maintenance` |
 | [test-unit](test-unit/SKILL.md) | Protect isolated logic and state without fixing internal implementation choices | `npx skills add jinyongp/agentskills --skill test-unit` |
+| [test-contract](test-contract/SKILL.md) | Verify actual provider behavior against justified consumer compatibility expectations | `npx skills add jinyongp/agentskills --skill test-contract` |
 <!-- skills:end -->
 
 Add skills at `skills/workflow/<skill-name>/SKILL.md`.
