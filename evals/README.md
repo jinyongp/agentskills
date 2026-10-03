@@ -14,6 +14,7 @@ Keep each skill's cases and results in its own folder.
 | handoff | [Missing context, targeted lookups, and work preservation](handoff/README.md) |
 | verify | [Bounded execution, log recovery, failures, and timeout handling](verify/README.md) |
 | survey | [Read-only directory mapping and bounded manifest discovery](survey/README.md) |
+| plan | [Scoped work units, material decisions, and completion evidence](plan/README.md) |
 
 Cover at least these cases:
 
