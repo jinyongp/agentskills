@@ -22,6 +22,7 @@ Keep each skill's cases and results in its own folder.
 | test | [Meaningful coverage, stable contracts, reuse, and maintenance cost](test/README.md) |
 | test-integration | [Real boundaries, consumer outcomes, isolation, and coverage reuse](test-integration/README.md) |
 | test-maintenance | [Cost evidence, justified assertions, and retained protection](test-maintenance/README.md) |
+| test-unit | [Stable logic boundaries, meaningful cases, and isolated state](test-unit/README.md) |
 
 Cover at least these cases:
 
