@@ -15,6 +15,7 @@ Keep each skill's cases and results in its own folder.
 | verify | [Bounded execution, log recovery, failures, and timeout handling](verify/README.md) |
 | survey | [Read-only directory mapping and bounded manifest discovery](survey/README.md) |
 | plan | [Scoped work units, material decisions, and completion evidence](plan/README.md) |
+| code-review | [Review scope, bounded comparisons, and reproducible findings](code-review/README.md) |
 
 Cover at least these cases:
 
