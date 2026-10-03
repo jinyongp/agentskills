@@ -11,6 +11,7 @@ Keep each skill's cases and results in its own folder.
 | git-sync | [Remote synchronization, divergence, tags, local work](git-sync/README.md) |
 | git-conflict | [Merge, rebase, and cherry-pick conflict procedures](git-conflict/README.md) |
 | git-pr | [PR scope, body preparation, and validation limits](git-pr/README.md) |
+| handoff | [Portable context, work preservation, and resumption gaps](handoff/README.md) |
 
 Cover at least these cases:
 

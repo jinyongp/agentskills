@@ -58,6 +58,13 @@ class NewSkillTests(unittest.TestCase):
 
     def test_multiple_additions_preserve_existing_entries_and_prose(self):
         category = self.root / "skills" / "workflow" / "README.md"
+        catalog = self.root / "README.md"
+        original_row = next(
+            row for row in catalog.read_text().splitlines()
+            if row.startswith("| [workflow](skills/workflow/README.md) |")
+        )
+        previous = original_row.split("|")[3].strip()
+        expected_entries = [] if previous == "None yet" else previous.split(", ")
         category.write_text(category.read_text() + "\nMaintainer notes to preserve.\n")
         prepare_skill(self.root, "workflow", "repo-survey")
         prepare_skill(self.root, "workflow", "repo-plan")
@@ -68,13 +75,15 @@ class NewSkillTests(unittest.TestCase):
             self.assertIn(f"skills/workflow/{name}/SKILL.md", (self.root / "README.md").read_text())
         self.assertNotIn("| None yet |", content)
         root_row = next(
-            row for row in (self.root / "README.md").read_text().splitlines()
+            row for row in catalog.read_text().splitlines()
             if row.startswith("| [workflow](skills/workflow/README.md) |")
         )
         self.assertEqual(
-            root_row.split("|")[3].strip(),
-            "[repo-survey](skills/workflow/repo-survey/SKILL.md), "
-            "[repo-plan](skills/workflow/repo-plan/SKILL.md)",
+            root_row.split("|")[3].strip().split(", "),
+            expected_entries + [
+                "[repo-survey](skills/workflow/repo-survey/SKILL.md)",
+                "[repo-plan](skills/workflow/repo-plan/SKILL.md)",
+            ],
         )
 
     def test_invalid_names_and_unknown_categories_do_not_mutate_files(self):

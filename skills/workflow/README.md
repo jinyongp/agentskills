@@ -1,10 +1,10 @@
 # Workflow
 
-Skills for repository inspection, implementation planning, verification, and closeout.
+Skills for repository inspection, implementation planning, verification, handoff, and closeout.
 <!-- skills:start -->
 | Skill | Description | Install |
 | --- | --- | --- |
-| None yet | | |
+| [handoff](handoff/SKILL.md) | Preserve task context and verified work state for continuation in another session or agent | `npx skills add jinyongp/agentskills --skill handoff` |
 <!-- skills:end -->
 
 Add skills at `skills/workflow/<skill-name>/SKILL.md`.
