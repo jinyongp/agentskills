@@ -12,6 +12,7 @@ This repository distributes standalone Agent Skills through the skills CLI.
 - Prepare new skills with `uv run new_skill.py <category> <name>`, then write the generated instructions and evaluation cases.
 - Update the root and category catalogs when adding, moving, or removing a skill.
 - Follow `CONTRIBUTING.md` for authoring and verification.
+- Task skills follow current user instructions and repository tool requirements; tool-specific skills declare their scope and prerequisites.
 - Keep descriptions within 300 characters and SKILL.md bodies within 4,000 characters. Include only task-changing guidance; preserve essential context and boundaries.
 - Load references only for a stated condition. Execute bundled helpers without reading their source by default.
 - Use scripts for repeated mechanical inspection or large-output reduction. Start with bounded summaries; request only relevant detail, with explicit omission counts and pagination.

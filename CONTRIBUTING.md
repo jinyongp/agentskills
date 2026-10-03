@@ -69,6 +69,18 @@ Omit general knowledge and repetition while preserving context that affects deci
 and conditions for protecting existing work. Use short lists and steps, within 4,000 characters.
 The description and body limits are repository policy, enforced by validation and CI.
 
+## Tool selection
+
+Task skills choose tools from the user's current instructions and applicable repository
+requirements. Reuse a suitable existing tool before adding one; explain capability or
+availability gaps before substituting a tool that changes the requested workflow.
+
+Tool-specific skills are valid. Make their scope clear in the name and description,
+and state actual prerequisites in the body or `compatibility`. Keep portable task
+skills focused on required capabilities rather than a mandatory product.
+The specification's experimental `allowed-tools` field depends on client support;
+it is not a portable enforcement mechanism.
+
 ## Agent input budget
 
 Start with the smallest summary needed to decide the next action, then request relevant detail.
