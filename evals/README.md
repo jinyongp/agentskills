@@ -19,6 +19,7 @@ Keep each skill's cases and results in its own folder.
 | debug | [Reproduction, scoped correction, and preserved unrelated work](debug/README.md) |
 | git-worktree | [Registry paging, checkout lifecycle, locks, and local data](git-worktree/README.md) |
 | benchmark | [Tool selection, matched measurements, noise, and retained raw results](benchmark/README.md) |
+| test | [Meaningful coverage, stable contracts, reuse, and maintenance cost](test/README.md) |
 
 Cover at least these cases:
 

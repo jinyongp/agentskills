@@ -143,6 +143,18 @@ including escaped characters and the trailing newline.
 
 ## Verify before committing
 
+Test additions must protect a named failure or contract absent from existing checks.
+Prefer extending useful coverage, or reusing lint, type, and schema validation, over
+adding a separate test for each change. Inspecting or validating a task does not
+automatically require permanent test code.
+
+Assert stable behavior and required contracts, with independently justified expectations.
+Exact literals, document structures, HTML attributes, snapshots, and architecture
+constraints need a concrete reason; preserve legitimate implementation freedom.
+Evaluate additional confidence against setup, runtime, failure-analysis, and maintenance
+cost. Removing a redundant or incidental assertion must preserve meaningful coverage.
+See the [test skill](skills/workflow/test/SKILL.md) for the full decision procedure.
+
 Full verification requires Python 3.11+, [uv](https://docs.astral.sh/uv/),
 Node.js 22.20+, and npm. Run from the repository root:
 

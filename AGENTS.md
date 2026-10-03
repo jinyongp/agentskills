@@ -18,6 +18,7 @@ This repository distributes standalone Agent Skills through the skills CLI.
 - Load references only for a stated condition. Execute bundled helpers without reading their source by default.
 - Use scripts for repeated mechanical inspection or large-output reduction. Start with bounded summaries; request only relevant detail, with explicit omission counts and pagination.
 - Define and test inspection output limits, including large inputs and failures. Never treat truncated information as complete or shorten exact paths silently.
+- Add tests for meaningful uncovered behavior, reuse existing checks, and keep maintenance cost proportional. Follow the testing principles in CONTRIBUTING.md.
 - Run `uv run check.py` for full verification, or `uv run check.py validate` for skill format and catalog checks. CI adds `--locked` to enforce the committed dependency lockfile.
 - Preserve third-party licenses and attribution. Original repository content uses MIT.
 - Use `rg` for searches and preserve unrelated changes.

@@ -24,7 +24,7 @@ npx skills add jinyongp/agentskills --skill <skill-name> --agent codex --global
 
 | Category | Scope | Skills |
 | --- | --- | --- |
-| [workflow](skills/workflow/README.md) | Inspection, planning, verification, review, debugging, benchmarking, handoff, closeout | [handoff](skills/workflow/handoff/SKILL.md), [verify](skills/workflow/verify/SKILL.md), [survey](skills/workflow/survey/SKILL.md), [plan](skills/workflow/plan/SKILL.md), [code-review](skills/workflow/code-review/SKILL.md), [debug](skills/workflow/debug/SKILL.md), [benchmark](skills/workflow/benchmark/SKILL.md) |
+| [workflow](skills/workflow/README.md) | Inspection, planning, test design, verification, review, debugging, benchmarking, handoff, closeout | [handoff](skills/workflow/handoff/SKILL.md), [verify](skills/workflow/verify/SKILL.md), [survey](skills/workflow/survey/SKILL.md), [plan](skills/workflow/plan/SKILL.md), [code-review](skills/workflow/code-review/SKILL.md), [debug](skills/workflow/debug/SKILL.md), [benchmark](skills/workflow/benchmark/SKILL.md), [test](skills/workflow/test/SKILL.md) |
 | [frontend](skills/frontend/README.md) | Frameworks, UI, accessibility | None yet |
 | [git](skills/git/README.md) | Commits, branches, remote synchronization, conflicts, PRs, worktrees | [git-commit](skills/git/git-commit/SKILL.md), [git-branch](skills/git/git-branch/SKILL.md), [git-sync](skills/git/git-sync/SKILL.md), [git-conflict](skills/git/git-conflict/SKILL.md), [git-pr](skills/git/git-pr/SKILL.md), [git-worktree](skills/git/git-worktree/SKILL.md) |
 | [writing](skills/writing/README.md) | Developer documentation, editing | None yet |
