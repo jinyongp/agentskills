@@ -16,6 +16,7 @@ Skills for repository inspection, planning, test design, verification, code revi
 | [test-maintenance](test-maintenance/SKILL.md) | Reduce concrete suite maintenance costs while preserving meaningful failure detection | `npx skills add jinyongp/agentskills --skill test-maintenance` |
 | [test-unit](test-unit/SKILL.md) | Protect isolated logic and state without fixing internal implementation choices | `npx skills add jinyongp/agentskills --skill test-unit` |
 | [test-contract](test-contract/SKILL.md) | Verify actual provider behavior against justified consumer compatibility expectations | `npx skills add jinyongp/agentskills --skill test-contract` |
+| [test-e2e](test-e2e/SKILL.md) | Verify critical user journeys through actual entrypoints and observable results | `npx skills add jinyongp/agentskills --skill test-e2e` |
 <!-- skills:end -->
 
 Add skills at `skills/workflow/<skill-name>/SKILL.md`.
