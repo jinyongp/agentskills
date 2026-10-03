@@ -16,6 +16,7 @@ Keep each skill's cases and results in its own folder.
 | survey | [Read-only directory mapping and bounded manifest discovery](survey/README.md) |
 | plan | [Scoped work units, material decisions, and completion evidence](plan/README.md) |
 | code-review | [Review scope, bounded comparisons, and reproducible findings](code-review/README.md) |
+| debug | [Reproduction, scoped correction, and preserved unrelated work](debug/README.md) |
 
 Cover at least these cases:
 
