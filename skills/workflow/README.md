@@ -21,6 +21,7 @@ Skills for implementation, repository inspection, planning, test design, verific
 | [implement](implement/SKILL.md) | Deliver authorized code changes with clear outcomes, simple design, scoped edits, and sufficient checks | `npx skills add jinyongp/agentskills --skill implement` |
 | [dependency-update](dependency-update/SKILL.md) | Update selected dependencies or runtimes with verified target versions, compatibility review, scoped manifest and lockfile changes, and relevant checks. Use for requested upgrades or remediation; recommendations alone do not authorize installation. | `npx skills add jinyongp/agentskills --skill dependency-update` |
 | [optimize](optimize/SKILL.md) | Improve code performance through demonstrated bottlenecks, scoped changes, correctness checks, and matched before/after measurements. Use for latency, throughput, memory, or resource costs; measurement alone does not authorize optimization. | `npx skills add jinyongp/agentskills --skill optimize` |
+| [db-migrate](db-migrate/SKILL.md) | Prepare, review, or run scoped database schema changes and data migrations with engine-aware execution, preserved data, staged compatibility, and recovery. Use for migrations or backfills; live execution requires the identified target and task authorization. | `npx skills add jinyongp/agentskills --skill db-migrate` |
 <!-- skills:end -->
 
 Add skills at `skills/workflow/<skill-name>/SKILL.md`.
