@@ -14,6 +14,7 @@ Each skill works independently and declares its own license.
 | [summarize](summarize/SKILL.md) | Summarize a specified document, thread, transcript, file, or pasted text faithfully. Preserve essential facts, attribution, conditions, and actual action items; use when source-content compression is requested. | `npx skills add jinyongp/agentskills --skill summarize` |
 | [rewrite](rewrite/SKILL.md) | Edit prose for clarity and natural voice while preserving facts, intent, and essential qualifications | `npx skills add jinyongp/agentskills --skill rewrite` |
 | [write](write/SKILL.md) | Draft reader-facing prose from a brief or evidence, with a clear purpose, appropriate voice, and supported claims. Use for new documents, articles, messages, or product copy; use rewrite for editing existing prose. | `npx skills add jinyongp/agentskills --skill write` |
+| [korean-writing](korean-writing/SKILL.md) | Create, edit, or review Korean reader-facing prose for natural syntax, register, and information flow. Use for Korean writing or translationese concerns; ordinary Korean conversation alone does not require this skill. | `npx skills add jinyongp/agentskills --skill korean-writing` |
 <!-- skills:end -->
 
 Add skills at `skills/writing/<skill-name>/SKILL.md`.
