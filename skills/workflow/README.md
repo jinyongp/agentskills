@@ -1,6 +1,6 @@
 # Workflow
 
-Skills for repository inspection, planning, test design, verification, code review, debugging, benchmarking, handoff, and closeout.
+Skills for implementation, repository inspection, planning, test design, verification, code review, debugging, benchmarking, handoff, and closeout.
 <!-- skills:start -->
 | Skill | Description | Install |
 | --- | --- | --- |
@@ -18,6 +18,7 @@ Skills for repository inspection, planning, test design, verification, code revi
 | [test-contract](test-contract/SKILL.md) | Verify actual provider behavior against justified consumer compatibility expectations | `npx skills add jinyongp/agentskills --skill test-contract` |
 | [test-e2e](test-e2e/SKILL.md) | Verify critical user journeys through actual entrypoints and observable results | `npx skills add jinyongp/agentskills --skill test-e2e` |
 | [test-property](test-property/SKILL.md) | Explore meaningful invariants with generated cases and reproducible counterexamples | `npx skills add jinyongp/agentskills --skill test-property` |
+| [implement](implement/SKILL.md) | Deliver authorized code changes with clear outcomes, simple design, scoped edits, and sufficient checks | `npx skills add jinyongp/agentskills --skill implement` |
 <!-- skills:end -->
 
 Add skills at `skills/workflow/<skill-name>/SKILL.md`.

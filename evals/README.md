@@ -6,6 +6,7 @@ Keep each skill's cases and results in its own folder.
 
 | Skill | Evaluation record |
 | --- | --- |
+| implement | [Material ambiguity, simple design, scoped changes, and sufficient checks](implement/README.md) |
 | summarize | [Delivery, fidelity, and scope](summarize/README.md) |
 | brief | [Delivery, fidelity, and scope](brief/README.md) |
 | terse | [Delivery, fidelity, and scope](terse/README.md) |
