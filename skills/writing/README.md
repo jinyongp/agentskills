@@ -20,6 +20,7 @@ Each skill works independently and declares its own license.
 | [write](write/SKILL.md) | Draft reader-facing prose from a brief or evidence, with a clear purpose, appropriate voice, and supported claims. Use for new documents, articles, messages, or product copy; use rewrite for editing existing prose. | `npx skills add jinyongp/agentskills --skill write` |
 | [korean-writing](korean-writing/SKILL.md) | Create, edit, or review Korean reader-facing prose for natural syntax, register, and information flow. Use for Korean writing or translationese concerns; ordinary Korean conversation alone does not require this skill. | `npx skills add jinyongp/agentskills --skill korean-writing` |
 | [english-writing](english-writing/SKILL.md) | Create, edit, or review English reader-facing prose for clear syntax, appropriate register, and natural voice. Use for English writing or translationese concerns; ordinary English conversation alone does not require this skill. | `npx skills add jinyongp/agentskills --skill english-writing` |
+| [dev-docs](dev-docs/SKILL.md) | Create, revise, or review developer documentation using actual product behavior and reader tasks. Use for README files, guides, API references, examples, and documentation structure; preserve requested language, publication scope, and version boundaries. | `npx skills add jinyongp/agentskills --skill dev-docs` |
 <!-- skills:end -->
 
 Add skills at `skills/writing/<skill-name>/SKILL.md`.
