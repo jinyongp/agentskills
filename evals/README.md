@@ -6,6 +6,7 @@ Keep each skill's cases and results in its own folder.
 
 | Skill | Evaluation record |
 | --- | --- |
+| animate | [Web gestures, transitions, interruption, reduced motion, and runtime limits](animate/README.md) |
 | accessibility | [Behavioral access, standards applicability, contrast boundaries, and audit limits](accessibility/README.md) |
 | responsive | [Content-driven reflow, intentional scrolling, input access, and verification limits](responsive/README.md) |
 | ui-design | [Content-driven composition, honest claims, visual judgment, and functioning controls](ui-design/README.md) |
