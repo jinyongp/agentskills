@@ -67,6 +67,43 @@ Cover at least these cases:
 Record the request, expected result, agent and version, and actual result.
 For skills with scripts, also verify normal and failure inputs.
 
+## Iterative changes and independent expectations
+
+For skills that alter evolving code, use an iterative evaluation when it exposes a
+material gap in single-task evidence. Keep one workspace through realistic requirement
+changes; a fixed stage count or mandatory run for every skill adds no assurance.
+
+1. Define initial public behavior, completion criteria and justified expectations
+   separately from candidate code. Keep evaluation-only cases outside agent context
+   when measuring independent behavior; provide legitimate project checks normally.
+2. Perform the initial task, then a meaningful extension or correction against the
+   same result. State which contracts remain and which change. Preserve unrelated
+   user edits. Do not reset the workspace or silently improve a candidate between stages.
+3. At each stage, exercise new requirements and affected preserved behavior. Reuse
+   sufficient checks. For a meaningful detection gap, verify that a named faulty
+   behavior fails while legitimate alternatives pass; code/test agreement alone is
+   insufficient. A different agent/model does not guarantee oracle independence.
+4. Inspect accumulated responsibilities, duplication, stale call sites and temporary
+   exceptions only where they impose concrete change or operation costs. Added code
+   can be required. File counts, length and abstract complexity scores alone do not
+   establish design quality; avoid building speculative extension points for the evaluator.
+5. Record requests, artifacts, checks, failures and recoveries by stage. Label planned,
+   parent-authored replay and independent-agent results separately. Claim comparative
+   skill benefit only with an appropriate with/without-skill study; track review effort
+   and verification cost as well as generation time when measuring productivity.
+
+Useful prepared sequences include extending catalog lookup while preserving duplicate
+and ordering semantics, evolving an API while keeping a supported consumer usable, or
+adding migration resume while preserving old reads and user-owned target values.
+These sequences are evaluation proposals, not executed trajectories. Existing
+[task execution](task-execution/README.md) exercises selected individual outcomes,
+not independent iterative quality or causal skill benefit.
+
+Research basis: [SlopCodeBench v2 (2026)](https://arxiv.org/html/2603.24755v2) examines
+quality under repeated extensions; [coding-before-testing (2026)](https://arxiv.org/abs/2607.05139)
+examines propagated test-oracle errors. Neither establishes that these repository
+instructions eliminate the observed problems.
+
 ## Authoring policy verification
 
 See [parent task execution and replay](task-execution/README.md) for five executed
