@@ -6,6 +6,7 @@ Keep each skill's cases and results in its own folder.
 
 | Skill | Evaluation record |
 | --- | --- |
+| clear | [Attention-aware delivery, complete detail, and scope](clear/README.md) |
 | git-commit | [Request scope, commit grouping, excluded changes](git-commit/README.md) |
 | git-branch | [Branch operations and index/worktree preservation](git-branch/README.md) |
 | git-sync | [Remote synchronization, divergence, tags, local work](git-sync/README.md) |
