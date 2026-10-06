@@ -6,6 +6,7 @@ Keep each skill's cases and results in its own folder.
 
 | Skill | Evaluation record |
 | --- | --- |
+| english-writing | [English register, modal scope, contextual style, and fidelity](english-writing/README.md) |
 | korean-writing | [Korean syntax, register, contextual judgment, and fidelity](korean-writing/README.md) |
 | write | [Evidence-based drafting, language routing, and publication scope](write/README.md) |
 | mobile-web | [Touch, browser viewport, keyboard access, safe areas, and platform evidence](mobile-web/README.md) |
