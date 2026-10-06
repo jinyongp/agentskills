@@ -27,7 +27,7 @@ npx skills add jinyongp/agentskills --skill <skill-name> --agent codex --global
 | [workflow](skills/workflow/README.md) | Inspection, planning, test design, verification, review, debugging, benchmarking, handoff, closeout | [handoff](skills/workflow/handoff/SKILL.md), [verify](skills/workflow/verify/SKILL.md), [survey](skills/workflow/survey/SKILL.md), [plan](skills/workflow/plan/SKILL.md), [code-review](skills/workflow/code-review/SKILL.md), [debug](skills/workflow/debug/SKILL.md), [benchmark](skills/workflow/benchmark/SKILL.md), [test](skills/workflow/test/SKILL.md), [test-integration](skills/workflow/test-integration/SKILL.md), [test-maintenance](skills/workflow/test-maintenance/SKILL.md), [test-unit](skills/workflow/test-unit/SKILL.md), [test-contract](skills/workflow/test-contract/SKILL.md), [test-e2e](skills/workflow/test-e2e/SKILL.md), [test-property](skills/workflow/test-property/SKILL.md) |
 | [frontend](skills/frontend/README.md) | Frameworks, UI, accessibility | None yet |
 | [git](skills/git/README.md) | Commits, branches, remote synchronization, conflicts, PRs, worktrees | [git-commit](skills/git/git-commit/SKILL.md), [git-branch](skills/git/git-branch/SKILL.md), [git-sync](skills/git/git-sync/SKILL.md), [git-conflict](skills/git/git-conflict/SKILL.md), [git-pr](skills/git/git-pr/SKILL.md), [git-worktree](skills/git/git-worktree/SKILL.md) |
-| [writing](skills/writing/README.md) | Conversation styles, summaries, documentation, editing | [clear](skills/writing/clear/SKILL.md), [terse](skills/writing/terse/SKILL.md) |
+| [writing](skills/writing/README.md) | Conversation styles, summaries, documentation, editing | [clear](skills/writing/clear/SKILL.md), [terse](skills/writing/terse/SKILL.md), [brief](skills/writing/brief/SKILL.md) |
 | [tooling](skills/tooling/README.md) | Development tool setup and operation | None yet |
 
 Skills live at `skills/<category>/<skill-name>/SKILL.md`.
@@ -90,8 +90,9 @@ See the [record convention](CONTRIBUTING.md#saved-task-records) for run IDs and 
 
 Original repository content uses the [MIT License](LICENSE). Individual skills
 declare their license in SKILL.md and bundle applicable notices.
-The writing skills [clear](skills/writing/clear/SKILL.md) and
-[terse](skills/writing/terse/SKILL.md) are adapted from
+The writing skills [clear](skills/writing/clear/SKILL.md),
+[terse](skills/writing/terse/SKILL.md), and [brief](skills/writing/brief/SKILL.md)
+are adapted from
 [attention-span](https://github.com/alexgreensh/attention-span) under AGPL-3.0;
 their bundled LICENSE and NOTICE.md apply to each skill.
 Third-party material retains its original license and copyright notices.
