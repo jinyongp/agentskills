@@ -9,6 +9,7 @@ Skills for frontend frameworks, UI implementation, and accessibility.
 | [accessibility](accessibility/SKILL.md) | Verify and improve actual user access with semantics, keyboard, focus, contrast, and explicit coverage limits | `npx skills add jinyongp/agentskills --skill accessibility` |
 | [animate](animate/SKILL.md) | Implement web motion, gestures, sheets, and transitions with accessible, interruptible behavior | `npx skills add jinyongp/agentskills --skill animate` |
 | [animation-review](animation-review/SKILL.md) | Review selected web or native motion with behavioral evidence and contextual judgment | `npx skills add jinyongp/agentskills --skill animation-review` |
+| [animation-audit](animation-audit/SKILL.md) | Inventory project motion with bounded summaries and prioritize evidence-backed improvement plans | `npx skills add jinyongp/agentskills --skill animation-audit` |
 <!-- skills:end -->
 
 Add skills at `skills/frontend/<skill-name>/SKILL.md`.
