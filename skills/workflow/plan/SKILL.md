@@ -16,10 +16,15 @@ metadata:
 - Reuse current repository facts and accepted decisions; link their sources instead
   of copying them. Keep the plan proportional to the work.
 
+Read [references/design-scope.md](references/design-scope.md) when comparing a
+simpler alternative, added infrastructure, or the completeness of a proposed solution.
+
 ## Procedure
 
 1. State the outcome, scope, constraints, and observable completion criteria.
    Inspect only facts needed to identify the affected behavior and dependencies.
+   Include the usable end-to-end result and reachable failure/recovery needs;
+   distinguish required behavior from optional extensions.
 2. Separate accepted decisions, reversible assumptions, and unresolved choices.
    Ask when several viable options materially affect behavior, contracts, data,
    permissions, or cost and existing context cannot settle the choice.
@@ -27,9 +32,12 @@ metadata:
 3. For a necessary decision, explain the impact and recommend a supported option.
    Keep the question visible in conversation. Resolve dependent decisions before
    committing to affected steps; independent preparation can continue.
-4. Choose the simplest approach meeting the accepted requirements. Order meaningful
-   work units by dependencies; identify relevant paths, behavior changes, and
-   completion evidence. Include migration or recovery only when the change needs it.
+4. Compare viable approaches by requirement coverage, readability, and maintenance
+   cost. Check existing code, standard/platform features, and installed tools for fit.
+   Justify added structure by a current need or concrete maintenance benefit; name
+   where a simpler option falls short. Keep accepted behavior intact when simplifying.
+   Order meaningful work units by dependencies; identify relevant paths, behavior
+   changes, and completion evidence. Include migration/recovery when needed.
 5. Tie each plausible failure to a useful check. Distinguish per-unit checks from
    required final integration checks; a scheduled check remains pending.
    Use not-needed when a check would add no useful signal.
