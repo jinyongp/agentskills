@@ -116,6 +116,59 @@ class AnimationInventoryTests(unittest.TestCase):
         self.assertEqual(code, 0)
         self.assertEqual([r['path'] for r in page['items']], ['screen.tsx'])
 
+    def test_symlink_loops_remain_bounded_and_preserve_other_candidates(self):
+        source = 'transition: opacity 150ms;'
+        (self.root / 'normal.css').write_text(source)
+        deep = self.root
+        for i in range(15):
+            deep = deep / ('x' * 200 + str(i))
+        deep.mkdir(parents=True)
+        loop = deep / 'loop.css'
+        loop.symlink_to('loop.css')
+        code, result = self.call('--mode', 'candidates')
+        self.assertEqual(code, 0)
+        self.assertEqual(result['candidate_files'], 1)
+        self.assertEqual(result['skipped_files'], 1)
+        self.assertEqual([r['path'] for r in result['items']], ['normal.css'])
+        code, skipped = self.call('--mode', 'skipped')
+        self.assertEqual(code, 0)
+        self.assertEqual([r['path'] for r in skipped['items']], [loop.relative_to(self.root).as_posix()])
+        self.assertEqual((self.root / 'normal.css').read_text(), source)
+        self.assertEqual(loop.readlink(), Path('loop.css'))
+        code, result = self.call('--root', loop)
+        self.assertEqual(code, 2)
+        self.assertIn('error', result)
+
+    def test_deleted_cwd_does_not_override_explicit_root_or_escape_errors(self):
+        (self.root / 'screen.tsx').write_text('motion.div')
+        wrapper = '''
+import importlib.util, os, sys
+from pathlib import Path
+sys.dont_write_bytecode = True
+spec = importlib.util.spec_from_file_location("inventory", sys.argv[1])
+module = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(module)
+root = Path(sys.argv[2])
+deleted = root / "deleted"
+deleted.mkdir()
+os.chdir(deleted)
+deleted.rmdir()
+sys.argv = [str(module.__file__)] + (["--root", str(root)] if sys.argv[3] == "explicit" else [])
+raise SystemExit(module.main())
+'''
+        for mode in ('explicit', 'default'):
+            with self.subTest(mode=mode):
+                p = subprocess.run([sys.executable, '-c', wrapper, str(HELPER), str(self.root), mode],
+                                   capture_output=True, text=True)
+                self.assertLessEqual(len(p.stdout), 4000)
+                self.assertEqual(p.stderr, '')
+                result = json.loads(p.stdout)
+                self.assertEqual(p.returncode, 0 if mode == 'explicit' else 2)
+                if mode == 'explicit':
+                    self.assertEqual(result['candidate_files'], 1)
+                else:
+                    self.assertIn('error', result)
+
 
 if __name__ == '__main__':
     unittest.main()

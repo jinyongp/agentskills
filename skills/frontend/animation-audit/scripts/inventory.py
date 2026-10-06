@@ -80,7 +80,7 @@ def inspect(args):
             matches = [i for i, line in enumerate(text.splitlines(), 1) if PATTERN.search(line)]
             if matches:
                 candidates.append({'path': name, 'first_line': matches[0], 'matching_lines': len(matches)})
-        except (OSError, UnicodeError):
+        except (OSError, UnicodeError, RuntimeError):
             skipped.append({'path': name, 'reason': 'unreadable-or-non-UTF8'})
     end = args.scan_offset + len(window)
     scope = {'eligible_files': len(names), 'scan_offset': args.scan_offset,
@@ -99,7 +99,7 @@ def inspect(args):
 
 def main():
     parser = Parser(description=__doc__)
-    parser.add_argument('--root', type=Path, default=Path.cwd())
+    parser.add_argument('--root', type=Path, default=Path('.'))
     parser.add_argument('--mode', choices=('summary', 'candidates', 'skipped'), default='summary')
     parser.add_argument('--scan-offset', type=int, default=0)
     parser.add_argument('--scan-limit', type=int, default=1000)
@@ -113,8 +113,8 @@ def main():
     except ValueError as exc:
         print(encoded({'error': str(exc)}), end='')
         return 2
-    except (OSError, UnicodeError, subprocess.TimeoutExpired):
-        print(encoded({'error': 'Discovery unavailable or timed out; use targeted project inspection.'}), end='')
+    except (OSError, UnicodeError, RuntimeError, subprocess.TimeoutExpired):
+        print(encoded({'error': 'Discovery unavailable, invalid path, or timeout; use targeted project inspection.'}), end='')
         return 2
     print(encoded(result), end='')
     return 0

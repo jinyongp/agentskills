@@ -8,6 +8,8 @@
 | An intentional long transition serves explanation | Respect context instead of universal duration limits | Preference separated from evidence |
 | Produce a roadmap without source edits | Return inline scoped plans and useful acceptance checks | Audit boundary retained |
 | No supported motion defect is found | Return coverage and material gaps | No finding quota |
+| A cyclic file symlink appears beside usable candidates | Report an exact skipped path and continue within the output budget | Reproduced on Python 3.11; covered by a filesystem test |
+| A cyclic root or removed current directory is supplied | Return bounded JSON; an explicit valid root still works after cwd removal | Reproduced and covered with actual filesystem conditions |
 
 ## Validation and limits
 
@@ -27,3 +29,24 @@ installation of all four files byte-for-byte, upstream MIT comparison, and local
 links passed. The installed helper ran in an isolated Git project; its default
 summary was 197 characters. Large escaped paths, multiple scan windows, failures,
 and explicit skipped records passed bounded-output checks in the helper tests.
+
+## Review follow-up
+
+On 2026-10-06, independent read-only reviews covered all six motion instruction
+bundles and the inventory's runtime, path, pagination, and failure contracts.
+Parent reproduction found a cyclic symlink escaped as RuntimeError and produced
+7,667 stderr characters for a long path. Per-file failures now remain skipped;
+invalid roots return bounded JSON. A removed current directory also escaped during
+eager default calculation, even with an explicit root; resolution is now deferred
+until guarded inspection. Both failures received behavioral tests without pinning
+instruction wording. Nine inventory tests passed. A second independent helper
+review found no additional actionable findings within the implemented contract.
+These results do not establish real-device motion quality or exhaustive correctness.
+
+Final follow-up checks passed: 35 skills validated, 76 tests passed, CLI fixtures,
+creator validation, local links, upstream MIT comparison, and selective installation
+of all four files byte-for-byte. The installed helper retained a normal candidate
+beside a cyclic link and returned bounded JSON for a cyclic root. The removed-cwd
+test disables bytecode writes before importing the helper, preserving the source
+bundle during validation. A final independent review of that test change found no
+additional actionable issue.
