@@ -19,6 +19,7 @@ Skills for implementation, repository inspection, planning, test design, verific
 | [test-e2e](test-e2e/SKILL.md) | Verify critical user journeys through actual entrypoints and observable results | `npx skills add jinyongp/agentskills --skill test-e2e` |
 | [test-property](test-property/SKILL.md) | Explore meaningful invariants with generated cases and reproducible counterexamples | `npx skills add jinyongp/agentskills --skill test-property` |
 | [implement](implement/SKILL.md) | Deliver authorized code changes with clear outcomes, simple design, scoped edits, and sufficient checks | `npx skills add jinyongp/agentskills --skill implement` |
+| [dependency-update](dependency-update/SKILL.md) | Update selected dependencies or runtimes with verified target versions, compatibility review, scoped manifest and lockfile changes, and relevant checks. Use for requested upgrades or remediation; recommendations alone do not authorize installation. | `npx skills add jinyongp/agentskills --skill dependency-update` |
 <!-- skills:end -->
 
 Add skills at `skills/workflow/<skill-name>/SKILL.md`.

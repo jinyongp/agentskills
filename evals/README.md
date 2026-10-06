@@ -6,6 +6,7 @@ Keep each skill's cases and results in its own folder.
 
 | Skill | Evaluation record |
 | --- | --- |
+| dependency-update | [Target versions, coupled migrations, resolution failures, and verification](dependency-update/README.md) |
 | dev-docs | [Reader tasks, public behavior, examples, version boundaries, and delivery](dev-docs/README.md) |
 | english-writing | [English register, modal scope, contextual style, and fidelity](english-writing/README.md) |
 | korean-writing | [Korean syntax, register, contextual judgment, and fidelity](korean-writing/README.md) |
