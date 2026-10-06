@@ -6,6 +6,7 @@ Keep each skill's cases and results in its own folder.
 
 | Skill | Evaluation record |
 | --- | --- |
+| rewrite | [Factual fidelity, natural voice, compression, and edit scope](rewrite/README.md) |
 | implement | [Material ambiguity, simple design, scoped changes, and sufficient checks](implement/README.md) |
 | summarize | [Delivery, fidelity, and scope](summarize/README.md) |
 | brief | [Delivery, fidelity, and scope](brief/README.md) |
