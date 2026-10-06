@@ -1,5 +1,29 @@
 # code-review evaluation
 
+## Balanced design cases
+
+Parent instruction review of the revised skill and conditional design reference.
+These cases do not measure independent defect discovery or severity judgment.
+
+| Shared review target | Excess-design case | Incomplete-design case | Expected decision |
+| --- | --- | --- | --- |
+| Upload with an accepted retry contract | Unused layers create demonstrable setup/coupling cost | Failed submission leaves the user unable to retry | Separate evidenced engineering cost from the reproducible behavior defect |
+| Resource-owning wrapper with one caller | Wrapper duplicates ownership and creates parallel edits | Removing it leaks the resource on exceptions | Judge responsibilities/lifecycle, not usage count |
+| Standard/native feature or maintained library | Dependency has no capability benefit and adds concrete integration cost | Removing it breaks a required platform or access behavior | Compare alternatives against identical requirements |
+| Complete feature or accepted prototype | Generalize for hypothetical consumers | Call a missing accepted workflow complete | Evaluate the actual agreed scope; no full-product requirements for a prototype |
+| Readable complete patch | No material extra cost is established | No missing behavior or failure is established | No finding is valid; avoid forced issues and severity inflation |
+
+Counts, preference and speculative future scale alone do not establish a defect.
+Engineering observations need concrete evidence and stay separate from defects.
+Full verification passed for 49 skills and 76 existing tests, including CLI
+discovery/installation fixtures. Creator validation and actual individual
+installation with skills@1.7.0 passed: all four bundled files matched byte-for-byte.
+Body: 3,690 characters. Local runtime links resolve within this skill, saved-record
+guidance is unchanged, and MIT is preserved. No runtime helper was changed.
+These checks establish packaging, not independent review judgment.
+
+## Earlier evaluation
+
 Helper tests inspect actual temporary Git repositories. A separate parent replay
 reviews a small arithmetic regression and confirms its trigger.
 These results do not measure independent agent defect discovery or automatic routing.
