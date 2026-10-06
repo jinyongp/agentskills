@@ -6,6 +6,7 @@ Keep each skill's cases and results in its own folder.
 
 | Skill | Evaluation record |
 | --- | --- |
+| responsive | [Content-driven reflow, intentional scrolling, input access, and verification limits](responsive/README.md) |
 | ui-design | [Content-driven composition, honest claims, visual judgment, and functioning controls](ui-design/README.md) |
 | rewrite | [Factual fidelity, natural voice, compression, and edit scope](rewrite/README.md) |
 | implement | [Material ambiguity, simple design, scoped changes, and sufficient checks](implement/README.md) |
