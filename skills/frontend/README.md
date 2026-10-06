@@ -15,6 +15,7 @@ Skills for web and native interfaces, motion, responsive behavior, and accessibi
 | [animate-native](animate-native/SKILL.md) | Implement React Native and Expo motion with project-compatible tools and platform-aware behavior | `npx skills add jinyongp/agentskills --skill animate-native` |
 | [animation-debug](animation-debug/SKILL.md) | Diagnose concrete web or native motion symptoms and correct supported causes | `npx skills add jinyongp/agentskills --skill animation-debug` |
 | [animation-performance](animation-performance/SKILL.md) | Profile web or native motion bottlenecks and compare matched performance measurements | `npx skills add jinyongp/agentskills --skill animation-performance` |
+| [prototype](prototype/SKILL.md) | Compare distinct interactive UI directions and promote an authorized choice | `npx skills add jinyongp/agentskills --skill prototype` |
 <!-- skills:end -->
 
 Add skills at `skills/frontend/<skill-name>/SKILL.md`.
