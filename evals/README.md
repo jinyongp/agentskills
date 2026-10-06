@@ -6,6 +6,7 @@ Keep each skill's cases and results in its own folder.
 
 | Skill | Evaluation record |
 | --- | --- |
+| api-design | [Consumer semantics, compatibility, errors, retries, and protocol scope](api-design/README.md) |
 | db-migrate | [Data preservation, engine semantics, mixed versions, interruption, and recovery](db-migrate/README.md) |
 | optimize | [Demonstrated costs, correctness, matched measurements, and tradeoffs](optimize/README.md) |
 | dependency-update | [Target versions, coupled migrations, resolution failures, and verification](dependency-update/README.md) |
@@ -68,7 +69,14 @@ For skills with scripts, also verify normal and failure inputs.
 
 ## Authoring policy verification
 
-See the [repository-wide context review](context-review/README.md) for all 44 skills,
+Five additions on 2026-10-06 bring the collection to 49 skills: dev-docs,
+dependency-update, optimize, db-migrate, and api-design. Their evaluation records
+separate parent decision-rule review from mechanical verification and the scoped
+SQLite rehearsal. Full verification passed with 76 existing tests. Actual installation
+of these five names in one command and wildcard installation of all 49 skills with
+skills@1.7.0 passed; all bundled files matched byte-for-byte, with no extra selections.
+
+See the [repository-wide context review](context-review/README.md) for the 44-skill snapshot,
 their decision boundaries, corrections, mechanical evidence, and unmeasured behavior.
 
 See [saved-records verification](saved-records/README.md) for the shared artifact

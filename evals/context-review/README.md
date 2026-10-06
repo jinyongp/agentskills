@@ -1,6 +1,8 @@
 # Repository-wide context and decision review
 
 Reviewed on 2026-10-06 in the current Codex session; model version not recorded.
+Inventory snapshot: commit `ef1603e` with 44 skills. Later additions have their own
+evaluation records; this historical review does not cover those additions.
 Scope: all 44 installed-skill entrypoints, all 19 bundled references, all seven
 runtime helpers, and relevant evaluation and authoring guidance. This is a parent
 instruction and source review, supplemented by packaging and existing runtime checks.
