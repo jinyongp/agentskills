@@ -16,6 +16,9 @@ and product identity. Reuse existing components and design conventions. A review
 returns recommendations; requested edits authorize only the named scope.
 Resolve consequential missing direction from evidence or a focused question.
 
+Read [references/craft.md](references/craft.md) when refining component defaults,
+spatial feedback, layered surfaces, or typography. Read only the applicable section.
+
 ## Design decisions
 
 - Establish the user's primary action and information needs before choosing a
