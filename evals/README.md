@@ -6,6 +6,7 @@ Keep each skill's cases and results in its own folder.
 
 | Skill | Evaluation record |
 | --- | --- |
+| ui-library | [Capability fit, project tool precedence, primary evidence, and integration scope](ui-library/README.md) |
 | ui-stress | [Realistic content extremes, state boundaries, evidence, and proportionate coverage](ui-stress/README.md) |
 | prototype | [Distinct UI alternatives, isolated previews, selection, and scoped promotion](prototype/README.md) |
 | animation-performance | [Frame pacing, runtime attribution, matched comparisons, and measurement limits](animation-performance/README.md) |
