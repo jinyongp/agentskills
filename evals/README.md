@@ -64,6 +64,9 @@ For skills with scripts, also verify normal and failure inputs.
 
 ## Authoring policy verification
 
+See the [repository-wide context review](context-review/README.md) for all 44 skills,
+their decision boundaries, corrections, mechanical evidence, and unmeasured behavior.
+
 See [saved-records verification](saved-records/README.md) for the shared artifact
 location, individual installation, generation, and file preservation checks.
 

@@ -69,6 +69,31 @@ Omit general knowledge and repetition while preserving context that affects deci
 and conditions for protecting existing work. Use short lists and steps, within 4,000 characters.
 The description and body limits are repository policy, enforced by validation and CI.
 
+## Decision quality and composition
+
+Separate task workflows from language, presentation, and platform guidance when their
+triggers differ. Each installed skill must remain usable alone. When several skills
+are loaded, apply specialized criteria within the requested task and produce one
+result. Descriptions guide discovery; client activation is not an automatic dependency
+or composition guarantee. Bundle essential boundaries rather than requiring another skill.
+
+Preserve user scope, output language, genre, voice, factual qualifications, and current
+project choices. A style request changes communication, not implementation depth or
+authorization. Ask about material unresolved decisions; settle routine details from
+available evidence. Review-only and measurement-only requests retain those boundaries.
+
+Tie each rule to a concrete decision or failure. Distinguish required contracts and
+standards from starting values, examples, and optional recommendations. Choose form,
+timing, tools, and checks from the task; word bans, sentence counts, fixed checklists,
+preferred libraries, and test quotas cannot substitute for contextual judgment.
+Mechanical inspection budgets protect agent input and require recoverable omissions;
+they are not writing-quality scores or caps on a requested complete deliverable.
+
+Use existing coverage before adding lasting tests. Report observed, inferred, and
+unverified behavior separately. Format validation, installation, scripted replay,
+parent instruction review, and independent agent execution establish different things;
+record the evidence actually obtained without promoting one into another.
+
 ## Tool selection
 
 Task skills choose tools from the user's current instructions and applicable repository
