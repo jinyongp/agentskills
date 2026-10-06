@@ -6,6 +6,7 @@ Keep each skill's cases and results in its own folder.
 
 | Skill | Evaluation record |
 | --- | --- |
+| mobile-web | [Touch, browser viewport, keyboard access, safe areas, and platform evidence](mobile-web/README.md) |
 | ui-library | [Capability fit, project tool precedence, primary evidence, and integration scope](ui-library/README.md) |
 | ui-stress | [Realistic content extremes, state boundaries, evidence, and proportionate coverage](ui-stress/README.md) |
 | prototype | [Distinct UI alternatives, isolated previews, selection, and scoped promotion](prototype/README.md) |
