@@ -1,6 +1,6 @@
 # Frontend
 
-Skills for frontend frameworks, UI implementation, and accessibility.
+Skills for web and native interfaces, motion, responsive behavior, and accessibility.
 <!-- skills:start -->
 | Skill | Description | Install |
 | --- | --- | --- |
@@ -12,6 +12,7 @@ Skills for frontend frameworks, UI implementation, and accessibility.
 | [animation-audit](animation-audit/SKILL.md) | Inventory project motion with bounded summaries and prioritize evidence-backed improvement plans | `npx skills add jinyongp/agentskills --skill animation-audit` |
 | [animation-opportunities](animation-opportunities/SKILL.md) | Find useful web or native motion opportunities and preserve flows that should stay instant | `npx skills add jinyongp/agentskills --skill animation-opportunities` |
 | [animation-vocabulary](animation-vocabulary/SKILL.md) | Translate described motion into accurate terms and distinguish similar effects | `npx skills add jinyongp/agentskills --skill animation-vocabulary` |
+| [animate-native](animate-native/SKILL.md) | Implement React Native and Expo motion with project-compatible tools and platform-aware behavior | `npx skills add jinyongp/agentskills --skill animate-native` |
 <!-- skills:end -->
 
 Add skills at `skills/frontend/<skill-name>/SKILL.md`.

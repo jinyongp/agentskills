@@ -6,6 +6,7 @@ Keep each skill's cases and results in its own folder.
 
 | Skill | Evaluation record |
 | --- | --- |
+| animate-native | [Runtime selection, gestures, keyboard coordination, haptics, and platform evidence](animate-native/README.md) |
 | animation-vocabulary | [Observable effects, terminology ambiguity, compound motion, and naming scope](animation-vocabulary/README.md) |
 | animation-opportunities | [User benefit, instant alternatives, platform coverage, and discovery scope](animation-opportunities/README.md) |
 | animation-audit | [Bounded inventory, recoverable omissions, motion evidence, and improvement plans](animation-audit/README.md) |
