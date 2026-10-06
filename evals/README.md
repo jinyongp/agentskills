@@ -6,6 +6,7 @@ Keep each skill's cases and results in its own folder.
 
 | Skill | Evaluation record |
 | --- | --- |
+| summarize | [Delivery, fidelity, and scope](summarize/README.md) |
 | brief | [Delivery, fidelity, and scope](brief/README.md) |
 | terse | [Delivery, fidelity, and scope](terse/README.md) |
 | clear | [Attention-aware delivery, complete detail, and scope](clear/README.md) |
