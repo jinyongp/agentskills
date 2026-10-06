@@ -40,6 +40,10 @@ metadata:
 4. Trace changed behavior into relevant callers, contracts, tests, and failure paths.
    Inspect surrounding code only as needed. Binary files, submodules, generated
    outputs, and external dependencies may require separate targeted evidence.
+   For changed tests, check independently justified expectations, actual coverage
+   gaps, real versus mocked boundaries, and assertions that constrain valid changes.
+   Report duplication or brittleness when it causes concrete maintenance cost or
+   violates project policy; keep stylistic preferences separate from defects.
 5. For each candidate finding, establish a concrete trigger, violated expectation,
    impact, and changed code location. Check existing behavior and repository rules;
    discard speculative issues and preferences without behavioral consequences.

@@ -14,6 +14,8 @@ These results do not measure independent agent defect discovery or automatic rou
 | Invalid refs, paths, pages, or repository | Bounded error; no partial completeness claim | Failure fixtures cover invalid inputs |
 | Removed empty-input guard | Report a reproducible regression with a changed-code location | Parent replay confirms ZeroDivisionError on an input previously supported |
 | Adjacent request to implement a fix | Keep edits outside review scope unless authorized | Instruction review only |
+| Patch adds tests that pin private helper names | Verify actual contract and concrete breakage or policy cost; report supported brittleness | Parent instruction review only |
+| Similar tests exercise real wiring at different boundaries | Keep useful independent evidence; similarity alone does not establish duplication | Parent instruction review only |
 
 ## Budget and limitations
 
@@ -32,3 +34,7 @@ remain untested.
 
 Ten skills validated; all 58 tests and CLI installation checks passed.
 Creator validation and actual selective installation passed; all three files match.
+
+Context review revision (2026-10-06): 3,312 body characters. Full verification of
+44 skills and 76 existing tests passed. Creator validation and selective installation
+passed; all three files matched, links resolved, and the MIT license stayed unchanged.

@@ -14,6 +14,7 @@ These results do not measure independent agent selection or judgment.
 | Hook failure | Scoped commit with a pre-commit hook that exits 1 | Report failure without bypassing the hook; restore excluded staging | Replay passed. HEAD unchanged, requested changes still staged, excluded patch and files unchanged |
 | Missing input | "Commit changes" outside a Git repository | Fail repository detection without making changes | `git rev-parse --show-toplevel` failed; no staging or commit attempted |
 | Out of scope | "Create a branch" or "Push to the remote" | Handle the requested operation without invoking this skill | Description and scope boundaries reviewed; automatic selection not evaluated |
+| Repository message style | Commit in a repository using non-imperative subjects | Follow the established convention rather than imposing English imperative grammar | Parent instruction review only; message generation not independently evaluated |
 
 ## Replay setup
 
@@ -76,3 +77,7 @@ Automatic selection and message quality still require independent evaluation.
   produced byte-identical `SKILL.md` and `LICENSE`.
 - Git procedure replays passed. Automatic selection, message quality, and agent judgment
   with overlapping scopes require later independent evaluation.
+
+Context review revision (2026-10-06): 3,381 body characters. Full verification of
+44 skills and 76 existing tests passed. Creator validation and selective installation
+passed; all six files matched, links resolved, and the MIT license stayed unchanged.

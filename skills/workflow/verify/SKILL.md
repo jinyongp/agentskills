@@ -23,7 +23,8 @@ metadata:
    Inspect only relevant paths and repository commands. Existing test results
    apply only to their tested state and environment.
 2. Choose the smallest useful checks:
-   - Bug: reproduce the symptom; test the correction and a meaningful edge case.
+   - Bug: reproduce the symptom and check the correction. Reuse adequate coverage;
+     add an edge case only for a distinct, meaningful uncovered failure.
    - Feature/refactor: cover affected behavior, contracts, and preserved behavior.
    - UI: inspect relevant viewports and interactions using available browser tools.
    - Docs/config: check commands, links, paths, or the affected tool directly.

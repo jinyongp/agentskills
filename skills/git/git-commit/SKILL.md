@@ -1,6 +1,6 @@
 ---
 name: git-commit
-description: Stage, unstage, split pending commits, or draft commit messages when requested. Inspect changes, preserve excluded work, and follow repository message conventions.
+description: Commit, stage, unstage, split pending commits, or draft commit messages when requested. Inspect changes, preserve excluded work, and follow repository message conventions.
 license: MIT
 metadata:
   author: jinyongp
@@ -41,7 +41,8 @@ metadata:
    before retrying and keep normal hooks enabled.
 5. Follow repository instructions, template, and message style. Read
    [conventional-commits.md](references/conventional-commits.md) only when requested
-   or used by the repository. Use an imperative subject and a body only for useful
+   or used by the repository. Prefer an imperative subject when it fits those
+   conventions, and use a body only for useful
    context. Write a temporary message file,
    then `git commit -F <file>` when committing was requested. Preparation-only
    requests stop at the requested index state or message; do not create empty commits.

@@ -10,6 +10,7 @@ Script checks validate execution and reporting, not independent agent check sele
 | Timeout with a child process | No pass; process group stopped | Timeout fixture checks absence of delayed child writes |
 | Existing log or missing executable | Preserve evidence; report a bounded error | Existing-log and launch-failure fixtures cover both |
 | Wrong skill or missing task scope | Keep validation separate from implementation; clarify blocking scope | Instruction review only; routing not evaluated |
+| Bug already has sufficient coverage | Reproduce and verify with existing checks; add an edge case only for a distinct gap | Parent instruction review only; no automatic new test requirement |
 
 ## Input budget and limits
 
@@ -27,3 +28,7 @@ them remains the agent's responsibility.
 - skill-creator validation and actual selective installation passed; all three bundled files match.
 - Evaluation date: 2026-10-03 (Asia/Seoul), current Codex session; model version not recorded.
 - Independent check selection, browser/database behavior, and automatic routing remain untested.
+
+Context review revision (2026-10-06): 3,086 body characters. Full verification of
+44 skills and 76 existing tests passed. Creator validation and selective installation
+passed; all three files matched, links resolved, and the MIT license stayed unchanged.
