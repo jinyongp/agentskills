@@ -42,3 +42,30 @@ Packaging verification passed: 45 skills, 76 existing tests, and CLI fixtures.
 Creator validation and actual selective installation with skills@1.7.0 passed;
 all four bundled files matched byte-for-byte. MIT notice and local links passed.
 Entrypoint body: 3,651 characters, excluding frontmatter.
+
+## Main-path instruction review
+
+Parent instruction review on 2026-10-07; model version not recorded. The following
+paired cases inspect the revised rules for conflicting or overbroad decisions.
+They are not independent writing executions, reader studies, or quality scores.
+The packaging figures above describe the earlier verification run.
+
+| Condition | Decision supported by the revised instructions | Parent review |
+| --- | --- | --- |
+| API-call example interrupted by object prototype construction | Keep the call and its result together; link independent mechanics | Main-path relevance test gives a concrete relocation decision |
+| Prototype semantics change how the reader checks a response field | Keep the applicable field-access caveat beside that operation | Essential use conditions remain available |
+| Page opens with internals before explaining how to generate an SDK | Open with the generation task and outcome; move rationale to its own section | Opening criterion exposes the missing takeaway |
+| API reference opens with parameters and version applicability | Preserve lookup structure | No forced tutorial or first-success sequence |
+| Basic generation shares a continuous sequence with CI and remote-reference variants | Keep basic setup through result together; label or link independent workflows | Separation follows reader tasks rather than page-length limits |
+| Paid or destructive command has a warning before execution | Retain the warning before the affected step | First-success ordering preserves relevant safeguards |
+| Example is intended to demonstrate several APIs working together | State the composition purpose and keep required integration | Example-purpose rule does not force one API per snippet |
+| All commands compile but the example's purpose is buried | Report the specific obstructing passage, task, effect, and relocation | Correctness checks cannot substitute for readability review |
+
+The entrypoint now routes prose and example reviews to the bundled structure
+reference. Actual improvements in autonomous writing and reader comprehension
+remain unmeasured; no permanent wording or layout assertions were added.
+
+Revision verification: repository format/catalog validation passed for 49 skills;
+skill-creator validation, routed reference paths, the canonical saved-record fragment,
+and diff whitespace checks passed. Entrypoint body: 3,896 characters. Tests and CLI
+installation were not rerun for these instruction-only changes.

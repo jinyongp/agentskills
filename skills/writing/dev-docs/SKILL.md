@@ -16,8 +16,8 @@ output language, product version, house style, and delivery format. Review-only 
 read-only; publishing or changing product behavior needs its own task scope.
 This skill works alone. Accompanying language guidance refines the same deliverable.
 
-Read [references/structure.md](references/structure.md) when choosing document form
-or reorganizing navigation; read [references/verification.md](references/verification.md)
+Read [references/structure.md](references/structure.md) when drafting or reviewing
+explanatory prose, examples, or navigation; read [references/verification.md](references/verification.md)
 when validating commands, generated references, version claims, or examples.
 
 ## Procedure
@@ -30,14 +30,15 @@ when validating commands, generated references, version claims, or examples.
    whole sites, source trees, or generated API dumps. Track omissions and recover
    necessary context before claiming complete coverage. Existing generators or native
    filters can bound mechanical output; report their limits and retrieval method.
-3. Choose structure from the reader's need. A short README can be sufficient; a
-   guide, explanation, or reference needs different depth. Reuse canonical definitions
-   and link supporting material instead of duplicating it. Preserve useful URLs and
-   navigation when moving pages; account for real inbound links or provide migration.
-4. Write the actual path to success: required setup, meaningful steps, expected
-   result, and relevant failure/recovery conditions. Include only reachable cases
-   needed for this task. Keep API names, defaults, units, permissions, and supported
-   versions exact; identify illustrative data and placeholders clearly.
+3. State the page's reader task and answer or outcome in its opening. Use headings
+   that locate actions, decisions, or lookup subjects. Keep details on the main path
+   when they change the reader's next action, prevent a relevant failure, or explain
+   the result; link separate design or internals material at the point of need.
+   Preserve useful URLs and real inbound links when reorganizing.
+4. Give required setup, steps, and a recognizable result. Introduce each example
+   with what it demonstrates; keep its inputs consistent with the preceding setup.
+   Separate optional variants from the first successful path. Keep API names, defaults,
+   units, permissions, and versions exact; label illustrative data and placeholders.
 5. Use supplied or verified evidence for behavior and claims. Preserve uncertainty,
    limitations, and author voice. Explain material gaps rather than inventing APIs,
    output, platform support, benchmarks, or guarantees. Keep secrets out of examples.
@@ -45,8 +46,10 @@ when validating commands, generated references, version claims, or examples.
    suitable environment. Distinguish tested output from illustrative output. Avoid
    live writes or paid calls merely to validate an example; report unavailable setup
    or unsupported versions. Reuse link, build, snippet, type, and schema checks.
-7. Compare the result with the requested scope and actual reader journey. Check
-   missing prerequisites, broken links, contradictions, and stale generated sources.
+7. Review whether the opening and headings expose the task and takeaway, and whether
+   a reader can follow the example without unrelated internals. Report obstructing
+   passages and their effect before minor completeness issues. Check missing setup,
+   broken links, contradictions, and stale generated sources.
    Add permanent example coverage only for a meaningful uncovered contract. Preserve
    user edits and report unresolved product/documentation disagreements.
 
