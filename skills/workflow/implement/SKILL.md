@@ -11,62 +11,62 @@ metadata:
 
 ## Scope
 
-Implement the user's requested feature, fix, or refactor when edits are authorized.
-Follow current instructions, repository requirements, and existing tool choices.
-Planning and read-only review retain their stated scope. Publication, deployment,
-and history changes need authorization.
+Implement authorized features, fixes or refactors using current instructions,
+repository requirements and tools. Planning/review keep their scope; publication,
+deployment and history changes need authorization.
+
+Read [references/design-fit.md](references/design-fit.md) when simplifying a solution,
+choosing added structure, or judging whether implementation is complete.
 
 ## Think before changing
 
-- Define the observable outcome and completion criteria from the request and actual
-  contracts. Inspect relevant code, callers, checks, and local changes first.
+- Define observable completion from the request and contracts. Inspect relevant
+  code, callers, checks and local changes first.
 - Separate established facts, reversible assumptions, and unresolved choices.
   Ask a focused question only when missing information materially changes behavior,
   data, permissions, compatibility, cost, or an expensive-to-reverse decision.
   Continue independent work while waiting; settle the choice before dependent edits.
-- Resolve routine details from repository conventions and evidence. State assumptions
-  that affect the result. Surface a simpler viable approach and relevant tradeoffs
-  before committing to a consequential design.
-- Start with bounded summaries, then selected files or diffs. Use existing tools or
-  bounded helpers for repeated inspection. Report omissions and retrieve relevant
-  detail before drawing conclusions.
+- Settle routine details from repository evidence. State material assumptions and
+  compare a simpler viable approach before a consequential design choice.
+- Start with bounded summaries, then relevant files/diffs. Reuse tools or bounded
+  helpers; report omissions and recover required detail before concluding.
 
 ## Choose a simple design
 
-- Use the smallest coherent change that meets the accepted requirements, measured
-  by responsibilities and maintenance cost rather than line count.
-- Reuse established interfaces and patterns. Introduce an abstraction, dependency,
-  configuration option, or extension point only for a concrete current requirement.
-  A single-use abstraction can be justified by a real boundary or resource lifecycle.
-- Handle reachable failure states and enforce actual contracts at appropriate
-  boundaries. Preserve required safety and compatibility; avoid speculative guards.
+- Meet accepted requirements with low maintenance cost and readable responsibilities;
+  file count, line count, or diff size alone do not establish simplicity.
+- Check existing code, standard/platform features and installed tools for actual fit.
+  Add structure or dependencies for a current need or concrete maintenance benefit.
+  One caller can justify a boundary or lifecycle abstraction.
+- Complete the usable flow and reachable failure/recovery states. Enforce contracts
+  at appropriate boundaries; preserve required safety, compatibility and access.
+  Simplification preserves accepted behavior; reduced scope needs agreement.
 
 ## Keep edits scoped
 
-- Connect each changed line to the requested outcome or a necessary dependency.
-  Match local style and preserve user changes, meaningful comments, and unrelated code.
-- Comments explain intent, constraints, or non-obvious behavior. Omit code narration;
-  preserve license notices, tool directives, and useful issue or version references.
-- Refactor an affected area when needed for the outcome. Keep adjacent cleanup and
-  pre-existing dead code outside the patch; mention material discoveries separately.
+- Tie edits to the requested outcome or a necessary dependency. Follow local style;
+  preserve user changes, meaningful comments, and unrelated code.
+- Comments explain intent/constraints, not code narration. Preserve license notices,
+  tool directives, and useful issue/version references.
+- Refactor affected code when needed. Keep adjacent cleanup and pre-existing dead
+  code outside the patch; report material discoveries separately.
 - Remove imports, variables, and functions made obsolete by this change after checking
   remaining consumers. Keep documentation and configuration aligned where behavior
   actually changes.
 
 ## Verify completion
 
-- For multi-step work, order meaningful units and their checks.
+- Order meaningful work units and their checks.
 - Reuse sufficient tests, lint, types, and schema checks. Add or extend a test only for
   a named uncovered failure or contract, with independently justified expectations
   and stable behavior assertions.
 - Reproduce a reported failure when possible and confirm the correction. For a
   behavior-preserving refactor, use relevant before/after evidence when available.
   Run affected checks and required project checks; preserve meaningful protection.
-- Investigate failures before changing expectations. Continue scoped fixes until the
-  criteria are met. Stop repeated failing attempts when new evidence or access is
-  needed; report the actual blocker, skipped checks, and unverified behavior.
-- Review the final diff for scope. Report outcomes, actual checks, and material gaps;
-  green checks alone do not prove every requirement.
+- Investigate failures before changing expectations. Continue scoped fixes to meet
+  criteria; stop blind retries when evidence/access is missing and report the gap.
+- Review both missing behavior and unnecessary complexity in the final diff.
+  Report outcomes, actual checks, and material gaps; green checks alone are insufficient.
 
 ## Saved records
 

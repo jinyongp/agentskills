@@ -1,5 +1,29 @@
 # implement evaluation
 
+## Balanced design cases
+
+Parent instruction review of the revised skill and conditional design reference.
+No independent implementation run or causal skill comparison is claimed here.
+
+| Shared request | Excess-design case | Incomplete-design case | Expected decision |
+| --- | --- | --- | --- |
+| Implement an upload with defined submission and retry behavior | Add unused adapters and configuration | Implement the happy-path call without failure recovery | Fulfill the contract with justified responsibilities |
+| Add a cache with required freshness and tenant isolation | Build a general caching framework for one need | Use a short memoization call that retains stale or cross-tenant data | Choose tools by semantics; preserve freshness and ownership |
+| Handle a resource safely | Add interchangeable backend interfaces without need | Inline code and lose cleanup on exceptions | A one-use lifecycle wrapper is justified |
+| Implement readable existing logic | Add indirection without a maintenance benefit | Compress branches into a difficult expression to minimize lines | Judge readability and maintenance cost, not size |
+| Verify a change covered by existing checks | Add one new test per branch regardless of coverage | Skip checks because the change is short | Reuse sufficient checks; add only meaningful missing protection |
+| Deliver a feature or an accepted prototype | Add speculative future capabilities | Silently replace requested behavior with a reduced demo | Preserve accepted scope and expose consequential limitations |
+
+These are contextual decision cases, not universal requirements for caches,
+uploads, dependencies or tests. Full verification passed for 49 skills and 76
+existing tests, including CLI discovery/installation fixtures. Creator validation
+and actual individual installation with skills@1.7.0 passed: all four bundled files
+matched byte-for-byte. Body: 3,842 characters. Local runtime links resolve within
+this skill; saved-record guidance, MIT and existing attribution remain unchanged.
+These checks establish packaging, not independent implementation judgment.
+
+## Earlier evaluation
+
 ## Cases
 
 | Request | Expected behavior | Result |
