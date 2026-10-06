@@ -1,5 +1,30 @@
 # test evaluation
 
+## Oracle independence revision
+
+Parent instruction review adds four decision cases; no fresh-agent execution is claimed.
+
+| Situation | Expected decision |
+| --- | --- |
+| A generated test repeats a generated implementation's wrong result | Derive the expectation from the actual contract and reject the named faulty behavior |
+| A second agent endorses the same result without new evidence | Treat agreement as insufficient; identify an independent basis |
+| Existing checks already reject the reported defect and accept valid behavior | Reuse their evidence; no mutation campaign or duplicate test |
+| Tests are authored after implementation but expectations come from the specification | Accept the grounded checks; no universal test-first requirement |
+
+The existing [task replay](../task-execution/README.md) supplies a concrete reusable
+example: ordered search results preserve the first matching label, while a deliberately
+wrong last-wins index is rejected. That prior execution does not validate fresh-agent
+test design. This revision adds a conditional reference, not a runtime helper or CI test.
+
+Revision verification passed: 49 skills validated, all 76 existing tests passed,
+and CLI discovery/installation checks passed. Creator validation and actual selective
+installation of test with skills@1.7.0 passed; all three bundled files matched
+byte-for-byte. The body is 3,968 characters. Local links, saved-record convention
+and existing license remain intact. This evidence verifies packaging and existing
+tools, not the causal effect of the new oracle guidance.
+
+## Earlier evaluation
+
 Instruction review covers test-admission decisions and their exceptions.
 Independent agent execution, automatic routing, and suite-pruning quality were not evaluated.
 

@@ -20,8 +20,10 @@ metadata:
 
 ## Principles
 
-- Protect a named failure and observable contract. Derive expected results from
-  requirements or independently checked examples, not copied implementation output.
+- Protect a named failure and observable contract. Ground expectations in requirements
+  or independently checked examples, not current output. Read
+  [references/oracles.md](references/oracles.md) for coupled code/test generation
+  or uncertain expectations.
 - Reuse existing coverage first. Add a regression case only for a meaningful gap;
   a change, commit, or coverage target alone is not a reason to add a test.
 - Test through the smallest stable boundary that can expose the failure. Preserve
