@@ -6,6 +6,7 @@ Keep each skill's cases and results in its own folder.
 
 | Skill | Evaluation record |
 | --- | --- |
+| animation-performance | [Frame pacing, runtime attribution, matched comparisons, and measurement limits](animation-performance/README.md) |
 | animation-debug | [Symptom-directed probes, lifecycle causes, scoped correction, and evidence limits](animation-debug/README.md) |
 | animate-native | [Runtime selection, gestures, keyboard coordination, haptics, and platform evidence](animate-native/README.md) |
 | animation-vocabulary | [Observable effects, terminology ambiguity, compound motion, and naming scope](animation-vocabulary/README.md) |
