@@ -6,6 +6,7 @@ Keep each skill's cases and results in its own folder.
 
 | Skill | Evaluation record |
 | --- | --- |
+| animation-review | [Motion defects, continuity, contextual judgment, and runtime coverage](animation-review/README.md) |
 | animate | [Web gestures, transitions, interruption, reduced motion, and runtime limits](animate/README.md) |
 | accessibility | [Behavioral access, standards applicability, contrast boundaries, and audit limits](accessibility/README.md) |
 | responsive | [Content-driven reflow, intentional scrolling, input access, and verification limits](responsive/README.md) |
