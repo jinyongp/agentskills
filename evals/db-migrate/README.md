@@ -1,5 +1,9 @@
 # Database migration evaluation
 
+See [parent task execution](../task-execution/README.md) for reproducible SQLite
+interruption, resume, reconciliation, preserved targets and backup readback.
+Production restoration and concurrent writers remain outside that rehearsal.
+
 ## Decision cases
 
 Parent instruction review on 2026-10-06 in the current Codex session; model version
@@ -34,7 +38,7 @@ detail. Native output varies, so no universal mechanical ceiling is claimed.
 A new reducer needs explicit limits and large-input/failure verification.
 
 Engine-specific operational performance, production execution, cross-store recovery,
-backup restoration, independent plan quality, and automatic routing remain unmeasured.
+production backup restoration, independent plan quality, and automatic routing remain unmeasured.
 References are original guidance with links to primary engine documentation.
 
 ## Parent-guided rehearsal
@@ -49,7 +53,8 @@ an invariant check detected it and a scoped reconciliation filled it.
 
 This hand-authored replay passed. It illustrates selected decisions in the references,
 not independent agent execution, real concurrent writers, restoration, another engine's
-DDL semantics, or operational migration safety. No permanent fixture suite was added.
+DDL semantics, or operational migration safety. That initial replay used a temporary
+script; the subsequent linked replay now retains its fixture for reproduction.
 
 Packaging verification passed: 48 skills, 76 existing tests, and CLI fixtures.
 Creator validation and actual selective installation with skills@1.7.0 passed;

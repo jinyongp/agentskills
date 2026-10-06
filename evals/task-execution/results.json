@@ -1,0 +1,99 @@
+{
+  "kind": "parent-authored task replay; no independent agent invocation",
+  "environment": {
+    "python": "3.11.17",
+    "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+    "node": "v22.22.2",
+    "npm": "10.9.7",
+    "shell_python": "Python 3.14.8"
+  },
+  "fixture_sha256": {
+    "api-review.md": "4e485e074f4d062996b574c9fd2539385d2f45067bb8903c827d5a5bef6e7b79",
+    "api.py": "ba67a990fa34f9a89c7ceeb4f18b605fc8256bf7f610917c9281a4776a3fee7a",
+    "cli.py": "618a4c3c6fc804f3b834a62c529c51763518b8e3ff0158840e417b1f7398b1f8",
+    "guide.md": "354310cb97e632810e10771ae78b261ada047ff131ee1b760ec74559d9c6ce9f",
+    "join_after.py": "e6e4475e15debada5191a89b0773920d6fa468aa6b5cf29a15ff5c05c76f40d5",
+    "join_before.py": "107e03f9f9d3acf1b17b1ed7a52b29a4da98a8a90b04adb2d3bbaa41ee26ae5b",
+    "migration.py": "81ead9ad6b6ad914bf3b7c4a20dd0de80193a7b8c297ca521917acaa6e014687"
+  },
+  "tasks": {
+    "dev-docs": {
+      "status": "pass",
+      "executed_inputs": 7,
+      "implementation_unchanged": true
+    },
+    "dependency-update": {
+      "status": "pass",
+      "core_versions": [
+        "1.0.0",
+        "2.0.0"
+      ],
+      "peer_warning_exit_zero_observed": true,
+      "invalid_peer_tree_observed": true,
+      "strict_peer_conflict_observed": true,
+      "install_success_runtime_failure_observed": true,
+      "consumer_migration_verified": true,
+      "unrelated_resolution_preserved": true,
+      "clean_install_verified": true,
+      "lifecycle_scripts": "disabled in owned fixtures"
+    },
+    "optimize": {
+      "status": "pass",
+      "correctness_cases": 3,
+      "negative_control_detected": true,
+      "workload": {
+        "catalog_rows": 2500,
+        "query_ids": 2000
+      },
+      "boundary": "complete function call including index construction",
+      "elapsed_ms": {
+        "before": [
+          17.410277,
+          17.572041,
+          17.698173,
+          18.00154,
+          17.767449,
+          18.050447,
+          17.50778
+        ],
+        "after": [
+          0.222038,
+          0.110839,
+          0.119606,
+          0.11156,
+          0.118253,
+          0.11141,
+          0.124925
+        ]
+      },
+      "median_ms": {
+        "before": 17.698173,
+        "after": 0.118253
+      },
+      "traced_peak_bytes": {
+        "before": 17064,
+        "after": 110784
+      },
+      "performance_conclusion": "observed local improvement",
+      "production_inference": false
+    },
+    "db-migrate": {
+      "status": "pass",
+      "sqlite_version": "3.53.1",
+      "interruption_atomic": true,
+      "reopen_resume": true,
+      "retry_preserves_data": true,
+      "late_row_gap_detected": true,
+      "reconciliation_verified": true,
+      "disposable_backup_readback_verified": true,
+      "real_concurrent_writers": false
+    },
+    "api-design": {
+      "status": "pass",
+      "current_provider_consumer_pass": true,
+      "proposed_additive_break_observed": true,
+      "review_only_source_unchanged": true,
+      "transport": "in-process JSON serialization and decoding; no HTTP server"
+    }
+  }
+}

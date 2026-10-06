@@ -1,5 +1,9 @@
 # API design evaluation
 
+See [parent task execution](../task-execution/README.md) for actual provider/consumer
+serialization demonstrating a strict consumer's incompatibility with an additive
+field. That review leaves implementation unchanged; it does not test transport.
+
 ## Decision cases
 
 Parent instruction review on 2026-10-06 in the current Codex session; model version
@@ -39,7 +43,7 @@ explicit limits and large-input/failure verification. Universal output sizes and
 large-schema recovery have not been measured.
 
 References provide original decision guidance with primary-source links, not copied
-organizational policies. Actual provider/consumer execution, protocol-specific
+organizational policies. Production provider/consumer execution, protocol-specific
 generation, independent design quality, security guarantees, and automatic routing
 remain unmeasured.
 

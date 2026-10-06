@@ -1,5 +1,9 @@
 # Developer documentation evaluation
 
+See [parent task execution](../task-execution/README.md) for an authored CLI guide
+whose documented commands and success/failure behavior were actually executed.
+That scoped result supplements the instruction review below.
+
 ## Decision cases
 
 Parent instruction review on 2026-10-06 in the current Codex session; model version

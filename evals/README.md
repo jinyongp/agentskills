@@ -69,6 +69,11 @@ For skills with scripts, also verify normal and failure inputs.
 
 ## Authoring policy verification
 
+See [parent task execution and replay](task-execution/README.md) for five executed
+local tasks, fixture contracts, actual package/runtime failures, measurements,
+database recovery and an API consumer break. This supplements instruction review
+and packaging checks; it does not measure independent selection or causal skill benefit.
+
 Five additions on 2026-10-06 bring the collection to 49 skills: dev-docs,
 dependency-update, optimize, db-migrate, and api-design. Their evaluation records
 separate parent decision-rule review from mechanical verification and the scoped

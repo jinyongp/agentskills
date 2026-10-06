@@ -39,7 +39,8 @@ lifecycle execution, failed resolution, or reproducibility checks.
    and regenerate locks through their owner tool. Apply necessary consumer/config
    migrations within scope; a larger redesign needs a separate decision. Inspect the
    resulting diff, resolved versions, and unexpected removals or broad churn.
-5. Investigate resolution, peer, integrity, native-build, or install-script failures.
+5. Inspect warnings and peer validity even when the resolver exits successfully.
+   Investigate resolution, peer, integrity, native-build, or install-script failures.
    A forced override or suppressed check needs an understood compatibility tradeoff
    and applicable authorization. Preserve evidence and partial changes; do not reset
    unrelated work, delete locks, switch registries, or repeat failing updates blindly.

@@ -1,5 +1,9 @@
 # Optimize evaluation
 
+See [parent task execution](../task-execution/README.md) for executed correctness
+cases, a regression negative control, profiling, before/after timing and memory
+tradeoffs. It does not establish production benefit or independent agent judgment.
+
 ## Decision cases
 
 Parent instruction review on 2026-10-06 in the current Codex session; model version
@@ -32,7 +36,7 @@ summaries; full traces and raw samples remain outside default input. A new reduc
 needs explicit limits, omission recovery, and large-input/failure verification.
 Mechanical ceiling and large-trace recovery are not measured for arbitrary tools.
 
-Independent bottleneck selection, actual speedup, application correctness,
+Independent bottleneck selection, application-wide correctness, production benefit,
 multi-platform measurements, and automatic routing remain unmeasured. References
 are conditionally loaded original guidance with primary-source links.
 

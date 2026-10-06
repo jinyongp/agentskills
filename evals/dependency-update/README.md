@@ -39,3 +39,8 @@ Packaging verification passed: 46 skills, 76 existing tests, and CLI fixtures.
 Creator validation and actual selective installation with skills@1.7.0 passed;
 all four bundled files matched byte-for-byte. MIT notice and local links passed.
 Entrypoint body: 3,818 characters, excluding frontmatter.
+
+Subsequent [parent task execution](../task-execution/README.md) exercises actual
+local npm updates, incompatible peers, consumer migration and clean installation.
+A zero-exit peer warning prompted explicit warning/peer inspection guidance.
+The historical matrix above remains instruction review, not independent execution.
