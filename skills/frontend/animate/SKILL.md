@@ -17,9 +17,11 @@ Inspect local tokens, components, dependencies, and browser requirements first.
 Reuse the simplest capable existing mechanism; follow user tool requirements.
 
 Read [references/interactions.md](references/interactions.md) for gestures, sheets,
-route transitions, or viewport/keyboard coordination. Read
+route transitions, scroll effects, or viewport/keyboard coordination. Read
 [references/mechanics.md](references/mechanics.md) when choosing timing, interruption,
-or profiling a performance issue. Each is optional until its condition applies.
+or profiling a performance issue. Read [references/css.md](references/css.md) for
+CSS implementation and [references/motion-react.md](references/motion-react.md)
+only when the project uses Motion for React. Read only relevant sections.
 
 ## Decisions and implementation
 

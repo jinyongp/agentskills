@@ -1,5 +1,8 @@
 # Animate native evaluation
 
+The 2026-10-06 extension passed full locked checks (35 skills, 76 tests, CLI fixtures),
+creator validation, exact four-file selective installation, MIT comparison, and links.
+
 | Request | Expected decision | Parent review |
 | --- | --- | --- |
 | Add a simple fade using an adequate existing native driver | Reuse the project tool | No compulsory Reanimated migration |
@@ -11,6 +14,7 @@
 | A worklet API differs across installed versions | Consult installed-version documentation | No universal runtime API recipe |
 | A native animation is also used on web | Check web-specific input and viewport behavior | Platform coverage explicit |
 | A large application contains unrelated screens | Inspect selected scope with bounded project detail | No broad inspection claim |
+| Reduced motion changes while a drag is settling | Reconcile visual and semantic states without losing dismissal | Runtime reference covers interrupted settings changes |
 
 ## Validation and limits
 

@@ -45,3 +45,9 @@ rather than continuous drag frames. The installed native API or
 Hardware, settings, and platform conditions can suppress it; a successful call is
 not proof that the user felt a vibration. Check relevant physical-device behavior,
 keep visual/semantic feedback, and report unsupported or untested conditions.
+
+When the motion preference changes mid-gesture or during settling, reconcile the
+visual and semantic state through the selected engine. Keep navigation, dismissal,
+and loading outcomes independent of decorative playback or its completion callback.
+Verify release cancellation and ownership when a second pointer or system gesture
+interrupts input. A reduced-motion setting does not supply gesture arbitration.

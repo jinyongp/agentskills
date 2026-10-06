@@ -29,3 +29,16 @@ and actions. Use supported viewport or platform mechanisms only where necessary;
 avoid adding scroll jumps or a new dependency to a working layout.
 Haptic or other device feedback is an optional enhancement when requested and
 supported; visual and semantic feedback still carry the outcome.
+
+## Scroll effects
+
+Distinguish a visibility-triggered entrance from motion linked to scroll progress.
+Use existing primitives or [IntersectionObserver](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API)
+for visibility triggers; keep content reachable if observation or motion is unavailable.
+Choose replay deliberately. Repeated entrances can obstruct frequently used content.
+
+For progress-linked motion, verify the actual scroll container, changing content sizes,
+sticky boundaries, and restored scroll position. Keep scrolling under user control.
+Parallax and smoothing need a reduced-motion alternative; preserve reading order,
+navigation, and access at every progress value. Avoid per-frame framework state when
+the existing animation system can own visual updates directly.

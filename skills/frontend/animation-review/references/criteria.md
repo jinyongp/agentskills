@@ -21,6 +21,8 @@ A swipe dismiss action also needs a reachable alternative. A visually smooth she
 still fails if focus or its required action becomes inaccessible. Reduced motion
 should preserve the same information and actions, with suitable instant or gentler
 feedback; its existence in source does not prove every path uses it.
+Check preference changes during playback and JS-driven or scroll effects beyond CSS
+overrides. Zero-duration or cancelled playback must still reach correct semantic state.
 
 ## Performance and platform
 
@@ -28,6 +30,8 @@ Use traces or runtime measurements for performance findings. On web, inspect act
 layout/paint, compositing, and main-thread contention. On React Native, determine the
 animation execution path, JS/UI-thread load, rendering, and supported device behavior.
 Property choice and moving work off JS help only part of the pipeline.
+Separate delayed input acknowledgement from slow easing and missed frames. Frame-rate
+targets depend on the device and refresh rate; averages can conceal short stalls.
 
 Device-specific gestures, keyboard behavior, and native feedback need relevant
 platform evidence. A web screenshot or native simulator cannot establish all

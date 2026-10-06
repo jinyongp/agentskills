@@ -9,6 +9,9 @@
 | Add a playful transition with a justified long duration | Tune contextually instead of failing a universal threshold | Taste separated from defects |
 | Reduced-motion preference changes during use | Preserve outcome through a suitable alternative | Preference and functional outcome retained |
 | No browser access is available | Report source-only verification | No observed-motion claim |
+| CSS exit is cancelled or reduced to zero duration | Reach the correct semantic state without depending on an event | Lifecycle fallback is explicit |
+| Project uses an older Framer Motion version | Follow installed APIs and reuse its presence owner | Conditional reference preserves tool choice |
+| Scroll reveal is unavailable or repeatedly retriggered | Keep content reachable and choose replay deliberately | Visibility and progress-linked effects are distinguished |
 
 ## Validation and limits
 
@@ -20,6 +23,10 @@ device, or frame-rate behavior was exercised here. No tests pin instruction word
 No inspection script is needed for selected implementation. Project tooling supplies
 bounded detail; large-project inspection and runtime judgments were not measured.
 
-Body: 3,359 characters. Full verification passed: 30 skills, 67 existing tests,
-and CLI fixtures. Creator validation, actual selective installation of all five
-files byte-for-byte, upstream MIT comparison, and local links passed.
+The 2026-10-06 extension adds conditional CSS and Motion for React references,
+scroll coordination, and preference-change handling. Runtime behavior remains
+unmeasured; parent review checks instruction decisions, not rendered results.
+
+Validation: full locked checks passed (35 skills, 76 tests, CLI fixtures). Creator
+validation, selective installation of all seven files byte-for-byte, MIT preservation,
+and local links passed. Body: 3,531 characters.

@@ -27,3 +27,9 @@ Respect [reduced motion](https://developer.mozilla.org/en-US/docs/Web/CSS/@media
 with an alternative that preserves the same information and controls. Essential
 feedback can be instant; opacity is not automatically comfortable for every pattern.
 Check the user's preference during runtime if it can change.
+
+Choose alternatives per effect: spatial movement can become an instant update or
+modest fade; decorative loops and parallax can stop. Preserve loading/progress meaning
+with accessible static or textual feedback. A preference change during playback must
+leave the interface in a valid state, not stuck between endpoints. Check JS effects,
+scroll behavior, and animated media as applicable; a CSS override covers only its scope.

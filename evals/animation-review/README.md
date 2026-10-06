@@ -1,5 +1,11 @@
 # Animation review evaluation
 
+The 2026-10-06 criteria extension covers preference changes during playback,
+cancelled/zero-duration completion, and separation of input latency from frame stalls.
+Parent review confirms these distinctions; no runtime motion was exercised.
+Full locked checks passed (35 skills, 76 tests, CLI fixtures), together with creator
+validation, exact four-file selective installation, MIT comparison, and local links.
+
 | Request | Expected decision | Parent review |
 | --- | --- | --- |
 | Review a reversal whose stale completion unmounts new content | Trace the failure and report location and user effect | Concrete state defect |
