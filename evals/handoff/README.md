@@ -14,6 +14,7 @@ agent summarization, automatic selection, or autonomous continuation.
 | Missing artifact | Another checkout lacks uncommitted work or an attachment | Identify the missing input and transfer method before dependent edits | Instructions reviewed; cross-machine transfer not run |
 | Long context | Logs and superseded proposals accompany current decisions and unresolved questions | Preserve current missing context and necessary rationale; access existing evidence selectively | Instructions reviewed; large-conversation fidelity not measured |
 | Pending external action | Source reports an unfinished remote operation | Confirm its outcome before retrying within current authorization | Resume instructions reviewed; live external actions not run |
+| Requested language | Prepare a Korean handoff containing English identifiers | Use the requested working language and preserve exact identifiers | Parent instruction review only; generated packet quality not independently measured |
 
 ## Replay setup
 
@@ -48,3 +49,7 @@ No model selected the queries or decided the next implementation action.
 - Local documentation links and MIT license copies passed checks.
 - Independent agent continuation, large-context fidelity, live delivery, and cross-machine
   recovery remain unevaluated.
+
+Context review revision (2026-10-06): 3,659 body characters. Full verification of
+44 skills and 76 existing tests passed. Creator validation and selective installation
+passed; both files matched, local links resolved, and the MIT license stayed unchanged.

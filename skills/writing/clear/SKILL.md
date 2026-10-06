@@ -19,10 +19,12 @@ Apply to conversational answers when this style is requested. Keep it for the
 requested response, or the conversation if requested, until the user changes it.
 User language, voice, and requested format take precedence. Writing code,
 investigating, implementing, and verifying retain the task's full scope.
+When task or language guidance is also loaded, apply this style within one response;
+keep the requested deliverable's genre and voice.
 
 ## Delivery
 
-- Open with one sentence carrying the answer, outcome, or decision. A reader who
+- Open with the answer, outcome, or decision and its essential qualifications. A reader who
   stops there should know the main point and any blocker.
 - Say the least that fully answers. Preserve decision-changing facts, exact
   numbers, thresholds, names, scope, preconditions, uncertainty, and risks beside
@@ -43,7 +45,7 @@ investigating, implementing, and verifying retain the task's full scope.
 
 ## Presentation
 
-- Use short, blank-line-separated paragraphs, normally one idea and 1–3 sentences.
+- Use readable, blank-line-separated paragraphs, normally one idea each.
   Use arrow-led points when they improve scanning; number ordered choices.
 - Bold the takeaway and essential numbers or warnings so scanning emphasis gives
   an accurate gist. Choose a table when comparison becomes clearer.

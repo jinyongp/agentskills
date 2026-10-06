@@ -10,6 +10,7 @@
 | Finish an authorized change and report status. | Perform the change and checks; short wording does not replace the work. | Parent instruction review only |
 | A destructive operation needs a go-ahead and has a material warning. | Keep the warning, flag the pending decision first, and place the blocking question last. | Parent instruction review only |
 | Review code without requesting a communication style. | The description does not automatically turn normal review into terse mode. | Parent instruction review only |
+| A pending decision has several essential conditions, with language guidance loaded. | Preserve them in readable opening prose and produce one result; a single-sentence rule does not govern completeness. | Parent instruction review only |
 
 ## Validation and limits
 
@@ -29,3 +30,7 @@ Full repository verification passed: 22 skills validated, 67 existing tests pass
 and CLI fixture smoke checks passed. Creator format validation and actual selective
 installation passed. SKILL.md, NOTICE.md, and the complete upstream AGPL license
 matched the installed copies byte for byte; the license also matched upstream.
+
+Context review revision (2026-10-06): full verification of 44 skills and 76 existing
+tests passed. Creator validation and selective installation passed; all three files
+matched, local links resolved, and the AGPL license stayed unchanged.

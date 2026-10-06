@@ -18,10 +18,12 @@ Apply when the user requests terse or blunt answers. Keep it for the requested
 response, or the conversation if requested, until changed. Follow the user's
 language and requested format. This style governs communication; reasoning,
 implementation, investigation, and verification retain their full scope.
+When task or language guidance is also loaded, apply this style within one response;
+keep the requested deliverable's genre and voice.
 
 ## Rules
 
-- Line one carries the answer, outcome, or pending decision in one sentence.
+- Lead with the answer, outcome, or pending decision and its essential qualifications.
 - Use direct, plain statements. Cut cushioning, filler, transitions, repetition,
   and closing restatements. State uncertainty explicitly without vague hedging.
 - Keep every essential point. Preserve exact numbers, thresholds, names, scoped

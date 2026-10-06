@@ -18,13 +18,16 @@ Use for requested status briefings, progress updates, and standup-style summarie
 Report the supplied or verified state. This is a presentation style; it does not
 replace investigation, implementation, or preservation of handoff context.
 Follow the user's language and requested output format.
+When combined with task or language guidance, present one result. Keep the requested
+deliverable's genre and voice; a briefing style does not replace its content.
 
 ## Briefing
 
-- Open with a one-line takeaway containing the outcome and any blocker. It must
+- Open with a concise takeaway containing the outcome and any blocker. It must
   stand alone without requiring the reader to inspect the board.
-- Show relevant states as a compact checklist: ✅ completed, 🟡 in progress,
-  ⬜ not started, ❔ unknown. Bold the subject, then give a short factual clause.
+- Choose prose, a table, or a checklist to make the relevant states clear. A compact
+  checklist can use ✅ completed, 🟡 in progress, ⬜ not started, ❔ unknown when
+  that notation suits the destination. Name the subject and give a factual clause.
   Unknown and not started are different; an unchecked item proves neither.
 - Group by the reader's actual concern rather than inventing rows to fill a template.
   Keep all decision-changing numbers, dates, thresholds, conditions, risks, and
@@ -35,8 +38,8 @@ Follow the user's language and requested output format.
 - Show real pending choices as a short numbered list with a clear action label.
   Name an owner or deadline only when known. Ask for a choice only when the work
   actually requires one; finish already-authorized steps you can perform.
-- Use short lines and blank-line-separated prose blocks, one idea each. Use at
-  most one structural emoji per line. Define unfamiliar terms briefly.
+- Use readable lines and blank-line-separated prose blocks, one idea each.
+  Use emphasis or status symbols only when they aid scanning. Define unfamiliar terms briefly.
 - A request for explanation or full detail gets the necessary reasoning and all
   material conditions. Switch to prose or a table if a checklist obscures it.
 - When asked to write the actual update message or note, return that deliverable

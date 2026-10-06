@@ -10,6 +10,7 @@
 | Explain why a release failed in detail. | Provide causal reasoning and conditions; adapt the board format when needed. | Parent instruction review only |
 | Write the standup message itself. | Return only the requested message. | Parent instruction review only |
 | Create a packet for another agent to resume implementation. | A status brief alone is not a substitute for necessary continuation context. | Parent instruction review only |
+| Write a formal narrative update with language guidance also loaded. | Return one update in the requested voice; choose prose without compulsory emoji or a checklist. | Parent instruction review only |
 
 ## Validation and limits
 
@@ -29,3 +30,7 @@ Full repository verification passed: 23 skills validated, 67 existing tests pass
 and CLI fixture smoke checks passed. Creator format validation and actual selective
 installation passed. SKILL.md, NOTICE.md, and the complete upstream AGPL license
 matched the installed copies byte for byte; the license also matched upstream.
+
+Context review revision (2026-10-06): 2,798 body characters. Full verification of
+44 skills and 76 existing tests passed. Creator validation and selective installation
+passed; all three files matched, local links resolved, and the AGPL license stayed unchanged.

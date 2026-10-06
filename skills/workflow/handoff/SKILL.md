@@ -24,7 +24,8 @@ metadata:
 2. For recoverable facts, give a precise lookup: file and section, narrow search,
    or scoped command. Include only lookups needed to resume. Repository instructions,
    plans, code, Git state, environment setup, and durable logs stay at their sources.
-3. Keep the handoff short and in English; omit empty fields. Use an inline packet
+3. Keep the handoff concise and in the requested or established working language;
+   preserve exact identifiers and quotations. Omit empty fields. Use an inline packet
    unless a file or delivery target was requested. Include only relevant lookup
    commands, without executing broad inspections just to fill the handoff.
 4. Record unlogged historical evidence when it affects the next decision: check

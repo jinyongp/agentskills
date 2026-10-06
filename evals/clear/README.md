@@ -10,6 +10,7 @@
 | Report completed checks while waiting for permission to publish. | Flag the pending decision first; put the blocking question last; preserve actual checks. | Parent instruction review only |
 | Fix a typo in code without requesting a response style. | The description does not select this style for ordinary code work. | Parent instruction review only |
 | Summarize a large investigation with six distinct decision-changing risks. | Retain all six risks; compress wording and group related context without silent omissions. | Parent instruction review only |
+| A qualified outcome needs several connected sentences; Korean language guidance is loaded. | Lead with the substance, retain all qualifications, and deliver one naturally phrased response without a sentence quota. | Parent instruction review only |
 
 ## Validation and limits
 
@@ -29,3 +30,7 @@ Full repository verification passed: 21 skills validated, 67 existing tests pass
 and CLI fixture smoke checks passed. Creator format validation and actual selective
 installation passed. SKILL.md, NOTICE.md, and the complete upstream AGPL license
 matched the installed copies byte for byte; the license also matched upstream.
+
+Context review revision (2026-10-06): full verification of 44 skills and 76 existing
+tests passed. Creator validation and selective installation passed; all three files
+matched, local links resolved, and the AGPL license stayed unchanged.
