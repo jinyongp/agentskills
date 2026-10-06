@@ -6,6 +6,7 @@ Keep each skill's cases and results in its own folder.
 
 | Skill | Evaluation record |
 | --- | --- |
+| ui-stress | [Realistic content extremes, state boundaries, evidence, and proportionate coverage](ui-stress/README.md) |
 | prototype | [Distinct UI alternatives, isolated previews, selection, and scoped promotion](prototype/README.md) |
 | animation-performance | [Frame pacing, runtime attribution, matched comparisons, and measurement limits](animation-performance/README.md) |
 | animation-debug | [Symptom-directed probes, lifecycle causes, scoped correction, and evidence limits](animation-debug/README.md) |

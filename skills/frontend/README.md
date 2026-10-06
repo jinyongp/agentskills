@@ -16,6 +16,7 @@ Skills for web and native interfaces, motion, responsive behavior, and accessibi
 | [animation-debug](animation-debug/SKILL.md) | Diagnose concrete web or native motion symptoms and correct supported causes | `npx skills add jinyongp/agentskills --skill animation-debug` |
 | [animation-performance](animation-performance/SKILL.md) | Profile web or native motion bottlenecks and compare matched performance measurements | `npx skills add jinyongp/agentskills --skill animation-performance` |
 | [prototype](prototype/SKILL.md) | Compare distinct interactive UI directions and promote an authorized choice | `npx skills add jinyongp/agentskills --skill prototype` |
+| [ui-stress](ui-stress/SKILL.md) | Find UI failures with realistic content extremes and task-state boundaries | `npx skills add jinyongp/agentskills --skill ui-stress` |
 <!-- skills:end -->
 
 Add skills at `skills/frontend/<skill-name>/SKILL.md`.
