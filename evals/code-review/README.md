@@ -38,3 +38,10 @@ Creator validation and actual selective installation passed; all three files mat
 Context review revision (2026-10-06): 3,312 body characters. Full verification of
 44 skills and 76 existing tests passed. Creator validation and selective installation
 passed; all three files matched, links resolved, and the MIT license stayed unchanged.
+
+Filesystem-monitor regression: the existing external-diff fixture also configured a
+marker-writing fsmonitor hook. It failed before the fix because diff inspection ran
+the hook. Inspection now disables it per query without changing repository config.
+The fixture checks that both external-driver and fsmonitor markers stay absent.
+After the fix, all 76 tests and full repository verification passed. Selective
+installation copied all three files exactly; format, license, and local links passed.

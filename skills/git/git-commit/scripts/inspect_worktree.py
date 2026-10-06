@@ -27,7 +27,7 @@ class BoundedParser(argparse.ArgumentParser):
 def git(repo, *args, optional=False):
     try:
         result = subprocess.run(
-            ["git", "--no-optional-locks", "--literal-pathspecs", "-C", str(repo), *args],
+            ["git", "--no-optional-locks", "--literal-pathspecs", "-c", "core.fsmonitor=false", "-C", str(repo), *args],
             env={**os.environ, "GIT_TERMINAL_PROMPT": "0"},
             capture_output=True, timeout=30,
         )

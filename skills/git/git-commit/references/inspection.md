@@ -19,6 +19,7 @@ query: refresh after repository changes. Counts cover all files, including omitt
 pages. A long recent subject has `truncated: true`; request history if needed.
 
 The helper never fetches, stages, commits, or prints file contents in its summary.
+Inspection queries disable filesystem-monitor hooks; actual commit hooks remain enabled.
 Diff requests need exact repository-relative files. New files need a separate
 bounded content read. Diff and template text may contain sensitive data: request
 only the scope needed, inspect locally, and keep secrets out of user-facing output.

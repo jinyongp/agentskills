@@ -81,3 +81,10 @@ Automatic selection and message quality still require independent evaluation.
 Context review revision (2026-10-06): 3,381 body characters. Full verification of
 44 skills and 76 existing tests passed. Creator validation and selective installation
 passed; all six files matched, links resolved, and the MIT license stayed unchanged.
+
+Filesystem-monitor regression: the existing read-only summary fixture configured a
+marker-writing fsmonitor hook. It failed before the fix because inspection ran the
+hook. Disabling it per query preserves the marker's absence, HEAD, index, worktree
+content, and accurate change counts. Commit hooks are unaffected.
+After the fix, all 76 tests and full repository verification passed. Selective
+installation copied all six files exactly; format, license, and local links passed.

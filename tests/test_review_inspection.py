@@ -99,9 +99,14 @@ class ReviewInspectionTests(unittest.TestCase):
         script = self.repo / 'external.py'
         script.write_text(f'from pathlib import Path\nPath({str(marker)!r}).write_text("bad")\n')
         self.git('config', 'diff.external', f'{sys.executable} {script}')
+        hook = self.repo / '.git/fsmonitor-test'
+        hook.write_text('#!/bin/sh\n: > "$0.marker"\nprintf "token\\0/\\0"\n')
+        hook.chmod(0o755)
+        self.git('config', 'core.fsmonitor', str(hook))
         (self.repo / 'feature.txt').write_text('changed\n')
         self.assertEqual(self.call('--mode', 'diff', '--path', 'feature.txt')[0], 0)
         self.assertFalse(marker.exists())
+        self.assertFalse(Path(str(hook) + '.marker').exists())
 
     def test_invalid_refs_paths_and_arguments_fail_bounded(self):
         for args in (('--base', 'missing'), ('--head', 'HEAD'), ('--base', '--output=evil'), ('--mode', 'diff'), ('--mode', 'diff', '--path', '../outside'), ('--mode', 'files', '--offset', '-1')):

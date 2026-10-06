@@ -21,7 +21,7 @@ class Parser(argparse.ArgumentParser):
 
 
 def git(repo, *args):
-    result = subprocess.run(['git', '--no-optional-locks', '--literal-pathspecs', '-C', str(repo), *args],
+    result = subprocess.run(['git', '--no-optional-locks', '--literal-pathspecs', '-c', 'core.fsmonitor=false', '-C', str(repo), *args],
                             env={**os.environ, 'GIT_TERMINAL_PROMPT': '0'}, capture_output=True, timeout=30)
     if result.returncode:
         raise ValueError('Git query failed; verify repository, refs, and access.')
