@@ -6,6 +6,7 @@ Keep each skill's cases and results in its own folder.
 
 | Skill | Evaluation record |
 | --- | --- |
+| write | [Evidence-based drafting, language routing, and publication scope](write/README.md) |
 | mobile-web | [Touch, browser viewport, keyboard access, safe areas, and platform evidence](mobile-web/README.md) |
 | ui-library | [Capability fit, project tool precedence, primary evidence, and integration scope](ui-library/README.md) |
 | ui-stress | [Realistic content extremes, state boundaries, evidence, and proportionate coverage](ui-stress/README.md) |

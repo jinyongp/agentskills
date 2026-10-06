@@ -13,6 +13,9 @@ These are parent instruction reviews, not independent agent execution.
 | Review a document without editing | Return recommendations | Read-only scope retained |
 | Edit one chapter in a large document | Read relevant context and limit whole-document claims | Omitted sections remain explicit |
 | Remove repetitive transitions but retain a deliberate aside | Improve clarity while preserving personality | Cleanup does not require a uniform voice |
+| Smooth "Only administrators may delete drafts" | Preserve exclusive role and permission | Actor, quantifier, and obligation checks are explicit |
+| Review Korean prose with language guidance also loaded | Give scoped findings without edits | Composition preserves review-only mode |
+| Edit English in a Korean conversation | Keep English unless translation is requested | Output language controls expression |
 
 ## Validation and limits
 
@@ -22,9 +25,13 @@ recovery remain unmeasured. The cases above assess written decision rules only.
 No runtime scripts or dependencies are bundled; there is no mechanically enforced
 inspection ceiling. No tests that pin wording or punctuation were added.
 
-Body: 2,799 characters excluding frontmatter. Full repository verification passed:
+Initial version body: 2,799 characters excluding frontmatter. Initial verification passed:
 26 skills validated, 67 existing tests passed, and CLI fixture checks passed.
 Creator validation and actual selective installation with `skills@1.7.0` passed:
 three bundled files copied byte-for-byte, with no other skill installed. Upstream
 MIT license comparison and local Markdown links passed. These are packaging checks,
 not evidence of independent rewrite performance.
+
+Revised version: 3,453 body characters. Full verification passed with 42 skills,
+76 existing tests, and CLI fixtures. Creator validation, selective installation
+of all three files byte-for-byte, MIT notice, and local links passed again.

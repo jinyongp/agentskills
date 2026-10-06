@@ -38,6 +38,15 @@ For a review-only request, return supported recommendations without editing file
    invented evidence, and unnecessary edits. A request for substantial compression
    may omit secondary material; preserve decision-changing context and disclose
    material omissions. Resolve clarity problems without flattening the voice.
+   Check negation, quantities, causal links, time, and who acts or is obligated;
+   a smoother sentence can silently change any of these.
+
+## Language and composition
+
+This skill works alone across languages. Follow the requested output language;
+editing alone does not authorize translation. When language-specific guidance is
+also loaded, apply it to the relevant passages within this workflow and return one
+result. Review-only mode remains read-only regardless of accompanying style guidance.
 
 ## Result
 
@@ -45,6 +54,9 @@ Return the revised text ready for its destination. Include a short explanation
 only when requested or needed for material changes or unresolved claims. Preserve
 the original where required. Use existing spelling, link, or document checks when
 useful; word-count or banned-word scores alone do not establish writing quality.
+
+For review-only requests, identify the passage, reader impact, and suggested change;
+keep already effective prose. Limit conclusions to the inspected text.
 
 ## Saved records
 
