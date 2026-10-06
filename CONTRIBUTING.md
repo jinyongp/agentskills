@@ -94,6 +94,14 @@ unverified behavior separately. Format validation, installation, scripted replay
 parent instruction review, and independent agent execution establish different things;
 record the evidence actually obtained without promoting one into another.
 
+When a rule leaves the next action unclear, specify its trigger, the observable
+evidence to inspect, and the decision that evidence changes. For example, replace
+"keep documentation clear" with "when internals interrupt an API-call example,
+keep details that change the call or explain its result beside that step; link
+independent implementation rationale separately." Evaluate a case needing the
+detail as well as one where it distracts. Keep this authoring check out of generated
+deliverables; it is a way to improve instructions, not a mandatory output template.
+
 ## Tool selection
 
 Task skills choose tools from the user's current instructions and applicable repository
