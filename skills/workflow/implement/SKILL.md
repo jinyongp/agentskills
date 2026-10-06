@@ -13,8 +13,8 @@ metadata:
 
 Implement the user's requested feature, fix, or refactor when edits are authorized.
 Follow current instructions, repository requirements, and existing tool choices.
-A request for planning or read-only review remains within that boundary. Publication,
-deployment, and history changes need their own authorization.
+Planning and read-only review retain their stated scope. Publication, deployment,
+and history changes need authorization.
 
 ## Think before changing
 
@@ -45,6 +45,8 @@ deployment, and history changes need their own authorization.
 
 - Connect each changed line to the requested outcome or a necessary dependency.
   Match local style and preserve user changes, meaningful comments, and unrelated code.
+- Comments explain intent, constraints, or non-obvious behavior. Omit code narration;
+  preserve license notices, tool directives, and useful issue or version references.
 - Refactor an affected area when needed for the outcome. Keep adjacent cleanup and
   pre-existing dead code outside the patch; mention material discoveries separately.
 - Remove imports, variables, and functions made obsolete by this change after checking
@@ -53,7 +55,7 @@ deployment, and history changes need their own authorization.
 
 ## Verify completion
 
-- For multi-step work, give a short sequence with a useful check per meaningful unit.
+- For multi-step work, order meaningful units and their checks.
 - Reuse sufficient tests, lint, types, and schema checks. Add or extend a test only for
   a named uncovered failure or contract, with independently justified expectations
   and stable behavior assertions.
@@ -63,8 +65,8 @@ deployment, and history changes need their own authorization.
 - Investigate failures before changing expectations. Continue scoped fixes until the
   criteria are met. Stop repeated failing attempts when new evidence or access is
   needed; report the actual blocker, skipped checks, and unverified behavior.
-- Review the final diff for scope and accidental changes. Report the outcome, checks
-  actually run, and material gaps. Green checks alone do not prove every requirement.
+- Review the final diff for scope. Report outcomes, actual checks, and material gaps;
+  green checks alone do not prove every requirement.
 
 ## Saved records
 

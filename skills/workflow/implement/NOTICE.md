@@ -18,3 +18,9 @@ design criteria, and prioritized sufficient existing checks over mandatory new t
 Added bounded inspection and the saved-record convention. No plugin, Cursor rule,
 or global agent configuration is installed.
 This notice is provenance, not required runtime reading.
+
+Comment guidance also adapts [anti-slop](https://github.com/miqdadbadjuber/anti-slop),
+commit `388cbe3b6c37d5175b9f460015bb092ef9e34894`,
+`skills/antislop-code/SKILL.md`. Its MIT copyright and permission notice are
+preserved in the bundled license. The adaptation keeps explanatory comments,
+tool directives, and useful issue/version context without fixed line quotas.
