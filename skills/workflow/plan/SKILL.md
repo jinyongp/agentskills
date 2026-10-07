@@ -28,10 +28,12 @@ plan or drafting tasks from settled work items.
    Preserve agreed limits, deliberate omissions, and rationale at their source or
    in the plan. Define success and recovery within that contract; distinguish required
    behavior from optional extensions. Absence alone is not an unmet requirement.
-2. Separate accepted decisions, reversible assumptions, and unresolved choices.
-   Ask when several viable options materially affect behavior, contracts, data,
-   permissions, or cost and existing context cannot settle the choice.
-   Routine implementation details and optional preferences are not approval gates.
+2. Separate source-backed facts, user decisions, assumptions, unresolved choices,
+   and accepted deferrals. Check relevant repository facts before asking the user.
+   A deferral is a deliberate scope boundary, not missing clarity. Ask only when
+   the answer changes behavior, contracts, data, permissions, cost, or dependent work.
+   Readiness follows resolved blocking choices, not a score or fixed interview count.
+   Routine details and already authorized work need no extra approval gate.
 3. For a necessary decision, explain the impact and recommend a supported option.
    Keep the question visible in conversation. Resolve dependent decisions before
    committing to affected steps; independent preparation can continue.

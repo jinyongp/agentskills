@@ -1,5 +1,25 @@
 # plan evaluation
 
+## Evidence and scope reinforcement — 2026-10-07
+
+Revision checks: body 3715 characters; 55 skill formats/catalogs validated.
+Full repository verification passed 131 existing tests and skills@1.7.0 discovery/
+installation fixtures. Final wording was format-validated again. This skill was
+installed alone into a temporary project through the bundled CLI for Codex and
+Claude; all resources, LICENSE and NOTICE.md matched source bytes, runtime links
+resolved, and the Claude connection used the shared skill directory. No runtime
+code changed; no independent agent effectiveness evaluation was performed.
+
+Parent instruction review in Codex; exact model version not recorded. These cases
+check written decision boundaries, not independent agent execution or measured gains.
+Earlier verification records below retain their original scope.
+
+| Input | Expected decision supported by the revised rules |
+| --- | --- |
+| Known repository fact; unresolved product policy | Inspect the relevant source first; ask only about the policy affecting dependent work. |
+| Accepted single-device scope with synchronization deferred | Preserve that deferral without treating it as missing clarity. |
+| Authorized scoped change with all blocking choices settled | Proceed without numerical readiness scores or repeated approval. |
+
 ## Structural-friction review — 2026-10-07
 
 Parent instruction review, current Codex session; model version not recorded.
