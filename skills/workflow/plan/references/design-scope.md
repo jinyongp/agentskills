@@ -14,5 +14,19 @@ Use this comparison only when scope or design is consequential.
 - Compare the simplest complete alternative with added design only where it changes
   the decision. List a material limitation or cost, not speculative future features.
   A small reversible edit can need no alternatives document.
+- For a proposed structural change, identify actual friction: a recent change had
+  to touch the same rule in several places, ownership is unclear, or understanding
+  one operation requires chasing fragmented modules. Use relevant history/callers
+  as evidence; file size, naming style, or an abstraction count alone is insufficient.
+- Compare a concrete current change before and after the proposed boundary. Does
+  it reduce coordinated edits or clarify state/resource ownership? Remove or merge
+  a layer only if its required behavior and lifecycle remain accounted for.
+- Keep the review focused on the named pain point or demonstrably affected area.
+  Existing architecture decisions and accepted omissions remain constraints; a
+  hypothetical future extension does not justify redesigning the project.
 - User-selected behavior remains part of completion. A reduced prototype is appropriate
   when requested or accepted; an unfinished happy path is not a completed feature.
+
+Workflow inspiration: [Matt Pocock architecture improvement](https://github.com/mattpocock/skills/blob/main/skills/engineering/improve-codebase-architecture/SKILL.md)
+(MIT). Guidance is independently written; reports, glossary files, and delegation
+are selected only when needed for the requested task.

@@ -1,5 +1,14 @@
 # plan evaluation
 
+## Structural-friction review — 2026-10-07
+
+Parent instruction review, current Codex session; model version not recorded.
+Repeated edits to one rule across modules justify comparing a boundary that reduces
+coordination. A large readable file without a current maintenance problem does not
+justify an automatic module split. Existing architecture decisions constrain the
+comparison; imagined future plugins do not broaden scope. These are instruction
+cases, not independent execution or measured maintainability gains.
+
 ## Revision verification — 2026-10-07
 
 Body: 3,534 characters. Full verification passed for 52 skills, 96 existing tests
