@@ -38,6 +38,9 @@ npx @jinyongp/agentskills@latest add --agent codex --skill review-loop verify --
 # Install all skills globally without shared rules
 npx @jinyongp/agentskills@latest add --agent claude --global --no-rules --yes
 
+# Connect Claude to the same project skills already installed for Codex
+npx @jinyongp/agentskills@latest add --agent claude --skill review-loop verify --no-rules --yes
+
 # Install only shared rules
 npx @jinyongp/agentskills@latest add --agent codex --rules-only --yes
 
@@ -60,8 +63,8 @@ of silently installing into the project. Answer `n` at confirmation to cancel;
 `Ctrl+C` cancels with exit code 130. Waiting for confirmation does not hold the
 installation lock.
 
-The preview groups skill names by agent and action, shows each destination directory
-once, and counts unchanged skills. Identical skills and managed rules are not rewritten;
+The preview lists each shared skill change once, followed by agent connections
+and separate rule changes. Identical skills and managed rules are not rewritten;
 an entirely unchanged selection succeeds without a confirmation prompt.
 The preview shows the selected scope and exact destination paths. Completion
 reports the applied item count and record location. If a batch fails after some
@@ -74,11 +77,26 @@ items completed, the error reports that progress; those completed items remain.
 | Codex | `.agents/skills/` / `AGENTS.md` | `~/.codex/skills/` / `~/.codex/AGENTS.md` |
 | Claude | `.claude/skills/` / `CLAUDE.md` | `~/.claude/skills/` / `~/.claude/CLAUDE.md` |
 
+Skill content lives once in `.agents/skills/` for projects or `~/.agents/skills/`
+globally. Codex reads the project source directly; other paths in the table contain
+relative symlinks to the shared source. Adding another agent reuses that source.
+Updating a skill through either agent updates it for every connected agent.
+Removing an agent connection retains the source while another connection remains;
+removing the last connection deletes the source. Agents that read the shared
+directory directly can discover its skills regardless of their recorded selection.
+
+On `add` or `update`, older CLI-owned copies of each selected skill are checked
+against their recorded content, then consolidated for all recorded agents.
+Unselected skills retain their previous installation until updated. Migration
+requires symlink support; a failed item restores its previous files and record.
+
 Shared rules come from `rules/base.md`. Only the block between
 `<!-- agentskills:rules:start -->` and `<!-- agentskills:rules:end -->` is managed;
 project prose outside it remains intact. Existing skills installed by another
 tool are not adopted. Modified skills, extra files, modified rules blocks,
-damaged markers, and symlinks stop the operation before applying selected changes.
+damaged markers, and redirected connections stop the operation before applying
+selected changes. Symlinks inside skill content or installation parent paths are
+rejected; recorded agent connections to the shared source are accepted.
 Rules documents must be UTF-8; other encodings are rejected without conversion.
 Files and the installation record are checked again after confirmation, so edits
 made while the prompt is pending require a fresh inspection.

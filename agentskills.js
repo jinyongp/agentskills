@@ -19,12 +19,12 @@ const AGENTS = {
   claude: { project: { skills: '.claude/skills', rules: 'CLAUDE.md' }, global: { skills: '.claude/skills', rules: '.claude/CLAUDE.md' } },
 };
 const SCOPES = {
-  project: { label: 'Project', root: opts => path.resolve(opts.project), record: '.agents/agentskills.json' },
-  global: { label: 'Global', root: () => os.homedir(), record: '.local/share/agentskills/install.json' },
+  project: { label: 'Project', root: opts => path.resolve(opts.project), record: '.agents/agentskills.json', skills: '.agents/skills' },
+  global: { label: 'Global', root: () => os.homedir(), record: '.local/share/agentskills/install.json', skills: '.agents/skills' },
 };
 const OPTION_GROUPS = {
   target: { label: 'Target', options: {
-    agent: { flags: ['--agent', '-a'], type: 'one', value: 'AGENT', default: null, choices: () => Object.keys(AGENTS), description: 'Target agent.' },
+    agent: { flags: ['--agent', '-a'], type: 'one', value: 'AGENT', default: null, choices: () => Object.keys(AGENTS), description: 'Select connections and rules; skills share one source.' },
     project: { flags: ['--project'], type: 'one', value: 'PATH', default: () => process.cwd(), description: 'Use an existing project directory.' },
     global: { flags: ['--global', '-g'], type: 'flag', default: false, conflicts: ['project'], description: 'Use the current user\'s global installation.' },
   } },
@@ -64,34 +64,33 @@ const completion = (completed, total, record) => `Completed ${completed}/${total
 
 function preview(scope, base, operations, unchanged) {
   const lines = [`${PACKAGE.name}@${PACKAGE.version}`, `${SCOPES[scope].label}: ${base}`, `Changes: ${operations.length}`];
-  const agents = [...new Set([...operations, ...unchanged].map(item => item.agent))];
-  for (const agent of agents) {
-    lines.push('', agent);
-    const changes = operations.filter(item => item.agent === agent);
-    const same = unchanged.filter(item => item.agent === agent);
-    if ([...changes, ...same].some(item => item.kind === 'skill')) {
-      lines.push(`  Skills: ${path.join(base, AGENTS[agent][scope].skills)}`);
-      for (const action of ['add', 'update', 'remove']) {
-        const names = changes.filter(item => item.kind === 'skill' && item.action === action).map(item => item.name);
-        if (!names.length) continue;
-        const label = `${action[0].toUpperCase()}${action.slice(1)} (${names.length}):`;
-        let row = `  ${label}`;
-        for (const name of names) {
-          if (row.length + name.length + 2 > 88) { lines.push(row); row = '   '; }
-          row += `${row.trim() === label || !row.trim() ? ' ' : ', '}${name}`;
-        }
-        lines.push(row);
+  const skills = [...operations, ...unchanged].filter(item => item.kind === 'skill');
+  if (skills.length) {
+    lines.push('', `Shared skills: ${path.join(base, SCOPES[scope].skills)}`);
+    for (const action of ['add', 'update', 'migrate', 'connect', 'disconnect', 'remove']) {
+      const names = operations.filter(item => item.kind === 'skill' && item.action === action).map(item => item.name);
+      if (!names.length) continue;
+      const label = `${action[0].toUpperCase()}${action.slice(1)} (${names.length}):`;
+      let row = `  ${label}`;
+      for (const name of names) {
+        if (row.length + name.length + 2 > 88) { lines.push(row); row = '   '; }
+        row += `${row.trim() === label || !row.trim() ? ' ' : ', '}${name}`;
       }
-      const count = same.filter(item => item.kind === 'skill').length;
-      if (count) lines.push(`  Unchanged: ${count} ${count === 1 ? 'skill' : 'skills'}`);
+      lines.push(row);
     }
-    for (const item of [...changes, ...same].filter(item => item.kind === 'rules')) {
-      lines.push(`  Rules: ${item.action || 'unchanged'} -> ${item.destination}`);
+    const count = unchanged.filter(item => item.kind === 'skill').length;
+    if (count) lines.push(`  Unchanged: ${count} ${count === 1 ? 'skill' : 'skills'}`);
+    lines.push('Connections:');
+    for (const agent of [...new Set(skills.flatMap(item => item.agents))]) {
+      const directory = path.join(base, AGENTS[agent][scope].skills);
+      lines.push(`  ${agent}: ${directory === path.join(base, SCOPES[scope].skills) ? 'reads shared skills directly' : directory}`);
     }
+  }
+  for (const item of [...operations, ...unchanged].filter(item => item.kind === 'rules')) {
+    lines.push(`Rules (${item.agent}): ${item.action || 'unchanged'} -> ${item.destination}`);
   }
   return lines.join('\n');
 }
-
 function commandLine(command, values = {}) {
   if (!Object.hasOwn(COMMANDS, command)) fail(`Unknown command example: ${command}`);
   for (const key of Object.keys(values)) if (!COMMANDS[command].options.includes(key)) fail(`Unsupported example option: ${command}/${key}`);
@@ -136,6 +135,7 @@ function help(topic) {
       `  Skills without ${flag('names')}:`,
       ...selections.map(([command, spec]) => `    ${command}: ${spec.selection === 'catalog' ? 'all bundled skills' : 'recorded skills'}`),
       `  Rules: included even with ${flag('names')}; ${flag('noRules')} skips them.`,
+      '  Skills use one shared copy; updates affect every connected agent.',
       ...agentRequired.map(command => `  ${command}: prompts for unspecified choices; ${flag('yes')} requires ${flag('agent')}.`),
     ] : []), '',
   ];
@@ -266,23 +266,173 @@ function catalog() {
   return result;
 }
 
+function validateFiles(files) {
+  if (!files || typeof files !== 'object' || Array.isArray(files)) fail('Invalid skill file record');
+  for (const [key, digest] of Object.entries(files)) {
+    if (key.split(/[\\/]/).some(p => !p || p === '.' || p === '..') || path.isAbsolute(key) || !/^[a-f0-9]{64}$/.test(digest)) fail(`Invalid file record: ${key}`);
+  }
+}
+
 function loadState(file) {
-  if (!fs.existsSync(file)) return { version: 1, agents: {} };
+  if (!fs.existsSync(file)) return { version: 2, skills: {}, agents: {} };
   let state;
   try { state = JSON.parse(fs.readFileSync(file, 'utf8')); }
   catch (error) { fail(`Cannot read installation record: ${file}. ${error.message}. Restore a valid record from backup before retrying.`); }
-  if (state.version !== 1 || !state.agents || typeof state.agents !== 'object' || Array.isArray(state.agents)) fail(`Invalid installation record: ${file}`);
-  for (const [agent, record] of Object.entries(state.agents)) {
-    if (!Object.hasOwn(AGENTS, agent) || !record || typeof record.skills !== 'object' || !record.skills || Array.isArray(record.skills)) fail(`Invalid agent record: ${agent}`);
-    for (const [name, files] of Object.entries(record.skills)) {
-      if (!NAME.test(name) || !files || typeof files !== 'object' || Array.isArray(files)) fail(`Invalid skill record: ${name}`);
-      for (const [key, digest] of Object.entries(files)) {
-        if (key.split(/[\\/]/).some(p => !p || p === '.' || p === '..') || path.isAbsolute(key) || !/^[a-f0-9]{64}$/.test(digest)) fail(`Invalid file record: ${key}`);
-      }
+  if (!state || ![1, 2].includes(state.version) || !state.agents || typeof state.agents !== 'object' || Array.isArray(state.agents)) fail(`Invalid installation record: ${file}`);
+  if (state.version === 1) {
+    for (const record of Object.values(state.agents)) {
+      if (!record || !record.skills || typeof record.skills !== 'object' || Array.isArray(record.skills)) fail(`Invalid installation record: ${file}`);
+      record.legacy = record.skills;
+      record.skills = Object.fromEntries(Object.keys(record.legacy).map(name => [name, true]));
     }
+    state.version = 2;
+    state.skills = {};
+  }
+  if (!state.skills || typeof state.skills !== 'object' || Array.isArray(state.skills)) fail('Invalid shared skill record');
+  for (const [name, files] of Object.entries(state.skills)) {
+    if (!NAME.test(name)) fail(`Invalid skill record: ${name}`);
+    validateFiles(files);
+  }
+  for (const [agent, record] of Object.entries(state.agents)) {
+    if (!Object.hasOwn(AGENTS, agent) || !record || !record.skills || typeof record.skills !== 'object' || Array.isArray(record.skills)) fail(`Invalid agent record: ${agent}`);
+    if (record.legacy && (typeof record.legacy !== 'object' || Array.isArray(record.legacy))) fail('Invalid legacy record');
+    for (const [name, connected] of Object.entries(record.skills)) {
+      if (!NAME.test(name) || connected !== true) fail(`Invalid connection: ${agent}/${name}`);
+      if (Object.hasOwn(record.legacy || {}, name)) validateFiles(record.legacy[name]);
+      else if (!Object.hasOwn(state.skills, name)) fail(`Missing shared record: ${name}`);
+    }
+    for (const name of Object.keys(record.legacy || {})) if (!Object.hasOwn(record.skills, name)) fail(`Orphaned legacy record: ${name}`);
     if (record.rules && (typeof record.rules !== 'object' || !/^[a-f0-9]{64}$/.test(record.rules.hash))) fail('Invalid rules record');
   }
+  for (const name of Object.keys(state.skills)) if (!Object.values(state.agents).some(r => Object.hasOwn(r.skills, name))) fail(`Orphaned shared record: ${name}`);
   return state;
+}
+function present(file) { try { fs.lstatSync(file); return true; } catch (error) { if (error.code === 'ENOENT') return false; throw error; } }
+
+// Only an explicitly recorded connection may be a symlink, and only to its shared skill.
+function describe(base, relative) {
+  const target = path.join(safe(base, path.dirname(relative)), path.basename(relative));
+  if (!present(target)) return null;
+  const info = fs.lstatSync(target);
+  if (info.isSymbolicLink()) return { link: fs.readlinkSync(target) };
+  if (!info.isDirectory()) fail(`Not a skill directory: ${target}`);
+  return { files: snapshot(target) };
+}
+
+function sameDescription(a, b) {
+  if (a === null || b === null) return a === b;
+  return a.link !== undefined || b.link !== undefined ? a.link === b.link : equalFiles(a.files, b.files);
+}
+
+function skillOperation(base, scope, state, name, selected, definition, available) {
+  const sharedRelative = `${SCOPES[scope].skills}/${name}`;
+  const shared = safe(base, sharedRelative);
+  const owners = Object.keys(state.agents).filter(agent => Object.hasOwn(state.agents[agent].skills, name));
+  const participants = [...new Set([...owners, ...selected])];
+  const remaining = definition.removes ? owners.filter(agent => !selected.includes(agent)) : [...new Set([...owners, ...selected])];
+  const sharedFiles = Object.hasOwn(state.skills, name) ? state.skills[name] : null;
+  const legacyNative = owners.find(agent => state.agents[agent].legacy && Object.hasOwn(state.agents[agent].legacy, name) && `${AGENTS[agent][scope].skills}/${name}` === sharedRelative);
+  const initial = describe(base, sharedRelative);
+  if (initial && !sharedFiles && !legacyNative) fail(`Existing unowned skill: ${shared}; left untouched`);
+  if (initial && (initial.link !== undefined || !equalFiles(initial.files, sharedFiles || state.agents[legacyNative].legacy[name]))) fail(`Locally modified skill: ${shared}; left untouched`);
+  if (!initial && (sharedFiles || legacyNative) && !definition.removes) fail(`Installed skill is missing: ${shared}; restore it or remove its record first`);
+  const inspected = new Map([[sharedRelative, initial]]);
+  for (const agent of participants) {
+    const relative = `${AGENTS[agent][scope].skills}/${name}`;
+    if (relative === sharedRelative) continue;
+    const current = describe(base, relative);
+    inspected.set(relative, current);
+    const owned = owners.includes(agent);
+    const legacy = owned && Object.hasOwn(state.agents[agent].legacy || {}, name);
+    if (!owned && current) fail(`Existing unowned skill: ${path.join(base, relative)}; left untouched`);
+    if (legacy && current && (current.link !== undefined || !equalFiles(current.files, state.agents[agent].legacy[name]))) fail(`Locally modified skill: ${path.join(base, relative)}; left untouched`);
+    if (owned && !legacy && current && (current.link === undefined || path.resolve(path.dirname(path.join(base, relative)), current.link) !== shared)) fail(`Changed skill connection: ${path.join(base, relative)}; left untouched`);
+    if (owned && !current && !definition.removes) fail(`Installed connection is missing: ${path.join(base, relative)}; restore it or remove its record first`);
+  }
+  if (!definition.removes && !Object.hasOwn(available, name)) fail(`Skill no longer bundled: ${name}; remove explicitly`);
+  const desired = definition.removes ? sharedFiles : snapshot(available[name].source);
+  const replacements = [];
+  if (definition.removes) {
+    if (!remaining.length && initial) replacements.push({ relative: sharedRelative, type: 'remove' });
+    // A legacy native directory can be deleted if remaining owners still have independent copies.
+    else if (!sharedFiles && legacyNative && selected.includes(legacyNative) && initial) replacements.push({ relative: sharedRelative, type: 'remove' });
+  } else if (!initial || !equalFiles(initial.files, desired)) {
+    replacements.push({ relative: sharedRelative, type: 'copy', source: available[name].source, files: desired });
+  }
+  for (const [relative, current] of inspected) {
+    if (relative === sharedRelative) continue;
+    const agent = participants.find(a => `${AGENTS[a][scope].skills}/${name}` === relative);
+    if (definition.removes) {
+      if (selected.includes(agent) && current) replacements.push({ relative, type: 'remove' });
+    } else {
+      const link = path.relative(path.dirname(path.join(base, relative)), shared);
+      if (!current || current.link !== link) replacements.push({ relative, type: 'link', link });
+    }
+  }
+  const migration = !definition.removes && owners.some(agent => Object.hasOwn(state.agents[agent].legacy || {}, name));
+  const bindingChange = definition.removes || selected.some(agent => !owners.includes(agent));
+  const changed = replacements.length || migration || bindingChange;
+  const action = definition.removes ? remaining.length ? 'disconnect' : 'remove'
+    : migration ? 'migrate' : !initial ? 'add' : !equalFiles(initial.files, desired) ? 'update' : bindingChange || replacements.length ? 'connect' : null;
+  const check = () => {
+    safe(base, sharedRelative);
+    for (const [relative, before] of inspected) if (!sameDescription(describe(base, relative), before)) fail(`Skill changed after inspection: ${path.join(base, relative)}; retry`);
+  };
+  return { kind: 'skill', name, action, changed: Boolean(changed), agents: participants, destination: shared, check, apply() {
+    const saved = structuredClone(state);
+    const staged = [], applied = [];
+    const rollback = () => {
+      for (const entry of [...applied].reverse()) {
+        if (entry.replaced) fs.rmSync(entry.target, { recursive: true, force: true });
+        if (present(entry.backup)) fs.renameSync(entry.backup, entry.target);
+      }
+      for (const key of Object.keys(state)) delete state[key];
+      Object.assign(state, saved);
+    };
+    try {
+      for (const replacement of replacements) {
+        const target = path.join(safe(base, path.dirname(replacement.relative)), path.basename(replacement.relative));
+        fs.mkdirSync(path.dirname(target), { recursive: true });
+        const temporary = `${target}.${crypto.randomUUID()}.tmp`, backup = `${target}.${crypto.randomUUID()}.bak`;
+        const entry = { target, temporary, backup, replaced: false };
+        staged.push(entry);
+        if (replacement.type === 'copy') {
+          fs.cpSync(replacement.source, temporary, { recursive: true, verbatimSymlinks: true });
+          if (!equalFiles(snapshot(temporary), replacement.files)) fail(`Bundled skill changed during copying: ${name}`);
+        } else if (replacement.type === 'link') fs.symlinkSync(replacement.link, temporary, 'dir');
+      }
+      check();
+      for (const entry of staged) {
+        applied.push(entry);
+        if (present(entry.target)) fs.renameSync(entry.target, entry.backup);
+        if (present(entry.temporary)) { fs.renameSync(entry.temporary, entry.target); entry.replaced = true; }
+      }
+      if (definition.removes) {
+        for (const agent of selected) {
+          delete state.agents[agent].skills[name];
+          if (state.agents[agent].legacy) {
+            delete state.agents[agent].legacy[name];
+            if (!Object.keys(state.agents[agent].legacy).length) delete state.agents[agent].legacy;
+          }
+        }
+        if (!remaining.length) delete state.skills[name];
+      } else {
+        state.skills[name] = desired;
+        for (const agent of remaining) {
+          state.agents[agent] ||= { skills: {} };
+          state.agents[agent].skills[name] = true;
+          if (state.agents[agent].legacy) {
+            delete state.agents[agent].legacy[name];
+            if (!Object.keys(state.agents[agent].legacy).length) delete state.agents[agent].legacy;
+          }
+        }
+      }
+      return { rollback, backups: applied.map(entry => entry.backup), finish() { for (const entry of applied) fs.rmSync(entry.backup, { recursive: true, force: true }); } };
+    } catch (error) {
+      try { rollback(); } catch (rollbackError) { fail(`${error.message}; rollback failed: ${rollbackError.message}; backups: ${applied.map(e => e.backup).join(', ')}`); }
+      throw error;
+    } finally { for (const entry of staged) fs.rmSync(entry.temporary, { recursive: true, force: true }); }
+  } };
 }
 
 function atomicWrite(file, content, mode) {
@@ -361,9 +511,15 @@ async function main() {
       const targets = Object.entries(state.agents).filter(([agent]) => !opts.agent || agent === opts.agent).filter(([, record]) => Object.keys(record.skills).length || record.rules);
       console.log(`\nInstalled (${scope}: ${base}):`);
       if (!targets.length) console.log(`  None recorded. Use ${commandLine('add', opts.global ? { global: true } : {})} to install here. Check other scopes with ${flag('global')} or ${flag('project')}.`);
+      const names = [...new Set(targets.flatMap(([, record]) => Object.keys(record.skills)))].sort();
+      if (names.length) {
+        console.log(`  Skills (${names.length}): ${names.join(', ')}`);
+        if (names.some(name => Object.hasOwn(state.skills, name))) console.log(`    Shared source: ${path.join(base, SCOPES[scope].skills)}`);
+      }
       for (const [agent, record] of targets) {
-        console.log(`  ${agent}: ${Object.keys(record.skills).sort().join(', ') || 'no skills'}${record.rules ? '; shared rules' : ''}`);
-        console.log(`    Skills: ${path.join(base, AGENTS[agent][scope].skills)}`);
+        console.log(`  ${agent}: ${Object.keys(record.skills).length} connections${record.rules ? '; shared rules' : ''}`);
+        if (Object.keys(record.legacy || {}).length) console.log(`    Legacy copies: ${Object.keys(record.legacy).length}; add or update to migrate selected skills.`);
+        console.log(`    Reads: ${path.join(base, AGENTS[agent][scope].skills)}`);
         if (record.rules) console.log(`    Rules: ${path.join(base, AGENTS[agent][scope].rules)}`);
       }
       return;
@@ -383,49 +539,20 @@ async function main() {
         if (definition.selection === 'catalog' && !Object.hasOwn(available, name)) fail(`Unknown skill: ${name}. Run ${commandLine('list')} to see available names.`);
         if (definition.selection === 'installed' && !targets.some(a => state.agents[a] && Object.hasOwn(state.agents[a].skills, name))) fail(`Skill is not installed in the selected scope: ${name}. Run ${commandLine('list')} with the same scope options to check installations.`);
       }
+      for (const agent of targets) state.agents[agent] ||= { skills: {} };
+      const names = !opts.skills ? [] : definition.selection === 'catalog'
+        ? all ? Object.keys(available) : requested
+        : [...new Set(targets.flatMap(agent => Object.keys(state.agents[agent].skills)))].filter(name => all || requested.includes(name));
+      for (const name of names.sort()) {
+        const selected = definition.selection === 'catalog' ? targets : targets.filter(agent => Object.hasOwn(state.agents[agent].skills, name));
+        const operation = skillOperation(base, scope, state, name, selected, definition, available);
+        inspections.push(operation);
+        if (operation.changed) operations.push(operation);
+        else unchanged.push(operation);
+      }
       for (const agent of targets) {
         const config = AGENTS[agent];
-        const record = state.agents[agent] || { skills: {} };
-        const names = !opts.skills ? [] : (definition.selection === 'catalog' && all ? Object.keys(available) : definition.selection === 'catalog' ? requested : Object.keys(record.skills).filter(n => all || requested.includes(n)));
-        for (const name of names.sort()) {
-          const target = safe(base, `${config[scope].skills}/${name}`);
-          if (fs.existsSync(target)) {
-            if (!fs.statSync(target).isDirectory()) fail(`Not a skill directory: ${target}`);
-            if (!Object.hasOwn(record.skills, name)) fail(`Existing unowned skill: ${target}; left untouched. Manage it with its original installer, or choose another skill or target.`);
-            if (!equalFiles(snapshot(target), record.skills[name])) fail(`Locally modified skill: ${target}; left untouched. Back up edits and restore the installed content before retrying. To replace it, move the directory aside, remove its record with ${commandLine('remove', { agent, names: [name], noRules: true })} in this scope, then add it again.`);
-          } else if (Object.hasOwn(record.skills, name) && !definition.removes) fail(`Installed skill is missing: ${target}. Restore it, or use ${commandLine('remove', { agent, names: [name], noRules: true })} in this scope to clear its record, then add it again.`);
-          if (!definition.removes && !available[name]) fail(`Skill no longer bundled: ${name}; remove explicitly`);
-          const files = definition.removes ? null : snapshot(available[name].source);
-          const before = fs.existsSync(target) ? snapshot(target) : null;
-          const operation = { kind: 'skill', agent, name, action: definition.removes ? 'remove' : before ? 'update' : 'add', destination: target, check() {
-            safe(base, path.relative(base, target));
-            const current = fs.existsSync(target) ? snapshot(target) : null;
-            if (before === null ? current !== null : current === null || !equalFiles(current, before)) fail(`Skill changed after inspection: ${target}; retry to inspect the new state`);
-          }, apply() {
-            fs.mkdirSync(path.dirname(target), { recursive: true });
-            const temporary = `${target}.${crypto.randomUUID()}.tmp`, backup = `${target}.${crypto.randomUUID()}.bak`;
-            let replaced = false;
-            const rollback = () => {
-              if (replaced) fs.rmSync(target, { recursive: true, force: true });
-              if (fs.existsSync(backup)) fs.renameSync(backup, target);
-            };
-            try {
-              if (!definition.removes) {
-                fs.cpSync(available[name].source, temporary, { recursive: true, verbatimSymlinks: true });
-                if (!equalFiles(snapshot(temporary), files)) fail(`Bundled skill changed during copying: ${name}`);
-              }
-              if (fs.existsSync(target)) fs.renameSync(target, backup);
-              if (definition.removes) delete record.skills[name];
-              else { fs.renameSync(temporary, target); replaced = true; record.skills[name] = files; }
-              state.agents[agent] = record;
-              return { rollback, finish: () => fs.rmSync(backup, { recursive: true, force: true }), backup };
-            } catch (error) { rollback(); throw error; }
-            finally { fs.rmSync(temporary, { recursive: true, force: true }); }
-          } };
-          inspections.push(operation);
-          if (!definition.removes && before !== null && equalFiles(before, files)) unchanged.push(operation);
-          else operations.push(operation);
-        }
+        const record = state.agents[agent];
         if (opts.rules && (definition.selection === 'catalog' || record.rules)) {
           const file = safe(base, config[scope].rules);
           const existed = fs.existsSync(file);
@@ -485,7 +612,10 @@ async function main() {
           try { atomicWrite(stateFile, JSON.stringify(state, null, 2) + '\n'); }
           catch (error) {
             try { transaction.rollback(); }
-            catch (rollbackError) { fail(`${error.message}; rollback failed: ${rollbackError.message}${transaction.backup && fs.existsSync(transaction.backup) ? `; preserved backup: ${transaction.backup}` : ''}`); }
+            catch (rollbackError) {
+              const backups = (transaction.backups || [transaction.backup]).filter(file => file && present(file));
+              fail(`${error.message}; rollback failed: ${rollbackError.message}${backups.length ? `; preserved backups: ${backups.join(', ')}` : ''}`);
+            }
             throw error;
           }
           completed += 1;

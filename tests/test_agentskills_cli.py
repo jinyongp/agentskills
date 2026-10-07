@@ -1,5 +1,6 @@
 """Exercise CLI installation ownership and updates through real Node subprocesses."""
 
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -51,6 +52,157 @@ class AgentskillsCliTests(unittest.TestCase):
 
     def skill(self, name, global_scope=False):
         return (self.home / ".codex/skills" if global_scope else self.project / ".agents/skills") / name
+
+    def legacy_install(self, names=("alpha", "beta"), global_scope=True):
+        base = self.home if global_scope else self.project
+        state = {"version": 1, "agents": {}}
+        for agent in ("codex", "claude"):
+            record = {"skills": {}}
+            state["agents"][agent] = record
+            directory = ".agents/skills" if agent == "codex" and not global_scope else f".{agent}/skills"
+            for name in names:
+                target = base / directory / name
+                shutil.copytree(self.source / "skills/workflow" / name, target)
+                record["skills"][name] = {
+                    str(file.relative_to(target)): hashlib.sha256(file.read_bytes()).hexdigest()
+                    for file in target.rglob("*") if file.is_file()
+                }
+        state_file = base / (".local/share/agentskills/install.json" if global_scope else ".agents/agentskills.json")
+        state_file.parent.mkdir(parents=True, exist_ok=True)
+        state_file.write_text(json.dumps(state))
+        return state_file
+
+    def test_shared_source_updates_all_connections_and_survives_partial_removal(self):
+        for global_scope in (False, True):
+            with self.subTest(global_scope=global_scope):
+                scope = ["--global"] if global_scope else []
+                base = self.home if global_scope else self.project
+                self.run_cli("add", "--agent", "codex", "--skill", "alpha", "--no-rules", *scope)
+                shared = base / ".agents/skills/alpha"
+                inode = shared.stat().st_ino
+                self.run_cli("add", "--agent", "claude", "--skill", "alpha", "--no-rules", *scope)
+                claude = base / ".claude/skills/alpha"
+                codex = self.skill("alpha", global_scope)
+                self.assertEqual(shared.stat().st_ino, inode)
+                self.assertFalse(shared.is_symlink())
+                self.assertTrue(claude.is_symlink())
+                self.assertEqual(claude.resolve(), shared)
+                self.assertEqual(codex.is_symlink(), global_scope)
+                (self.source / "skills/workflow/alpha/SKILL.md").write_text(f"Updated {global_scope}\n")
+                result = self.run_cli("update", "--agent", "codex", "--no-rules", *scope)
+                self.assertIn("Update (1): alpha", result.stdout)
+                self.assertEqual((claude / "SKILL.md").read_text(), f"Updated {global_scope}\n")
+                self.run_cli("remove", "--agent", "codex", "--no-rules", *scope)
+                self.assertTrue(shared.exists())
+                self.assertTrue(claude.exists())
+                if global_scope:
+                    self.assertFalse(codex.is_symlink())
+                self.run_cli("remove", "--agent", "claude", "--no-rules", *scope)
+                self.assertFalse(shared.exists())
+                self.assertFalse(claude.is_symlink())
+
+    def test_legacy_update_consolidates_both_agents_in_each_scope(self):
+        for global_scope in (False, True):
+            with self.subTest(global_scope=global_scope):
+                state_file = self.legacy_install(names=("alpha",), global_scope=global_scope)
+                scope = ["--global"] if global_scope else []
+                base = self.home if global_scope else self.project
+                self.run_cli("update", "--agent", "codex", "--no-rules", *scope)
+                state = json.loads(state_file.read_text())
+                self.assertEqual(state["version"], 2)
+                self.assertEqual(set(state["skills"]), {"alpha"})
+                for agent in ("codex", "claude"):
+                    self.assertEqual(state["agents"][agent]["skills"], {"alpha": True})
+                    self.assertNotIn("legacy", state["agents"][agent])
+                self.assertTrue((base / ".claude/skills/alpha").is_symlink())
+                self.assertEqual((base / ".claude/skills/alpha").resolve(), base / ".agents/skills/alpha")
+                self.assertEqual((self.skill("alpha", global_scope) / "LICENSE").read_text(), "Fixture license\n")
+
+    def test_migration_record_failure_restores_copies_and_retry_keeps_progress(self):
+        state_file = self.legacy_install()
+        original = state_file.read_bytes()
+        preload = self.root / "fail-migration.cjs"
+        for failure in (1, 2):
+            preload.write_text(
+                "const fs=require('node:fs');const rename=fs.renameSync;let count=0;"
+                f"fs.renameSync=function(a,b){{if(b==={json.dumps(str(state_file))}&&++count==={failure})"
+                "{throw new Error('Injected record failure');}return rename.apply(this,arguments);};\n"
+            )
+            self.run_cli("update", "--agent", "codex", "--global", "--no-rules", success=False,
+                         env_extra={"NODE_OPTIONS": f"--require={preload}"})
+            if failure == 1:
+                self.assertEqual(state_file.read_bytes(), original)
+            else:
+                state = json.loads(state_file.read_text())
+                self.assertEqual(set(state["skills"]), {"alpha"})
+                self.assertEqual(set(state["agents"]["claude"]["legacy"]), {"beta"})
+                self.assertTrue(self.skill("alpha", True).is_symlink())
+            for agent in ("codex", "claude"):
+                beta = self.home / f".{agent}/skills/beta"
+                self.assertTrue(beta.is_dir())
+                self.assertFalse(beta.is_symlink())
+        self.run_cli("update", "--global", "--no-rules")
+        for name in ("alpha", "beta"):
+            self.assertTrue(self.skill(name, True).is_symlink())
+            self.assertTrue((self.home / f".claude/skills/{name}").is_symlink())
+
+    def test_migration_rejects_foreign_source_and_cannot_fall_back_to_copies(self):
+        state_file = self.legacy_install(names=("alpha",))
+        before = state_file.read_bytes()
+        shared = self.home / ".agents/skills/alpha"
+        shutil.copytree(self.source / "skills/workflow/alpha", shared)
+        self.run_cli("update", "--global", "--no-rules", success=False)
+        self.assertEqual(state_file.read_bytes(), before)
+        shutil.rmtree(shared)
+        preload = self.root / "deny-symlink.cjs"
+        preload.write_text("require('node:fs').symlinkSync=()=>{throw new Error('Links unavailable');};\n")
+        self.run_cli("update", "--global", "--no-rules", success=False,
+                     env_extra={"NODE_OPTIONS": f"--require={preload}"})
+        self.assertFalse(shared.exists())
+        self.assertEqual(state_file.read_bytes(), before)
+        self.assertFalse(self.skill("alpha", True).is_symlink())
+
+    def test_update_checks_other_agents_links_and_shared_edits(self):
+        for agent in ("codex", "claude"):
+            self.run_cli("add", "--agent", agent, "--skill", "alpha", "--no-rules")
+        claude = self.project / ".claude/skills/alpha"
+        link = os.readlink(claude)
+        foreign = self.root / "foreign"
+        foreign.mkdir()
+        (foreign / "note").write_text("Preserve\n")
+        claude.unlink()
+        claude.symlink_to(foreign, target_is_directory=True)
+        self.run_cli("update", "--agent", "codex", "--no-rules", success=False)
+        self.run_cli("remove", "--agent", "codex", "--no-rules", success=False)
+        self.assertEqual((foreign / "note").read_text(), "Preserve\n")
+        claude.unlink()
+        claude.symlink_to(link, target_is_directory=True)
+        (claude / "SKILL.md").write_text("User edit through Claude\n")
+        self.run_cli("update", "--agent", "codex", "--no-rules", success=False)
+        self.assertEqual((self.skill("alpha") / "SKILL.md").read_text(), "User edit through Claude\n")
+
+    def test_legacy_removal_leaves_other_copy_available_for_migration(self):
+        state_file = self.legacy_install(names=("alpha",), global_scope=False)
+        self.run_cli("remove", "--agent", "codex", "--no-rules")
+        self.assertFalse(self.skill("alpha").exists())
+        claude = self.project / ".claude/skills/alpha"
+        self.assertTrue(claude.is_dir())
+        self.assertFalse(claude.is_symlink())
+        self.run_cli("update", "--agent", "claude", "--no-rules")
+        self.assertTrue(claude.is_symlink())
+        self.assertEqual(claude.resolve(), self.skill("alpha"))
+        self.assertEqual(set(json.loads(state_file.read_text())["skills"]), {"alpha"})
+
+    def test_missing_shared_source_requires_explicit_record_removal(self):
+        for agent in ("codex", "claude"):
+            self.run_cli("add", "--agent", agent, "--global", "--skill", "alpha", "--no-rules")
+        shutil.rmtree(self.home / ".agents/skills/alpha")
+        self.run_cli("update", "--global", "--no-rules", success=False)
+        self.run_cli("remove", "--global", "--no-rules")
+        for agent in ("codex", "claude"):
+            self.assertFalse((self.home / f".{agent}/skills/alpha").is_symlink())
+        state = json.loads((self.home / ".local/share/agentskills/install.json").read_text())
+        self.assertEqual(state["skills"], {})
 
     def test_help_examples_execute_with_current_catalog_and_package_entrypoint(self):
         package_file = self.source / "package.json"

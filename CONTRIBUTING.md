@@ -280,6 +280,14 @@ Task-specific procedures belong in independently installable skills. Installer
 state belongs to the selected target, and project instructions outside managed
 markers must survive installation, updates, and removal.
 
+Store skill content once per scope in `.agents/skills/`; agent destinations use
+relative symlinks unless they read that directory directly. Version 2 records
+track shared content separately from agent connections. Validate ownership of
+every connected destination before modifying shared content. Migrate version 1
+copies per selected skill, preserving unmigrated records and completed progress.
+Check shared updates, last-connection removal, migration, and rollback with real
+filesystem operations in temporary projects and homes.
+
 ### Releases
 
 The `Release` workflow runs on `v*` tags. It reuses full validation, publishes
