@@ -15,7 +15,8 @@ metadata:
 - Validate the requested change or target. Editing fixes, publishing, and changing
   unrelated configuration require task authorization.
 - Select checks for plausible failures, not a fixed checklist. Report not-needed
-  when no available check adds useful confidence; explain why.
+  when a check adds no useful signal. An unavailable required check is blocked,
+  not not-needed; report its exact prerequisite and affected completion criterion.
 
 ## Procedure
 

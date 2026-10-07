@@ -20,3 +20,13 @@ Read only for the current design or completeness decision.
   behavior. Agreement on a prototype or reduced scope can permit that tradeoff.
 - Reuse sufficient checks. Add coverage for a named gap, not a function/branch quota,
   and report what was actually exercised rather than equating small code with safety.
+
+## Completion evidence
+
+Compare accepted outcomes with the final state and checks that actually ran.
+Separate implemented behavior, verified behavior, and commit/publication state.
+A planned check is pending; a required failed or unavailable check leaves completion
+limited unless the user accepts that specific gap. Reuse evidence only when its
+tested code, relevant configuration, and environment still apply. Inspect the final
+diff for missing accepted behavior and accidental files. State any remaining decision
+or action; completion alone grants no staging, commit, deployment, or task mutation.

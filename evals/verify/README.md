@@ -1,5 +1,21 @@
 # verify evaluation
 
+## Local-skill-informed reinforcement — 2026-10-07
+
+Parent rule review; model version not recorded. Paired cases:
+An unavailable required check is blocked with its prerequisite; a check unrelated to
+the completion criterion can be not-needed.
+Instructions are original guidance informed by local workflow comparison, not a
+copied manual. New references are conditional and bundled where needed. This checks
+decision boundaries, not independent agent performance. Earlier results below
+retain their original scope and date.
+
+Revision verification passed: 49 skill formats/catalogs, 76 existing tests, CLI
+fixtures, creator validation, and actual skills@1.7.0 installation of this skill
+alone. Bundled files matched byte-for-byte; local links, the body budget, and the
+saved-record convention passed. No independent agent or reader study was run.
+
+
 ## Decision clarity review — 2026-10-07
 
 Parent instruction review; model version not recorded.
