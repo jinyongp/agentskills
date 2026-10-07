@@ -6,6 +6,7 @@ Keep each skill's cases and results in its own folder.
 
 | Skill | Evaluation record |
 | --- | --- |
+| ci-fix | [Revision-specific CI, stable Actions, gates and bounded log recovery](ci-fix/README.md) |
 | security-review | [Attacker control, authorization, defenses, evidence and coverage](security-review/README.md) |
 | research | [Primary evidence, version conflicts, inference, coverage and research scope](research/README.md) |
 | close | [Completion evidence, accepted deferrals, work scope and commit readiness](close/README.md) |

@@ -34,6 +34,7 @@ defines consumer contracts; `db-migrate` preserves data through scoped transitio
 | [close](close/SKILL.md) | Assess completion and commit readiness from existing scope, validation evidence and worktree changes. Use for requested closeout; report gaps without starting new implementation or checks. | `npx skills add jinyongp/agentskills --skill close` |
 | [research](research/SKILL.md) | Investigate a specified question using primary sources, reconcile conflicting evidence, and distinguish facts, inference, and unknowns. Use for external technical research or comparisons; repository mapping alone uses survey. | `npx skills add jinyongp/agentskills --skill research` |
 | [security-review](security-review/SKILL.md) | Review specified code, configuration, or changes for exploitable security defects. Trace attacker control, trust boundaries, permissions, and existing defenses; report supported findings with confidence and scoped evidence. | `npx skills add jinyongp/agentskills --skill security-review` |
+| [ci-fix](ci-fix/SKILL.md) | Diagnose and fix failing CI for an identified revision or PR, verify current checks, and maintain compatible stable GitHub Actions when workflows change. Use for CI failures; preserve project tools, permissions, and release scope. | `npx skills add jinyongp/agentskills --skill ci-fix` |
 <!-- skills:end -->
 
 Add skills at `skills/workflow/<skill-name>/SKILL.md`.

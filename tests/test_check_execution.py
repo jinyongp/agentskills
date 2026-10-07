@@ -11,6 +11,7 @@ HELPER = Path(__file__).resolve().parents[1] / 'skills/workflow/verify/scripts/r
 
 
 class CheckExecutionTests(unittest.TestCase):
+    helper = HELPER
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
@@ -18,7 +19,7 @@ class CheckExecutionTests(unittest.TestCase):
         self.log = self.root / 'check.log'
 
     def call(self, *args):
-        result = subprocess.run([sys.executable, str(HELPER), *map(str, args)], capture_output=True, text=True)
+        result = subprocess.run([sys.executable, str(self.helper), *map(str, args)], capture_output=True, text=True)
         self.assertLessEqual(len(result.stdout), 4000)
         self.assertEqual(result.stderr, '')
         return result.returncode, json.loads(result.stdout)
@@ -79,6 +80,10 @@ class CheckExecutionTests(unittest.TestCase):
             self.log.write_bytes(b'short')
             self.assertEqual(self.call('log', '--log', self.log, '--offset', offset)[0], 2)
         self.assertEqual(self.call('--unknown-' + 'x' * 10000)[0], 2)
+
+
+class CiCaptureTests(CheckExecutionTests):
+    helper = HELPER.parents[2] / 'ci-fix/scripts/capture.py'
 
 
 if __name__ == '__main__':
