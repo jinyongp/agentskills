@@ -1,5 +1,15 @@
 # Dependency update evaluation
 
+## Supply-chain review — 2026-10-07
+
+Parent instruction review, current Codex session; model version not recorded.
+An affected transitive locked version is traced through its parent; the manifest
+range alone cannot clear it. A package with one publisher and many contributors
+does not have many publish authorities. An unavailable advisory source leaves
+coverage unverified. Disabling a required native install hook does not establish a
+usable build. Ordinary version updates remain scoped rather than launching a broad
+audit. No live advisory audit or independent agent execution is claimed.
+
 ## Decision cases
 
 Parent instruction review on 2026-10-06 in the current Codex session; model version

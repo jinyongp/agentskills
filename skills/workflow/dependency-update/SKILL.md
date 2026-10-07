@@ -20,6 +20,7 @@ Read [references/compatibility.md](references/compatibility.md) for target selec
 peer/runtime conflicts, or security remediation. Read
 [references/resolution.md](references/resolution.md) for workspaces, lockfile churn,
 lifecycle execution, failed resolution, or reproducibility checks.
+For advisory or install-script risk, read [supply-chain.md](references/supply-chain.md).
 
 ## Procedure
 
