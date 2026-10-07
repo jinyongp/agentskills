@@ -286,10 +286,49 @@ The `Release` workflow runs on `v*` tags. It reuses full validation, publishes
 the npm package with `releaseway/npm-actions`, then creates an immutable GitHub
 Release with `releaseway/actions` and commit-based release notes.
 
-Set the version in `package.json`, commit and push the change to `main`, then
-push its matching `v<version>` tag. The workflow rejects a mismatched version.
-For prereleases, explicitly set `publishConfig.tag` to the intended npm dist-tag.
-Published versions cannot be replaced; subsequent releases need a new version.
+Run from the repository's default branch (currently `main`):
+
+```bash
+uv run release.py 0.2.0
+uv run release.py --help
+```
+
+Supply the version without a `v` prefix or build metadata. The script requires Git,
+uv, Node.js/npm/npx, and `gh` authenticated with repository write access. Commit
+pending work first; clean local commits ahead of the remote are included. The origin
+fetch/push repository must match `package.json`. A behind or diverged branch stops
+before preparation. Package identity, installer entrypoint, packaging allowlist and
+repository come from `package.json`; the default branch comes from GitHub, and the
+publication workflow is discovered by its releaseway npm action.
+
+The script updates the package version, runs `uv run --locked check.py`, packs into
+a temporary directory, and exercises that tarball's help and full skill installation
+outside the checkout. It compares installed resources with their sources, commits
+only release metadata, and pushes the branch and selected tag atomically. It never
+force-pushes or pushes unrelated tags. The workflow rejects a mismatched version.
+GitHub Actions remains the publisher; the script has no local npm publish path.
+
+Running the command authorizes publishing without another prompt. A prerelease such
+as `0.3.0-rc.1` sets `publishConfig.tag` to `next`; a stable release removes that override
+and uses `latest`. It waits up to two minutes for the matching tag/commit workflow and
+one hour for completion, then checks npm version/integrity/available commit metadata,
+the intended dist-tag, and the GitHub release/tag. Registry lookup failures stop rather
+than masquerading as an unpublished version. Logs stay at the printed OS temporary path;
+the script returns nonzero on failure and never treats a pending run as complete.
+
+Retry the same command to resume a matching local or remote tag. A failed preparation
+may leave only the expected version/dist-tag edit in `package.json`; that exact change
+is accepted on retry, including when staged. Other changes must be resolved explicitly.
+Prepared commits and tags are reused. An active run is observed; an existing failed
+run gets at most one rerun per invocation, after the previous failure logs are saved.
+A newly failed run is reported without an automatic retry. Cancellation reruns the
+workflow; ordinary failed runs rerun failed jobs. Timeouts or interrupted pushes can
+have completed remotely: reexecution checks actual refs and runs rather than rolling
+back or deleting tags. No extra release state file is maintained.
+
+Published versions cannot be replaced. Once a tag exists, new source commits require
+a new version. An already-published version without a matching tag stops for inspection.
+Installing or updating personal skills is separate from releasing the package.
 
 Before the first automated release, publish the initial package once and configure
 its npm Trusted Publisher for user `jinyongp`, repository `agentskills`, and

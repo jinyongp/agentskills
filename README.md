@@ -176,6 +176,22 @@ GitHub Actions runs the same script with `--locked` to enforce committed depende
 See the [verification instructions](CONTRIBUTING.md#verify-before-committing) for details.
 Skill users do not need these maintenance tools.
 
+## Release
+
+From a checkout, publish a specified version with one command:
+
+```bash
+uv run release.py 0.2.0
+```
+
+The command validates, tests the npm tarball, commits release metadata, pushes the
+default branch and matching tag, and waits for npm and GitHub publication. It requires
+Git, uv, Node.js/npm, and an authenticated GitHub CLI with repository write access.
+Commit pending work first. Running the command authorizes publication; it has no
+additional confirmation prompt. Prereleases such as `0.3.0-rc.1` use npm's `next` tag.
+Rerun the same version after a failure to resume; source changes require a new version
+once a release tag exists. See [release details](CONTRIBUTING.md#releases).
+
 ## Saved task records
 
 When a workflow needs saved records, skills default to
