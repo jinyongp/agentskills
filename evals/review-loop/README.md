@@ -1,5 +1,14 @@
 # Review-loop evaluation
 
+## Incoming feedback review — 2026-10-07
+
+Parent instruction review, current Codex session; model version not recorded.
+An outdated bot comment is checked against its revision; a suggestion to add storage
+to an accepted in-memory prototype remains a scope change; an independently confirmed
+authorization defect remains eligible. Unclear dependent feedback pauses only its
+affected work. Replying/resolving remote threads retains the external-write boundary.
+These are reviewed decision cases, not independent agent execution.
+
 See [workflow sequence replay](../workflow-sequence/README.md) for an executed
 producer correction that breaks an unchanged caller, reopening its check, and a
 pending-area review resumed through an authored handoff. This is parent replay.

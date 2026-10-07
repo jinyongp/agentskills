@@ -18,6 +18,8 @@ This skill works alone; accompanying review or validation guidance serves one ta
 
 Read [references/contract.md](references/contract.md) when intent is uncertain,
 tradeoffs affect finding eligibility, or a proposed fix would add behavior.
+Read [references/feedback.md](references/feedback.md) when working from external
+review comments, bot findings, or requested reviewer feedback.
 
 ## Procedure
 
