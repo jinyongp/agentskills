@@ -27,8 +27,9 @@ spatial feedback, layered surfaces, or typography. Read only the applicable sect
 - Let content determine sections, grouping, density, and navigation. Include a
   chart for a real question, a metric with a defined meaning, and a section with
   useful information. A familiar pattern is valid when it serves the task.
-- Tie hierarchy, typography, color, spacing, imagery, and motion to readability,
-  interaction, or product identity. Evaluate techniques in context; cards,
+- Check whether the primary action, current state, and task-critical information
+  can be located in the rendered view. When decoration competes with them, change
+  grouping or emphasis and recheck the task. Evaluate techniques in context; cards,
   gradients, icons, and minimal layouts are choices, not automatic defects.
   Preserve requested visual direction while identifying concrete usability costs.
 - Use supplied or verified facts. Keep demonstration data visibly identified.
@@ -42,9 +43,9 @@ spatial feedback, layered surfaces, or typography. Read only the applicable sect
 - Keep essential information and actions usable across supported widths, input
   methods, zoom, and themes. Prefer established accessible primitives. Decoration
   and motion should preserve legibility, focus, and reduced-motion needs.
-- Preserve recognizable product character. Removing unnecessary decoration should
-  leave a deliberate composition; distinctiveness does not justify unfamiliar
-  interaction or ignoring the user's design system.
+- Resolve product character from supplied screens, tokens, assets, or a voice sample.
+  Carry those cues into the changed surface; explain departures tied to a user task.
+  Label proposed cues as design choices when identity evidence is absent.
 
 ## Verify and report
 

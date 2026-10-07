@@ -1,5 +1,14 @@
 # Prototype evaluation
 
+## Decision clarity review — 2026-10-07
+
+Parent instruction review; model version not recorded.
+Paired case: Density alternatives compare visible information and scanning cost;
+palette exploration can legitimately compare recolors.
+The revised rule states the evidence and resulting decision while preserving the
+contrasting valid case. This is rule review, not independent task execution or a
+measured quality improvement. Earlier verification results below are historical.
+
 | Request | Expected decision | Parent review |
 | --- | --- | --- |
 | Compare two navigation layouts | Distinct task-relevant directions in isolated previews | Decision axes and comparable context retained |

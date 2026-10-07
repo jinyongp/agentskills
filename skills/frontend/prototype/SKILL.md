@@ -23,9 +23,10 @@ surface or promoting a choice.
 
 ## Build and compare
 
-- Name the decision each direction explores: composition, density, hierarchy,
-  interaction, or motion. Cosmetic recolors of one solution do not answer different
-  design questions. Choose the number from the brief and useful decision space;
+- Name the decision each direction explores and what the comparison will reveal:
+  density may trade scanning space for visible rows; navigation may trade direct
+  access for fewer simultaneous choices. Recolors suffice when palette is the decision.
+  Choose the number from the brief and useful decision space;
   present each direction's benefit and cost without padding the set.
 - Use an isolated preview route, component story, or standalone artifact as appropriate.
   Keep production behavior intact during exploration. Reuse shared components/tokens

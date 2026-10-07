@@ -10,6 +10,12 @@ carry readable hierarchy, predictable feedback, and useful state behavior before
 offering customization. Reuse established tokens and primitives. Component APIs
 should make the intended use easy without accumulating options for hypothetical needs.
 
+For hierarchy, follow the selected task: locate its next action, distinguish current
+state from available actions, and read the required information in the intended order.
+If equal emphasis makes these compete, regroup related content or strengthen the
+task's priority. Equal weight can be correct for peer choices; size alone is not a
+hierarchy defect. Source tokens and screenshots cannot establish user comprehension.
+
 Distinguish acknowledgement from commitment: a press can show immediate feedback
 while activation still respects cancellation and control semantics. Deliberate
 confirmation must match the action and accessible alternatives, not a universal
