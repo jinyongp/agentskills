@@ -1,5 +1,15 @@
 # handoff evaluation
 
+## Accepted-scope review — 2026-10-07
+
+Parent instruction review; model version not recorded. Paired case:
+A scope compromise absent from repository sources carries its rationale in the
+packet; recoverable decisions remain linked.
+The revised rules recover agreed limits before judging gaps. This is not independent
+agent execution. Repository checks and actual selective installation passed for this
+revision; earlier results below retain their original scope.
+
+
 ## Decision clarity review — 2026-10-07
 
 Parent instruction review; model version not recorded.

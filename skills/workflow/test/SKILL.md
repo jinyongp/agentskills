@@ -20,8 +20,8 @@ metadata:
 
 ## Principles
 
-- Protect a named failure and observable contract. Ground expectations in requirements
-  or independently checked examples, not current output. Read
+- Protect an agreed contract and named failure. Preserve deliberate scope limits;
+  ground expectations in requirements or independent examples, not current output. Read
   [references/oracles.md](references/oracles.md) for coupled code/test generation
   or uncertain expectations.
 - Reuse existing coverage first. Add a regression case only for a meaningful gap;

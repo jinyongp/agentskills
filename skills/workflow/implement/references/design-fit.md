@@ -14,6 +14,8 @@ Read only for the current design or completeness decision.
   acquisition and release; a policy boundary avoids changing the same rule in several
   places. If removal preserves these needs with less coordination, use that alternative.
 - Preserve the required path through success, reachable failures and recovery.
+  Determine these requirements from the accepted scope, including deliberate
+  omissions. A requested simulation or manual step is not an unfinished integration.
   Upload progress, submission state and retry behavior depend on the actual contract;
   implementing only a request call can leave that contract incomplete.
 - Expose material limitations before choosing a shortcut that changes accepted

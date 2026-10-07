@@ -102,6 +102,14 @@ independent implementation rationale separately." Evaluate a case needing the
 detail as well as one where it distracts. Keep this authoring check out of generated
 deliverables; it is a way to improve instructions, not a mandatory output template.
 
+Recover agreed scope, deliberate omissions, and accepted tradeoffs before judging
+completion or proposing fixes. Preserve their rationale through plans and handoffs.
+Absence alone establishes no missing requirement. Anchor findings to the active
+contract, an in-scope regression, or a concrete reachable safety/data violation.
+Unknown intent needs evidence or clarification; it does not authorize expanded
+features, recovery flows, hardening, or tests. Review every requested area while
+limiting repeated review to changed effects and invalidated evidence.
+
 ## Tool selection
 
 Task skills choose tools from the user's current instructions and applicable repository

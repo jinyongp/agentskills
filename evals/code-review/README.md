@@ -1,5 +1,15 @@
 # code-review evaluation
 
+## Accepted-scope review — 2026-10-07
+
+Parent instruction review; model version not recorded. Paired case:
+A missing optional capability stays outside findings; a demonstrated regression
+within the agreed subset remains actionable.
+The revised rules recover agreed limits before judging gaps. This is not independent
+agent execution. Repository checks and actual selective installation passed for this
+revision; earlier results below retain their original scope.
+
+
 ## Balanced design cases
 
 Parent instruction review of the revised skill and conditional design reference.

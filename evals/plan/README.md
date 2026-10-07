@@ -1,5 +1,15 @@
 # plan evaluation
 
+## Accepted-scope review — 2026-10-07
+
+Parent instruction review; model version not recorded. Paired case:
+A chosen manual operation is part of completion; an unresolved capability choice
+stays unresolved until its dependent scope is settled.
+The revised rules recover agreed limits before judging gaps. This is not independent
+agent execution. Repository checks and actual selective installation passed for this
+revision; earlier results below retain their original scope.
+
+
 ## Local-skill-informed reinforcement — 2026-10-07
 
 Parent rule review; model version not recorded. Paired cases:

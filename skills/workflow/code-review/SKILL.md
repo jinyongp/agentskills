@@ -21,7 +21,10 @@ design complexity, shortcuts, or end-to-end completeness concerns.
 
 ## Procedure
 
-1. Resolve the target and expected behavior. For a commit/PR comparison, establish
+1. Recover expected behavior, agreed omissions, and tradeoffs from user decisions,
+   plans/handoffs, and public contracts. Missing functionality alone is not a defect;
+   resolve uncertain intent before recommending additions. Review every requested
+   area; a clean subset is partial coverage. For a commit/PR comparison, establish
    the intended base and head; use merge-base only for branch changes when appropriate.
    For local work, distinguish staged, working, and untracked changes.
 2. Execute the Python 3.11+ helper without reading its source:

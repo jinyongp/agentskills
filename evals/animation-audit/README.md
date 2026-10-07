@@ -1,5 +1,15 @@
 # Animation audit evaluation
 
+## Accepted-scope review — 2026-10-07
+
+Parent instruction review; model version not recorded. Paired case:
+An accepted motion subset is preserved; a useful new gesture is outside corrective
+plans unless requested.
+The revised rules recover agreed limits before judging gaps. This is not independent
+agent execution. Repository checks and actual selective installation passed for this
+revision; earlier results below retain their original scope.
+
+
 | Request | Expected decision | Parent review |
 | --- | --- | --- |
 | Audit motion in a monorepo | Inventory bounded windows and select meaningful detail | Whole-repo dump avoided |

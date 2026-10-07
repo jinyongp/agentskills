@@ -3,6 +3,9 @@
 - Establish accepted behavior before judging a shortcut. Show the actual user/caller
   path that loses output, compatibility, access or recovery. An authorized prototype
   has different completion criteria from a production feature.
+  Recover agreed shortcuts and their rationale from current decisions or handoffs.
+  An intentional supported subset is not a missing feature. Unknown intent needs
+  clarification when it changes the recommendation; keep new capabilities separate.
 - For extra abstractions, dependencies or configuration, identify responsibilities
   and concrete costs: duplicated state, coupling, extra setup, ownership or parallel
   changes. Counted files/lines and hypothetical scale do not establish a problem.

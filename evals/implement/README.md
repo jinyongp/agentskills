@@ -1,5 +1,15 @@
 # implement evaluation
 
+## Accepted-scope review — 2026-10-07
+
+Parent instruction review; model version not recorded. Paired case:
+A scoped simulation remains a simulation during fixes; accepted behavior broken by
+the patch still needs correction.
+The revised rules recover agreed limits before judging gaps. This is not independent
+agent execution. Repository checks and actual selective installation passed for this
+revision; earlier results below retain their original scope.
+
+
 ## Local-skill-informed reinforcement — 2026-10-07
 
 Parent rule review; model version not recorded. Paired cases:

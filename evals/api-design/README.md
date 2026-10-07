@@ -1,5 +1,15 @@
 # API design evaluation
 
+## Accepted-scope review — 2026-10-07
+
+Parent instruction review; model version not recorded. Paired case:
+A scoped synchronous interface needs its accepted semantics; review does not add
+asynchronous jobs or automatic retries solely for completeness.
+The revised rules recover agreed limits before judging gaps. This is not independent
+agent execution. Repository checks and actual selective installation passed for this
+revision; earlier results below retain their original scope.
+
+
 See [parent task execution](../task-execution/README.md) for actual provider/consumer
 serialization demonstrating a strict consumer's incompatibility with an additive
 field. That review leaves implementation unchanged; it does not test transport.

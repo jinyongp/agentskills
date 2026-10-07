@@ -15,6 +15,8 @@ Audit motion across the selected web or React Native project and return prioriti
 improvement plans. Source edits and dependency changes need an implementation request.
 Plans stay inline unless saving is requested or needed. Respect current user/project
 tools, motion tokens, platform requirements, and documented design decisions.
+Recover agreed limits and omissions before planning corrections; a useful new
+interaction is an extension only when requested, not an automatic audit finding.
 
 ## Inventory
 

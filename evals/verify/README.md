@@ -1,5 +1,15 @@
 # verify evaluation
 
+## Accepted-scope review — 2026-10-07
+
+Parent instruction review; model version not recorded. Paired case:
+Checks verify the accepted subset; a mandatory check is still required rather than
+waived by a simplification.
+The revised rules recover agreed limits before judging gaps. This is not independent
+agent execution. Repository checks and actual selective installation passed for this
+revision; earlier results below retain their original scope.
+
+
 ## Local-skill-informed reinforcement — 2026-10-07
 
 Parent rule review; model version not recorded. Paired cases:

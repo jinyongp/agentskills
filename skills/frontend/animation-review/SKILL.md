@@ -15,6 +15,8 @@ Review the selected motion or changed component on web or React Native. Resolve
 the target, platform, intended behavior, and applicable product conventions.
 Keep source edits, dependency changes, and publication within separate user
 authorization. Repository-wide inventory is outside a selected review's coverage.
+Recover agreed interaction limits and their rationale before reporting missing
+behavior; resolve unknown intent rather than proposing an expanded interaction.
 
 Read [references/criteria.md](references/criteria.md) when assessing timing,
 gesture continuity, performance, or platform-specific evidence.

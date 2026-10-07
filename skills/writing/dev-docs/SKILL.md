@@ -15,6 +15,7 @@ Create, edit, or review the requested developer documentation. Follow the audien
 output language, product version, house style, and delivery format. Review-only stays
 read-only; publishing or changing product behavior needs its own task scope.
 This skill works alone. Accompanying language guidance refines the same deliverable.
+Review agreed capabilities; documenting a limit does not authorize adding its feature.
 
 Read [references/structure.md](references/structure.md) when drafting or reviewing
 explanatory prose, examples, or navigation; read [references/verification.md](references/verification.md)

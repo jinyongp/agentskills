@@ -1,5 +1,15 @@
 # Animation review evaluation
 
+## Accepted-scope review — 2026-10-07
+
+Parent instruction review; model version not recorded. Paired case:
+A deliberate instant transition stays valid; a broken accepted interaction is still a
+finding.
+The revised rules recover agreed limits before judging gaps. This is not independent
+agent execution. Repository checks and actual selective installation passed for this
+revision; earlier results below retain their original scope.
+
+
 The 2026-10-06 criteria extension covers preference changes during playback,
 cancelled/zero-duration completion, and separation of input latency from frame stalls.
 Parent review confirms these distinctions; no runtime motion was exercised.

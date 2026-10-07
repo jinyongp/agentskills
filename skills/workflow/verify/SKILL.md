@@ -21,6 +21,8 @@ metadata:
 ## Procedure
 
 1. Identify changed behavior, public contracts, and preservation requirements.
+   Recover agreed limits from decisions/plans/handoffs; checks verify that scope,
+   including valid simplifications, rather than impose additional product behavior.
    Inspect only relevant paths and repository commands. Existing test results
    apply only to their tested state and environment.
 2. Choose the smallest useful checks:

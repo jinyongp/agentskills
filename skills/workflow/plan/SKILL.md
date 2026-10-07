@@ -25,8 +25,9 @@ plan or drafting tasks from settled work items.
 
 1. State the outcome, scope, constraints, and observable completion criteria.
    Inspect only facts needed to identify the affected behavior and dependencies.
-   Include the usable end-to-end result and reachable failure/recovery needs;
-   distinguish required behavior from optional extensions.
+   Preserve agreed limits, deliberate omissions, and rationale at their source or
+   in the plan. Define success and recovery within that contract; distinguish required
+   behavior from optional extensions. Absence alone is not an unmet requirement.
 2. Separate accepted decisions, reversible assumptions, and unresolved choices.
    Ask when several viable options materially affect behavior, contracts, data,
    permissions, or cost and existing context cannot settle the choice.

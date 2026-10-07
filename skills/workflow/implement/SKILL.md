@@ -21,7 +21,8 @@ choosing added structure, or judging whether implementation is complete.
 ## Think before changing
 
 - Define observable completion from the request and contracts. Inspect relevant
-  code, callers, checks and local changes first.
+  code, callers, checks and local changes first. Recover agreed omissions and tradeoffs
+  from decisions/plans/handoffs; keep accepted limits when fixing or completing work.
 - Separate established facts, reversible assumptions, and unresolved choices.
   Ask a focused question only when missing information materially changes behavior,
   data, permissions, compatibility, cost, or an expensive-to-reverse decision.

@@ -14,7 +14,8 @@ metadata:
 Create, revise, or review the requested interface using its real tasks, content,
 and product identity. Reuse existing components and design conventions. A review
 returns recommendations; requested edits authorize only the named scope.
-Resolve consequential missing direction from evidence or a focused question.
+Recover agreed scope and simplifications before judging completeness; retain their
+rationale. Resolve consequential missing direction from evidence or a focused question.
 
 Read [references/craft.md](references/craft.md) when refining component defaults,
 spatial feedback, layered surfaces, or typography. Read only the applicable section.

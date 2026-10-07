@@ -1,5 +1,15 @@
 # Developer documentation evaluation
 
+## Accepted-scope review — 2026-10-07
+
+Parent instruction review; model version not recorded. Paired case:
+An accepted limitation is documented accurately; its absence does not authorize
+implementing the feature.
+The revised rules recover agreed limits before judging gaps. This is not independent
+agent execution. Repository checks and actual selective installation passed for this
+revision; earlier results below retain their original scope.
+
+
 See [parent task execution](../task-execution/README.md) for an authored CLI guide
 whose documented commands and success/failure behavior were actually executed.
 That scoped result supplements the instruction review below.

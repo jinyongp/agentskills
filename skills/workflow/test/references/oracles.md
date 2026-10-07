@@ -8,6 +8,8 @@ Read when code and tests reuse generated assumptions or a result lacks a justifi
 - Read code to find interfaces and reachable failures, while separately deriving
   what should happen. Resolve consequential missing semantics rather than inventing
   expected values. Tests may follow implementation if their expectations stay grounded.
+  Recover agreed omissions from decisions and handoffs. A test must not turn an
+  optional capability into a required one, or force expansion of a scoped prototype.
 - A separate session, agent or model can repeat the same mistake. Distinct authors
   do not by themselves establish independence; identify the expectation's evidence.
 - For a material detection gap, use the reported faulty state or a targeted wrong

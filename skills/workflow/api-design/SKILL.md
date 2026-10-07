@@ -16,6 +16,8 @@ or message contract. Preserve chosen protocols, tooling, supported consumers, an
 project conventions. Design-only returns a contract/proposal; review-only returns
 findings. Implementation, publication, and live client/server changes need task scope.
 This skill works alone; accompanying language or test guidance refines the same task.
+Recover agreed capabilities and omissions before judging completeness; resolve
+uncertain intent before adding operation semantics or recovery flows.
 
 Read [references/compatibility.md](references/compatibility.md) for evolution,
 serialization, defaults, versions, or consumer migration. Read
