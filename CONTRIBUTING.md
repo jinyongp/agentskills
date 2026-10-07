@@ -280,6 +280,26 @@ Task-specific procedures belong in independently installable skills. Installer
 state belongs to the selected target, and project instructions outside managed
 markers must survive installation, updates, and removal.
 
+### Releases
+
+The `Release` workflow runs on `v*` tags. It reuses full validation, publishes
+the npm package with `releaseway/npm-actions`, then creates an immutable GitHub
+Release with `releaseway/actions` and commit-based release notes.
+
+Set the version in `package.json`, commit and push the change to `main`, then
+push its matching `v<version>` tag. The workflow rejects a mismatched version.
+For prereleases, explicitly set `publishConfig.tag` to the intended npm dist-tag.
+Published versions cannot be replaced; subsequent releases need a new version.
+
+Before the first automated release, publish the initial package once and configure
+its npm Trusted Publisher for user `jinyongp`, repository `agentskills`, and
+workflow `release.yml`, allowing direct publication. Enable Immutable Releases
+in the GitHub repository. Subsequent npm releases use OIDC without a publish token;
+`.github/npm/packages.yml` selects direct publication rather than staged approval.
+
+Refresh all action references with `npx actions-up --yes` when changing workflows.
+Keep full commit SHA pins and explicit `ubuntu-24.04` runners.
+
 ## Changes and commits
 
 Include a skill's instructions, resources, checks, and catalog updates in the same commit.

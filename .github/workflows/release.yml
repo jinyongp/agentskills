@@ -1,0 +1,63 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    uses: ./.github/workflows/validate.yml
+
+  publish:
+    needs: validate
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "22.22.2"
+          package-manager-cache: false
+      - name: Check release version
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          node <<'JS'
+          const { version } = require('./package.json');
+          if (process.env.RELEASE_TAG !== `v${version}`) {
+            throw new Error(`Release tag must match package.json: v${version}`);
+          }
+          JS
+      - name: Publish npm package
+        uses: releaseway/npm-actions@269fbdeac83fed2df2880915726ed91edbe1bbdd # v0.4.0
+
+  release:
+    needs: publish
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+          fetch-tags: true
+      - name: Publish GitHub Release
+        uses: releaseway/actions@c054f2de3448e79e5d854155e701e13ad31a520c # v0.3.1
+        with:
+          tag: ${{ github.ref_name }}
+          commit: ${{ github.sha }}
+          prerelease: ${{ contains(github.ref_name, '-') }}

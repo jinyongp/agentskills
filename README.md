@@ -7,8 +7,7 @@ The bundled CLI manages skills and shared rules together; the
 
 ## Unified installer
 
-The CLI is ready locally. The commands below require publication of
-`@jinyongp/agentskills` to npm; the package is not published yet.
+Install and manage skills with the bundled CLI:
 
 ```bash
 npx @jinyongp/agentskills@latest add
@@ -22,7 +21,7 @@ shows the proposed changes before applying them. Shared rules are included.
 Use `@latest` to run the newest published installer and bundled content.
 `update` reuses recorded selections; newly available skills require `add`.
 
-Run the same CLI now from a checkout:
+Run the same CLI from a checkout:
 
 ```bash
 node /path/to/agentskills/agentskills.js add
@@ -96,7 +95,7 @@ The CLI requires Node.js 22.20+ and npm, with no runtime dependencies or uv requ
 
 ## Install with the skills CLI
 
-Once skills are published to GitHub, use these commands to browse and install them:
+Browse and install skills directly from GitHub:
 
 ```bash
 # List available skills
