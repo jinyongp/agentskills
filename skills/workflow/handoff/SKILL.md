@@ -21,7 +21,9 @@ metadata:
 1. Identify the active goal, current user decisions and their necessary rationale,
    temporary constraints, unresolved questions, and next action. Preserve only
    context unavailable from the repository, including agreed limits and why the
-   selected scope is sufficient. Express current choices positively.
+   selected scope is sufficient. Read
+   [references/current-context.md](references/current-context.md) when corrections
+   or changed decisions affect the packet.
 2. For recoverable facts, give a precise lookup: file and section, narrow search,
    or scoped command. Include only lookups needed to resume. Repository instructions,
    plans, code, Git state, environment setup, and durable logs stay at their sources.

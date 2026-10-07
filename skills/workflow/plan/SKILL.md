@@ -45,9 +45,10 @@ plan or drafting tasks from settled work items.
 5. Tie each plausible failure to a useful check. Distinguish per-unit checks from
    required final integration checks; a scheduled check remains pending.
    Use not-needed when a check would add no useful signal.
-6. Review the plan against the latest request. Express selected decisions positively
-   and retain rationale needed for execution. Do not present unanswered questions
-   as settled facts in a saved plan.
+6. Review the plan against the latest request. Express current choices positively;
+   keep necessary rationale and unresolved questions distinct. Read
+   [references/current-context.md](references/current-context.md) when a correction
+   or changed decision affects the plan or dependent records.
 7. Return a short inline plan unless a destination was requested. If implementation
    is also authorized, continue once blocking choices are resolved; otherwise stop
    after the plan.

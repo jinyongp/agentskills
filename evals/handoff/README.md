@@ -1,5 +1,16 @@
 # handoff evaluation
 
+## Current context review — 2026-10-07
+
+Parent rule review, Codex; exact model version not recorded. The next packet carries
+the selected store, accepted scope and privacy constraint rather than rejected
+alternatives. Expired task-local conditions leave active context only after their
+exit condition is known to hold. An uncertain constraint is not silently discarded
+or promoted to a permanent rule. A stale linked plan is updated only with editing
+authorization; otherwise the discrepancy is named. Written boundaries were reviewed;
+independent transfer behavior was not measured. The conditional reference is bundled
+inside this skill rather than depending on another skill or installed shared rules.
+
 ## Accepted-scope review — 2026-10-07
 
 Parent instruction review; model version not recorded. Paired case:

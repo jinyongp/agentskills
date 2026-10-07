@@ -1,5 +1,16 @@
 # plan evaluation
 
+## Current context review — 2026-10-07
+
+Parent rule review, Codex; exact model version not recorded. A chosen local store
+replaces earlier alternatives in active plans, while its accepted single-device
+scope and a private-data exclusion remain. A temporary migration constraint remains
+until its exit condition holds. Unknown durability stays task-local rather than
+becoming a permanent rule. Changed decisions trigger targeted dependent-record
+inspection, not repository-wide history rewriting or unauthorized edits. Cases were
+checked against the written rules; independent execution was not run. The conditional
+reference is bundled here so individual installation retains the full boundary.
+
 ## Accepted-scope review — 2026-10-07
 
 Parent instruction review; model version not recorded. Paired case:
