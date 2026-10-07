@@ -26,6 +26,7 @@ defines consumer contracts; `db-migrate` preserves data through scoped transitio
 | [optimize](optimize/SKILL.md) | Improve code performance through demonstrated bottlenecks, scoped changes, correctness checks, and matched before/after measurements. Use for latency, throughput, memory, or resource costs; measurement alone does not authorize optimization. | `npx skills add jinyongp/agentskills --skill optimize` |
 | [db-migrate](db-migrate/SKILL.md) | Prepare, review, or run scoped database schema changes and data migrations with engine-aware execution, preserved data, staged compatibility, and recovery. Use for migrations or backfills; live execution requires the identified target and task authorization. | `npx skills add jinyongp/agentskills --skill db-migrate` |
 | [api-design](api-design/SKILL.md) | Design or review consumer-facing APIs and interface changes using explicit semantics, compatibility, errors, retries, and version policy. Use for HTTP, RPC, SDK, or message contracts; preserve project protocols and distinguish design from implementation. | `npx skills add jinyongp/agentskills --skill api-design` |
+| [review-loop](review-loop/SKILL.md) | Review and fix agreed scope with complete area coverage, preserved tradeoffs, and scoped rechecks | `npx skills add jinyongp/agentskills --skill review-loop` |
 <!-- skills:end -->
 
 Add skills at `skills/workflow/<skill-name>/SKILL.md`.
