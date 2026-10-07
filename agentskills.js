@@ -81,7 +81,7 @@ function safe(base, relative) {
 }
 
 function snapshot(directory) {
-  const files = {};
+  const files = Object.create(null);
   function walk(current, relative = '') {
     for (const entry of fs.readdirSync(current, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))) {
       const key = relative ? `${relative}/${entry.name}` : entry.name;
@@ -101,8 +101,21 @@ function equalFiles(left, right) {
   return keys.length === Object.keys(right).length && keys.every(key => left[key] === right[key]);
 }
 
+function bytes(file) {
+  return fs.existsSync(file) ? fs.readFileSync(file) : null;
+}
+
+function sameBytes(left, right) {
+  return left === null || right === null ? left === right : left.equals(right);
+}
+
+function utf8(data, file) {
+  try { return new TextDecoder('utf-8', { fatal: true, ignoreBOM: true }).decode(data); }
+  catch { fail(`Rules document must be UTF-8: ${file}; left untouched`); }
+}
+
 function catalog() {
-  const result = {};
+  const result = Object.create(null);
   for (const category of fs.readdirSync(path.join(ROOT, 'skills'), { withFileTypes: true })) {
     if (!category.isDirectory()) continue;
     const directory = path.join(ROOT, 'skills', category.name);
@@ -134,11 +147,11 @@ function loadState(file) {
   return state;
 }
 
-function atomicWrite(file, content) {
+function atomicWrite(file, content, mode) {
   fs.mkdirSync(path.dirname(file), { recursive: true });
   const temporary = `${file}.${crypto.randomUUID()}.tmp`;
   try {
-    fs.writeFileSync(temporary, content, { mode: fs.existsSync(file) ? fs.statSync(file).mode : 0o600, flag: 'wx' });
+    fs.writeFileSync(temporary, content, { mode: mode ?? (fs.existsSync(file) ? fs.statSync(file).mode : 0o600), flag: 'wx' });
     fs.renameSync(temporary, file);
   } finally { if (fs.existsSync(temporary)) fs.unlinkSync(temporary); }
 }
@@ -196,6 +209,7 @@ async function main() {
       throw error;
     }
     try {
+      const originalState = bytes(stateFile);
       const state = loadState(stateFile);
       const targets = opts.agent ? [opts.agent] : Object.keys(state.agents);
       if (!targets.length) fail('No recorded installations in this scope; use add first');
@@ -203,8 +217,8 @@ async function main() {
       const requested = [...new Set(opts.names)];
       const all = requested.includes('*') || !requested.length;
       for (const name of requested.filter(n => n !== '*')) {
-        if (opts.command === 'add' && !available[name]) fail(`Unknown skill: ${name}`);
-        if (opts.command !== 'add' && !targets.some(a => state.agents[a]?.skills[name])) fail(`Skill is not installed in the selected scope: ${name}`);
+        if (opts.command === 'add' && !Object.hasOwn(available, name)) fail(`Unknown skill: ${name}`);
+        if (opts.command !== 'add' && !targets.some(a => state.agents[a] && Object.hasOwn(state.agents[a].skills, name))) fail(`Skill is not installed in the selected scope: ${name}`);
       }
       for (const agent of targets) {
         const config = AGENTS[agent];
@@ -214,31 +228,44 @@ async function main() {
           const target = safe(base, `${opts.global ? config.global : config.project}/${name}`);
           if (fs.existsSync(target)) {
             if (!fs.statSync(target).isDirectory()) fail(`Not a skill directory: ${target}`);
-            if (!record.skills[name]) fail(`Existing unowned skill: ${target}; left untouched`);
+            if (!Object.hasOwn(record.skills, name)) fail(`Existing unowned skill: ${target}; left untouched`);
             if (!equalFiles(snapshot(target), record.skills[name])) fail(`Locally modified skill: ${target}; left untouched`);
-          } else if (record.skills[name] && opts.command !== 'remove') fail(`Installed skill is missing: ${target}; restore it or remove its record first`);
+          } else if (Object.hasOwn(record.skills, name) && opts.command !== 'remove') fail(`Installed skill is missing: ${target}; restore it or remove its record first`);
           if (opts.command !== 'remove' && !available[name]) fail(`Skill no longer bundled: ${name}; remove explicitly`);
           const files = opts.command === 'remove' ? null : snapshot(available[name].source);
-          operations.push({ label: `${opts.command} ${agent}/${name}`, apply() {
-            if (opts.command === 'remove') {
-              fs.rmSync(target, { recursive: true, force: true }); delete record.skills[name];
-            } else {
-              fs.mkdirSync(path.dirname(target), { recursive: true });
-              const temporary = `${target}.${crypto.randomUUID()}.tmp`, backup = `${target}.${crypto.randomUUID()}.bak`;
-              try {
+          const before = fs.existsSync(target) ? snapshot(target) : null;
+          operations.push({ label: `${opts.command} ${agent}/${name}`, check() {
+            safe(base, path.relative(base, target));
+            const current = fs.existsSync(target) ? snapshot(target) : null;
+            if (before === null ? current !== null : current === null || !equalFiles(current, before)) fail(`Skill changed after inspection: ${target}; retry to inspect the new state`);
+          }, apply() {
+            fs.mkdirSync(path.dirname(target), { recursive: true });
+            const temporary = `${target}.${crypto.randomUUID()}.tmp`, backup = `${target}.${crypto.randomUUID()}.bak`;
+            let replaced = false;
+            const rollback = () => {
+              if (replaced) fs.rmSync(target, { recursive: true, force: true });
+              if (fs.existsSync(backup)) fs.renameSync(backup, target);
+            };
+            try {
+              if (opts.command !== 'remove') {
                 fs.cpSync(available[name].source, temporary, { recursive: true, verbatimSymlinks: true });
-                if (fs.existsSync(target)) fs.renameSync(target, backup);
-                try { fs.renameSync(temporary, target); } catch (error) { if (fs.existsSync(backup)) fs.renameSync(backup, target); throw error; }
-                fs.rmSync(backup, { recursive: true, force: true }); record.skills[name] = files;
-              } finally { fs.rmSync(temporary, { recursive: true, force: true }); }
-            }
-            state.agents[agent] = record;
+                if (!equalFiles(snapshot(temporary), files)) fail(`Bundled skill changed during copying: ${name}`);
+              }
+              if (fs.existsSync(target)) fs.renameSync(target, backup);
+              if (opts.command === 'remove') delete record.skills[name];
+              else { fs.renameSync(temporary, target); replaced = true; record.skills[name] = files; }
+              state.agents[agent] = record;
+              return { rollback, finish: () => fs.rmSync(backup, { recursive: true, force: true }), backup };
+            } catch (error) { rollback(); throw error; }
+            finally { fs.rmSync(temporary, { recursive: true, force: true }); }
           } });
         }
         if (opts.rules && (opts.command === 'add' || record.rules)) {
           const file = safe(base, opts.global ? config.globalRules : config.rules);
           const existed = fs.existsSync(file);
-          const text = existed ? fs.readFileSync(file, 'utf8') : '';
+          const mode = existed ? fs.statSync(file).mode : 0o600;
+          const original = bytes(file);
+          const text = existed ? utf8(original, file) : '';
           const previous = rulesBlock(text, file);
           if (previous && !record.rules) fail(`Existing unowned rules block in ${file}; left untouched`);
           if (record.rules && (!previous || hash(previous.text) !== record.rules.hash)) fail(`Locally modified or missing rules block in ${file}; left untouched`);
@@ -248,24 +275,55 @@ async function main() {
           const content = previous ? text.slice(0, previous.start) + replacement + text.slice(previous.end) : `${next}\n${text}`;
           const removing = opts.command === 'remove';
           const final = removing && previous ? text.slice(0, previous.start) + text.slice(previous.end + (text[previous.end] === '\n' ? 1 : 0)) : content;
-          operations.push({ label: `${opts.command} ${agent}/shared-rules`, apply() {
-            if (removing && record.rules.created && final === '') fs.unlinkSync(file);
-            else atomicWrite(file, final);
-            if (removing) delete record.rules;
-            else record.rules = { hash: hash(next), created: record.rules?.created ?? !existed };
-            state.agents[agent] = record;
+          operations.push({ label: `${opts.command} ${agent}/shared-rules`, check() {
+            safe(base, path.relative(base, file));
+            if (!sameBytes(bytes(file), original)) fail(`Rules document changed after inspection: ${file}; retry to inspect the new state`);
+          }, apply() {
+            const backup = `${file}.${crypto.randomUUID()}.bak`;
+            let replaced = false;
+            const rollback = () => {
+              if (replaced) fs.rmSync(file, { force: true });
+              if (fs.existsSync(backup)) fs.renameSync(backup, file);
+            };
+            try {
+              if (existed) fs.renameSync(file, backup);
+              if (!(removing && record.rules.created && final === '')) { atomicWrite(file, final, mode); replaced = true; }
+              if (removing) delete record.rules;
+              else record.rules = { hash: hash(next), created: record.rules?.created ?? !existed };
+              state.agents[agent] = record;
+              return { rollback, finish: () => fs.rmSync(backup, { force: true }), backup };
+            } catch (error) { rollback(); throw error; }
           } });
         }
       }
       if (!operations.length) fail('No matching installed items');
       console.log(`${opts.global ? 'Global' : 'Project'}: ${base}\n${operations.map(o => o.label).join('\n')}`);
       if (prompt && !/^y(es)?$/i.test((await prompt.question('Apply? [y/N] ')).trim())) { console.log('Cancelled.'); return; }
+      safe(base, path.relative(base, stateFile));
+      if (!sameBytes(bytes(stateFile), originalState)) fail(`Installation record changed after inspection: ${stateFile}; retry`);
+      for (const operation of operations) operation.check();
       for (const operation of operations) {
-        operation.apply();
-        atomicWrite(stateFile, JSON.stringify(state, null, 2) + '\n');
+        operation.check();
+        const transaction = operation.apply();
+        try { atomicWrite(stateFile, JSON.stringify(state, null, 2) + '\n'); }
+        catch (error) {
+          try { transaction.rollback(); }
+          catch (rollbackError) { fail(`${error.message}; rollback failed: ${rollbackError.message}${transaction.backup && fs.existsSync(transaction.backup) ? `; preserved backup: ${transaction.backup}` : ''}`); }
+          throw error;
+        }
+        transaction.finish();
       }
       console.log(`Done. Installation record: ${stateFile}`);
-    } finally { fs.closeSync(handle); fs.unlinkSync(lock); }
+    } finally {
+      const opened = fs.fstatSync(handle);
+      fs.closeSync(handle);
+      safe(base, path.relative(base, lock));
+      if (fs.existsSync(lock)) {
+        const current = fs.lstatSync(lock);
+        if (current.dev !== opened.dev || current.ino !== opened.ino) fail(`Lock changed during operation: ${lock}; left untouched`);
+        fs.unlinkSync(lock);
+      }
+    }
   } finally { prompt?.close(); }
 }
 

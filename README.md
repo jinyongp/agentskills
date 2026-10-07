@@ -64,6 +64,9 @@ Shared rules come from `rules/base.md`. Only the block between
 project prose outside it remains intact. Existing skills installed by another
 tool are not adopted. Modified skills, extra files, modified rules blocks,
 damaged markers, and symlinks stop the operation before applying selected changes.
+Rules documents must be UTF-8; other encodings are rejected without conversion.
+Files and the installation record are checked again after confirmation, so edits
+made while the prompt is pending require a fresh inspection.
 Resolve a conflict explicitly, such as backing up edits and restoring the last
 installed content, then retry. There is no force-overwrite option.
 
@@ -71,7 +74,10 @@ Installation records live at `.agents/agentskills.json` in projects and
 `~/.local/share/agentskills/install.json` globally. Retain them to identify owned
 files; they are installation metadata, not saved task records. Cooperating CLI
 operations use a lock next to the record. Individual writes are staged; completed
-items are recorded incrementally if a filesystem error interrupts a batch.
+items are recorded incrementally. A caught record-write failure rolls back the
+current item while retaining earlier completed items. Backups are removed only
+after the installation record is saved. Record-write rollback failures report
+available backup paths.
 
 The CLI requires Node.js 22.20+ and npm, with no runtime dependencies or uv requirement.
 
