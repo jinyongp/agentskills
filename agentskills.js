@@ -22,18 +22,25 @@ const SCOPES = {
   project: { label: 'Project', root: opts => path.resolve(opts.project), record: '.agents/agentskills.json' },
   global: { label: 'Global', root: () => os.homedir(), record: '.local/share/agentskills/install.json' },
 };
-const OPTIONS = {
-  agent: { flags: ['--agent', '-a'], type: 'one', value: 'AGENT', default: null, choices: () => Object.keys(AGENTS), description: 'Target agent.' },
-  global: { flags: ['--global', '-g'], type: 'flag', default: false, conflicts: ['project'], description: 'Use the current user\'s global installation.' },
-  project: { flags: ['--project'], type: 'one', value: 'PATH', default: () => process.cwd(), description: 'Use an existing project directory.' },
-  names: { flags: ['--skill', '-s'], type: 'many', value: 'NAME ...', default: () => [], description: 'Select skills; quote \'*\' to select all.' },
-  rulesOnly: { flags: ['--rules-only'], type: 'flag', default: false, conflicts: ['noRules', 'names'], description: 'Manage shared rules without skills.' },
-  noRules: { flags: ['--no-rules'], type: 'flag', default: false, description: 'Manage skills without shared rules.' },
-  yes: { flags: ['--yes', '-y'], type: 'flag', default: false, description: 'Apply without prompts.' },
-  help: { flags: ['--help', '-h'], type: 'flag', default: false, description: 'Show help; also accepts help <command>.' },
+const OPTION_GROUPS = {
+  target: { label: 'Target', options: {
+    agent: { flags: ['--agent', '-a'], type: 'one', value: 'AGENT', default: null, choices: () => Object.keys(AGENTS), description: 'Target agent.' },
+    project: { flags: ['--project'], type: 'one', value: 'PATH', default: () => process.cwd(), description: 'Use an existing project directory.' },
+    global: { flags: ['--global', '-g'], type: 'flag', default: false, conflicts: ['project'], description: 'Use the current user\'s global installation.' },
+  } },
+  selection: { label: 'Selection', options: {
+    names: { flags: ['--skill', '-s'], type: 'many', value: 'NAME ...', default: () => [], description: 'Select skills; quote \'*\' to select all.' },
+    rulesOnly: { flags: ['--rules-only'], type: 'flag', default: false, conflicts: ['noRules', 'names'], description: 'Manage shared rules without skills.' },
+    noRules: { flags: ['--no-rules'], type: 'flag', default: false, description: 'Manage skills without shared rules.' },
+  } },
+  execution: { label: 'Execution', options: {
+    yes: { flags: ['--yes', '-y'], type: 'flag', default: false, description: 'Apply without prompts.' },
+    help: { flags: ['--help', '-h'], type: 'flag', default: false, description: 'Show help; also accepts help <command>.' },
+  } },
 };
-const SCOPE_OPTIONS = ['agent', 'global', 'project'];
-const EDIT_OPTIONS = [...SCOPE_OPTIONS, 'names', 'rulesOnly', 'noRules', 'yes', 'help'];
+const OPTIONS = Object.fromEntries(Object.values(OPTION_GROUPS).flatMap(group => Object.entries(group.options)));
+const SCOPE_OPTIONS = Object.keys(OPTION_GROUPS.target.options);
+const EDIT_OPTIONS = Object.keys(OPTIONS);
 const COMMANDS = {
   add: { description: 'Install selected skills and shared rules; prompt for unspecified choices.', options: EDIT_OPTIONS, mutates: true, selection: 'catalog', requiresAgent: true,
     examples: ctx => [{}, { agent: ctx.agents[0], names: ctx.skills.slice(0, 2), yes: true }, { agent: ctx.agents.at(-1), global: true, rulesOnly: true, yes: true }] },
@@ -45,6 +52,7 @@ const COMMANDS = {
     examples: ctx => [{}, { global: true, agent: ctx.agents[0] }] },
 };
 const FLAGS = new Map(Object.entries(OPTIONS).flatMap(([key, option]) => option.flags.map(flag => [flag, key])));
+const optionKeys = command => Object.keys(OPTIONS).filter(key => !command || COMMANDS[command].options.includes(key));
 const flag = key => OPTIONS[key].flags[0];
 const scopeOf = opts => opts.scope || (opts.global ? 'global' : 'project');
 const optionDefault = option => typeof option.default === 'function' ? option.default() : option.default;
@@ -58,7 +66,7 @@ function commandLine(command, values = {}) {
   if (!Object.hasOwn(COMMANDS, command)) fail(`Unknown command example: ${command}`);
   for (const key of Object.keys(values)) if (!COMMANDS[command].options.includes(key)) fail(`Unsupported example option: ${command}/${key}`);
   const words = [BIN, command];
-  for (const key of COMMANDS[command].options) {
+  for (const key of optionKeys(command)) {
     const value = values[key], option = OPTIONS[key];
     if (value === undefined || value === null || value === false || (Array.isArray(value) && !value.length)) continue;
     words.push(flag(key));
@@ -70,15 +78,22 @@ function commandLine(command, values = {}) {
 
 function help(topic) {
   const definition = topic ? COMMANDS[topic] : null;
-  const keys = definition?.options || Object.keys(OPTIONS);
+  const keys = optionKeys(topic);
   const rows = keys.map(key => {
     const option = OPTIONS[key];
-    const aliases = [...option.flags].reverse().join(', ');
+    const aliases = option.flags.length > 1 ? [...option.flags].reverse().join(', ') : `    ${option.flags[0]}`;
     const choices = option.choices?.();
     const initial = optionDefault(option);
     return [`${aliases}${option.value ? ` ${option.value}` : ''}`, `${option.description}${choices ? ` Choices: ${choices.join(', ')}.` : ''}${option.type === 'one' && initial !== null ? ` Default: ${initial}.` : ''}${option.conflicts ? ` Conflicts: ${option.conflicts.map(flag).join(', ')}.` : ''}`];
   });
   const width = Math.max(...rows.map(([label]) => label.length));
+  const optionRows = Object.values(OPTION_GROUPS).flatMap(group => {
+    const selected = Object.keys(group.options).filter(key => keys.includes(key));
+    return selected.length ? [`${group.label}:`, ...selected.map(key => {
+      const [label, description] = rows[keys.indexOf(key)];
+      return `  ${label.padEnd(width)}  ${description}`;
+    }), ''] : [];
+  });
   const ctx = { agents: OPTIONS.agent.choices(), skills: Object.keys(catalog()).sort() };
   const examples = definition ? definition.examples(ctx).map(values => commandLine(topic, values)) : Object.entries(COMMANDS).map(([command, spec]) => commandLine(command, spec.examples(ctx)[0]));
   const agentRequired = definition ? (definition.requiresAgent ? [topic] : []) : Object.entries(COMMANDS).filter(([, spec]) => spec.requiresAgent).map(([command]) => command);
@@ -93,7 +108,7 @@ function help(topic) {
   console.log([
     `Usage: ${BIN} ${topic || '<command>'} [options]`, '',
     definition ? definition.description : 'Commands:\n' + Object.entries(COMMANDS).map(([name, spec]) => `  ${name.padEnd(8)} ${spec.description}`).join('\n'), '',
-    ...rows.map(([label, description]) => `  ${label.padEnd(width)}  ${description}`), '',
+    ...optionRows,
     `Scope defaults to ${scopeOf(defaults())}. Use ${flag('global')} again to manage global installations.`, ...defaultNotes, '',
     'Examples:', ...examples.map(example => `  ${example}`), '',
     `Run with npx ${PACKAGE.name}@latest <command> after npm publication,`,

@@ -260,8 +260,10 @@ entrypoint and bundles the catalog, complete skill directories, shared rules,
 and applicable licenses. The existing skills CLI remains supported.
 
 Maintain CLI behavior through the definitions in `agentskills.js`: `COMMANDS`
-owns supported options and command behavior, `OPTIONS` owns aliases, defaults,
-values, and conflicts, and `AGENTS`/`SCOPES` own installation destinations.
+owns supported options and command behavior. `OPTION_GROUPS` defines options in
+target, selection, execution order; the flattened `OPTIONS` registry supplies
+aliases, defaults, values, and conflicts. `AGENTS`/`SCOPES` own installation destinations.
+Help and generated commands share this display order; input order remains free.
 Parsing, help, prompts, and suggested commands use these definitions. Generate
 examples with `commandLine()` using the current catalog; package identity comes
 from `package.json`. Verify printed commands through actual CLI execution when
