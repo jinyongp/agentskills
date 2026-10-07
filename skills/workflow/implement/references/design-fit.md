@@ -23,6 +23,26 @@ Read only for the current design or completeness decision.
 - Reuse sufficient checks. Add coverage for a named gap, not a function/branch quota,
   and report what was actually exercised rather than equating small code with safety.
 
+## Structural changes
+
+When refactoring is part of the request, find the actual cost: duplicated policy
+edits, unclear state/resource ownership, or tightly coupled callers that make the
+current change difficult. Scope the fix to that friction; splitting files or adding
+interfaces does not establish improvement by itself.
+
+Before moving a responsibility, identify its callers, observable contract, lifecycle
+and configuration. Keep those semantics while reducing coordinated edits or making
+ownership clearer. Removing a wrapper must not lose cleanup, authorization, error
+translation or compatibility. Keeping a useful wrapper needs no second implementation.
+
+Use relevant before/after checks and inspect unchanged callers. Preserve accepted
+architecture choices; a broader redesign needs a current requirement or a separate
+decision. Do not generate glossary files, architecture tests or abstractions merely
+because the refactor could support them.
+
+Workflow inspiration: [Matt Pocock architecture improvement](https://github.com/mattpocock/skills/blob/main/skills/engineering/improve-codebase-architecture/SKILL.md)
+(MIT). Guidance is independently written and scoped to the actual implementation.
+
 ## Completion evidence
 
 Compare accepted outcomes with the final state and checks that actually ran.

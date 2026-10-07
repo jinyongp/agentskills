@@ -1,5 +1,13 @@
 # implement evaluation
 
+## Structural-friction review — 2026-10-07
+
+Parent instruction review, current Codex session; model version not recorded.
+A refactor of repeated policy updates preserves authorization and unchanged callers;
+removing a cleanup wrapper preserves resource release; a file split without actual
+friction adds no automatic benefit. Existing accepted decisions limit the work.
+Cases review instruction boundaries, not independent performance or measured benefits.
+
 ## Accepted-scope review — 2026-10-07
 
 Parent instruction review; model version not recorded. Paired case:
