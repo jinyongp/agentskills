@@ -31,8 +31,10 @@ metadata:
 4. Record unlogged historical evidence when it affects the next decision: check
    command, result, scope, and tested revision or state. A current repository query
    cannot prove a past test passed. Record pending checks and blockers as such.
-5. Verify that the receiver can find the relevant work and take the next step
-   without earlier chat. If another checkout lacks local changes or an attachment,
+5. Check that the next action has its target, current decision, and required input
+   in the packet or a specific lookup. Confirm referenced files exist and selectors
+   locate the needed section; keep broad or mutating commands as pending work.
+   If another checkout lacks local changes or an attachment,
    identify the missing artifact and its transfer method. Exclude credentials.
 
 ## Packet

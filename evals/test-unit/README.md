@@ -1,5 +1,14 @@
 # test-unit evaluation
 
+## Decision clarity review — 2026-10-07
+
+Parent instruction review; model version not recorded.
+Paired case: An exclusive-limit fault selects the contract limit and a valid
+neighbor; an adequate existing case needs no duplicate.
+The revised rule states the evidence and resulting decision while preserving the
+contrasting valid case. This is rule review, not independent task execution or a
+measured quality improvement. Earlier verification results below are historical.
+
 Instruction review covers admission and stable logic boundaries. Existing validator
 cases provide a parent-reviewed example; no independent agent test writing was run.
 

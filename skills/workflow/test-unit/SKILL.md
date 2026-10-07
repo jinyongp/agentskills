@@ -31,8 +31,10 @@ metadata:
 
 1. Identify the stable input/output or state contract, existing cases, and missing
    failure mechanism. Ask only when missing requirements prevent a valid expectation.
-2. Choose representative cases and meaningful boundaries. Extend a suitable existing
-   test instead of creating a separate fixture for every edit. Parameterize similar
+2. Select cases that distinguish the missing failure: for an exclusive limit, check
+   the limit and a valid neighboring value; for a state transition, exercise its
+   relevant starting state and outcome. Use boundaries from the contract, not invented
+   extremes. Extend existing coverage before adding a fixture. Parameterize similar
    scenarios when it improves clarity; retain distinguishable failure reports.
 3. Exercise behavior without asserting helper names, internal object layout, or an
    algorithm choice. Derive expectations from requirements or checked examples,

@@ -1,5 +1,14 @@
 # test-maintenance evaluation
 
+## Decision clarity review — 2026-10-07
+
+Parent instruction review; model version not recorded.
+Paired case: Cases detecting the same fault at the same required boundary can
+consolidate; mock and real persistence checks may protect different faults.
+The revised rule states the evidence and resulting decision while preserving the
+contrasting valid case. This is rule review, not independent task execution or a
+measured quality improvement. Earlier verification results below are historical.
+
 Instruction review and parent inspection of two existing checks cover the retention
 criteria. Independent agent auditing, pruning, and automatic routing were not evaluated.
 

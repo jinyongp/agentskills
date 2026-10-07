@@ -10,6 +10,9 @@ Read only for the current design or completeness decision.
   earn its cost without multiple implementations or callers.
 - Give added configuration, layers, packages and extension points a current purpose
   or concrete maintenance benefit. Scope refactoring to what enables this task.
+  Name the change they simplify or the resource they own: a cleanup wrapper pairs
+  acquisition and release; a policy boundary avoids changing the same rule in several
+  places. If removal preserves these needs with less coordination, use that alternative.
 - Preserve the required path through success, reachable failures and recovery.
   Upload progress, submission state and retry behavior depend on the actual contract;
   implementing only a request call can leave that contract incomplete.

@@ -38,6 +38,9 @@ metadata:
 2. Map each candidate to its input/state, failure mechanism, contract, and assertions.
    Check requirements and actual consumers before classifying a detail as incidental.
    Similar text, covered lines, or passing results alone do not establish duplication.
+   Compare the trigger, failed outcome, and real boundary: consolidation fits when
+   the retained case detects the same fault under the required conditions. A shared
+   assertion across mock and real storage can protect different failures.
 3. Choose keep, refactor, consolidate, move to an existing static check, or remove.
    For each reduction, identify the retained check and its covered failure, or explain
    why the asserted constraint is no longer required. Clarify missing contracts before

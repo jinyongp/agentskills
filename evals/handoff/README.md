@@ -1,5 +1,15 @@
 # handoff evaluation
 
+## Decision clarity review — 2026-10-07
+
+Parent instruction review; model version not recorded.
+Paired case: A next action without a target or required input needs a packet field or
+lookup; a repository fact already recoverable through that lookup stays at its
+source.
+The revised rule states the evidence and resulting decision while preserving the
+contrasting valid case. This is rule review, not independent task execution or a
+measured quality improvement. Earlier verification results below are historical.
+
 Instruction review and a lookup-based replay used a shared temporary repository.
 A fresh Python process read a compact packet and executed its targeted Git queries.
 This checks information recovery and work preservation; it does not measure independent

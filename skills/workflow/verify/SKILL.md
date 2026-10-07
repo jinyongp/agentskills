@@ -25,13 +25,17 @@ metadata:
 2. Choose the smallest useful checks:
    - Bug: reproduce the symptom and check the correction. Reuse adequate coverage;
      add an edge case only for a distinct, meaningful uncovered failure.
-   - Feature/refactor: cover affected behavior, contracts, and preserved behavior.
+   - Feature/refactor: trace changed inputs/outputs into callers. Select checks that
+     exercise the changed path and an existing contract it could break; reuse prior
+     evidence only when the relevant code, configuration, and environment still match.
    - UI: inspect relevant viewports and interactions using available browser tools.
    - Docs/config: check commands, links, paths, or the affected tool directly.
    - Database: use an isolated fixture for migration/data effects; live writes need
      authorization. Dependencies: check manifest/lock pairing and affected imports.
 3. Run targeted checks first. Add integration checks when shared behavior, failures,
    or unresolved risks justify them. Respect required repository checks.
+   Use a real boundary check when isolated checks substitute the changed serializer,
+   registration, or persistence path; rerunning unrelated tests adds no such evidence.
    For several work units, keep required final checks pending until they run.
 4. For finite commands with noisy output, execute the bundled helper without reading
    its source. Supply the command explicitly; it performs no shell expansion:
