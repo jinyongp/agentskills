@@ -26,6 +26,8 @@ Run the same CLI now from a checkout:
 
 ```bash
 node /path/to/agentskills/agentskills.js add
+node /path/to/agentskills/agentskills.js --help
+node /path/to/agentskills/agentskills.js help remove
 ```
 
 For explicit selections or unattended use:
@@ -53,6 +55,17 @@ be selected with `--global` on subsequent commands. `update` and `remove` target
 all recorded agents in that scope, or just the selected `--agent`.
 Skill selection and rule selection are separate: `--skill` narrows skills;
 use `--no-rules` to exclude shared rules from that operation.
+Interactive `add` asks for unspecified choices even when `--agent` is provided.
+Shared rules can be declined at the prompt. An invalid scope is rejected instead
+of silently installing into the project. Answer `n` at confirmation to cancel;
+`Ctrl+C` cancels with exit code 130. Waiting for confirmation does not hold the
+installation lock.
+
+The preview shows the selected scope and exact destination paths. Completion
+reports the applied item count and record location. If a batch fails after some
+items completed, the error reports that progress; those completed items remain.
+`list` identifies an empty installation explicitly. Use `help <command>` or
+`<command> --help` for defaults, scope behavior, and examples.
 
 | Agent | Project skills / rules | Global skills / rules |
 | --- | --- | --- |

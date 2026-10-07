@@ -50,7 +50,7 @@ class AgentskillsCliTests(unittest.TestCase):
     def skill(self, name, global_scope=False):
         return (self.home / ".codex/skills" if global_scope else self.project / ".agents/skills") / name
 
-    def confirm_after(self, args, mutate):
+    def confirm_after(self, args, mutate, response=b"y\n", wait_for=b"Apply? [y/N]"):
         import pty
         import select
 
@@ -63,12 +63,12 @@ class AgentskillsCliTests(unittest.TestCase):
         try:
             output = b""
             deadline = time.monotonic() + 10
-            while b"Apply? [y/N]" not in output:
+            while wait_for not in output:
                 self.assertLess(time.monotonic(), deadline, output)
                 if select.select([master], [], [], 0.1)[0]:
                     output += os.read(master, 65536)
             mutate()
-            os.write(master, b"y\n")
+            os.write(master, response)
             return process.wait(timeout=10)
         finally:
             if process.poll() is None:
@@ -316,3 +316,59 @@ class AgentskillsCliTests(unittest.TestCase):
         self.assertFalse(unowned.exists())
         self.assertTrue(self.skill("alpha").exists())
         self.assertEqual(rules.read_bytes(), original)
+
+    def test_help_aliases_are_side_effect_free_and_support_each_command(self):
+        root_help = self.run_cli("--help")
+        self.assertTrue(root_help.stdout.strip())
+        self.assertEqual(root_help.stderr, "")
+        for args in (("-h",), ("help",), ("help", "--help")):
+            with self.subTest(args=args):
+                self.assertEqual(self.run_cli(*args).stdout, root_help.stdout)
+        for command in ("add", "update", "remove", "list"):
+            with self.subTest(command=command):
+                by_flag = self.run_cli(command, "--help", "--project", str(self.root / "missing"), "--agent", "invalid")
+                by_command = self.run_cli("help", command)
+                self.assertTrue(by_flag.stdout.strip())
+                self.assertEqual(by_flag.stdout, by_command.stdout)
+                self.assertEqual(by_flag.stderr, "")
+        self.assertEqual(list(self.project.iterdir()), [])
+        self.assertEqual(list(self.home.iterdir()), [])
+
+    @unittest.skipUnless(os.name == "posix", "Interactive PTY checks require POSIX")
+    def test_cancelling_confirmation_does_not_leave_a_lock_or_change_files(self):
+        self.run_cli("add", "--agent", "codex", "--skill", "alpha")
+        state = self.project / ".agents/agentskills.json"
+        original = state.read_bytes()
+        for response, expected in ((b"n\n", 0), (b"\x03", 130)):
+            with self.subTest(response=response):
+                self.assertEqual(self.confirm_after(["remove"], lambda: None, response=response), expected)
+                self.assertEqual(state.read_bytes(), original)
+                self.assertTrue(self.skill("alpha").exists())
+                self.assertFalse((self.project / ".agents/agentskills.json.lock").exists())
+        self.run_cli("update")
+
+    @unittest.skipUnless(os.name == "posix", "Interactive PTY checks require POSIX")
+    def test_invalid_interactive_scope_cannot_fall_back_to_project_install(self):
+        result = self.confirm_after(["add", "--agent", "codex"], lambda: None, response=b"globla\n", wait_for=b"Scope [")
+        self.assertNotEqual(result, 0)
+        self.assertEqual(list(self.project.iterdir()), [])
+        self.assertEqual(list(self.home.iterdir()), [])
+
+    def test_failure_after_one_completed_item_preserves_that_progress_and_can_retry(self):
+        self.run_cli("add", "--agent", "codex", "--no-rules")
+        state = self.project / ".agents/agentskills.json"
+        for name in ("alpha", "beta"):
+            (self.source / "skills/workflow" / name / "SKILL.md").write_text(f"Updated {name}\n")
+        preload = self.root / "fail-second-record.cjs"
+        preload.write_text(
+            "const fs=require('node:fs');const rename=fs.renameSync;let count=0;"
+            f"fs.renameSync=function(a,b){{if(b==={json.dumps(str(state))}&&++count===2)"
+            "{throw new Error('Injected second record write failure');}"
+            "return rename.apply(this,arguments);};\n"
+        )
+        result = self.run_cli("update", "--no-rules", success=False, env_extra={"NODE_OPTIONS": f"--require={preload}"})
+        self.assertEqual((self.skill("alpha") / "SKILL.md").read_text(), "Updated alpha\n")
+        self.assertNotEqual((self.skill("beta") / "SKILL.md").read_text(), "Updated beta\n")
+        self.assertIn(str(state), result.stderr)
+        self.run_cli("update", "--no-rules")
+        self.assertEqual((self.skill("beta") / "SKILL.md").read_text(), "Updated beta\n")
