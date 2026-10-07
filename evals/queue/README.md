@@ -1,5 +1,13 @@
 # queue evaluation
 
+## Revision verification — 2026-10-07
+
+Body: 2,688 characters. Format/catalog validation passed for 52 skills; full
+verification passed all 96 existing tests and skills@1.7.0 installation fixtures.
+After adding the standalone MIT notice, temporary Codex and Claude project installs
+copied this skill byte-for-byte. Creator validation passed. No live tracker or
+independent agent evaluation was run.
+
 ## Decision cases — 2026-10-07
 
 Parent instruction review in Codex; exact model version not recorded. These cases

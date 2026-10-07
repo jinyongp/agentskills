@@ -1,5 +1,12 @@
 # handoff evaluation
 
+## Revision verification — 2026-10-07
+
+Body: 3,969 characters. Full verification passed for 52 skills, 96 existing tests
+and skills@1.7.0 installation fixtures. Creator validation passed. Temporary Codex
+and Claude project installs preserved the complete skill tree byte-for-byte,
+including the new conditional reference. Updated shared rules were included.
+
 ## Current context review — 2026-10-07
 
 Parent rule review, Codex; exact model version not recorded. The next packet carries

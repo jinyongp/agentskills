@@ -1,5 +1,13 @@
 # close evaluation
 
+## Revision verification — 2026-10-07
+
+Body: 2,888 characters. Format/catalog validation passed for 52 skills; full
+verification passed all 96 existing tests and skills@1.7.0 installation fixtures.
+After adding the standalone MIT notice, temporary Codex and Claude project installs
+copied this skill byte-for-byte. Creator validation passed. Completion judgment
+remains parent instruction review, not independent agent execution.
+
 Parent instruction review in Codex, 2026-10-07; exact model version not recorded.
 These are decision-boundary cases, not independent closeout execution.
 
