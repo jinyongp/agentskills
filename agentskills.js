@@ -98,19 +98,35 @@ function help(topic) {
   const examples = definition ? definition.examples(ctx).map(values => commandLine(topic, values)) : Object.entries(COMMANDS).map(([command, spec]) => commandLine(command, spec.examples(ctx)[0]));
   const agentRequired = definition ? (definition.requiresAgent ? [topic] : []) : Object.entries(COMMANDS).filter(([, spec]) => spec.requiresAgent).map(([command]) => command);
   const selections = definition ? [[topic, definition]] : Object.entries(COMMANDS).filter(([, spec]) => spec.mutates);
-  const defaultNotes = !definition || definition.mutates ? [
-    `Without ${flag('names')}: ${selections.map(([command, spec]) => `${command} selects ${spec.selection === 'catalog' ? 'all bundled' : 'recorded'} skills`).join('; ')}.`,
-    `Shared rules are included unless ${flag('noRules')} is passed, even with ${flag('names')}.`,
-    `Rule documents: ${Object.entries(AGENTS).map(([agent, config]) => `${agent}: ${Object.keys(SCOPES).map(scope => `${scope} ${config[scope].rules}`).join(', ')}`).join('; ')}. Other prose is preserved.`,
-    ...(agentRequired.length ? [`${agentRequired.join(', ')} requires ${flag('agent')} with ${flag('yes')}; otherwise unspecified choices are prompted.`] : []),
-    ...(definition?.selection === 'installed' ? ['Named examples assume those skills are already installed in the selected scope.'] : []),
+  const managesItems = !definition || definition.mutates;
+  const defaultNotes = [
+    'Defaults:',
+    `  Scope: ${scopeOf(defaults())}. Use ${flag('global')} on every global command.`,
+    ...(managesItems ? [
+      `  Skills without ${flag('names')}:`,
+      ...selections.map(([command, spec]) => `    ${command}: ${spec.selection === 'catalog' ? 'all bundled skills' : 'recorded skills'}`),
+      `  Rules: included even with ${flag('names')}; ${flag('noRules')} skips them.`,
+      ...agentRequired.map(command => `  ${command}: prompts for unspecified choices; ${flag('yes')} requires ${flag('agent')}.`),
+    ] : []), '',
+  ];
+  const ruleTable = [
+    ['Agent', ...Object.values(SCOPES).map(scope => scope.label)],
+    ...Object.entries(AGENTS).map(([agent, config]) => [agent, ...Object.keys(SCOPES).map(scope => config[scope].rules)]),
+  ];
+  const ruleWidths = ruleTable[0].map((_, column) => Math.max(...ruleTable.map(row => row[column].length)));
+  const ruleNotes = managesItems ? [
+    'Rule files:',
+    ...ruleTable.map(row => `  ${row.map((cell, column) => cell.padEnd(ruleWidths[column])).join('  ').trimEnd()}`),
+    '  Existing text outside managed rules is preserved.', '',
   ] : [];
   console.log([
     `Usage: ${BIN} ${topic || '<command>'} [options]`, '',
     definition ? definition.description : 'Commands:\n' + Object.entries(COMMANDS).map(([name, spec]) => `  ${name.padEnd(8)} ${spec.description}`).join('\n'), '',
     ...optionRows,
-    `Scope defaults to ${scopeOf(defaults())}. Use ${flag('global')} again to manage global installations.`, ...defaultNotes, '',
-    'Examples:', ...examples.map(example => `  ${example}`), '',
+    ...defaultNotes, ...ruleNotes,
+    ...(definition?.selection === 'installed' ? ['Named skill examples require an existing installation in this scope.', ''] : []),
+    'Examples:',
+    ...examples.map(example => `  ${example}`), '',
   ].join('\n'));
 }
 
