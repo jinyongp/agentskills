@@ -18,8 +18,8 @@ metadata:
 
 ## Prepare
 
-1. Identify the active goal, current user decisions and their necessary rationale,
-   temporary constraints, unresolved questions, and next action. Preserve only
+1. Identify the goal, user decisions and rationale, material assumptions and sources,
+   accepted deferrals, temporary constraints, blockers, and next action. Preserve only
    context unavailable from the repository, including agreed limits and why the
    selected scope is sufficient. Read
    [references/current-context.md](references/current-context.md) when corrections
@@ -27,13 +27,13 @@ metadata:
 2. For recoverable facts, give a precise lookup: file and section, narrow search,
    or scoped command. Include only lookups needed to resume. Repository instructions,
    plans, code, Git state, environment setup, and durable logs stay at their sources.
-3. Keep the handoff concise and in the requested or established working language;
-   preserve exact identifiers and quotations. Omit empty fields. Use an inline packet
-   unless a file or delivery target was requested. Include only relevant lookup
-   commands, without executing broad inspections just to fill the handoff.
-4. Record unlogged historical evidence when it affects the next decision: check
-   command, result, scope, and tested revision or state. A current repository query
-   cannot prove a past test passed. Record pending checks and blockers as such.
+3. Use the requested or established language; preserve exact identifiers and quotes.
+   Omit empty fields. Use an inline packet unless a file or target was requested.
+   Include relevant lookups without broad inspections just to fill the packet.
+4. Preserve otherwise unavailable evidence that changes the next decision: command,
+   result, tested scope/state, or a failed approach's observed cause. Keep audit
+   history separate from active instructions. Current queries cannot prove past
+   success; pending checks and blockers remain pending.
 5. Check that the next action has its target, current decision, and required input
    in the packet or a specific lookup. Confirm referenced files exist and selectors
    locate the needed section; keep broad or mutating commands as pending work.
@@ -44,8 +44,8 @@ metadata:
 
 Use only the fields needed for this task:
 
-- **Context:** goal or remaining intent absent from existing plans; current decisions,
-  reasons, constraints, authorization boundaries, and unresolved questions.
+- **Context:** missing intent, decisions and reasons, assumptions and sources,
+  deferrals, constraints, authorization boundaries, and unresolved choices.
 - **Next:** first concrete action, remaining order where unclear, and blocking input.
 - **Lookups:** exact source or bounded query, its purpose, and when it is needed.
   Use task-relevant selectors only; avoid copied file inventories, Git state,

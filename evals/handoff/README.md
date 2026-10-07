@@ -1,5 +1,26 @@
 # handoff evaluation
 
+## Evidence and scope reinforcement — 2026-10-07
+
+Revision checks: body 3952 characters; 55 skill formats/catalogs validated.
+Full repository verification passed 131 existing tests and skills@1.7.0 discovery/
+installation fixtures. Final wording was format-validated again. This skill was
+installed alone into a temporary project through the bundled CLI for Codex and
+Claude; all resources, LICENSE and NOTICE.md matched source bytes, runtime links
+resolved, and the Claude connection used the shared skill directory. No runtime
+code changed; no independent agent effectiveness evaluation was performed.
+
+Parent instruction review in Codex; exact model version not recorded. These cases
+check written decision boundaries, not independent agent execution or measured gains.
+Earlier verification records below retain their original scope.
+
+| Input | Expected decision supported by the revised rules |
+| --- | --- |
+| A material assumption came from inference; a user-approved deferral is absent from files | Carry the assumption's source separately from the decision and deferral. |
+| A previous approach failed because its prerequisite was unavailable | Carry the relevant observed cause or exact evidence lookup; omit full attempt history. |
+| Rejected alternatives accompany a settled current design | Keep the selected design active; historical evidence stays separate if needed. |
+| The repository already records the failure and its evidence | Provide a precise lookup instead of copying the log or decision history. |
+
 ## Revision verification — 2026-10-07
 
 Body: 3,969 characters. Full verification passed for 52 skills, 96 existing tests
