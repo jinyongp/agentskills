@@ -14,7 +14,7 @@ metadata:
 Use for an explicit review-and-fix or review-until-clean request. Plain review
 returns findings without edits. Follow project tools and current authorization;
 committing, publishing, deployment, and live data changes keep their own scope.
-This skill works alone; accompanying review or validation guidance serves one task.
+Use accompanying guidance within this same task.
 
 For uncertain scope or finding eligibility, read [contract.md](references/contract.md).
 For external review or bot comments, read [feedback.md](references/feedback.md).
@@ -30,7 +30,7 @@ For external review or bot comments, read [feedback.md](references/feedback.md).
    needs-recheck, or blocked, with target state and evidence. Keep this ledger inline
    unless saving is needed. A clean area does not end work on pending areas. Adjacent
    code informs the contract; discovering it does not expand the review target.
-3. Review all areas progressively. Begin with relevant path/count summaries, then
+3. Review all areas. Begin with relevant path/count summaries, then
    selected code, callers, contracts, and checks. Disclose omissions and recover needed
    pages; keep full repositories/diffs/logs outside default input. Use native filters
    or a tested bounded helper for large mechanical output. Delegation is optional;
@@ -40,12 +40,13 @@ For external review or bot comments, read [feedback.md](references/feedback.md).
    safety/data violation. Preserve agreed simplifications; optional capabilities,
    generalized hardening, and preferences are not missing requirements. Merge shared
    causes and separate suspected issues from confirmed defects.
-5. Apply authorized fixes to confirmed causes, preserving user work and accepted
-   behavior. Use existing checks; add coverage only for a meaningful uncovered failure
+5. Fix confirmed causes within authorization, preserving user work and accepted
+   behavior. Keep completion criteria stable; changing them needs a scope decision.
+   Reuse checks; add coverage only for a meaningful uncovered failure
    with justified expectations. A fix requiring a new contract or capability needs
    that decision first. Continue independent review while a decision is pending.
 6. Reproduce the failure and inspect affected callers/contracts. Mark affected areas,
-   including unchanged callers, as needs-recheck; retain unaffected valid evidence.
+   including unchanged callers, as needs-recheck. Keep unaffected work and valid evidence.
    Finish pending areas too. Reopen earlier findings when new evidence invalidates
    them. Refresh the ledger after each pass, including failures and blocked checks.
 7. Repeat until all requested areas are reviewed, no eligible findings remain, and
@@ -57,7 +58,7 @@ For external review or bot comments, read [feedback.md](references/feedback.md).
 
 ## Result
 
-Return contract sources and material agreed limits, area coverage, fixes, remaining
+Return contract sources and agreed limits, area coverage, fixes, remaining
 findings/decisions, actual checks and tested state, and gaps. No findings within
 complete scoped coverage is a valid result, not proof of all possible correctness.
 

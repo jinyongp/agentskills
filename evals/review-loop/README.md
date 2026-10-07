@@ -1,5 +1,26 @@
 # Review-loop evaluation
 
+## Evidence and scope reinforcement — 2026-10-07
+
+Revision checks: body 3992 characters; 55 skill formats/catalogs validated.
+Full repository verification passed 131 existing tests and skills@1.7.0 discovery/
+installation fixtures. Final wording was format-validated again. This skill was
+installed alone into a temporary project through the bundled CLI for Codex and
+Claude; all resources, LICENSE and NOTICE.md matched source bytes, runtime links
+resolved, and the Claude connection used the shared skill directory. No runtime
+code changed; no independent agent effectiveness evaluation was performed.
+
+Parent instruction review in Codex; exact model version not recorded. These cases
+check written decision boundaries, not independent agent execution or measured gains.
+Earlier verification records below retain their original scope.
+
+| Input | Expected decision supported by the revised rules |
+| --- | --- |
+| Areas A and B passed; C is pending and D fails | Finish C and fix D; preserve A/B work and evidence unless affected. |
+| Fix D changes a contract consumed by A | Reopen A and D, including unchanged callers; retain valid B evidence. |
+| Suggested repair removes an agreed completion criterion | Treat it as a scope decision, not a review fix or a route to a clean result. |
+| Repeated correction yields no new evidence | Report the cause of stagnation and needed input rather than success. |
+
 ## Incoming feedback review — 2026-10-07
 
 Parent instruction review, current Codex session; model version not recorded.
