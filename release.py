@@ -1,8 +1,10 @@
 """Release a specified version and wait for npm and GitHub publication."""
 
 import argparse
+import base64
 from copy import deepcopy
 import fnmatch
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -20,6 +22,7 @@ ROOT = Path(__file__).resolve().parent
 SEMVER = re.compile(r"(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?")
 POLL_SECONDS = 10
 RUN_TIMEOUT = 3600
+DOWNLOAD_TIMEOUT = 300
 
 
 class ReleaseError(Exception):
@@ -146,6 +149,44 @@ def published_version(commands: Commands, package: str, version: str) -> dict | 
     if not isinstance(value, dict) or value.get("version") != version:
         raise ReleaseError("npm returned an unexpected package version.")
     return value
+
+
+def check_published_tarball(commands: Commands, manifest: dict, live: dict) -> None:
+    deadline = time.monotonic() + DOWNLOAD_TIMEOUT
+    with tempfile.TemporaryDirectory(prefix="agentskills-registry-pack-") as directory:
+        temp = Path(directory)
+        while True:
+            result = commands.run(
+                "npm", "pack", f"{manifest['name']}@{manifest['version']}", "--json",
+                "--ignore-scripts", "--cache", str(temp / "cache"),
+                "--pack-destination", directory, "--fetch-retries=0",
+                "--fetch-timeout=30000", cwd=temp, timeout=45, check=False)
+            if result.returncode == 0:
+                try:
+                    packed = json.loads(result.stdout or "")
+                    info, = packed
+                    filename = info["filename"]
+                    if Path(filename).name != filename:
+                        raise ValueError("Unexpected archive path")
+                    archive = temp / filename
+                    with archive.open("rb") as stream:
+                        digest = "sha512-" + base64.b64encode(
+                            hashlib.file_digest(stream, "sha512").digest()
+                        ).decode("ascii")
+                except (ValueError, TypeError, KeyError, OSError) as error:
+                    raise ReleaseError("Invalid downloaded npm archive or response.") from error
+                if ((info.get("name"), info.get("version")) !=
+                        (manifest["name"], manifest["version"]) or
+                        digest != live.get("dist.integrity")):
+                    raise ReleaseError("Downloaded npm archive identity or integrity differs from publication.")
+                print("Registry archive downloaded with matching integrity.", flush=True)
+                return
+            transient = re.search(r"\b(E404|ETIMEDOUT|ECONNRESET|EAI_AGAIN|ENOTFOUND)\b",
+                                  result.stdout or "")
+            if not transient or time.monotonic() >= deadline:
+                raise ReleaseError("Published npm archive could not be downloaded; inspect the log. Metadata alone is not a completed release.")
+            print("Registry archive unavailable; waiting for download readiness...", flush=True)
+            time.sleep(min(POLL_SECONDS, max(0, deadline - time.monotonic())))
 
 
 def check_tarball(commands: Commands, manifest: dict) -> None:
@@ -334,6 +375,7 @@ def release(commands: Commands, version: str) -> None:
         raise ReleaseError(f"The version is published but npm {dist_tag} is {tags.get(dist_tag)!r}; inspect registry state before retrying.")
     if github.get("draft") or github.get("prerelease") != ("-" in version) or remote_tag(commands, tag) != head:
         raise ReleaseError("GitHub release or tag does not match the expected publication.")
+    check_published_tarball(commands, expected, live)
     print(f"Released {expected['name']}@{version} ({dist_tag}).\n{github['html_url']}", flush=True)
 
 

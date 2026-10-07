@@ -327,7 +327,11 @@ Running the command authorizes publishing without another prompt. A prerelease s
 as `0.3.0-rc.1` sets `publishConfig.tag` to `next`; a stable release removes that override
 and uses `latest`. It waits up to two minutes for the matching tag/commit workflow and
 one hour for completion, then checks npm version/integrity/available commit metadata,
-the intended dist-tag, and the GitHub release/tag. Registry lookup failures stop rather
+the intended dist-tag, and the GitHub release/tag. It also downloads the exact registry
+version into a fresh temporary npm cache with scripts disabled and verifies the archive
+bytes against the registry SHA-512 integrity. Transient download failures are retried
+for a bounded interval; missing or mismatched archives prevent a completion report.
+Registry lookup failures stop rather
 than masquerading as an unpublished version. Logs stay at the printed OS temporary path;
 the script returns nonzero on failure and never treats a pending run as complete.
 

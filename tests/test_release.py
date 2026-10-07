@@ -114,6 +114,9 @@ class ReleaseTests(unittest.TestCase):
         self.pack_patch = patch.object(release, "check_tarball")
         self.pack_check = self.pack_patch.start()
         self.addCleanup(self.pack_patch.stop)
+        download_patch = patch.object(release, "check_published_tarball")
+        self.download_check = download_patch.start()
+        self.addCleanup(download_patch.stop)
         tools = patch.object(release.shutil, "which", return_value="/fixture/tool")
         tools.start()
         self.addCleanup(tools.stop)
@@ -148,6 +151,16 @@ class ReleaseTests(unittest.TestCase):
         self.assertEqual(self.git("rev-parse", "HEAD"), head)
         self.assertEqual(self.pack_check.call_count, 1)
         self.assertFalse(any(c[:3] == ("gh", "run", "rerun") for c in self.commands.calls))
+
+    def test_metadata_without_download_does_not_report_a_completed_release(self):
+        self.download_check.side_effect = release.ReleaseError("archive unavailable")
+        with self.assertRaisesRegex(release.ReleaseError, "archive unavailable"):
+            self.run_release()
+        head = self.git("rev-parse", "HEAD")
+        self.assertEqual(self.git("rev-parse", "v0.2.0^{commit}"), head)
+        self.download_check.side_effect = None
+        self.assertIn("Released @example/skills@0.2.0", self.run_release())
+        self.assertEqual(self.git("rev-parse", "HEAD"), head)
 
     def test_dirty_or_staged_work_is_preserved_and_blocks_before_version_changes(self):
         for staged in (False, True):
@@ -306,6 +319,46 @@ class ReleaseTests(unittest.TestCase):
 
 
 class ReleaseCommandTests(unittest.TestCase):
+    def test_registry_download_retries_missing_archive_and_verifies_actual_bytes(self):
+        payload = b"downloaded fixture bytes"
+        integrity = "sha512-" + release.base64.b64encode(
+            release.hashlib.sha512(payload).digest()).decode("ascii")
+        manifest = {"name": "@example/skills", "version": "0.2.0"}
+        with tempfile.TemporaryDirectory() as directory:
+            commands = release.Commands(Path(directory), Path(directory) / "log")
+            attempts = []
+
+            def download(*argv, **options):
+                attempts.append(argv)
+                if len(attempts) == 1:
+                    return subprocess.CompletedProcess(argv, 1, '{"error":{"code":"E404"}}')
+                destination = Path(argv[argv.index("--pack-destination") + 1])
+                (destination / "skills-0.2.0.tgz").write_bytes(payload)
+                return subprocess.CompletedProcess(argv, 0, json.dumps([
+                    {**manifest, "filename": "skills-0.2.0.tgz"}]))
+
+            with patch.object(commands, "run", side_effect=download), patch.object(release.time, "sleep"):
+                release.check_published_tarball(commands, manifest, {"dist.integrity": integrity})
+            self.assertEqual(len(attempts), 2)
+            self.assertIn("--cache", attempts[0])
+
+            for bad_case in ("corrupt", "wrong-version", "auth", "missing"):
+                with self.subTest(case=bad_case):
+                    def bad_download(*argv, **options):
+                        if bad_case in ("auth", "missing"):
+                            code = "E401" if bad_case == "auth" else "E404"
+                            return subprocess.CompletedProcess(argv, 1, json.dumps({"error":{"code": code}}))
+                        destination = Path(argv[argv.index("--pack-destination") + 1])
+                        (destination / "skills-0.2.0.tgz").write_bytes(b"bad" if bad_case == "corrupt" else payload)
+                        return subprocess.CompletedProcess(argv, 0, json.dumps([
+                            {**manifest, "version": "0.3.0" if bad_case == "wrong-version" else "0.2.0",
+                             "filename": "skills-0.2.0.tgz"}]))
+
+                    with patch.object(commands, "run", side_effect=bad_download), \
+                            patch.object(release.time, "monotonic", side_effect=[0, 301]):
+                        with self.assertRaises(release.ReleaseError):
+                            release.check_published_tarball(commands, manifest, {"dist.integrity": integrity})
+
     def test_help_and_invalid_versions_have_no_side_effects(self):
         script = Path(release.__file__)
         for version in ("--help", "v0.2.0", "01.2.0", "0.2.0-01", "0.2.0+build", "--bad"):
