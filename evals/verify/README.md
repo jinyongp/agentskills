@@ -1,5 +1,10 @@
 # verify evaluation
 
+See [workflow sequence replay](../workflow-sequence/README.md) for actual stale
+configuration evidence and producer/caller invalidation. The conditional evidence
+reference now names the relevant tested inputs and environment. This is parent
+replay, not autonomous check selection or an independent agent evaluation.
+
 ## Accepted-scope review — 2026-10-07
 
 Parent instruction review; model version not recorded. Paired case:

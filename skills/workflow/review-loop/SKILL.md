@@ -44,8 +44,8 @@ tradeoffs affect finding eligibility, or a proposed fix would add behavior.
    behavior. Use existing checks; add coverage only for a meaningful uncovered failure
    with justified expectations. A fix requiring a new contract or capability needs
    that decision first. Continue independent review while a decision is pending.
-6. Reproduce the original failure and inspect affected callers/contracts. Mark areas
-   touched by the fix as needs-recheck; retain unaffected valid review evidence.
+6. Reproduce the failure and inspect affected callers/contracts. Mark affected areas,
+   including unchanged callers, as needs-recheck; retain unaffected valid evidence.
    Finish pending areas too. Reopen earlier findings when new evidence invalidates
    them. Refresh the ledger after each pass, including failures and blocked checks.
 7. Repeat until all requested areas are reviewed, no eligible findings remain, and

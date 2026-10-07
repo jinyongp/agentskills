@@ -18,6 +18,9 @@ metadata:
   when a check adds no useful signal. An unavailable required check is blocked,
   not not-needed; report its exact prerequisite and affected completion criterion.
 
+Read [references/evidence.md](references/evidence.md) when reusing results across
+edits, configuration changes, or a handoff.
+
 ## Procedure
 
 1. Identify changed behavior, public contracts, and preservation requirements.

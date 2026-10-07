@@ -1,5 +1,9 @@
 # Review-loop evaluation
 
+See [workflow sequence replay](../workflow-sequence/README.md) for an executed
+producer correction that breaks an unchanged caller, reopening its check, and a
+pending-area review resumed through an authored handoff. This is parent replay.
+
 Parent instruction review on 2026-10-07; model version not recorded. These cases
 assess decision boundaries, not independent execution or automatic activation.
 

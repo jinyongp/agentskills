@@ -45,6 +45,7 @@ Keep each skill's cases and results in its own folder.
 | survey | [Read-only directory mapping and bounded manifest discovery](survey/README.md) |
 | plan | [Scoped work units, material decisions, and completion evidence](plan/README.md) |
 | code-review | [Review scope, bounded comparisons, and reproducible findings](code-review/README.md) |
+| review-loop | [Whole-scope coverage, accepted tradeoffs, corrections, and termination](review-loop/README.md) |
 | debug | [Reproduction, scoped correction, and preserved unrelated work](debug/README.md) |
 | git-worktree | [Registry paging, checkout lifecycle, locks, and local data](git-worktree/README.md) |
 | benchmark | [Tool selection, matched measurements, noise, and retained raw results](benchmark/README.md) |
@@ -68,6 +69,10 @@ Record the request, expected result, agent and version, and actual result.
 For skills with scripts, also verify normal and failure inputs.
 
 ## Iterative changes and independent expectations
+
+See [workflow sequence replay](workflow-sequence/README.md) for an executed parent
+trajectory covering planning, corrections that affect unchanged callers, stale
+configuration evidence, and a fresh-process handoff. It is not an agent execution.
 
 For skills that alter evolving code, use an iterative evaluation when it exposes a
 material gap in single-task evidence. Keep one workspace through realistic requirement
