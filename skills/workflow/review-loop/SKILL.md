@@ -16,10 +16,8 @@ returns findings without edits. Follow project tools and current authorization;
 committing, publishing, deployment, and live data changes keep their own scope.
 This skill works alone; accompanying review or validation guidance serves one task.
 
-Read [references/contract.md](references/contract.md) when intent is uncertain,
-tradeoffs affect finding eligibility, or a proposed fix would add behavior.
-Read [references/feedback.md](references/feedback.md) when working from external
-review comments, bot findings, or requested reviewer feedback.
+For uncertain scope or finding eligibility, read [contract.md](references/contract.md).
+For external review or bot comments, read [feedback.md](references/feedback.md).
 
 ## Procedure
 
