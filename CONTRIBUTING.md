@@ -259,6 +259,14 @@ After adding a real skill, verify its local installation and behavior separately
 entrypoint and bundles the catalog, complete skill directories, shared rules,
 and applicable licenses. The existing skills CLI remains supported.
 
+Maintain CLI behavior through the definitions in `agentskills.js`: `COMMANDS`
+owns supported options and command behavior, `OPTIONS` owns aliases, defaults,
+values, and conflicts, and `AGENTS`/`SCOPES` own installation destinations.
+Parsing, help, prompts, and suggested commands use these definitions. Generate
+examples with `commandLine()` using the current catalog; package identity comes
+from `package.json`. Verify printed commands through actual CLI execution when
+changing the interface, including selected scopes and paths requiring quoting.
+
 Run the ownership/update/removal integration checks with the normal test command.
 Before release, run `npm pack --dry-run` and exercise the produced tarball through
 `npx` in a temporary project. Check that bundled resources and licenses are present,

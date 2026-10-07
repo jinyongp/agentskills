@@ -4,6 +4,7 @@ import json
 import os
 from pathlib import Path
 import shutil
+import shlex
 import subprocess
 import tempfile
 import time
@@ -24,6 +25,7 @@ class AgentskillsCliTests(unittest.TestCase):
         for directory in (self.source, self.project, self.home):
             directory.mkdir()
         shutil.copyfile(ROOT / "agentskills.js", self.source / "agentskills.js")
+        shutil.copyfile(ROOT / "package.json", self.source / "package.json")
         (self.source / "rules").mkdir()
         (self.source / "rules/base.md").write_text("# Shared rules\nRespect agreed scope.\n")
         for name in ("alpha", "beta"):
@@ -37,7 +39,7 @@ class AgentskillsCliTests(unittest.TestCase):
 
     def run_cli(self, command, *args, success=True, env_extra=None):
         result = subprocess.run(
-            ["node", str(self.cli), command, *args, "--yes"],
+            ["node", str(self.cli), command, *args, *(["--yes"] if command in ("add", "update", "remove") else [])],
             cwd=self.project,
             env={**os.environ, "HOME": str(self.home), **(env_extra or {})},
             capture_output=True,
@@ -49,6 +51,62 @@ class AgentskillsCliTests(unittest.TestCase):
 
     def skill(self, name, global_scope=False):
         return (self.home / ".codex/skills" if global_scope else self.project / ".agents/skills") / name
+
+    def test_help_examples_execute_with_current_catalog_and_package_entrypoint(self):
+        package_file = self.source / "package.json"
+        package = json.loads(package_file.read_text())
+        package["bin"] = {"fixture-skills": "agentskills.js"}
+        package_file.write_text(json.dumps(package))
+        for old, new in (("alpha", "delta"), ("beta", "epsilon")):
+            directory = self.source / "skills/workflow" / old
+            directory.rename(directory.with_name(new))
+        for topic in (None, "add", "update", "remove", "list"):
+            result = self.run_cli(topic, "--help") if topic else self.run_cli("--help")
+            examples = result.stdout.split("Examples:\n", 1)[1].split("\n\n", 1)[0].splitlines()
+            for example in examples:
+                with self.subTest(topic=topic, example=example):
+                    self.run_cli("add", "--agent", "codex")
+                    self.run_cli("add", "--agent", "codex", "--global")
+                    binary, command, *args = shlex.split(example)
+                    self.assertEqual(binary, "fixture-skills")
+                    if command == "add" and "--agent" not in args:
+                        args += ["--agent", "codex"]
+                    self.run_cli(command, *args)
+                    state = json.loads((self.project / ".agents/agentskills.json").read_text())
+                    expected = {"epsilon"} if command == "remove" and "--skill" in args else {"delta", "epsilon"}
+                    self.assertEqual(set(state["agents"]["codex"]["skills"]), expected)
+                    self.run_cli("remove")
+                    if command != "remove" or "--global" not in args:
+                        self.run_cli("remove", "--global")
+
+    def test_noninteractive_retry_preserves_scope_selection_and_shell_quoting(self):
+        project = self.root / "project's retry space"
+        project.mkdir()
+        for scope_args, base in ((["--global"], self.home), (["--project", str(project)], project)):
+            with self.subTest(scope=scope_args):
+                result = subprocess.run(
+                    ["node", str(self.cli), "add", "-a", "claude", *scope_args, "-s", "beta", "--no-rules"],
+                    cwd=self.project, env={**os.environ, "HOME": str(self.home)},
+                    capture_output=True, text=True, timeout=20,
+                )
+                self.assertNotEqual(result.returncode, 0)
+                advice = result.stderr.split("Retry with ", 1)[1].split(", or run in a terminal", 1)[0]
+                _, command, *args = shlex.split(advice)
+                self.run_cli(command, *args)
+                installed = base / ".claude/skills"
+                self.assertEqual({entry.name for entry in installed.iterdir()}, {"beta"})
+                rules = base / (".claude/CLAUDE.md" if base == self.home else "CLAUDE.md")
+                self.assertFalse(rules.exists())
+                self.assertFalse((self.project / ".claude").exists())
+
+    def test_aliases_install_selected_global_skill_and_list_rejects_mutation_flags(self):
+        self.run_cli("add", "-a", "codex", "-g", "-s", "beta", "-y", "--no-rules")
+        self.assertTrue(self.skill("beta", global_scope=True).exists())
+        self.assertFalse(self.skill("alpha", global_scope=True).exists())
+        self.assertFalse((self.home / ".codex/AGENTS.md").exists())
+        for args in (("--yes",), ("--skill", "beta"), ("--rules-only",)):
+            self.run_cli("list", *args, success=False)
+        self.run_cli("list", "-a", "codex", "-g")
 
     def confirm_after(self, args, mutate, response=b"y\n", wait_for=b"Apply? [y/N]"):
         import pty

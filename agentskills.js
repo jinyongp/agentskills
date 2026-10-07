@@ -9,84 +9,136 @@ const crypto = require('node:crypto');
 const readline = require('node:readline/promises');
 
 const ROOT = __dirname;
+const PACKAGE = require('./package.json');
+const BIN = Object.keys(PACKAGE.bin)[0];
 const START = '<!-- agentskills:rules:start -->';
 const END = '<!-- agentskills:rules:end -->';
 const NAME = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const AGENTS = {
-  codex: { project: '.agents/skills', global: '.codex/skills', rules: 'AGENTS.md', globalRules: '.codex/AGENTS.md' },
-  claude: { project: '.claude/skills', global: '.claude/skills', rules: 'CLAUDE.md', globalRules: '.claude/CLAUDE.md' },
+  codex: { project: { skills: '.agents/skills', rules: 'AGENTS.md' }, global: { skills: '.codex/skills', rules: '.codex/AGENTS.md' } },
+  claude: { project: { skills: '.claude/skills', rules: 'CLAUDE.md' }, global: { skills: '.claude/skills', rules: '.claude/CLAUDE.md' } },
 };
+const SCOPES = {
+  project: { label: 'Project', root: opts => path.resolve(opts.project), record: '.agents/agentskills.json' },
+  global: { label: 'Global', root: () => os.homedir(), record: '.local/share/agentskills/install.json' },
+};
+const OPTIONS = {
+  agent: { flags: ['--agent', '-a'], type: 'one', value: 'AGENT', default: null, choices: () => Object.keys(AGENTS), description: 'Target agent.' },
+  global: { flags: ['--global', '-g'], type: 'flag', default: false, conflicts: ['project'], description: 'Use the current user\'s global installation.' },
+  project: { flags: ['--project'], type: 'one', value: 'PATH', default: () => process.cwd(), description: 'Use an existing project directory.' },
+  names: { flags: ['--skill', '-s'], type: 'many', value: 'NAME ...', default: () => [], description: 'Select skills; quote \'*\' to select all.' },
+  rulesOnly: { flags: ['--rules-only'], type: 'flag', default: false, conflicts: ['noRules', 'names'], description: 'Manage shared rules without skills.' },
+  noRules: { flags: ['--no-rules'], type: 'flag', default: false, description: 'Manage skills without shared rules.' },
+  yes: { flags: ['--yes', '-y'], type: 'flag', default: false, description: 'Apply without prompts.' },
+  help: { flags: ['--help', '-h'], type: 'flag', default: false, description: 'Show help; also accepts help <command>.' },
+};
+const SCOPE_OPTIONS = ['agent', 'global', 'project'];
+const EDIT_OPTIONS = [...SCOPE_OPTIONS, 'names', 'rulesOnly', 'noRules', 'yes', 'help'];
 const COMMANDS = {
-  add: 'Install selected skills and shared rules; prompt for unspecified choices.',
-  update: 'Refresh recorded installations; new skills require add.',
-  remove: 'Remove recorded skills and rules; no selection means all in this scope.',
-  list: 'Show available skills and recorded installations in this scope.',
+  add: { description: 'Install selected skills and shared rules; prompt for unspecified choices.', options: EDIT_OPTIONS, mutates: true, selection: 'catalog', requiresAgent: true,
+    examples: ctx => [{}, { agent: ctx.agents[0], names: ctx.skills.slice(0, 2), yes: true }, { agent: ctx.agents.at(-1), global: true, rulesOnly: true, yes: true }] },
+  update: { description: 'Refresh recorded installations; new skills require add.', options: EDIT_OPTIONS, mutates: true, selection: 'installed',
+    examples: ctx => [{}, { global: true, yes: true }, { names: ctx.skills.slice(0, 1), noRules: true, yes: true }] },
+  remove: { description: 'Remove recorded skills and rules; no selection means all in this scope.', options: EDIT_OPTIONS, mutates: true, selection: 'installed', removes: true,
+    examples: ctx => [{ names: ctx.skills.slice(0, 1), noRules: true }, { global: true }] },
+  list: { description: 'Show available skills and recorded installations in this scope.', options: [...SCOPE_OPTIONS, 'help'], mutates: false,
+    examples: ctx => [{}, { global: true, agent: ctx.agents[0] }] },
 };
+const FLAGS = new Map(Object.entries(OPTIONS).flatMap(([key, option]) => option.flags.map(flag => [flag, key])));
+const flag = key => OPTIONS[key].flags[0];
+const scopeOf = opts => opts.scope || (opts.global ? 'global' : 'project');
+const optionDefault = option => typeof option.default === 'function' ? option.default() : option.default;
+const defaults = () => Object.fromEntries(Object.entries(OPTIONS).map(([key, option]) => [key, optionDefault(option)]));
 const hash = data => crypto.createHash('sha256').update(data).digest('hex');
 const fail = message => { throw new Error(message); };
+const CANCELLED = 'Cancelled. No selected changes applied.';
+const completion = (completed, total, record) => `Completed ${completed}/${total} items.\nInstallation record: ${record}`;
+
+function commandLine(command, values = {}) {
+  if (!Object.hasOwn(COMMANDS, command)) fail(`Unknown command example: ${command}`);
+  for (const key of Object.keys(values)) if (!COMMANDS[command].options.includes(key)) fail(`Unsupported example option: ${command}/${key}`);
+  const words = [BIN, command];
+  for (const key of COMMANDS[command].options) {
+    const value = values[key], option = OPTIONS[key];
+    if (value === undefined || value === null || value === false || (Array.isArray(value) && !value.length)) continue;
+    words.push(flag(key));
+    if (option.type !== 'flag') words.push(...(Array.isArray(value) ? value : [value]).map(String));
+  }
+  parse(words.slice(1));
+  return words.map(word => /^[a-zA-Z0-9_./:@-]+$/.test(word) ? word : `'${word.replaceAll("'", "'\\''")}'`).join(' ');
+}
 
 function help(topic) {
-  const examples = {
-    add: 'agentskills add\n  agentskills add --agent codex --skill review-loop verify --yes\n  agentskills add --agent claude --global --rules-only --yes',
-    update: 'agentskills update\n  agentskills update --global --yes\n  agentskills update --skill verify --no-rules --yes',
-    remove: 'agentskills remove --skill verify --no-rules\n  agentskills remove --global',
-    list: 'agentskills list\n  agentskills list --global --agent codex',
-  };
-  console.log(`Usage: agentskills ${topic || '<command>'} [options]
-
-${topic ? COMMANDS[topic] : 'Commands:\n' + Object.entries(COMMANDS).map(([name, description]) => `  ${name.padEnd(8)} ${description}`).join('\n')}
-
-  -a, --agent codex|claude  Target agent (add prompts; update/remove use saved targets)
-  -g, --global             Use the current user's global installation
-      --project PATH       Use an existing project directory (default: current directory)
-${topic === 'list' ? '' : `  -s, --skill NAME ...     Select skills; '*' means all (quote it in your shell)
-      --rules-only         Manage shared rules without skills
-      --no-rules           Manage skills without shared rules
-  -y, --yes                Apply without prompts; add also requires --agent
-`}  -h, --help               Show help; also accepts help <command>
-
-Scope defaults to the current project. Use --global again for global updates/removal.
-${topic === 'list' ? '' : `Without --skill, add selects all bundled skills; update/remove select recorded skills.
-Shared rules are included unless --no-rules is passed, even with --skill.
-Rules are managed in AGENTS.md (Codex) or CLAUDE.md (Claude); other prose is preserved.
-`}
-Examples:
-  ${examples[topic] || 'agentskills add\n  agentskills update --global\n  agentskills help remove'}
-
-Run with npx @jinyongp/agentskills@latest <command> after npm publication,
-or node /path/to/agentskills/agentskills.js <command> from a checkout.`);
+  const definition = topic ? COMMANDS[topic] : null;
+  const keys = definition?.options || Object.keys(OPTIONS);
+  const rows = keys.map(key => {
+    const option = OPTIONS[key];
+    const aliases = [...option.flags].reverse().join(', ');
+    const choices = option.choices?.();
+    const initial = optionDefault(option);
+    return [`${aliases}${option.value ? ` ${option.value}` : ''}`, `${option.description}${choices ? ` Choices: ${choices.join(', ')}.` : ''}${option.type === 'one' && initial !== null ? ` Default: ${initial}.` : ''}${option.conflicts ? ` Conflicts: ${option.conflicts.map(flag).join(', ')}.` : ''}`];
+  });
+  const width = Math.max(...rows.map(([label]) => label.length));
+  const ctx = { agents: OPTIONS.agent.choices(), skills: Object.keys(catalog()).sort() };
+  const examples = definition ? definition.examples(ctx).map(values => commandLine(topic, values)) : Object.entries(COMMANDS).map(([command, spec]) => commandLine(command, spec.examples(ctx)[0]));
+  const agentRequired = definition ? (definition.requiresAgent ? [topic] : []) : Object.entries(COMMANDS).filter(([, spec]) => spec.requiresAgent).map(([command]) => command);
+  const selections = definition ? [[topic, definition]] : Object.entries(COMMANDS).filter(([, spec]) => spec.mutates);
+  const defaultNotes = !definition || definition.mutates ? [
+    `Without ${flag('names')}: ${selections.map(([command, spec]) => `${command} selects ${spec.selection === 'catalog' ? 'all bundled' : 'recorded'} skills`).join('; ')}.`,
+    `Shared rules are included unless ${flag('noRules')} is passed, even with ${flag('names')}.`,
+    `Rule documents: ${Object.entries(AGENTS).map(([agent, config]) => `${agent}: ${Object.keys(SCOPES).map(scope => `${scope} ${config[scope].rules}`).join(', ')}`).join('; ')}. Other prose is preserved.`,
+    ...(agentRequired.length ? [`${agentRequired.join(', ')} requires ${flag('agent')} with ${flag('yes')}; otherwise unspecified choices are prompted.`] : []),
+    ...(definition?.selection === 'installed' ? ['Named examples assume those skills are already installed in the selected scope.'] : []),
+  ] : [];
+  console.log([
+    `Usage: ${BIN} ${topic || '<command>'} [options]`, '',
+    definition ? definition.description : 'Commands:\n' + Object.entries(COMMANDS).map(([name, spec]) => `  ${name.padEnd(8)} ${spec.description}`).join('\n'), '',
+    ...rows.map(([label, description]) => `  ${label.padEnd(width)}  ${description}`), '',
+    `Scope defaults to ${scopeOf(defaults())}. Use ${flag('global')} again to manage global installations.`, ...defaultNotes, '',
+    'Examples:', ...examples.map(example => `  ${example}`), '',
+    `Run with npx ${PACKAGE.name}@latest <command> after npm publication,`,
+    `or node /path/to/${BIN}/${path.basename(__filename)} <command> from a checkout.`,
+  ].join('\n'));
 }
 
 function parse(args) {
-  if (!args.length || args.includes('--help') || args.includes('-h') || args[0] === 'help') {
+  if (!args.length || args.some(arg => OPTIONS.help.flags.includes(arg)) || args[0] === 'help') {
     const topic = args[0] === 'help' ? (args[1]?.startsWith('-') ? undefined : args[1]) : Object.hasOwn(COMMANDS, args[0]) ? args[0] : undefined;
-    if (topic && !Object.hasOwn(COMMANDS, topic)) fail(`Unknown command: ${topic}. Run agentskills --help for available commands.`);
+    if (topic && !Object.hasOwn(COMMANDS, topic)) fail(`Unknown command: ${topic}. Run ${BIN} ${flag('help')} for available commands.`);
     return { command: 'help', topic };
   }
-  const opts = { command: args.shift() || 'help', names: [], agent: null, global: false, project: process.cwd(), rules: true, skills: true, yes: false };
+  const command = args.shift();
+  if (!Object.hasOwn(COMMANDS, command)) fail(`Unknown command: ${command}`);
+  const opts = { command, ...defaults() };
+  const provided = new Set();
   while (args.length) {
     const arg = args.shift();
-    if (arg === '--global' || arg === '-g') opts.global = true;
-    else if (arg === '--yes' || arg === '-y') opts.yes = true;
-    else if (arg === '--rules-only') { opts.skills = false; opts.rulesExplicit = true; }
-    else if (arg === '--no-rules') { opts.rules = false; opts.rulesExplicit = true; }
-    else if (arg === '--agent' || arg === '-a' || arg === '--project') {
+    const key = FLAGS.get(arg);
+    if (!key) fail(`Unknown option: ${arg}`);
+    if (!COMMANDS[command].options.includes(key)) fail(`Option ${arg} is not available for ${command}. See ${BIN} ${command} ${flag('help')}.`);
+    const option = OPTIONS[key];
+    provided.add(key);
+    if (option.type === 'flag') opts[key] = true;
+    else if (option.type === 'one') {
       const value = args.shift();
       if (!value || value.startsWith('-')) fail(`Missing value for ${arg}`);
-      opts[arg === '--project' ? 'project' : 'agent'] = value;
-      if (arg === '--project') opts.projectExplicit = true;
-    } else if (arg === '--skill' || arg === '-s') {
-      const before = opts.names.length;
-      while (args.length && !args[0].startsWith('-')) opts.names.push(args.shift());
-      if (opts.names.length === before) fail(`Missing value for ${arg}`);
-    } else fail(`Unknown option: ${arg}`);
+      opts[key] = value;
+    } else {
+      const before = opts[key].length;
+      while (args.length && !args[0].startsWith('-')) opts[key].push(args.shift());
+      if (opts[key].length === before) fail(`Missing value for ${arg}`);
+    }
   }
-  if (!Object.hasOwn(COMMANDS, opts.command)) fail(`Unknown command: ${opts.command}`);
-  if (opts.agent && !Object.hasOwn(AGENTS, opts.agent)) fail('Agent must be codex or claude');
-  if (!opts.rules && !opts.skills) fail('--rules-only and --no-rules cannot be combined');
-  if (opts.command === 'list' && (opts.names.length || !opts.rules || !opts.skills)) fail('list does not accept skill/rule selections. Use --agent, --global, or --project to select installations.');
-  if (!opts.skills && opts.names.length) fail('--rules-only cannot select skills');
-  if (opts.global && opts.projectExplicit) fail('--global and --project cannot be combined');
+  for (const key of provided) {
+    const option = OPTIONS[key];
+    if (option.choices && !option.choices().includes(opts[key])) fail(`${flag(key)} must be one of: ${option.choices().join(', ')}.`);
+    for (const conflict of option.conflicts || []) if (provided.has(conflict)) fail(`${flag(key)} and ${flag(conflict)} cannot be combined.`);
+  }
+  opts.projectExplicit = provided.has('project');
+  opts.rulesExplicit = provided.has('rulesOnly') || provided.has('noRules');
+  opts.rules = !opts.noRules;
+  opts.skills = !opts.rulesOnly;
+  opts.provided = provided;
   for (const name of opts.names) if (name !== '*' && !NAME.test(name)) fail(`Invalid skill name: ${name}`);
   return opts;
 }
@@ -136,7 +188,7 @@ function sameBytes(left, right) {
 
 function utf8(data, file) {
   try { return new TextDecoder('utf-8', { fatal: true, ignoreBOM: true }).decode(data); }
-  catch { fail(`Rules document must be UTF-8: ${file}; left untouched. Convert it to UTF-8 before retrying, or pass --no-rules to manage skills.`); }
+  catch { fail(`Rules document must be UTF-8: ${file}; left untouched. Convert it to UTF-8 before retrying, or pass ${flag('noRules')} to manage skills.`); }
 }
 
 function catalog() {
@@ -188,33 +240,44 @@ function rulesBlock(text, file) {
   const ends = text.split(END).length - 1;
   if (!starts && !ends) return null;
   const start = text.indexOf(START), end = text.indexOf(END) + END.length;
-  if (starts !== 1 || ends !== 1 || end <= start || (start && text[start - 1] !== '\n') || (end < text.length && !['\n', '\r'].includes(text[end]))) fail(`Damaged rules markers in ${file}; left untouched. Repair the managed markers, or pass --no-rules to manage skills.`);
+  if (starts !== 1 || ends !== 1 || end <= start || (start && text[start - 1] !== '\n') || (end < text.length && !['\n', '\r'].includes(text[end]))) fail(`Damaged rules markers in ${file}; left untouched. Repair the managed markers, or pass ${flag('noRules')} to manage skills.`);
   return { start, end, text: text.slice(start, end) };
 }
 
 async function main() {
   const opts = parse(process.argv.slice(2));
   if (opts.command === 'help') return help(opts.topic);
+  const definition = COMMANDS[opts.command];
   const available = catalog();
   let prompt;
   const cancellation = new AbortController();
   const ask = question => prompt.question(question, { signal: cancellation.signal });
   try {
-    if (opts.command !== 'list' && !opts.yes) {
-      if (!process.stdin.isTTY) fail(`Non-interactive input. Retry ${opts.command} with --yes${opts.command === 'add' ? ' and --agent codex (or --agent claude)' : ''}, or run in a terminal to review changes.`);
+    if (definition.mutates && !opts.yes) {
+      if (!process.stdin.isTTY) {
+        const retry = Object.fromEntries([...opts.provided].map(key => [key, opts[key]]));
+        retry.yes = true;
+        const needsAgent = definition.requiresAgent && !retry.agent;
+        if (needsAgent) retry.agent = OPTIONS.agent.choices()[0];
+        const agentNote = needsAgent ? ` Choose the intended ${flag('agent')}: ${OPTIONS.agent.choices().join(', ')}.` : '';
+        fail(`Non-interactive input. Retry with ${commandLine(opts.command, retry)}, or run in a terminal to review changes.${agentNote}`);
+      }
       prompt = readline.createInterface({ input: process.stdin, output: process.stdout });
       prompt.on('SIGINT', () => cancellation.abort());
       prompt.on('close', () => cancellation.abort());
     }
-    if (opts.command === 'add') {
+    if (definition.requiresAgent) {
       if (!opts.agent) {
-        if (!prompt) fail('add with --yes requires --agent codex or --agent claude. See agentskills add --help.');
-        opts.agent = (await ask('Agent [codex/claude] (codex): ')).trim() || 'codex';
-        if (!Object.hasOwn(AGENTS, opts.agent)) fail('Choose codex or claude for the agent.');
+        const choices = OPTIONS.agent.choices();
+        if (!prompt) fail(`${opts.command} with ${flag('yes')} requires ${flag('agent')}. Choices: ${choices.join(', ')}. See ${BIN} ${opts.command} ${flag('help')}.`);
+        opts.agent = (await ask(`Agent [${choices.join('/')}] (${choices[0]}): `)).trim() || choices[0];
+        if (!choices.includes(opts.agent)) fail(`Choose one of these agents: ${choices.join(', ')}.`);
       }
       if (prompt && !opts.global && !opts.projectExplicit) {
-        const scope = (await ask('Scope [project/global] (project): ')).trim() || 'project';
-        if (!['project', 'global'].includes(scope)) fail('Choose project or global for the scope; no installation was started.');
+        const choices = Object.keys(SCOPES), initial = scopeOf(opts);
+        const scope = (await ask(`Scope [${choices.join('/')}] (${initial}): `)).trim() || initial;
+        if (!Object.hasOwn(SCOPES, scope)) fail(`Choose one of these scopes: ${choices.join(', ')}; no installation was started.`);
+        opts.scope = scope;
         opts.global = scope === 'global';
       }
       if (prompt && opts.skills && !opts.names.length) {
@@ -222,26 +285,27 @@ async function main() {
         opts.names = (await ask("Skills (space-separated names, '*' for all) (*): ")).trim().split(/\s+/).filter(Boolean);
       }
       if (prompt && opts.rules && !opts.rulesExplicit) {
-        const choice = (await ask(`Include shared rules in ${AGENTS[opts.agent].rules}? [Y/n] `)).trim().toLowerCase();
+        const choice = (await ask(`Include shared rules in ${AGENTS[opts.agent][scopeOf(opts)].rules}? [Y/n] `)).trim().toLowerCase();
         if (!['', 'y', 'yes', 'n', 'no'].includes(choice)) fail('Choose yes or no for shared rules; no installation was started.');
         opts.rules = !['n', 'no'].includes(choice);
       }
     }
-    const destination = opts.global ? os.homedir() : path.resolve(opts.project);
-    if (!fs.existsSync(destination) || !fs.statSync(destination).isDirectory()) fail(`Target directory does not exist or is not a directory: ${destination}. Choose an existing directory with --project.`);
+    const scope = scopeOf(opts), scopeConfig = SCOPES[scope];
+    const destination = scopeConfig.root(opts);
+    if (!fs.existsSync(destination) || !fs.statSync(destination).isDirectory()) fail(`Target directory does not exist or is not a directory: ${destination}. Choose an existing directory with ${flag('project')}.`);
     const base = fs.realpathSync(destination);
-    const stateFile = safe(base, opts.global ? '.local/share/agentskills/install.json' : '.agents/agentskills.json');
-    if (opts.command === 'list') {
+    const stateFile = safe(base, scopeConfig.record);
+    if (!definition.mutates) {
       const state = loadState(stateFile);
       console.log(`Available skills (${Object.keys(available).length}):`);
       for (const name of Object.keys(available).sort()) console.log(`  ${available[name].category}/${name}`);
       const targets = Object.entries(state.agents).filter(([agent]) => !opts.agent || agent === opts.agent).filter(([, record]) => Object.keys(record.skills).length || record.rules);
-      console.log(`\nInstalled (${opts.global ? 'global' : 'project'}: ${base}):`);
-      if (!targets.length) console.log(opts.global ? '  None recorded. Use add --global to install for this user.' : '  None recorded. Use add to install here; use list --global to check global installations.');
+      console.log(`\nInstalled (${scope}: ${base}):`);
+      if (!targets.length) console.log(`  None recorded. Use ${commandLine('add', opts.global ? { global: true } : {})} to install here. Check other scopes with ${flag('global')} or ${flag('project')}.`);
       for (const [agent, record] of targets) {
         console.log(`  ${agent}: ${Object.keys(record.skills).sort().join(', ') || 'no skills'}${record.rules ? '; shared rules' : ''}`);
-        console.log(`    Skills: ${path.join(base, opts.global ? AGENTS[agent].global : AGENTS[agent].project)}`);
-        if (record.rules) console.log(`    Rules: ${path.join(base, opts.global ? AGENTS[agent].globalRules : AGENTS[agent].rules)}`);
+        console.log(`    Skills: ${path.join(base, AGENTS[agent][scope].skills)}`);
+        if (record.rules) console.log(`    Rules: ${path.join(base, AGENTS[agent][scope].rules)}`);
       }
       return;
     }
@@ -252,27 +316,27 @@ async function main() {
       const originalState = bytes(stateFile);
       const state = loadState(stateFile);
       const targets = opts.agent ? [opts.agent] : Object.keys(state.agents);
-      if (!targets.length) fail(`No recorded installations at ${stateFile}. Use add first, or select the installed scope with --global or --project.`);
+      if (!targets.length) fail(`No recorded installations at ${stateFile}. Use ${commandLine('add')} first, or select the installed scope with ${flag('global')} or ${flag('project')}.`);
       const operations = [];
       const requested = [...new Set(opts.names)];
       const all = requested.includes('*') || !requested.length;
       for (const name of requested.filter(n => n !== '*')) {
-        if (opts.command === 'add' && !Object.hasOwn(available, name)) fail(`Unknown skill: ${name}. Run agentskills list to see available names.`);
-        if (opts.command !== 'add' && !targets.some(a => state.agents[a] && Object.hasOwn(state.agents[a].skills, name))) fail(`Skill is not installed in the selected scope: ${name}. Run list with the same scope options to check installations.`);
+        if (definition.selection === 'catalog' && !Object.hasOwn(available, name)) fail(`Unknown skill: ${name}. Run ${commandLine('list')} to see available names.`);
+        if (definition.selection === 'installed' && !targets.some(a => state.agents[a] && Object.hasOwn(state.agents[a].skills, name))) fail(`Skill is not installed in the selected scope: ${name}. Run ${commandLine('list')} with the same scope options to check installations.`);
       }
       for (const agent of targets) {
         const config = AGENTS[agent];
         const record = state.agents[agent] || { skills: {} };
-        const names = !opts.skills ? [] : (opts.command === 'add' && all ? Object.keys(available) : opts.command === 'add' ? requested : Object.keys(record.skills).filter(n => all || requested.includes(n)));
+        const names = !opts.skills ? [] : (definition.selection === 'catalog' && all ? Object.keys(available) : definition.selection === 'catalog' ? requested : Object.keys(record.skills).filter(n => all || requested.includes(n)));
         for (const name of names.sort()) {
-          const target = safe(base, `${opts.global ? config.global : config.project}/${name}`);
+          const target = safe(base, `${config[scope].skills}/${name}`);
           if (fs.existsSync(target)) {
             if (!fs.statSync(target).isDirectory()) fail(`Not a skill directory: ${target}`);
             if (!Object.hasOwn(record.skills, name)) fail(`Existing unowned skill: ${target}; left untouched. Manage it with its original installer, or choose another skill or target.`);
-            if (!equalFiles(snapshot(target), record.skills[name])) fail(`Locally modified skill: ${target}; left untouched. Back up edits and restore the installed content before retrying. To replace it, move the directory aside, remove its record with remove --agent ${agent} --skill ${name} --no-rules in this scope, then add it again.`);
-          } else if (Object.hasOwn(record.skills, name) && opts.command !== 'remove') fail(`Installed skill is missing: ${target}. Restore it, or use remove --agent ${agent} --skill ${name} --no-rules in this scope to clear its record, then add it again.`);
-          if (opts.command !== 'remove' && !available[name]) fail(`Skill no longer bundled: ${name}; remove explicitly`);
-          const files = opts.command === 'remove' ? null : snapshot(available[name].source);
+            if (!equalFiles(snapshot(target), record.skills[name])) fail(`Locally modified skill: ${target}; left untouched. Back up edits and restore the installed content before retrying. To replace it, move the directory aside, remove its record with ${commandLine('remove', { agent, names: [name], noRules: true })} in this scope, then add it again.`);
+          } else if (Object.hasOwn(record.skills, name) && !definition.removes) fail(`Installed skill is missing: ${target}. Restore it, or use ${commandLine('remove', { agent, names: [name], noRules: true })} in this scope to clear its record, then add it again.`);
+          if (!definition.removes && !available[name]) fail(`Skill no longer bundled: ${name}; remove explicitly`);
+          const files = definition.removes ? null : snapshot(available[name].source);
           const before = fs.existsSync(target) ? snapshot(target) : null;
           operations.push({ label: `${opts.command} ${agent}/${name}`, destination: target, check() {
             safe(base, path.relative(base, target));
@@ -287,12 +351,12 @@ async function main() {
               if (fs.existsSync(backup)) fs.renameSync(backup, target);
             };
             try {
-              if (opts.command !== 'remove') {
+              if (!definition.removes) {
                 fs.cpSync(available[name].source, temporary, { recursive: true, verbatimSymlinks: true });
                 if (!equalFiles(snapshot(temporary), files)) fail(`Bundled skill changed during copying: ${name}`);
               }
               if (fs.existsSync(target)) fs.renameSync(target, backup);
-              if (opts.command === 'remove') delete record.skills[name];
+              if (definition.removes) delete record.skills[name];
               else { fs.renameSync(temporary, target); replaced = true; record.skills[name] = files; }
               state.agents[agent] = record;
               return { rollback, finish: () => fs.rmSync(backup, { recursive: true, force: true }), backup };
@@ -300,20 +364,20 @@ async function main() {
             finally { fs.rmSync(temporary, { recursive: true, force: true }); }
           } });
         }
-        if (opts.rules && (opts.command === 'add' || record.rules)) {
-          const file = safe(base, opts.global ? config.globalRules : config.rules);
+        if (opts.rules && (definition.selection === 'catalog' || record.rules)) {
+          const file = safe(base, config[scope].rules);
           const existed = fs.existsSync(file);
           const mode = existed ? fs.statSync(file).mode : 0o600;
           const original = bytes(file);
           const text = existed ? utf8(original, file) : '';
           const previous = rulesBlock(text, file);
-          if (previous && !record.rules) fail(`Existing unowned rules block in ${file}; left untouched. Pass --no-rules to manage skills without this block.`);
-          if (record.rules && (!previous || hash(previous.text) !== record.rules.hash)) fail(`Locally modified or missing rules block in ${file}; left untouched. Restore the managed block, or pass --no-rules to manage skills without changing rules.`);
+          if (previous && !record.rules) fail(`Existing unowned rules block in ${file}; left untouched. Pass ${flag('noRules')} to manage skills without this block.`);
+          if (record.rules && (!previous || hash(previous.text) !== record.rules.hash)) fail(`Locally modified or missing rules block in ${file}; left untouched. Restore the managed block, or pass ${flag('noRules')} to manage skills without changing rules.`);
           const next = `${START}\n${fs.readFileSync(path.join(ROOT, 'rules/base.md'), 'utf8').trimEnd()}\n${END}`;
-          const replacement = opts.command === 'remove' ? '' : next;
+          const replacement = definition.removes ? '' : next;
           // Prepend a newline-terminated block so removing it restores existing prose byte-for-byte.
           const content = previous ? text.slice(0, previous.start) + replacement + text.slice(previous.end) : `${next}\n${text}`;
-          const removing = opts.command === 'remove';
+          const removing = definition.removes;
           const final = removing && previous ? text.slice(0, previous.start) + text.slice(previous.end + (text[previous.end] === '\n' ? 1 : 0)) : content;
           operations.push({ label: `${opts.command} ${agent}/shared-rules`, destination: file, check() {
             safe(base, path.relative(base, file));
@@ -336,9 +400,9 @@ async function main() {
           } });
         }
       }
-      if (!operations.length) fail(`No matching installed items at ${stateFile}. Run list with the same scope and agent options.`);
-      console.log(`${opts.global ? 'Global' : 'Project'}: ${base}\nPlanned changes (${operations.length}):\n${operations.map(o => `  ${o.label} -> ${o.destination}`).join('\n')}`);
-      if (prompt && !/^y(es)?$/i.test((await ask('Apply? [y/N] ')).trim())) { console.log('Cancelled. No selected changes applied.'); return; }
+      if (!operations.length) fail(`No matching installed items at ${stateFile}. Run ${commandLine('list')} with the same scope and agent options.`);
+      console.log(`${scopeConfig.label}: ${base}\nPlanned changes (${operations.length}):\n${operations.map(o => `  ${o.label} -> ${o.destination}`).join('\n')}`);
+      if (prompt && !/^y(es)?$/i.test((await ask('Apply? [y/N] ')).trim())) { console.log(CANCELLED); return; }
       safe(base, path.relative(base, lock));
       try { handle = fs.openSync(lock, 'wx'); } catch (error) {
         if (error.code === 'EEXIST') fail(`Another operation may be running; inspect ${lock} before removing a stale lock`);
@@ -362,10 +426,10 @@ async function main() {
           transaction.finish();
         }
       } catch (error) {
-        error.message += `\nCompleted ${completed}/${operations.length} items. Earlier completed items remain.\nInstallation record: ${stateFile}\nResolve the error, then retry with the same scope and selection.`;
+        error.message += `\n${completion(completed, operations.length, stateFile)}\nEarlier completed items remain. Resolve the error, then retry with the same scope and selection.`;
         throw error;
       }
-      console.log(`Completed ${completed}/${operations.length} items.\nInstallation record: ${stateFile}`);
+      console.log(completion(completed, operations.length, stateFile));
     } finally {
       if (handle !== undefined) {
         const opened = fs.fstatSync(handle);
@@ -382,9 +446,9 @@ async function main() {
 }
 
 main().catch(error => {
-  if (error.name === 'AbortError') { console.log('Cancelled. No selected changes applied.'); process.exitCode = 130; return; }
+  if (error.name === 'AbortError') { console.log(CANCELLED); process.exitCode = 130; return; }
   console.error(`Error: ${error.message}`);
   const hints = { ENOSPC: 'Free disk space before retrying.', EACCES: 'Check access permissions for the reported path.', EPERM: 'Check permissions or whether the reported file is in use.' };
-  console.error(hints[error.code] || 'For usage, run agentskills --help.');
+  console.error(hints[error.code] || `For usage, run ${BIN} ${flag('help')}.`);
   process.exitCode = 1;
 });
