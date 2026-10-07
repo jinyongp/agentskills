@@ -17,6 +17,9 @@ drafting or editing workflow is also loaded, refine its language within that
 workflow and return one result. Review-only requests produce findings, not edits.
 Select by deliverable language; preserve other-language quotations, code, and names.
 
+Read [references/diagnosis.md](references/diagnosis.md) for ambiguous referents,
+noun chains, layered predicates, or connectors; use only the matching examples.
+
 ## Meaning and voice
 
 Use supplied or verified evidence. Preserve attribution, negation, quantities,
