@@ -20,17 +20,17 @@ choosing added structure, or judging whether implementation is complete.
 
 ## Think before changing
 
-- Define observable completion from the request and contracts. Inspect relevant
-  code, callers, checks and local changes first. Recover agreed omissions and tradeoffs
-  from decisions/plans/handoffs; keep accepted limits when fixing or completing work.
+- Tie each completion criterion to an observable result and useful evidence.
+  Inspect relevant code, callers, checks and local changes. Recover agreed omissions
+  and tradeoffs; preserve their limits through implementation and verification.
 - Separate established facts, reversible assumptions, and unresolved choices.
   Ask a focused question only when missing information materially changes behavior,
   data, permissions, compatibility, cost, or an expensive-to-reverse decision.
   Continue independent work while waiting; settle the choice before dependent edits.
 - Settle routine details from repository evidence. State material assumptions and
   compare a simpler viable approach before a consequential design choice.
-- Start with bounded summaries, then relevant files/diffs. Reuse tools or bounded
-  helpers; report omissions and recover required detail before concluding.
+- Start with bounded summaries, then relevant files/diffs; report omissions and
+  recover required detail before concluding.
 
 ## Choose a simple design
 
@@ -51,21 +51,20 @@ choosing added structure, or judging whether implementation is complete.
   tool directives, and useful issue/version references.
 - Refactor affected code when needed. Keep adjacent cleanup and pre-existing dead
   code outside the patch; report material discoveries separately.
-- Remove imports, variables, and functions made obsolete by this change after checking
-  remaining consumers. Keep documentation and configuration aligned where behavior
-  actually changes.
+- Check remaining consumers before removing code made obsolete by this change.
+  Align documentation and configuration with changed behavior.
 
 ## Verify completion
 
-- Order meaningful work units and their checks.
+- Order work units and their checks; reuse matching evidence for unaffected criteria.
 - Reuse sufficient tests, lint, types, and schema checks. Add or extend a test only for
   a named uncovered failure or contract, with independently justified expectations
   and stable behavior assertions.
 - Reproduce a reported failure when possible and confirm the correction. For a
   behavior-preserving refactor, use relevant before/after evidence when available.
   Run affected checks and required project checks; preserve meaningful protection.
-- Investigate failures before changing expectations. Continue scoped fixes to meet
-  criteria; stop blind retries when evidence/access is missing and report the gap.
+- Investigate failures against the agreed criteria; changing them is a scope decision,
+  not a way to pass. Stop retries without new evidence and report the gap.
 - Review both missing behavior and unnecessary complexity in the final diff.
   Report outcomes, actual checks, and material gaps; green checks alone are insufficient.
 
