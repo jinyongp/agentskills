@@ -21,6 +21,7 @@ This repository distributes standalone Agent Skills through its bundled CLI and 
 - Add tests for meaningful uncovered behavior, reuse existing checks, and keep maintenance cost proportional. Follow the testing principles in CONTRIBUTING.md.
 - Run `uv run check.py` for full verification, or `uv run check.py validate` for skill format and catalog checks. CI adds `--locked` to enforce the committed dependency lockfile.
 - Preserve third-party licenses and attribution. Original repository content uses MIT.
+- Keep attribution and source-license notices in each skill's LICENSE and NOTICE.md, outside runtime instructions and references. Retain task-relevant technical source links.
 - Use `rg` for searches and preserve unrelated changes.
 - Validate each meaningful work unit before committing it. Keep independent changes in separate Conventional Commits.
 - For workspaces under `/home/`, run environment-sensitive tooling in interactive Linux bash using Linux paths.

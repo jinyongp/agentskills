@@ -18,7 +18,3 @@ Sources for verification:
 - [GitHub Actions secure use](https://docs.github.com/en/actions/reference/security/secure-use)
 - [OWASP authorization guidance](https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html)
 - [OWASP SSRF guidance](https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html)
-
-Workflow inspiration: [Sentry security-review](https://github.com/getsentry/skills/tree/main/skills/security-review).
-This guidance is independently written; upstream OWASP-derived reference files
-(CC BY-SA 4.0) are not bundled. Sentry's repository uses Apache-2.0.

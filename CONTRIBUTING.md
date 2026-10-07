@@ -233,6 +233,13 @@ Refine the catalog descriptions added by the preparation command.
 When renaming, moving, or removing skills, update root and category catalog links
 and installation commands. Preserve third-party licenses and copyright notices.
 
+Keep source attribution, upstream license declarations, and adaptation history in
+each skill's `LICENSE` and `NOTICE.md`, so standalone installation retains them.
+These notices are distribution metadata, not default runtime reading; omit notice
+links and provenance paragraphs from `SKILL.md` and task references. Keep technical
+source links that help verify task decisions, and licensing checks when the task
+itself requires choosing or redistributing third-party material.
+
 ## Verify installation
 
 The CLI installation check requires Node.js 22.20+ and npm.

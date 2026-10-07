@@ -40,9 +40,6 @@ architecture choices; a broader redesign needs a current requirement or a separa
 decision. Do not generate glossary files, architecture tests or abstractions merely
 because the refactor could support them.
 
-Workflow inspiration: [Matt Pocock architecture improvement](https://github.com/mattpocock/skills/blob/main/skills/engineering/improve-codebase-architecture/SKILL.md)
-(MIT). Guidance is independently written and scoped to the actual implementation.
-
 ## Completion evidence
 
 Compare accepted outcomes with the final state and checks that actually ran.

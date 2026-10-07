@@ -23,9 +23,6 @@ change motivates the selected update. Ordinary updates do not require a broad au
   forced resolution or edited integrity data. Report unresolved paths and coverage
   gaps instead of declaring the whole tree secure after a partial scan.
 
-Workflow inspiration: [Trail of Bits supply-chain-risk-auditor](https://github.com/trailofbits/skills/tree/master/plugins/supply-chain-risk-auditor)
-(CC BY-SA 4.0). This independently written reference uses general verification
-criteria; upstream scripts and reference text are not bundled.
 
 Primary sources: [OSV query API](https://google.github.io/osv.dev/api/),
 [npm audit](https://docs.npmjs.com/cli/commands/npm-audit/),

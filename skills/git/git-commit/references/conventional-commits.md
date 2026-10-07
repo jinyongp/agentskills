@@ -41,6 +41,4 @@ refactor(api)!: remove positional options
 BREAKING CHANGE: pass options as a named object.
 ```
 
-Source: [Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.0/)
-([CC BY 3.0](https://creativecommons.org/licenses/by/3.0/), Conventional Commits
-contributors). This note summarizes its rules; examples and practical guidance are original.
+Specification: [Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.0/).

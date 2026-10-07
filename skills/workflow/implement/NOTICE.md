@@ -24,3 +24,6 @@ commit `388cbe3b6c37d5175b9f460015bb092ef9e34894`,
 `skills/antislop-code/SKILL.md`. Its MIT copyright and permission notice are
 preserved in the bundled license. The adaptation keeps explanatory comments,
 tool directives, and useful issue/version context without fixed line quotas.
+
+Workflow inspiration: [Matt Pocock architecture improvement](https://github.com/mattpocock/skills/blob/main/skills/engineering/improve-codebase-architecture/SKILL.md)
+(MIT). Guidance is independently written and scoped to the actual implementation.

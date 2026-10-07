@@ -118,6 +118,13 @@ instructions eliminate the observed problems.
 
 ### Research, security and CI additions — 2026-10-07
 
+Attribution layout was corrected afterward: upstream provenance and license notices
+now live in the affected skills' NOTICE.md files, including the pre-existing Git
+commit reference. Task references retain their useful technical source links.
+The existing implement notice was extended without replacing earlier attribution.
+Format/catalog validation and actual tarball/selected-skill installation passed;
+the complete resource comparisons included the new notice files.
+
 Added research, security-review and ci-fix; reinforced review-loop feedback handling,
 plan/implement structural decisions, and dependency-update supply-chain checks.
 Guidance is independently written with source links; upstream scripts and

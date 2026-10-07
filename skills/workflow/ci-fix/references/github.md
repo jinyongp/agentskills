@@ -26,6 +26,3 @@ do not skip a named check because it appears informational.
 
 Sources: [gh pr checks](https://cli.github.com/manual/gh_pr_checks),
 [gh run view](https://cli.github.com/manual/gh_run_view).
-Workflow inspiration: [Sentry iterate-pr](https://github.com/getsentry/skills/tree/main/skills/iterate-pr)
-(Apache-2.0). Guidance is independently written; automatic pushes and bot-name lists
-are not required.

@@ -16,6 +16,3 @@
   suggestion may be acted on when requested, but does not become a correctness defect.
 - Replies, resolving remote threads, and pushing commits follow the user's current
   scope. A proposed or posted reply is not proof that the code was corrected.
-
-Workflow inspiration: [Superpowers receiving-code-review](https://github.com/obra/superpowers/blob/main/skills/receiving-code-review/SKILL.md)
-(MIT). Guidance is independently written; evidence and scope determine next actions.
