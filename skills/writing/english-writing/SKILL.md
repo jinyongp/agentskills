@@ -42,8 +42,10 @@ ambiguities that materially affect meaning or the requested voice.
 - Preserve modal strength and scope: may, can, should, and must are not interchangeable.
   Keep distinctions such as some versus all, association versus cause, and estimate
   versus measured result. Check that a moved only or not still modifies the same claim.
-- Replace stock praise, inflated significance, and vague implications with the
-  actual point. Give transitions a real logical role. Keep intentional repetition,
+- For praise or a vague implication, identify the supported fact or consequence;
+  state it directly, or cut the evaluation if it adds none. Check that therefore
+  has a supported cause and however a real contrast; otherwise connect the actual
+  relation or remove the connector. Keep intentional repetition,
   idioms, humor, contractions, or restrained formality when they suit the voice.
 - Use parallelism and punctuation to clarify relationships. Lists should group
   comparable items; paragraphs need connected thought. Em dashes, sentence fragments,

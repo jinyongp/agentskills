@@ -47,8 +47,9 @@ keep the requested deliverable's genre and voice.
 
 - Use readable, blank-line-separated paragraphs, normally one idea each.
   Use arrow-led points when they improve scanning; number ordered choices.
-- Bold the takeaway and essential numbers or warnings so scanning emphasis gives
-  an accurate gist. Choose a table when comparison becomes clearer.
+- Use emphasis when it helps locate the takeaway, a deciding number, or a warning.
+  Read emphasized text alone: keep the condition or uncertainty needed to interpret
+  it. Use a table for items compared on shared attributes, prose for causal reasoning.
 - Use plain, natural language. Define an unavoidable unfamiliar term briefly once.
   Keep warmth and directness; start with the substance and end when it is delivered.
 - In code comments and documentation, explain intent and non-obvious constraints

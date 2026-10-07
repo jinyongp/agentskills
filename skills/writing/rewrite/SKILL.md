@@ -28,9 +28,11 @@ For a review-only request, return supported recommendations without editing file
    uncertainty, and exceptions accurate. Distinguish source claims from verified
    facts. Add factual detail only from supplied or verified evidence within scope;
    expose material gaps rather than invent specificity or silently strengthen claims.
-4. Replace empty praise, inflated significance, repetitive transitions, and generic
-   conclusions with the actual point. Make actions and actors clear. Use headings,
-   lists, and emphasis when they help the reader, with natural sentence variation.
+4. Find the answer or requested action and its supporting passages. In instructional
+   or decision prose, move a buried answer before its support and group examples with
+   the point they explain. Preserve deliberate narrative sequencing. Cut praise or
+   repeated conclusions when they add no supported claim or qualification. Name an
+   actor when omission makes responsibility ambiguous; keep modifiers by their claim.
 5. Preserve intentional humor, formality, unusual phrasing, and author personality.
    Judge a phrase in context: punctuation or vocabulary alone does not establish
    poor writing or AI authorship. Avoid blanket word bans and mechanical scrubbing.

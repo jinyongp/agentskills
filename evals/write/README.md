@@ -1,5 +1,14 @@
 # Write evaluation
 
+## Decision clarity review — 2026-10-07
+
+Parent instruction review; model version not recorded.
+Paired case: A task answer buried after supporting detail moves before that detail; a
+deliberate narrative reveal keeps its sequence.
+The revised rule states the evidence and resulting decision while preserving the
+contrasting valid case. This is rule review, not independent task execution or a
+measured quality improvement. Earlier verification results below are historical.
+
 ## Instruction review
 
 Parent review on 2026-10-06 in the current Codex session; model version not recorded.

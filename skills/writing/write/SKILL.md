@@ -26,11 +26,14 @@ own scope. For existing prose, follow the requested editing scope instead.
    conditions, attribution, uncertainty, and exceptions. Use evidence for numbers,
    quotations, results, and concrete examples; label hypothetical examples clearly.
    Surface missing evidence rather than inventing specificity or personal experience.
-4. Build connected prose around the actual message. Give actors, actions, and
-   consequences enough context to be understood. Use headings or lists when they
-   help the reader, and vary rhythm where natural to the voice and genre.
-5. Replace generic praise, stock transitions, and repeated conclusions with useful
-   information. Keep intentional personality and necessary repetition. Judge
+4. Organize around what the reader should understand or do. In instructional or
+   decision prose, state the answer before its support; narrative may reveal it later.
+   Introduce terms before relying on them, keep qualifications beside their claims,
+   and group each example with the point it explains. Use headings for findable topics
+   and lists for comparable items or ordered steps; connect reasoning in prose.
+5. For praise or a conclusion, identify the claim or evidence it adds. Replace an
+   unsupported evaluation with the supplied fact; remove a restatement that adds no
+   consequence or qualification. Keep intentional personality and repetition. Judge
    wording in context; word bans, sentence quotas, and AI detectors cannot establish
    quality or authorship.
 6. Check the draft against the brief and evidence for missing context, changed

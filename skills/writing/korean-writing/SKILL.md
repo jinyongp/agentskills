@@ -31,8 +31,9 @@ ambiguities that materially affect meaning or the requested voice.
   Keep sentence endings coherent with that relationship. Vary rhythm through
   sentence construction, not arbitrary switches between polite and plain endings.
   Distinguish honorifics for people from politeness toward the reader.
-- Follow Korean information flow rather than English word order. Make topic,
-  subject, and predicate relationships clear. Omit recoverable subjects naturally;
+- Check who acts, what the predicate describes, and which noun a modifier qualifies.
+  When a delayed predicate or stacked modifier leaves two plausible readings,
+  move the qualifier beside its noun or turn it into a clause. Omit recoverable subjects;
   keep them when omission would confuse who acts. Use pronouns such as "당신" or
   "그것" only when they fit the relationship and referent.
 - Check stacked noun modifiers, nominalized predicates, and repetitive "의" chains.
