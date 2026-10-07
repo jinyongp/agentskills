@@ -33,6 +33,7 @@ defines consumer contracts; `db-migrate` preserves data through scoped transitio
 | [queue](queue/SKILL.md) | Convert settled plans or work items into a task queue draft, or register them in the selected project tool when requested. Preserve scope, meaningful dependencies, and existing task identities. | `npx skills add jinyongp/agentskills --skill queue` |
 | [close](close/SKILL.md) | Assess completion and commit readiness from existing scope, validation evidence and worktree changes. Use for requested closeout; report gaps without starting new implementation or checks. | `npx skills add jinyongp/agentskills --skill close` |
 | [research](research/SKILL.md) | Investigate a specified question using primary sources, reconcile conflicting evidence, and distinguish facts, inference, and unknowns. Use for external technical research or comparisons; repository mapping alone uses survey. | `npx skills add jinyongp/agentskills --skill research` |
+| [security-review](security-review/SKILL.md) | Review specified code, configuration, or changes for exploitable security defects. Trace attacker control, trust boundaries, permissions, and existing defenses; report supported findings with confidence and scoped evidence. | `npx skills add jinyongp/agentskills --skill security-review` |
 <!-- skills:end -->
 
 Add skills at `skills/workflow/<skill-name>/SKILL.md`.
