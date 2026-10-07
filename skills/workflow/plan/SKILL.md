@@ -18,6 +18,8 @@ metadata:
 
 Read [references/design-scope.md](references/design-scope.md) when comparing a
 simpler alternative, added infrastructure, or the completeness of a proposed solution.
+Read [references/work-units.md](references/work-units.md) when splitting a larger
+plan or drafting tasks from settled work items.
 
 ## Procedure
 
@@ -36,8 +38,9 @@ simpler alternative, added infrastructure, or the completeness of a proposed sol
    cost. Check existing code, standard/platform features, and installed tools for fit.
    Justify added structure by a current need or concrete maintenance benefit; name
    where a simpler option falls short. Keep accepted behavior intact when simplifying.
-   Order meaningful work units by dependencies; identify relevant paths, behavior
-   changes, and completion evidence. Include migration/recovery when needed.
+   Give each work unit an outcome, relevant paths, and completion evidence. Add a
+   dependency when it needs another unit's output or state, not merely a preferred
+   order. Include migration/recovery when needed.
 5. Tie each plausible failure to a useful check. Distinguish per-unit checks from
    required final integration checks; a scheduled check remains pending.
    Use not-needed when a check would add no useful signal.
