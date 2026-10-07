@@ -111,8 +111,6 @@ function help(topic) {
     ...optionRows,
     `Scope defaults to ${scopeOf(defaults())}. Use ${flag('global')} again to manage global installations.`, ...defaultNotes, '',
     'Examples:', ...examples.map(example => `  ${example}`), '',
-    `Run with npx ${PACKAGE.name}@latest <command> after npm publication,`,
-    `or node /path/to/${BIN}/${path.basename(__filename)} <command> from a checkout.`,
   ].join('\n'));
 }
 
