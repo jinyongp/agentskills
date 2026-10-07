@@ -2,6 +2,8 @@
 
 Skills for implementation, inspection, planning, tests, verification, review, debugging,
 dependency updates, API design, database migrations, performance work, and handoff.
+`research` investigates external evidence; `security-review` traces exploitable
+defects; `ci-fix` diagnoses CI failures and verifies current-revision results.
 `plan` settles work; `queue` drafts or registers it when requested.
 `verify` runs checks; `close` assesses existing completion evidence. These are
 independent workflows, not a mandatory sequence for every task.

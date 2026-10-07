@@ -116,6 +116,30 @@ instructions eliminate the observed problems.
 
 ## Authoring policy verification
 
+### Research, security and CI additions — 2026-10-07
+
+Added research, security-review and ci-fix; reinforced review-loop feedback handling,
+plan/implement structural decisions, and dependency-update supply-chain checks.
+Guidance is independently written with source links; upstream scripts and
+OWASP-derived reference text are not bundled. Existing original MIT log-runner code
+is included inside ci-fix so individual installation retains its runtime.
+
+Full verification passed: 55 skill formats/catalog entries and 131 tests, including
+the bounded log execution suite applied to the CI helper. Actual npm tarball help
+and full-catalog installation passed with all bundled resources compared byte-for-byte.
+Actual skills@1.7.0 selective installation of the three new skills and standalone
+execution of the installed CI helper passed. Creator validation of all three skills
+and local Markdown-link checks for all seven changed skills passed.
+
+Body lengths excluding frontmatter: research 2,964; security-review 3,229;
+ci-fix 3,668; review-loop 3,977; plan 3,534; implement 3,967;
+dependency-update 3,988 characters. New references load only for stated conditions.
+
+Decision cases are parent instruction reviews. Mechanical results do not establish
+independent agent selection, security coverage, live CI repair, research synthesis
+quality, or comparative skill benefit. No npm publication or personal installation
+was performed for these additions.
+
 See [parent task execution and replay](task-execution/README.md) for five executed
 local tasks, fixture contracts, actual package/runtime failures, measurements,
 database recovery and an API consumer break. This supplements instruction review
