@@ -60,6 +60,9 @@ of silently installing into the project. Answer `n` at confirmation to cancel;
 `Ctrl+C` cancels with exit code 130. Waiting for confirmation does not hold the
 installation lock.
 
+The preview groups skill names by agent and action, shows each destination directory
+once, and counts unchanged skills. Identical skills and managed rules are not rewritten;
+an entirely unchanged selection succeeds without a confirmation prompt.
 The preview shows the selected scope and exact destination paths. Completion
 reports the applied item count and record location. If a batch fails after some
 items completed, the error reports that progress; those completed items remain.

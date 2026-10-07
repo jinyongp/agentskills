@@ -157,6 +157,52 @@ class AgentskillsCliTests(unittest.TestCase):
         self.assertFalse(self.skill("beta").exists())
         self.assertEqual(rules.read_bytes(), original)
 
+    def test_update_skips_identical_trees_rules_and_record_writes(self):
+        self.run_cli("add", "--agent", "codex")
+        paths = [self.skill("alpha"), self.skill("beta"), self.project / "AGENTS.md",
+                 self.project / ".agents/agentskills.json"]
+        before = {p: (p.stat().st_ino, p.stat().st_mtime_ns) for p in paths}
+        preload = self.root / "deny-writes.cjs"
+        preload.write_text("const fs=require('node:fs');for(const k of ['renameSync','cpSync','writeFileSync'])fs[k]=()=>{throw new Error('Unexpected write');};\n")
+        result = self.run_cli("update", env_extra={"NODE_OPTIONS": f"--require={preload}"})
+        self.assertIn("Already up to date", result.stdout)
+        self.assertIn("Unchanged: 2 skills", result.stdout)
+        self.assertNotIn("Apply?", result.stdout)
+        self.assertEqual(before, {p: (p.stat().st_ino, p.stat().st_mtime_ns) for p in paths})
+        (self.source / "skills/workflow/alpha/SKILL.md").write_text("Updated guidance\n")
+        result = self.run_cli("update")
+        self.assertIn("Update (1): alpha", result.stdout)
+        self.assertIn("Unchanged: 1 skill", result.stdout)
+        self.assertEqual(before[self.skill("beta")], (self.skill("beta").stat().st_ino, self.skill("beta").stat().st_mtime_ns))
+        self.assertEqual(before[self.project / "AGENTS.md"], ((self.project / "AGENTS.md").stat().st_ino, (self.project / "AGENTS.md").stat().st_mtime_ns))
+        # Removing remains an explicit mutation even when source and target match.
+        self.run_cli("remove")
+        self.assertFalse(self.skill("beta").exists())
+
+    def test_grouped_preview_preserves_names_and_separates_agents_and_rules(self):
+        names = [f"example-skill-{index:02}" for index in range(30)]
+        for name in names:
+            skill = self.source / "skills/workflow" / name
+            skill.mkdir()
+            (skill / "SKILL.md").write_text(f"---\nname: {name}\n---\nGuidance\n")
+        self.run_cli("add", "--agent", "codex")
+        self.run_cli("add", "--agent", "claude", "--skill", "alpha")
+        for name in names:
+            (self.source / "skills/workflow" / name / "SKILL.md").write_text("Updated guidance\n")
+        (self.source / "rules/base.md").write_text("Updated shared rules\n")
+        result = self.run_cli("update")
+        self.assertEqual(result.stdout.count(str(self.project / ".agents/skills")), 1)
+        self.assertEqual(result.stdout.count(str(self.project / ".claude/skills")), 1)
+        self.assertIn("Update (30):", result.stdout)
+        for name in names:
+            self.assertIn(name, result.stdout)
+        self.assertIn(str(self.project / "AGENTS.md"), result.stdout)
+        self.assertIn(str(self.project / "CLAUDE.md"), result.stdout)
+        self.assertNotIn("update codex/", result.stdout)
+        for row in result.stdout.splitlines():
+            if "example-skill-" in row:
+                self.assertLessEqual(len(row), 88)
+
     def test_preflight_conflict_preserves_all_selected_skills(self):
         self.run_cli("add", "--agent", "codex")
         modified = self.skill("beta") / "references/detail.md"
@@ -271,6 +317,7 @@ class AgentskillsCliTests(unittest.TestCase):
         lock = outside / "agentskills.json.lock"
         lock.write_text("Unrelated lock\n")
         original = (self.skill("alpha") / "SKILL.md").read_bytes()
+        (self.source / "skills/workflow/alpha/SKILL.md").write_text("Updated guidance\n")
 
         def redirect():
             (self.project / ".agents").rename(self.project / ".agents-original")

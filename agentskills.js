@@ -62,6 +62,36 @@ const fail = message => { throw new Error(message); };
 const CANCELLED = 'Cancelled. No selected changes applied.';
 const completion = (completed, total, record) => `Completed ${completed}/${total} items.\nInstallation record: ${record}`;
 
+function preview(scope, base, operations, unchanged) {
+  const lines = [`${PACKAGE.name}@${PACKAGE.version}`, `${SCOPES[scope].label}: ${base}`, `Changes: ${operations.length}`];
+  const agents = [...new Set([...operations, ...unchanged].map(item => item.agent))];
+  for (const agent of agents) {
+    lines.push('', agent);
+    const changes = operations.filter(item => item.agent === agent);
+    const same = unchanged.filter(item => item.agent === agent);
+    if ([...changes, ...same].some(item => item.kind === 'skill')) {
+      lines.push(`  Skills: ${path.join(base, AGENTS[agent][scope].skills)}`);
+      for (const action of ['add', 'update', 'remove']) {
+        const names = changes.filter(item => item.kind === 'skill' && item.action === action).map(item => item.name);
+        if (!names.length) continue;
+        const label = `${action[0].toUpperCase()}${action.slice(1)} (${names.length}):`;
+        let row = `  ${label}`;
+        for (const name of names) {
+          if (row.length + name.length + 2 > 88) { lines.push(row); row = '   '; }
+          row += `${row.trim() === label || !row.trim() ? ' ' : ', '}${name}`;
+        }
+        lines.push(row);
+      }
+      const count = same.filter(item => item.kind === 'skill').length;
+      if (count) lines.push(`  Unchanged: ${count} ${count === 1 ? 'skill' : 'skills'}`);
+    }
+    for (const item of [...changes, ...same].filter(item => item.kind === 'rules')) {
+      lines.push(`  Rules: ${item.action || 'unchanged'} -> ${item.destination}`);
+    }
+  }
+  return lines.join('\n');
+}
+
 function commandLine(command, values = {}) {
   if (!Object.hasOwn(COMMANDS, command)) fail(`Unknown command example: ${command}`);
   for (const key of Object.keys(values)) if (!COMMANDS[command].options.includes(key)) fail(`Unsupported example option: ${command}/${key}`);
@@ -346,7 +376,7 @@ async function main() {
       const state = loadState(stateFile);
       const targets = opts.agent ? [opts.agent] : Object.keys(state.agents);
       if (!targets.length) fail(`No recorded installations at ${stateFile}. Use ${commandLine('add')} first, or select the installed scope with ${flag('global')} or ${flag('project')}.`);
-      const operations = [];
+      const operations = [], inspections = [], unchanged = [];
       const requested = [...new Set(opts.names)];
       const all = requested.includes('*') || !requested.length;
       for (const name of requested.filter(n => n !== '*')) {
@@ -367,7 +397,7 @@ async function main() {
           if (!definition.removes && !available[name]) fail(`Skill no longer bundled: ${name}; remove explicitly`);
           const files = definition.removes ? null : snapshot(available[name].source);
           const before = fs.existsSync(target) ? snapshot(target) : null;
-          operations.push({ label: `${opts.command} ${agent}/${name}`, destination: target, check() {
+          const operation = { kind: 'skill', agent, name, action: definition.removes ? 'remove' : before ? 'update' : 'add', destination: target, check() {
             safe(base, path.relative(base, target));
             const current = fs.existsSync(target) ? snapshot(target) : null;
             if (before === null ? current !== null : current === null || !equalFiles(current, before)) fail(`Skill changed after inspection: ${target}; retry to inspect the new state`);
@@ -391,7 +421,10 @@ async function main() {
               return { rollback, finish: () => fs.rmSync(backup, { recursive: true, force: true }), backup };
             } catch (error) { rollback(); throw error; }
             finally { fs.rmSync(temporary, { recursive: true, force: true }); }
-          } });
+          } };
+          inspections.push(operation);
+          if (!definition.removes && before !== null && equalFiles(before, files)) unchanged.push(operation);
+          else operations.push(operation);
         }
         if (opts.rules && (definition.selection === 'catalog' || record.rules)) {
           const file = safe(base, config[scope].rules);
@@ -408,7 +441,7 @@ async function main() {
           const content = previous ? text.slice(0, previous.start) + replacement + text.slice(previous.end) : `${next}\n${text}`;
           const removing = definition.removes;
           const final = removing && previous ? text.slice(0, previous.start) + text.slice(previous.end + (text[previous.end] === '\n' ? 1 : 0)) : content;
-          operations.push({ label: `${opts.command} ${agent}/shared-rules`, destination: file, check() {
+          const operation = { kind: 'rules', agent, action: removing ? 'remove' : previous ? 'update' : 'add', destination: file, check() {
             safe(base, path.relative(base, file));
             if (!sameBytes(bytes(file), original)) fail(`Rules document changed after inspection: ${file}; retry to inspect the new state`);
           }, apply() {
@@ -426,11 +459,15 @@ async function main() {
               state.agents[agent] = record;
               return { rollback, finish: () => fs.rmSync(backup, { force: true }), backup };
             } catch (error) { rollback(); throw error; }
-          } });
+          } };
+          inspections.push(operation);
+          if (!removing && sameBytes(Buffer.from(final, 'utf8'), original)) unchanged.push({ ...operation, action: null });
+          else operations.push(operation);
         }
       }
-      if (!operations.length) fail(`No matching installed items at ${stateFile}. Run ${commandLine('list')} with the same scope and agent options.`);
-      console.log(`${scopeConfig.label}: ${base}\nPlanned changes (${operations.length}):\n${operations.map(o => `  ${o.label} -> ${o.destination}`).join('\n')}`);
+      if (!inspections.length) fail(`No matching installed items at ${stateFile}. Run ${commandLine('list')} with the same scope and agent options.`);
+      console.log(preview(scope, base, operations, unchanged));
+      if (!operations.length) { console.log('\nAlready up to date.'); return; }
       if (prompt && !/^y(es)?$/i.test((await ask('Apply? [y/N] ')).trim())) { console.log(CANCELLED); return; }
       safe(base, path.relative(base, lock));
       try { handle = fs.openSync(lock, 'wx'); } catch (error) {
@@ -439,7 +476,7 @@ async function main() {
       }
       safe(base, path.relative(base, stateFile));
       if (!sameBytes(bytes(stateFile), originalState)) fail(`Installation record changed after inspection: ${stateFile}; retry`);
-      for (const operation of operations) operation.check();
+      for (const inspection of inspections) inspection.check();
       let completed = 0;
       try {
         for (const operation of operations) {
