@@ -1,5 +1,5 @@
 [project]
-name = "jinyongp-agentskills"
+name = "agentskills"
 version = "0.0.0"
 description = "Development checks for a categorized Agent Skills collection"
 requires-python = ">=3.11"
