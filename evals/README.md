@@ -6,6 +6,7 @@ Keep each skill's cases and results in its own folder.
 
 | Skill | Evaluation record |
 | --- | --- |
+| queue | [Queue scope, grouping, registration, duplicates and partial outcomes](queue/README.md) |
 | api-design | [Consumer semantics, compatibility, errors, retries, and protocol scope](api-design/README.md) |
 | db-migrate | [Data preservation, engine semantics, mixed versions, interruption, and recovery](db-migrate/README.md) |
 | optimize | [Demonstrated costs, correctness, matched measurements, and tradeoffs](optimize/README.md) |
