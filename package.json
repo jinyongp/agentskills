@@ -1,0 +1,11 @@
+{
+  "name": "@jinyongp/agentskills",
+  "version": "0.1.0",
+  "description": "Install and manage jinyongp's Agent Skills and shared agent rules",
+  "license": "MIT",
+  "repository": { "type": "git", "url": "https://github.com/jinyongp/agentskills.git" },
+  "bin": { "agentskills": "agentskills.js" },
+  "engines": { "node": ">=22.20.0" },
+  "files": ["agentskills.js", "rules/", "skills/", "LICENSE", "README.md"],
+  "publishConfig": { "access": "public" }
+}

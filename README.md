@@ -1,8 +1,81 @@
 # Agent Skills
 
 jinyongp's Agent Skills collection, organized by task and technology.
-Skills follow the [Agent Skills specification](https://agentskills.io/specification)
-and install through the [skills CLI](https://github.com/vercel-labs/skills).
+Skills follow the [Agent Skills specification](https://agentskills.io/specification).
+The bundled CLI manages skills and shared rules together; the
+[skills CLI](https://github.com/vercel-labs/skills) remains compatible for skill-only installs.
+
+## Unified installer
+
+The CLI is ready locally. The commands below require publication of
+`@jinyongp/agentskills` to npm; the package is not published yet.
+
+```bash
+npx @jinyongp/agentskills@latest add
+npx @jinyongp/agentskills@latest update
+npx @jinyongp/agentskills@latest list
+npx @jinyongp/agentskills@latest remove
+```
+
+`add` asks for Codex or Claude, project or global scope, and skill names, then
+shows the proposed changes before applying them. Shared rules are included.
+Use `@latest` to run the newest published installer and bundled content.
+`update` reuses recorded selections; newly available skills require `add`.
+
+Run the same CLI now from a checkout:
+
+```bash
+node /path/to/agentskills/agentskills.js add
+```
+
+For explicit selections or unattended use:
+
+```bash
+# Install two skills and shared rules into the current project
+npx @jinyongp/agentskills@latest add --agent codex --skill review-loop verify --yes
+
+# Install all skills globally without shared rules
+npx @jinyongp/agentskills@latest add --agent claude --global --no-rules --yes
+
+# Install only shared rules
+npx @jinyongp/agentskills@latest add --agent codex --rules-only --yes
+
+# Update only the recorded global installations
+npx @jinyongp/agentskills@latest update --global --yes
+
+# Remove one skill while retaining shared rules
+npx @jinyongp/agentskills@latest remove --skill verify --no-rules --yes
+```
+
+Omit `--yes` to review and confirm changes. `--project PATH` targets an existing
+project directory. The default scope is the current directory; global scope must
+be selected with `--global` on subsequent commands. `update` and `remove` target
+all recorded agents in that scope, or just the selected `--agent`.
+Skill selection and rule selection are separate: `--skill` narrows skills;
+use `--no-rules` to exclude shared rules from that operation.
+
+| Agent | Project skills / rules | Global skills / rules |
+| --- | --- | --- |
+| Codex | `.agents/skills/` / `AGENTS.md` | `~/.codex/skills/` / `~/.codex/AGENTS.md` |
+| Claude | `.claude/skills/` / `CLAUDE.md` | `~/.claude/skills/` / `~/.claude/CLAUDE.md` |
+
+Shared rules come from `rules/base.md`. Only the block between
+`<!-- agentskills:rules:start -->` and `<!-- agentskills:rules:end -->` is managed;
+project prose outside it remains intact. Existing skills installed by another
+tool are not adopted. Modified skills, extra files, modified rules blocks,
+damaged markers, and symlinks stop the operation before applying selected changes.
+Resolve a conflict explicitly, such as backing up edits and restoring the last
+installed content, then retry. There is no force-overwrite option.
+
+Installation records live at `.agents/agentskills.json` in projects and
+`~/.local/share/agentskills/install.json` globally. Retain them to identify owned
+files; they are installation metadata, not saved task records. Cooperating CLI
+operations use a lock next to the record. Individual writes are staged; completed
+items are recorded incrementally if a filesystem error interrupts a batch.
+
+The CLI requires Node.js 22.20+ and npm, with no runtime dependencies or uv requirement.
+
+## Install with the skills CLI
 
 Once skills are published to GitHub, use these commands to browse and install them:
 

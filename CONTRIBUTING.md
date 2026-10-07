@@ -253,6 +253,23 @@ GitHub Actions runs `uv run --locked check.py` on main branch pushes, PRs, and m
 `--locked` checks that `pyproject.toml` matches the committed dependency lockfile.
 After adding a real skill, verify its local installation and behavior separately.
 
+### Unified installer
+
+`agentskills.js` is the dependency-free Node CLI. `package.json` declares its npm
+entrypoint and bundles the catalog, complete skill directories, shared rules,
+and applicable licenses. The existing skills CLI remains supported.
+
+Run the ownership/update/removal integration checks with the normal test command.
+Before release, run `npm pack --dry-run` and exercise the produced tarball through
+`npx` in a temporary project. Check that bundled resources and licenses are present,
+and that maintainer files and Python caches are excluded. An npm release requires
+an explicit publication request; local commits do not make `npx` examples available.
+
+Keep `rules/base.md` limited to concise principles that apply to every task.
+Task-specific procedures belong in independently installable skills. Installer
+state belongs to the selected target, and project instructions outside managed
+markers must survive installation, updates, and removal.
+
 ## Changes and commits
 
 Include a skill's instructions, resources, checks, and catalog updates in the same commit.

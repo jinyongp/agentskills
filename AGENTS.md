@@ -1,6 +1,6 @@
 # Repository instructions
 
-This repository distributes standalone Agent Skills through the skills CLI.
+This repository distributes standalone Agent Skills through its bundled CLI and the skills CLI.
 
 - Write all documentation, skill instructions, references, catalogs, and evaluation notes in English.
 - Keep installable skills at `skills/<category>/<skill-name>/SKILL.md`.
