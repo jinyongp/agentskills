@@ -20,6 +20,8 @@ metadata:
 
 Read [references/evidence.md](references/evidence.md) when reusing results across
 edits, configuration changes, or a handoff.
+Read [references/cadence.md](references/cadence.md) when scheduling checks across
+several work units or preparing an expensive final check.
 
 ## Procedure
 
@@ -38,11 +40,10 @@ edits, configuration changes, or a handoff.
    - Docs/config: check commands, links, paths, or the affected tool directly.
    - Database: use an isolated fixture for migration/data effects; live writes need
      authorization. Dependencies: check manifest/lock pairing and affected imports.
-3. Run targeted checks first. Add integration checks when shared behavior, failures,
-   or unresolved risks justify them. Respect required repository checks.
-   Use a real boundary check when isolated checks substitute the changed serializer,
-   registration, or persistence path; rerunning unrelated tests adds no such evidence.
-   For several work units, keep required final checks pending until they run.
+3. Check meaningful work units, not every save. Run targeted checks first and honor
+   repository requirements. Integrate when shared behavior or unresolved risks need
+   it; use a real boundary check if isolated checks replace the changed serializer,
+   registration or persistence path. Required final checks stay pending until run.
 4. For finite commands with noisy output, execute the bundled helper without reading
    its source. Supply the command explicitly; it performs no shell expansion:
 

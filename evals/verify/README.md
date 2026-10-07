@@ -1,5 +1,16 @@
 # verify evaluation
 
+## Cadence review — 2026-10-07
+
+Parent instruction review in Codex; exact model version not recorded. Independent
+parser units get useful targeted checks; expensive required CLI integration can
+wait until wiring is complete, with command/environment/fixtures prepared earlier.
+A migration result consumed by the next unit requires earlier verification. A final
+failure reopens affected completion criteria; relevant corrections require rechecks,
+while unrelated valid evidence remains reusable. No case demands a lasting regression
+test for every edit. These are written-rule checks, not an independently executed
+scheduling study. Earlier runner tests below retain their original evidence scope.
+
 See [workflow sequence replay](../workflow-sequence/README.md) for actual stale
 configuration evidence and producer/caller invalidation. The conditional evidence
 reference now names the relevant tested inputs and environment. This is parent
