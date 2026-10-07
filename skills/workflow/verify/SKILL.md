@@ -26,10 +26,9 @@ several work units or preparing an expensive final check.
 ## Procedure
 
 1. Identify changed behavior, public contracts, and preservation requirements.
-   Recover agreed limits from decisions/plans/handoffs; checks verify that scope,
-   including valid simplifications, rather than impose additional product behavior.
-   Inspect only relevant paths and repository commands. Existing test results
-   apply only to their tested state and environment.
+   Map criteria to observable evidence; preserve agreed limits from decisions/plans/
+   handoffs. Inspect relevant paths and commands. Earlier results apply only to their
+   tested state and environment; checks do not introduce new product requirements.
 2. Choose the smallest useful checks:
    - Bug: reproduce the symptom and check the correction. Reuse adequate coverage;
      add an edge case only for a distinct, meaningful uncovered failure.
@@ -63,8 +62,9 @@ several work units or preparing an expensive final check.
 
 ## Result
 
-Report pass, fail, not-needed, or skipped/blocked; checks and tested scope/state;
-meaningful failures and remaining gaps. Partial coverage is not full validation.
+Report pass, fail, not-needed, or skipped/blocked, tested scope/state, and gaps.
+Keep executed checks and observed behavior separate from model judgments. A favorable
+review cannot replace missing required evidence; partial coverage stays incomplete.
 
 ## Saved records
 

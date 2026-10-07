@@ -1,5 +1,25 @@
 # verify evaluation
 
+## Evidence and scope reinforcement — 2026-10-07
+
+Revision checks: body 3936 characters; 55 skill formats/catalogs validated.
+Full repository verification passed 131 existing tests and skills@1.7.0 discovery/
+installation fixtures. Final wording was format-validated again. This skill was
+installed alone into a temporary project through the bundled CLI for Codex and
+Claude; all resources, LICENSE and NOTICE.md matched source bytes, runtime links
+resolved, and the Claude connection used the shared skill directory. No runtime
+code changed; no independent agent effectiveness evaluation was performed.
+
+Parent instruction review in Codex; exact model version not recorded. These cases
+check written decision boundaries, not independent agent execution or measured gains.
+Earlier verification records below retain their original scope.
+
+| Input | Expected decision supported by the revised rules |
+| --- | --- |
+| Build passes but required interactive behavior has not been observed | Report build evidence separately and keep behavior verification incomplete. |
+| Model review approves while a required check is blocked | Preserve the missing prerequisite and unverified criterion; review cannot replace it. |
+| Matching prior evidence covers an unaffected criterion | Reuse that evidence; require no new model review or redundant check. |
+
 ## Revision verification — 2026-10-07
 
 Body: 3,891 characters. Full verification passed for 52 skills, 96 existing tests
