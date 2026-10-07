@@ -201,7 +201,7 @@ async function main() {
   const ask = question => prompt.question(question, { signal: cancellation.signal });
   try {
     if (opts.command !== 'list' && !opts.yes) {
-      if (!process.stdin.isTTY) fail(`Non-interactive input. Retry ${opts.command} with --yes${opts.command === 'add' ? ' and --agent codex|claude' : ''}, or run in a terminal to review changes.`);
+      if (!process.stdin.isTTY) fail(`Non-interactive input. Retry ${opts.command} with --yes${opts.command === 'add' ? ' and --agent codex (or --agent claude)' : ''}, or run in a terminal to review changes.`);
       prompt = readline.createInterface({ input: process.stdin, output: process.stdout });
       prompt.on('SIGINT', () => cancellation.abort());
       prompt.on('close', () => cancellation.abort());
