@@ -6,6 +6,7 @@ Keep each skill's cases and results in its own folder.
 
 | Skill | Evaluation record |
 | --- | --- |
+| close | [Completion evidence, accepted deferrals, work scope and commit readiness](close/README.md) |
 | queue | [Queue scope, grouping, registration, duplicates and partial outcomes](queue/README.md) |
 | api-design | [Consumer semantics, compatibility, errors, retries, and protocol scope](api-design/README.md) |
 | db-migrate | [Data preservation, engine semantics, mixed versions, interruption, and recovery](db-migrate/README.md) |

@@ -3,6 +3,8 @@
 Skills for implementation, inspection, planning, tests, verification, review, debugging,
 dependency updates, API design, database migrations, performance work, and handoff.
 `plan` settles work; `queue` drafts or registers it when requested.
+`verify` runs checks; `close` assesses existing completion evidence. These are
+independent workflows, not a mandatory sequence for every task.
 `benchmark` measures and compares; `optimize` corrects demonstrated costs. `api-design`
 defines consumer contracts; `db-migrate` preserves data through scoped transitions.
 <!-- skills:start -->
@@ -29,6 +31,7 @@ defines consumer contracts; `db-migrate` preserves data through scoped transitio
 | [api-design](api-design/SKILL.md) | Design or review consumer-facing APIs and interface changes using explicit semantics, compatibility, errors, retries, and version policy. Use for HTTP, RPC, SDK, or message contracts; preserve project protocols and distinguish design from implementation. | `npx skills add jinyongp/agentskills --skill api-design` |
 | [review-loop](review-loop/SKILL.md) | Review and fix agreed scope with complete area coverage, preserved tradeoffs, and scoped rechecks | `npx skills add jinyongp/agentskills --skill review-loop` |
 | [queue](queue/SKILL.md) | Convert settled plans or work items into a task queue draft, or register them in the selected project tool when requested. Preserve scope, meaningful dependencies, and existing task identities. | `npx skills add jinyongp/agentskills --skill queue` |
+| [close](close/SKILL.md) | Assess completion and commit readiness from existing scope, validation evidence and worktree changes. Use for requested closeout; report gaps without starting new implementation or checks. | `npx skills add jinyongp/agentskills --skill close` |
 <!-- skills:end -->
 
 Add skills at `skills/workflow/<skill-name>/SKILL.md`.
