@@ -1,30 +1,45 @@
 # Writing
 
-Skills for conversational delivery, source summaries, documentation, and editing.
-`write` drafts new prose; `rewrite` edits or reviews existing prose. Language guidance
-can refine either task without requiring another installed skill.
-`korean-writing` and `english-writing` supply language-specific expression criteria.
-`readme` focuses on a package consumer's first use; `dev-docs` covers broader
-developer documentation. Neither requires the other to be installed.
-Select them by the requested text's language; each can also handle its task alone.
-Descriptions guide discovery; clients decide activation, so automatic composition
-is not an installation guarantee.
-Conversation styles preserve the full scope of implementation and verification.
-Each skill works independently and declares its own license.
+Choose by the text you need to produce or revise. Each skill works alone and declares its own license.
+
 <!-- skills:start -->
-| Skill | Description | Install |
-| --- | --- | --- |
-| [clear](clear/SKILL.md) | Answer clearly for readers with ADHD or limited attention. Use when the user requests readable, answer-first conversation with concise explanations and essential detail preserved. | `npx skills add jinyongp/agentskills --skill clear` |
-| [terse](terse/SKILL.md) | Use blunt, terse conversation when the user requests maximum signal with minimal wording. Preserve every essential condition, risk, and requested deliverable. | `npx skills add jinyongp/agentskills --skill terse` |
-| [brief](brief/SKILL.md) | Present status, progress, and handover updates as a scannable briefing when requested. Distinguish completed, active, pending, and unknown states; retain blockers and real next decisions. | `npx skills add jinyongp/agentskills --skill brief` |
-| [summarize](summarize/SKILL.md) | Summarize a specified document, thread, transcript, file, or pasted text faithfully. Preserve essential facts, attribution, conditions, and actual action items; use when source-content compression is requested. | `npx skills add jinyongp/agentskills --skill summarize` |
-| [rewrite](rewrite/SKILL.md) | Edit prose for clarity and natural voice while preserving facts, intent, and essential qualifications | `npx skills add jinyongp/agentskills --skill rewrite` |
-| [write](write/SKILL.md) | Draft reader-facing prose from a brief or evidence, with a clear purpose, appropriate voice, and supported claims. Use for new documents, articles, messages, or product copy; use rewrite for editing existing prose. | `npx skills add jinyongp/agentskills --skill write` |
-| [korean-writing](korean-writing/SKILL.md) | Create, edit, or review Korean reader-facing prose for natural syntax, register, and information flow. Use for Korean writing or translationese concerns; ordinary Korean conversation alone does not require this skill. | `npx skills add jinyongp/agentskills --skill korean-writing` |
-| [english-writing](english-writing/SKILL.md) | Create, edit, or review English reader-facing prose for clear syntax, appropriate register, and natural voice. Use for English writing or translationese concerns; ordinary English conversation alone does not require this skill. | `npx skills add jinyongp/agentskills --skill english-writing` |
-| [dev-docs](dev-docs/SKILL.md) | Create, revise, or review developer documentation using actual product behavior and reader tasks. Use for README files, guides, API references, examples, and documentation structure; preserve requested language, publication scope, and version boundaries. | `npx skills add jinyongp/agentskills --skill dev-docs` |
-| [readme](readme/SKILL.md) | Create, revise, or review package README files for consumers: purpose, installation, a working first-use example, compatibility, and deeper documentation. Keep contributor setup separate and verify claims against the documented release. | `npx skills add jinyongp/agentskills --skill readme` |
+
+## Draft, revise, or summarize
+
+- [write](write/SKILL.md) — Draft new reader-facing prose from a brief or evidence.
+- [rewrite](rewrite/SKILL.md) — Edit or review existing prose while preserving meaning and voice.
+- [summarize](summarize/SKILL.md) — Compress a specified source while preserving its essential facts.
+
+## Write developer documentation
+
+- [readme](readme/SKILL.md) — Create or review a package README for consumer setup and first use.
+- [dev-docs](dev-docs/SKILL.md) — Create or review broader developer guides, references, and examples.
+
+## Refine language
+
+- [korean-writing](korean-writing/SKILL.md) — Create, edit, or review Korean expression and information flow.
+- [english-writing](english-writing/SKILL.md) — Create, edit, or review English expression and register.
+
+## Set conversational delivery
+
+- [clear](clear/SKILL.md) — Answer with essential detail for readers with limited attention.
+- [terse](terse/SKILL.md) — Use blunt, concise conversation when requested.
+- [brief](brief/SKILL.md) — Present requested status and handover briefings.
+
 <!-- skills:end -->
 
-Add skills at `skills/writing/<skill-name>/SKILL.md`.
+## Install
+
+Run from the target project; replace `readme` with one or more names above:
+
+```bash
+npx @jinyongp/agentskills@latest add --agent codex --skill readme
+```
+
+See [installation requirements and alternatives](../../README.md#quick-start).
+
+Language guidance can refine a drafting or editing task. Conversation styles retain
+the full task scope and the deliverable's genre. Clients decide skill activation;
+installing several skills does not guarantee automatic composition.
+
 [Authoring guide](../../CONTRIBUTING.md) · [All skills](../../README.md)

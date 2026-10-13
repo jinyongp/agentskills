@@ -45,8 +45,12 @@ class NewSkillTests(unittest.TestCase):
         self.assertEqual(properties.metadata["category"], "frontend")
         self.assertEqual(validate_repository(self.root), (1, []))
         self.assertTrue((self.root / "evals" / "solid-review" / "README.md").is_file())
-        self.assertIn("skills/frontend/solid-review/SKILL.md", (self.root / "README.md").read_text())
-        self.assertIn("--skill solid-review", (skill.parent / "README.md").read_text())
+        row = next(
+            row for row in (self.root / "README.md").read_text().splitlines()
+            if row.startswith("| [frontend](skills/frontend/README.md) |")
+        )
+        self.assertEqual(int(row.split("|")[3].strip()), 1)
+        self.assertIn("[solid-review](solid-review/SKILL.md)", (skill.parent / "README.md").read_text())
         self.assertEqual(list(skill.iterdir()), [skill / "SKILL.md"])
 
     def test_description_round_trips_yaml_and_does_not_break_catalog_blocks(self):
@@ -55,16 +59,37 @@ class NewSkillTests(unittest.TestCase):
         self.assertEqual(read_properties(skill).description, description)
         prepare_skill(self.root, "frontend", "solid-debug")
         self.assertEqual(validate_repository(self.root), (2, []))
+        catalog = (skill.parent / "README.md").read_text()
+        self.assertEqual(catalog.count("<!-- skills:start -->"), 1)
+        self.assertEqual(catalog.count("<!-- skills:end -->"), 1)
+        self.assertIn("&lt;!-- skills:end --&gt;", catalog)
 
-    def test_multiple_additions_preserve_existing_entries_and_prose(self):
+    def test_first_skill_replaces_empty_catalog_without_losing_install_guidance(self):
+        category = self.root / "skills" / "tooling" / "README.md"
+        category.write_text(category.read_text() + "\nLocal installation notes.\n")
+        skill = prepare_skill(self.root, "tooling", "setup-check")
+        content = category.read_text()
+        self.assertIn("[setup-check](setup-check/SKILL.md)", content)
+        self.assertNotIn("No skills yet.", content)
+        self.assertIn("Local installation notes.", content)
+        self.assertEqual(read_properties(skill).name, "setup-check")
+        self.assertEqual(validate_repository(self.root), (1, []))
+
+    def test_multiple_additions_preserve_catalogs_and_refresh_counts(self):
         category = self.root / "skills" / "workflow" / "README.md"
         catalog = self.root / "README.md"
         original_row = next(
             row for row in catalog.read_text().splitlines()
             if row.startswith("| [workflow](skills/workflow/README.md) |")
         )
-        previous = original_row.split("|")[3].strip()
-        expected_entries = [] if previous == "None yet" else previous.split(", ")
+        cells = original_row.split("|")
+        cells[3] = " 999 "
+        catalog.write_text(catalog.read_text().replace(original_row, "|".join(cells)))
+        other_rows = [
+            row for row in catalog.read_text().splitlines()
+            if row.startswith("| [") and row != "|".join(cells)
+        ]
+        previous_entries = category.read_text()
         category.write_text(category.read_text() + "\nMaintainer notes to preserve.\n")
         prepare_skill(self.root, "workflow", "repo-survey")
         prepare_skill(self.root, "workflow", "repo-plan")
@@ -72,19 +97,17 @@ class NewSkillTests(unittest.TestCase):
         self.assertIn("Maintainer notes to preserve.", content)
         for name in ("repo-survey", "repo-plan"):
             self.assertIn(f"[{name}]({name}/SKILL.md)", content)
-            self.assertIn(f"skills/workflow/{name}/SKILL.md", (self.root / "README.md").read_text())
-        self.assertNotIn("| None yet |", content)
         root_row = next(
             row for row in catalog.read_text().splitlines()
             if row.startswith("| [workflow](skills/workflow/README.md) |")
         )
-        self.assertEqual(
-            root_row.split("|")[3].strip().split(", "),
-            expected_entries + [
-                "[repo-survey](skills/workflow/repo-survey/SKILL.md)",
-                "[repo-plan](skills/workflow/repo-plan/SKILL.md)",
-            ],
-        )
+        self.assertEqual(int(root_row.split("|")[3].strip()), 2)
+        self.assertEqual(root_row.split("|")[1:3], original_row.split("|")[1:3])
+        for row in other_rows:
+            self.assertIn(row, catalog.read_text())
+        for row in previous_entries.splitlines():
+            if row.startswith(("- [", "## ")):
+                self.assertIn(row, content)
 
     def test_invalid_names_and_unknown_categories_do_not_mutate_files(self):
         before = self.snapshot()

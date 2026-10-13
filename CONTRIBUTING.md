@@ -6,6 +6,7 @@ Write documentation, skill instructions, references, catalogs, and evaluation no
 
 ## Create a skill
 
+Run from the repository root with Python 3.11+ and uv.
 Choose the closest existing category and a name that is unique across the repository.
 Names must contain 1–64 lowercase ASCII letters, digits, or single hyphens.
 Hyphens cannot appear at either end or consecutively.
@@ -16,10 +17,15 @@ This example creates `my-skill` in `workflow`; replace both values as needed:
 uv run new_skill.py workflow my-skill
 ```
 
-The command sets `name`, `metadata.category`, and the title in `SKILL.md`,
-creates `evals/my-skill/README.md`, and adds root and category catalog entries.
+The command prepares:
+
+- `SKILL.md` with its name, category, title, and saved-record convention.
+- `evals/my-skill/README.md` for evaluation cases and results.
+- The root category count and a new category catalog entry.
+
+New entries appear under `New skills`; move them to the appropriate task group
+and refine their short descriptions before committing.
 It requires an existing category and rejects duplicate names or existing evaluation folders.
-Preparation requires Python 3.11+ and uv.
 
 You can also supply a description:
 
@@ -71,16 +77,22 @@ The description and body limits are repository policy, enforced by validation an
 
 ## Decision quality and composition
 
+### Compose standalone skills
+
 Separate task workflows from language, presentation, and platform guidance when their
 triggers differ. Each installed skill must remain usable alone. When several skills
 are loaded, apply specialized criteria within the requested task and produce one
 result. Descriptions guide discovery; client activation is not an automatic dependency
 or composition guarantee. Bundle essential boundaries rather than requiring another skill.
 
+### Preserve task scope
+
 Preserve user scope, output language, genre, voice, factual qualifications, and current
 project choices. A style request changes communication, not implementation depth or
 authorization. Ask about material unresolved decisions; settle routine details from
 available evidence. Review-only and measurement-only requests retain those boundaries.
+
+### Make criteria actionable
 
 Tie each rule to a concrete decision or failure. Distinguish required contracts and
 standards from starting values, examples, and optional recommendations. Choose form,
@@ -231,12 +243,39 @@ The command prepares development dependencies, validates formats, runs tests,
 and checks CLI installation. Any failed step makes the command fail.
 You can run each check separately:
 
-| Command | Checks |
-| --- | --- |
-| `uv run check.py validate` | Skill formats and category layout |
-| `uv run check.py test` | Normal and failure cases for validators and runtime scripts |
-| `uv run check.py smoke` | CLI discovery, selective installation, resource copying |
-| `uv run check.py package` | Packed npm CLI, native shell entrypoints, shared updates and removal |
+### Validate formats
+
+Check skill formats and category layout:
+
+```bash
+uv run check.py validate
+```
+
+### Run tests
+
+Exercise normal and failure cases for validators and runtime scripts:
+
+```bash
+uv run check.py test
+```
+
+### Check skill-only installation
+
+Verify discovery, selective installation, and copied resources:
+
+```bash
+uv run check.py smoke
+```
+
+### Check the packed installer
+
+Exercise npm entrypoints, shared updates, and removal:
+
+```bash
+uv run check.py package
+```
+
+### Validation scope
 
 `validate` does not require Node.js or npm. Installer integration tests require
 Node.js; the installation and package smoke checks also require npm.
@@ -268,154 +307,27 @@ itself requires choosing or redistributing third-party material.
 
 ## Verify installation
 
-The CLI installation check requires Node.js 22.20+ and npm.
-It creates two categorized fixture skills in a temporary folder, then uses pinned
-`skills@1.7.0` to check discovery and selective installation:
+Run the skill-only discovery and selective-installation fixture:
 
 ```bash
 uv run check.py smoke
 ```
 
-The check compares the selected skill's `SKILL.md`, references, scripts, and assets
-byte for byte, and confirms that the other skill was not installed.
-The temporary project is deleted afterward. The first run needs a network connection
-to download the CLI from npm. To change the CLI version, update `CLI_PACKAGE`
-in `scripts/smoke_install.py` and rerun the check.
+After adding a real skill, check its own local installation and behavior too.
+See [installer verification](maintainers/installer.md#run-installation-checks) for
+fixture details, CI coverage, and native agent discovery.
 
-GitHub Actions runs `uv run --locked check.py` on main branch pushes, PRs, and manual runs.
-The reusable validation workflow also runs format checks, installer integration
-tests, packed CLI lifecycle tests and skills CLI smoke checks on Ubuntu and
-Windows Server 2022 with Node 22.20.0, 22.x and 24.x. The Release workflow depends
-on that entire reusable workflow, so a failed Windows matrix job prevents npm
-publication. Keep all matrix jobs required by that dependency.
-`--locked` checks that `pyproject.toml` matches the committed dependency lockfile.
-After adding a real skill, verify its local installation and behavior separately.
+## Unified installer
 
-### Unified installer
+The bundled CLI shares one copy of skill content per scope. Changes to its parsing,
+connections, ownership, migration, or rollback need the corresponding lifecycle checks.
+See [CLI maintenance and verification](maintainers/installer.md).
 
-`agentskills.js` is the dependency-free Node CLI. `package.json` declares its npm
-entrypoint and bundles the catalog, complete skill directories, shared rules,
-and applicable licenses. The existing skills CLI remains supported.
+## Releases
 
-Maintain CLI behavior through the definitions in `agentskills.js`: `COMMANDS`
-owns supported options and command behavior. `OPTION_GROUPS` defines options in
-target, selection, execution order; the flattened `OPTIONS` registry supplies
-aliases, defaults, values, and conflicts. `AGENTS`/`SCOPES` own installation destinations.
-Help and generated commands share this display order; input order remains free.
-Parsing, help, prompts, and suggested commands use these definitions. Generate
-examples with `commandLine()` using the current catalog; package identity comes
-from `package.json`. Verify printed commands through actual CLI execution when
-changing the interface, including selected scopes and paths requiring quoting.
-
-Run the ownership/update/removal integration checks with the normal test command.
-Before release, run `npm pack --dry-run` and exercise the produced tarball through
-`npx` in a temporary project. Check that bundled resources and licenses are present,
-and that maintainer files and Python caches are excluded. An npm release requires
-an explicit publication request; local commits do not make `npx` examples available.
-
-`uv run check.py package` packs into a temporary directory, installs that tarball
-without lifecycle hooks, and invokes the installed npm shim. It checks both scopes,
-both agents, bundled file bytes, shared updates, partial/final removal, and BOM/CRLF
-prose preservation. Native Windows runs both PowerShell and cmd.exe and verifies
-that agent connections are junctions. All homes and npm caches are isolated.
-`scripts/npm_cli.py` invokes npm/npx JavaScript entrypoints directly so Python
-does not need to execute `.cmd` files through an implicit shell.
-
-The Windows 11 support contract targets writable local NTFS without elevation or
-Developer Mode. CI may run elevated; supplement it with a standard-user desktop
-run and record the token, OS, filesystem, shells and Node versions. Windows build
-26300 has been checked with a SAFER normal-user token and Developer Mode off.
-Confirmation/cancellation and prompt-time conflict tests use POSIX PTYs or the
-Windows ConPTY adapter in `tests/windows_terminal.py`, with the development-only
-`pyte` dependency interpreting terminal redraws. The adapter bounds buffered terminal
-output and reports omitted bytes on failure. Native Codex 0.162.1 and Claude Code
-2.1.296 passed project/global skill discovery before installation, after installation
-and after removal. Codex discovers the shared source; Claude reads the junction.
-Repeat this check with `uv run --locked python scripts/smoke_agents.py --codex <exe>
---claude <exe>`, or use `--download-windows-agents` on Windows x64 to fetch the pinned
-official builds with verified integrity hashes. CI runs this check on its minimum-Node
-Windows job. It isolates agent profiles, disables ancillary traffic, sends only
-local discovery requests and points providers at a closed localhost port. Agent
-binaries remain temporary development tools and are never bundled in the npm package.
-Windows 10 has not been verified; it is outside this completed support scope.
-Optional POSIX process-group helpers retain their documented platform scope.
-
-Keep `rules/base.md` limited to concise principles that apply to every task.
-Task-specific procedures belong in independently installable skills. Installer
-state belongs to the selected target, and project instructions outside managed
-markers must survive installation, updates, and removal.
-
-Store skill content once per scope in `.agents/skills/`; agent destinations use
-relative symlinks on Linux/WSL or absolute-target directory junctions on Windows,
-unless they read that directory directly. Version 2 records
-track shared content separately from agent connections. Validate ownership of
-every connected destination before modifying shared content. Migrate version 1
-copies per selected skill, preserving unmigrated records and completed progress.
-Check shared updates, last-connection removal, migration, and rollback with real
-filesystem operations in temporary projects and homes.
-
-### Releases
-
-The `Release` workflow runs on `v*` tags. It reuses full validation, publishes
-the npm package with `releaseway/npm-actions`, then creates an immutable GitHub
-Release with `releaseway/actions` and commit-based release notes.
-
-Run from the repository's default branch (currently `main`):
-
-```bash
-uv run release.py 0.2.0
-uv run release.py --help
-```
-
-Supply the version without a `v` prefix or build metadata. The script requires Git,
-uv, Node.js/npm/npx, and `gh` authenticated with repository write access. Commit
-pending work first; clean local commits ahead of the remote are included. The origin
-fetch/push repository must match `package.json`. A behind or diverged branch stops
-before preparation. Package identity, installer entrypoint, packaging allowlist and
-repository come from `package.json`; the default branch comes from GitHub, and the
-publication workflow is discovered by its releaseway npm action.
-
-The script updates the package version, runs `uv run --locked check.py`, packs into
-a temporary directory, and exercises that tarball's help and full skill installation
-outside the checkout. It compares installed resources with their sources, commits
-only release metadata, and pushes the branch and selected tag atomically. It never
-force-pushes or pushes unrelated tags. The workflow rejects a mismatched version.
-GitHub Actions remains the publisher; the script has no local npm publish path.
-
-Running the command authorizes publishing without another prompt. A prerelease such
-as `0.3.0-rc.1` sets `publishConfig.tag` to `next`; a stable release removes that override
-and uses `latest`. It waits up to two minutes for the matching tag/commit workflow and
-one hour for completion, then checks npm version/integrity/available commit metadata,
-the intended dist-tag, and the GitHub release/tag. It also downloads the exact registry
-version into a fresh temporary npm cache with scripts disabled and verifies the archive
-bytes against the registry SHA-512 integrity. Transient download failures are retried
-for a bounded interval; missing or mismatched archives prevent a completion report.
-Registry lookup failures stop rather
-than masquerading as an unpublished version. Logs stay at the printed OS temporary path;
-the script returns nonzero on failure and never treats a pending run as complete.
-
-Retry the same command to resume a matching local or remote tag. A failed preparation
-may leave only the expected version/dist-tag edit in `package.json`; that exact change
-is accepted on retry, including when staged. Other changes must be resolved explicitly.
-Prepared commits and tags are reused. An active run is observed; an existing failed
-run gets at most one rerun per invocation, after the previous failure logs are saved.
-A newly failed run is reported without an automatic retry. Cancellation reruns the
-workflow; ordinary failed runs rerun failed jobs. Timeouts or interrupted pushes can
-have completed remotely: reexecution checks actual refs and runs rather than rolling
-back or deleting tags. No extra release state file is maintained.
-
-Published versions cannot be replaced. Once a tag exists, new source commits require
-a new version. An already-published version without a matching tag stops for inspection.
-Installing or updating personal skills is separate from releasing the package.
-
-Before the first automated release, publish the initial package once and configure
-its npm Trusted Publisher for user `jinyongp`, repository `agentskills`, and
-workflow `release.yml`, allowing direct publication. Enable Immutable Releases
-in the GitHub repository. Subsequent npm releases use OIDC without a publish token;
-`.github/npm/packages.yml` selects direct publication rather than staged approval.
-
-Refresh all action references with `npx actions-up --yes` when changing workflows.
-Keep full commit SHA pins and explicit `ubuntu-24.04` runners.
+Publication has no additional confirmation prompt. Follow the
+[release guide](maintainers/releasing.md) for prerequisites, stable/prerelease
+commands, first-time setup, and failure recovery.
 
 ## Changes and commits
 

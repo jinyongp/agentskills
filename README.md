@@ -1,274 +1,191 @@
 # Agent Skills
 
-jinyongp's Agent Skills collection, organized by task and technology.
-Skills follow the [Agent Skills specification](https://agentskills.io/specification).
-The bundled CLI manages skills and shared rules together; the
-[skills CLI](https://github.com/vercel-labs/skills) remains compatible for skill-only installs.
+Task-focused skills for Codex and Claude: inspect repositories, implement and review
+code, work with Git, build interfaces, and write documentation. Install the skills
+you need, with optional shared working rules.
 
-## Unified installer
+[Quick start](#quick-start) · [Browse skills](#categories) ·
+[Manage installations](#manage-installations) · [Compatibility](#compatibility)
 
-Install and manage skills with the bundled CLI:
+<a id="unified-installer"></a>
 
-```bash
-npx @jinyongp/agentskills@latest add
-npx @jinyongp/agentskills@latest update
-npx @jinyongp/agentskills@latest list
-npx @jinyongp/agentskills@latest remove
-```
+## Quick start
 
-`add` asks for Codex or Claude, project or global scope, and skill names, then
-shows the proposed changes before applying them. Shared rules are included.
-Use `@latest` to run the newest published installer and bundled content.
-`update` reuses recorded selections; newly available skills require `add`.
+Requirements:
 
-Run the same CLI from a checkout:
+- **Installer:** Node.js 22.20+ and npm. No uv or Python required for installation.
+- **Example below:** Codex and Python 3.11+ for the `survey` skill's helper.
+- **PowerShell:** use `npx.cmd` in place of `npx`; see [Native Windows](#native-windows).
+
+### 1. Install one skill
+
+Run this from the project where you want to use it:
 
 ```bash
-node /path/to/agentskills/agentskills.js add
-node /path/to/agentskills/agentskills.js --help
-node /path/to/agentskills/agentskills.js help remove
+npx @jinyongp/agentskills@latest add --agent codex --project . --skill survey
 ```
 
-For explicit selections or unattended use:
+The installer asks whether to include shared rules in `AGENTS.md`, then previews
+the changes for confirmation. Confirm to install; answer `n` to cancel.
+
+### 2. Check the installation
 
 ```bash
-# Install two skills and shared rules into the current project
-npx @jinyongp/agentskills@latest add --agent codex --skill review-loop verify --yes
-
-# Install all skills globally without shared rules
-npx @jinyongp/agentskills@latest add --agent claude --global --no-rules --yes
-
-# Connect Claude to the same project skills already installed for Codex
-npx @jinyongp/agentskills@latest add --agent claude --skill review-loop verify --no-rules --yes
-
-# Install only shared rules
-npx @jinyongp/agentskills@latest add --agent codex --rules-only --yes
-
-# Update only the recorded global installations
-npx @jinyongp/agentskills@latest update --global --yes
-
-# Remove one skill while retaining shared rules
-npx @jinyongp/agentskills@latest remove --skill verify --no-rules --yes
+npx @jinyongp/agentskills@latest list --agent codex --project .
 ```
 
-Omit `--yes` to review and confirm changes. `--project PATH` targets an existing
-project directory. The default scope is the current directory; global scope must
-be selected with `--global` on subsequent commands. `update` and `remove` target
-all recorded agents in that scope, or just the selected `--agent`.
-Skill selection and rule selection are separate: `--skill` narrows skills;
-use `--no-rules` to exclude shared rules from that operation.
-Interactive `add` asks for unspecified choices even when `--agent` is provided.
-Shared rules can be declined at the prompt. An invalid scope is rejected instead
-of silently installing into the project. Answer `n` at confirmation to cancel;
-`Ctrl+C` cancels with exit code 130; native Windows shells can report their
-control-C exit status instead. Waiting for confirmation does not hold the
-installation lock.
+Under **Installed**, look for `survey` and the Codex project path.
+The skill lives at `.agents/skills/survey/`; the installation record lives at
+`.agents/agentskills.json`.
 
-The preview lists each shared skill change once, followed by agent connections
-and separate rule changes. Identical skills and managed rules are not rewritten;
-an entirely unchanged selection succeeds without a confirmation prompt.
-The preview shows the selected scope and exact destination paths. Completion
-reports the applied item count and record location. If a batch fails after some
-items completed, the error reports that progress; those completed items remain.
-`list` identifies an empty installation explicitly. Use `help <command>` or
-`<command> --help` for defaults, scope behavior, and examples.
+### 3. Use the skill
 
-| Agent | Project skills / rules | Global skills / rules |
-| --- | --- | --- |
-| Codex | `.agents/skills/` / `AGENTS.md` | `~/.codex/skills/` / `~/.codex/AGENTS.md` |
-| Claude | `.claude/skills/` / `CLAUDE.md` | `~/.claude/skills/` / `~/.claude/CLAUDE.md` |
+Open Codex in that project and make a request such as:
 
-Skill content lives once in `.agents/skills/` for projects or `~/.agents/skills/`
-globally. Codex reads the project source directly; other paths in the table contain
-connections to the shared source: relative symlinks on Linux/WSL and directory
-junctions on native Windows. Adding another agent reuses that source.
-Updating a skill through either agent updates it for every connected agent.
-Removing an agent connection retains the source while another connection remains;
-removing the last connection deletes the source. Agents that read the shared
-directory directly can discover its skills regardless of their recorded selection.
+> Use the survey skill to map this repository. Report its main folders, project
+> commands, risks, and next checks.
 
-On `add` or `update`, older CLI-owned copies of each selected skill are checked
-against their recorded content, then consolidated for all recorded agents.
-Unselected skills retain their previous installation until updated. Migration
-requires connection support on the destination filesystem; a failed item restores
-its previous files and record. Existing CLI-owned symlinks remain supported.
+The intended result is a repository map and suggested checks. `survey` inspects
+files without running project code or changing source files.
 
-Shared rules come from `rules/base.md`. Only the block between
-`<!-- agentskills:rules:start -->` and `<!-- agentskills:rules:end -->` is managed;
-project prose outside it remains intact. Existing skills installed by another
-tool are not adopted. Modified skills, extra files, modified rules blocks,
-damaged markers, and redirected connections stop the operation before applying
-selected changes. Symlinks inside skill content or installation parent paths are
-rejected; recorded agent connections to the shared source are accepted.
-Rules documents must be UTF-8; other encodings are rejected without conversion.
-Files and the installation record are checked again after confirmation, so edits
-made while the prompt is pending require a fresh inspection.
-Resolve a conflict explicitly, such as backing up edits and restoring the last
-installed content, then retry. There is no force-overwrite option.
-
-Installation records live at `.agents/agentskills.json` in projects and
-`~/.local/share/agentskills/install.json` globally. Retain them to identify owned
-files; they are installation metadata, not saved task records. Cooperating CLI
-operations use a lock next to the record. Individual writes are staged; completed
-items are recorded incrementally. A caught record-write failure rolls back the
-current item while retaining earlier completed items. Backups are removed only
-after the installation record is saved. Record-write rollback failures report
-available backup paths.
-
-The CLI requires Node.js 22.20+ and npm, with no runtime dependencies or uv requirement.
-
-### Native Windows
-
-Use `npx.cmd` in PowerShell to avoid npm's `.ps1` shim execution-policy dependency;
-Command Prompt also accepts the usual `npx` name. For example:
-
-```powershell
-npx.cmd @jinyongp/agentskills@latest add --agent codex --project 'C:\Projects\My App' --skill survey --yes
-npx.cmd @jinyongp/agentskills@latest add --agent claude --global --skill survey --yes
-```
-
-```bat
-npx @jinyongp/agentskills@latest add --agent codex --project "C:\Projects\My App" --skill survey --yes
-npx @jinyongp/agentskills@latest update --global --yes
-```
-
-Native Windows 11 installations use directory junctions on writable local NTFS
-volumes; Administrator access and Developer Mode are not required. Project paths
-may contain spaces and Unicode. Global `~` paths in the table above use the
-Windows user's home directory. The CLI checks connection support on the target
-volume before applying a selection that creates connections. It reports failures
-without switching to independent copies. Quoted commands generated by Windows
-help and retry messages use PowerShell syntax and the `.cmd` entrypoint.
-
-Junctions contain absolute targets. Keep an installed project at its original
-location; remove its managed installations before moving it, then install again
-at the new location. Network shares, cloud-synced directories, other filesystems,
-and relocation of existing junctions are outside the initial support scope.
-If Windows reports a file in use, close the process holding that file and retry;
-retain any backup paths reported by a failed rollback.
-
-Native regression and packed-package tests have passed on Windows 11 build 26300
-with a non-administrator token and Developer Mode disabled. CI runs Windows
-Server 2022 and Linux with Node 22.20.0, 22.x and 24.x. ConPTY tests also cover
-Windows confirmation, cancellation and edits made while a prompt is pending.
-Native Codex 0.162.1 and Claude Code 2.1.296 discovered project and global
-installations and stopped discovering them after removal. Codex reads the shared
-source; Claude follows the junction. CI repeats these checks without account
-credentials or model requests. Windows 10 is unverified and outside the verified
-support claim.
-
-Skill installation and helper execution have separate prerequisites. The optional
-`verify`, `debug`, and `ci-fix` Python runners require POSIX process groups. On
-native Windows, run the project's check or reproduction command directly, or use
-WSL for those runners. Other Python helpers require Python 3.11+; use the available
-interpreter (`python`, `py -3`, or `python3`) when following a skill's command.
-
-## Install with the skills CLI
-
-Browse and install skills directly from GitHub:
-
-```bash
-# List available skills
-npx skills add jinyongp/agentskills --list
-
-# Select skills interactively
-npx skills add jinyongp/agentskills
-
-# Install several skills together
-npx skills add jinyongp/agentskills --skill dev-docs dependency-update optimize db-migrate api-design --agent codex
-
-# Install the complete collection for Codex
-npx skills add jinyongp/agentskills --skill '*' --agent codex
-
-# Install a specific skill: replace <skill-name> with a listed name.
-npx skills add jinyongp/agentskills --skill <skill-name>
-
-# Install globally for Codex
-npx skills add jinyongp/agentskills --skill <skill-name> --agent codex --global
-```
+For Claude, select `--agent claude` when installing. For interactive selection of
+agent, scope, and skills, run `npx @jinyongp/agentskills@latest add`.
 
 ## Categories
 
-| Category | Scope | Skills |
-| --- | --- | --- |
-| [workflow](skills/workflow/README.md) | Implementation, research, security, CI, testing, verification, review, debugging, benchmarking, handoff and closeout | [handoff](skills/workflow/handoff/SKILL.md), [verify](skills/workflow/verify/SKILL.md), [survey](skills/workflow/survey/SKILL.md), [plan](skills/workflow/plan/SKILL.md), [code-review](skills/workflow/code-review/SKILL.md), [debug](skills/workflow/debug/SKILL.md), [benchmark](skills/workflow/benchmark/SKILL.md), [test](skills/workflow/test/SKILL.md), [test-integration](skills/workflow/test-integration/SKILL.md), [test-maintenance](skills/workflow/test-maintenance/SKILL.md), [test-unit](skills/workflow/test-unit/SKILL.md), [test-contract](skills/workflow/test-contract/SKILL.md), [test-e2e](skills/workflow/test-e2e/SKILL.md), [test-property](skills/workflow/test-property/SKILL.md), [implement](skills/workflow/implement/SKILL.md), [dependency-update](skills/workflow/dependency-update/SKILL.md), [optimize](skills/workflow/optimize/SKILL.md), [db-migrate](skills/workflow/db-migrate/SKILL.md), [api-design](skills/workflow/api-design/SKILL.md), [review-loop](skills/workflow/review-loop/SKILL.md), [queue](skills/workflow/queue/SKILL.md), [close](skills/workflow/close/SKILL.md), [research](skills/workflow/research/SKILL.md), [security-review](skills/workflow/security-review/SKILL.md), [ci-fix](skills/workflow/ci-fix/SKILL.md), [domain-modeling](skills/workflow/domain-modeling/SKILL.md), [retro](skills/workflow/retro/SKILL.md) |
-| [frontend](skills/frontend/README.md) | Web and native UI, accessibility, motion | [ui-design](skills/frontend/ui-design/SKILL.md), [responsive](skills/frontend/responsive/SKILL.md), [accessibility](skills/frontend/accessibility/SKILL.md), [animate](skills/frontend/animate/SKILL.md), [animation-review](skills/frontend/animation-review/SKILL.md), [animation-audit](skills/frontend/animation-audit/SKILL.md), [animation-opportunities](skills/frontend/animation-opportunities/SKILL.md), [animation-vocabulary](skills/frontend/animation-vocabulary/SKILL.md), [animate-native](skills/frontend/animate-native/SKILL.md), [animation-debug](skills/frontend/animation-debug/SKILL.md), [animation-performance](skills/frontend/animation-performance/SKILL.md), [prototype](skills/frontend/prototype/SKILL.md), [ui-stress](skills/frontend/ui-stress/SKILL.md), [ui-library](skills/frontend/ui-library/SKILL.md), [mobile-web](skills/frontend/mobile-web/SKILL.md) |
-| [git](skills/git/README.md) | Commits, branches, remote synchronization, conflicts, PRs, worktrees | [git-commit](skills/git/git-commit/SKILL.md), [git-branch](skills/git/git-branch/SKILL.md), [git-sync](skills/git/git-sync/SKILL.md), [git-conflict](skills/git/git-conflict/SKILL.md), [git-pr](skills/git/git-pr/SKILL.md), [git-worktree](skills/git/git-worktree/SKILL.md) |
-| [writing](skills/writing/README.md) | Conversation styles, summaries, documentation, editing | [clear](skills/writing/clear/SKILL.md), [terse](skills/writing/terse/SKILL.md), [brief](skills/writing/brief/SKILL.md), [summarize](skills/writing/summarize/SKILL.md), [rewrite](skills/writing/rewrite/SKILL.md), [write](skills/writing/write/SKILL.md), [korean-writing](skills/writing/korean-writing/SKILL.md), [english-writing](skills/writing/english-writing/SKILL.md), [dev-docs](skills/writing/dev-docs/SKILL.md), [readme](skills/writing/readme/SKILL.md) |
-| [tooling](skills/tooling/README.md) | Development tool setup and operation | None yet |
+Each category links to its complete skill catalog and installation commands.
 
-Skills live at `skills/<category>/<skill-name>/SKILL.md`.
-Categories organize the catalog. Select several unique skill names in one command,
-choose them interactively, or use the quoted `'*'` selector for the collection.
+| Category | Choose for | Skills |
+| --- | --- | --- |
+| [workflow](skills/workflow/README.md) | Planning, implementation, review, debugging, testing, and research | 27 |
+| [frontend](skills/frontend/README.md) | UI, accessibility, responsive layouts, and motion | 15 |
+| [git](skills/git/README.md) | Commits, branches, synchronization, conflicts, PRs, and worktrees | 6 |
+| [writing](skills/writing/README.md) | Documentation, drafting, editing, summaries, and conversation styles | 10 |
+| [tooling](skills/tooling/README.md) | Development tool setup and operation | 0 |
+
+Choose by the task you need done; skills work independently. For example,
+`code-review` reports defects, `review-loop` reviews and fixes, and `verify` runs
+checks and reports evidence. Skills follow the
+[Agent Skills specification](https://agentskills.io/specification).
+
+## Manage installations
+
+Use `@latest` to run the newest published installer and bundled content.
+
+### Add skills
+
+Select skills and optional shared rules:
+
+```bash
+npx @jinyongp/agentskills@latest add
+```
+
+### Update installed skills
+
+Refresh recorded selections. To install newly available skills, use `add`.
+
+```bash
+npx @jinyongp/agentskills@latest update
+```
+
+### Inspect installations
+
+Show available skills and recorded installations:
+
+```bash
+npx @jinyongp/agentskills@latest list
+```
+
+### Remove installations
+
+Preview removal of recorded skills and rules, then confirm:
+
+```bash
+npx @jinyongp/agentskills@latest remove
+```
+
+### Choose scope and content
+
+| Option | Effect |
+| --- | --- |
+| `--project PATH` | Target an existing project directory; default is the current directory |
+| `--global` | Target the user's global installation; include it on every global command |
+| `--agent codex` / `--agent claude` | Select an agent; `update` and `remove` otherwise target all recorded agents in scope |
+| `--skill NAME ...` | Select named skills; shared rules remain included unless excluded |
+| `--no-rules` / `--rules-only` | Manage only skills / only shared rules |
+| `--yes` | Apply without prompts; `add` also requires `--agent` |
+
+Updates to a shared skill affect every connected agent. Modified installed content
+stops the operation for explicit conflict resolution; there is no force-overwrite
+option. See the [installation guide](docs/installation.md) for additional examples,
+storage paths, shared rules, migration, and recovery.
+
+## Compatibility
+
+- **Linux / WSL:** agent connections use relative symlinks.
+- **Native Windows 11:** writable local NTFS; connections use directory junctions.
+- **Skill helpers:** Python helpers need Python 3.11+. The optional `verify`, `debug`,
+  and `ci-fix` runners need POSIX process groups; on native Windows, use the project's
+  command directly or run those helpers in WSL.
+
+### Native Windows
+
+In PowerShell, use the `.cmd` entrypoint:
+
+```powershell
+npx.cmd @jinyongp/agentskills@latest add --agent codex --project 'C:\Projects\My App' --skill survey
+```
+
+Administrator access and Developer Mode are not required. Remove managed
+installations before moving a project, then install again at its new location.
+Windows 10, network shares, and cloud-synced directories are outside the verified
+support scope. See [Windows setup, limits, and verification](docs/installation.md#native-windows).
+
+## Install with the skills CLI
+
+The [skills CLI](https://github.com/vercel-labs/skills) also supports skill-only
+installation from GitHub. It does not install this collection's shared rules.
+
+Browse available skills:
+
+```bash
+npx skills add jinyongp/agentskills --list
+```
+
+Install a selected skill for Codex:
+
+```bash
+npx skills add jinyongp/agentskills --skill survey --agent codex
+```
+
+See [alternative installation examples](docs/installation.md#install-with-the-skills-cli).
+The bundled installer does not adopt skills owned by another tool.
 
 ## Testing workflows
 
-| Skill | Use when | Required justification |
-| --- | --- | --- |
-| [test](skills/workflow/test/SKILL.md) | Decide whether and where to add coverage | A named failure, an observable contract, and a meaningful coverage gap |
-| [test-integration](skills/workflow/test-integration/SKILL.md) | Exercise a real dependency or module boundary | Evidence that isolated/static checks cannot supply |
-| [test-maintenance](skills/workflow/test-maintenance/SKILL.md) | Audit or improve existing tests | A concrete maintenance cost and preserved failure detection |
-| [test-unit](skills/workflow/test-unit/SKILL.md) | Check isolated calculations, decisions, or state transitions | An uncovered logic failure at a stable interface |
-| [test-contract](skills/workflow/test-contract/SKILL.md) | Verify consumer/provider compatibility | Independently justified expectations and provider conformance |
-| [test-e2e](skills/workflow/test-e2e/SKILL.md) | Exercise a critical journey from the actual entrypoint | A user outcome whose failure cheaper checks cannot expose |
-| [test-property](skills/workflow/test-property/SKILL.md) | Explore generated inputs or state transitions | An independently justified invariant and meaningful domain |
-
-Each works independently. Choose by the requested work rather than loading all of them.
-Reuse existing checks when sufficient; adding no new test is a valid outcome.
-Property testing is a technique that can use unit or integration boundaries;
-contract testing focuses on compatibility rather than a required execution layer.
-
-## Add a skill
-
-From the repository root, specify a category and name to prepare the skill,
-evaluation notes, and catalog entries:
-
-```bash
-uv run new_skill.py workflow my-skill
-```
-
-Write the triggers, procedure, and result checks in the generated `SKILL.md`.
-See the [authoring guide](CONTRIBUTING.md) for options and rules.
-Bundle required files in the skill's `scripts/`, `references/`, or `assets/`
-directories so they remain available after individual installation.
-
-Run all checks from the repository root with one command.
-This requires Python 3.11+, uv, Node.js 22.20+, and npm.
-
-```bash
-uv run check.py
-```
-
-The command prepares development dependencies and runs format validation, tests,
-and installation checks in a temporary project.
-For a quick format and layout check, use `uv run check.py validate`.
-GitHub Actions runs the same script with `--locked` to enforce committed dependency versions.
-See the [verification instructions](CONTRIBUTING.md#verify-before-committing) for details.
-Skill users do not need these maintenance tools.
-
-## Release
-
-From a checkout, publish a specified version with one command:
-
-```bash
-uv run release.py 0.2.0
-```
-
-The command validates, tests the npm tarball, commits release metadata, pushes the
-default branch and matching tag, and waits for npm and GitHub publication. It requires
-Git, uv, Node.js/npm, and an authenticated GitHub CLI with repository write access.
-Commit pending work first. Running the command authorizes publication; it has no
-additional confirmation prompt. Prereleases such as `0.3.0-rc.1` use npm's `next` tag.
-Rerun the same version after a failure to resume; source changes require a new version
-once a release tag exists. See [release details](CONTRIBUTING.md#releases).
+Start with `test` to assess whether coverage is needed. Use a specialized skill when
+the task calls for a specific boundary or technique. The
+[testing skill guide](docs/testing-skills.md) compares all seven choices.
 
 ## Saved task records
 
-When a workflow needs saved records, skills default to
-`.agents/artifacts/<run-id>/<skill-name>/` in the target project.
-User destinations and project conventions take precedence. Inline results stay
-inline unless saving is requested or needed by the workflow. Records remain local.
+- Inline results stay inline unless saving is requested or needed by the workflow.
+- Saved records default to `.agents/artifacts/<run-id>/<skill-name>/` in the target project.
+- User destinations and project conventions take precedence; records remain local.
+
 See the [record convention](CONTRIBUTING.md#saved-task-records) for run IDs and contents.
+
+<a id="add-a-skill"></a>
+<a id="release"></a>
+
+## Contributing
+
+Skills live at `skills/<category>/<skill-name>/SKILL.md`. Maintainer tasks have
+separate instructions:
+
+- [Create or update a skill](CONTRIBUTING.md#create-a-skill)
+- [Run repository checks](CONTRIBUTING.md#verify-before-committing)
+- [Publish a release](CONTRIBUTING.md#releases)
 
 ## License
 

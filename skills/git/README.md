@@ -1,16 +1,31 @@
 # Git
 
-Skills for commits, branches, remote synchronization, conflicts, GitHub PRs, and worktrees.
+Choose the Git operation you want to perform. Each skill preserves unrelated work.
+
 <!-- skills:start -->
-| Skill | Description | Install |
-| --- | --- | --- |
-| [git-commit](git-commit/SKILL.md) | Bounded inspection, staging, commit grouping, and messages; conditional Conventional Commits guidance | `npx skills add jinyongp/agentskills --skill git-commit` |
-| [git-branch](git-branch/SKILL.md) | Create, switch, rename, and delete local branches while preserving work | `npx skills add jinyongp/agentskills --skill git-branch` |
-| [git-sync](git-sync/SKILL.md) | Fetch, pull, push, and check ahead/behind counts and divergence | `npx skills add jinyongp/agentskills --skill git-sync` |
-| [git-conflict](git-conflict/SKILL.md) | Resolve, validate, and continue merge, rebase, or cherry-pick conflicts | `npx skills add jinyongp/agentskills --skill git-conflict` |
-| [git-pr](git-pr/SKILL.md) | Draft GitHub PR titles and bodies, check duplicates, create, and update | `npx skills add jinyongp/agentskills --skill git-pr` |
-| [git-worktree](git-worktree/SKILL.md) | Manage parallel checkouts with bounded inspection and preservation of local work | `npx skills add jinyongp/agentskills --skill git-worktree` |
+
+## Commit and publish changes
+
+- [git-commit](git-commit/SKILL.md) — Inspect, stage, split, and commit selected changes.
+- [git-pr](git-pr/SKILL.md) — Draft, create, or update a GitHub pull request.
+- [git-sync](git-sync/SKILL.md) — Fetch, pull, push, or inspect branch synchronization.
+
+## Manage local work
+
+- [git-branch](git-branch/SKILL.md) — Create, switch, rename, or delete a local branch.
+- [git-worktree](git-worktree/SKILL.md) — Create, inspect, or remove parallel checkouts.
+- [git-conflict](git-conflict/SKILL.md) — Resolve and continue a merge, rebase, or cherry-pick.
+
 <!-- skills:end -->
 
-Add skills at `skills/git/<skill-name>/SKILL.md`.
+## Install
+
+Run from the target project; replace `git-commit` with one or more names above:
+
+```bash
+npx @jinyongp/agentskills@latest add --agent codex --skill git-commit
+```
+
+See [installation requirements and alternatives](../../README.md#quick-start).
+
 [Authoring guide](../../CONTRIBUTING.md) · [All skills](../../README.md)
