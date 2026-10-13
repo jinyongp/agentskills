@@ -43,12 +43,12 @@ design complexity, shortcuts, or end-to-end completeness concerns.
    entries fail explicitly. Refresh queries if local work changes during inspection.
    Rename detection is disabled, so moves appear as old/new paths. Read selected
    untracked files separately; Git diff does not include their contents.
-4. Trace changed behavior into relevant callers, contracts, tests, and failure paths.
-   Inspect surrounding code only as needed. Binary files, submodules, generated
-   outputs, and external dependencies may require separate targeted evidence.
-   Check missing accepted behavior and reachable recovery as well as unnecessary
-   structure. Judge design by fit, readability and concrete maintenance cost;
-   keep engineering observations separate from behavioral defects.
+4. Check accepted behavior and applicable repository standards separately; a pass
+   on one does not establish the other. Reuse lint/type checks for mechanical rules.
+   Trace relevant callers, contracts, tests and failure paths. Binary/generated
+   files, submodules and dependencies may need separate evidence.
+   Check accepted behavior, reachable recovery, and design cost/readability;
+   separate engineering observations from behavioral defects.
    For changed tests, check independently justified expectations, actual coverage
    gaps, real versus mocked boundaries, and assertions that constrain valid changes.
    Report duplication or brittleness when it causes concrete maintenance cost or

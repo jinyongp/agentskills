@@ -1,5 +1,17 @@
 # code-review evaluation
 
+## Evidence and proportional workflow — 2026-10-13
+
+Parent instruction review in Codex; model version not exposed. No independent
+diagnosis, review or live PR operation was executed for these cases.
+
+| Scenario | Expected decision |
+| --- | --- |
+| Lint passes but required behavior is absent | Review contract separately from mechanical standards |
+| Behavior works but violates an applicable project standard | Report supported rule violation separately; avoid repeating already actionable tooling output |
+| Two-adapter heuristic rejects a cleanup-owning single adapter | Assess actual responsibility/caller cost; no count-based finding |
+| New outer tests omit a distinct case in old unit tests | Preserve meaningful coverage before recommending removal |
+
 ## Accepted-scope review — 2026-10-07
 
 Parent instruction review; model version not recorded. Paired case:

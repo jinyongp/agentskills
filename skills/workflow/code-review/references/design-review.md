@@ -18,3 +18,14 @@
   their severity or reporting personal preferences as defects.
 - A valid complete design may deserve no finding. Review both extremes without
   requiring an issue, a redesign, a new dependency or a new test in every patch.
+
+When a wrapper or module is hard to use, inspect what callers must know: sequencing,
+configuration, error handling and invariants as well as method signatures. Propose
+consolidation only when it removes demonstrated caller coordination or duplicated
+responsibility; a shorter interface or fewer files alone does not establish benefit.
+One implementation can justify a boundary that owns cleanup or protects a contract.
+
+When moving tests to a more stable public interface, map existing meaningful cases
+to replacement coverage first. Remove duplicated implementation-coupled checks only
+after the behavior they protected remains observable. An outer test passing does not
+justify deleting distinct lower-level cases it never exercises.
