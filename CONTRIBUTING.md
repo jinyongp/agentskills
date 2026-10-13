@@ -302,8 +302,9 @@ Developer Mode. CI may run elevated; supplement it with a standard-user desktop
 run and record the token, OS, filesystem, shells and Node versions. Windows build
 26300 has been checked with a SAFER normal-user token and Developer Mode off.
 Confirmation/cancellation and prompt-time conflict tests use POSIX PTYs or the
-standard-library Windows ConPTY adapter in `tests/windows_terminal.py`. The adapter
-bounds buffered terminal output and reports omitted bytes on failure. Native Codex
+Windows ConPTY adapter in `tests/windows_terminal.py`, with the development-only
+`pyte` dependency interpreting terminal redraws. The adapter bounds buffered terminal
+output and reports omitted bytes on failure. Native Codex
 0.162.0-alpha.17.2 discovered both project and global installations through its
 local skills API. Windows 10 desktop, native Claude discovery and remote execution
 of the new CI matrix remain pending acceptance checks. Optional POSIX process-group
