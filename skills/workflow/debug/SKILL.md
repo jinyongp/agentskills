@@ -22,6 +22,9 @@ metadata:
    and relevant revision. Reuse current evidence and repository commands.
    Ask for missing inputs only when they block meaningful investigation.
 2. Reproduce the smallest useful failure in an isolated fixture where practical.
+   Define a verdict for the exact symptom, not just successful exit. Reduce inputs
+   or steps one at a time while checking that the same failure remains; stop when
+   further reduction adds little diagnostic value. Preserve the original case.
    For noisy finite commands, run the bundled helper without reading its source:
 
    ```bash
@@ -40,13 +43,16 @@ metadata:
    symptom does not reproduce, record what was tried and the remaining gap.
    A successful unrelated command does not disprove the reported bug.
 5. Form a testable cause and choose a check that distinguishes it from alternatives.
+   State what each probe predicts before running it; inspect only the needed state.
    Trace relevant inputs, state, and callers; change one variable at a time.
    Separate confirmed observations from hypotheses. Avoid broad speculative edits.
 6. When fixes are authorized, correct the demonstrated cause with the smallest
    scoped change. Add regression coverage when it proves the failure and matters;
    do not write tests that only repeat the implementation.
-7. Rerun the original reproducer and affected checks. Broaden validation only for
-   shared effects, failures, or unresolved risks. Preserve pre-existing user changes.
+7. Rerun the original, unreduced scenario and affected checks. Remove temporary
+   instrumentation owned by this investigation; retain useful evidence separately.
+   Broaden validation only for shared effects, failures, or unresolved risks.
+   Preserve pre-existing user changes.
 
 ## Result
 

@@ -1,5 +1,17 @@
 # debug evaluation
 
+## Evidence and proportional workflow — 2026-10-13
+
+Parent instruction review in Codex; model version not exposed. No independent
+diagnosis, review or live PR operation was executed for these cases.
+
+| Scenario | Expected decision |
+| --- | --- |
+| Successful exit hides wrong business output | Reproducer verdict checks the exact symptom |
+| Minimization changes the failure to a setup error | Keep the original failure case; do not diagnose the substitute symptom |
+| Temporary logs isolate a cause | State probe prediction, verify original unreduced case after fixing, remove owned instrumentation |
+| Production-only issue cannot reproduce locally | Keep hypotheses explicit and evidence gaps visible; no invented reproduction |
+
 Two fixture tests replay reproduction and a scoped correction through the standalone
 runner. They do not evaluate independent agent diagnosis or automatic selection.
 
