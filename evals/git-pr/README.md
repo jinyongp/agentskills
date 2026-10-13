@@ -1,5 +1,16 @@
 # git-pr evaluation
 
+## Evidence and proportional workflow — 2026-10-13
+
+Parent instruction review in Codex; model version not exposed. No independent
+diagnosis, review or live PR operation was executed for these cases.
+
+| Scenario | Expected decision |
+| --- | --- |
+| Small correction with no material rollout issue | Concrete problem/result/checks; no compulsory diagram or risk boilerplate |
+| Data migration changes consumers and cannot fully roll back | Explain affected data/consumers and actual reversal limits |
+| Before/after behavior has not been executed | Label illustration or unavailable check; no observed evidence claim |
+
 PR change ranges and body-file preparation were replayed in a temporary repository,
 and installed gh options were inspected. Public GitHub PR creation and updates were not run.
 Automatic selection and independent agent title/body quality were not evaluated.

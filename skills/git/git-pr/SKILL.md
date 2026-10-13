@@ -31,6 +31,10 @@ metadata:
 3. Write for a reviewer new to the task: concrete problem, resulting behavior,
    actual checks, material limitations/migration. Follow the template, omit abandoned
    approaches, and preserve relevant existing context outside the requested edits.
+   Use a before/after example or compact visual when it clarifies changed behavior.
+   For consequential changes, name affected consumers/data, rollout needs, and
+   whether reversal restores the prior state. Omit empty risk sections and avoid
+   claiming observed results for checks that were not run.
 4. Return prepared text for drafting. For publication, verify the exact target/
    published head; push only the selected branch when required and authorized by
    the PR request. No force-push, unrelated branches, or automatic tag publication.
