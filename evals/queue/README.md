@@ -1,5 +1,16 @@
 # queue evaluation
 
+## Work decomposition reinforcement — 2026-10-13
+
+Parent instruction review in Codex; model version not exposed. The revised rules
+cover these decisions; no independent task or live tracker execution was run.
+
+| Scenario | Expected decision |
+| --- | --- |
+| Layer headings describe one working outcome | Group a narrow usable slice rather than automatic layer tickets |
+| Migration batches pass only together | Preserve the integration constraint and final checks; do not claim isolated release readiness |
+| Unsettled in-scope choice and accepted exclusion | Record the blocking question/evidence; keep the exclusion outside execution |
+
 ## Revision verification — 2026-10-07
 
 Body: 2,688 characters. Format/catalog validation passed for 52 skills; full

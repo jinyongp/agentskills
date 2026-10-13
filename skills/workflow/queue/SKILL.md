@@ -24,11 +24,17 @@ metadata:
 2. Group by independently verifiable outcomes. A file or checklist line is not
    automatically a task; keep coupled steps together and consolidate duplicates
    without losing acceptance conditions. Preserve meaningful domain wording.
+   Prefer a narrow working slice across layers. For large migrations, separate
+   compatibility setup, caller batches, and cleanup only where checks support it.
+   Record when intermediate work needs a shared integration result to pass.
 3. Give each task an action and observable result. Preserve supplied priorities;
    shared files or preferred order alone do not establish dependencies. Connect
    tasks only when later work needs an earlier result or state. Include explicit
    validation/review work; do not append unrequested quality or closeout tasks.
 4. For a draft, return the queue with unresolved items clearly separated.
+   Name each in-scope blocking question, its evidence, and affected work; keep
+   accepted exclusions outside the executable queue. For cross-session tasks,
+   link accepted decisions, relevant paths and completion checks, not chat history.
    For registration, inspect existing tasks in the selected scope before writing.
    Start with summaries; use the tool's filters and bounded pages to recover the
    relevant records. Partial listings cannot prove that a duplicate is absent.

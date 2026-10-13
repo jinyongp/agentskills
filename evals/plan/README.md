@@ -1,5 +1,16 @@
 # plan evaluation
 
+## Work decomposition reinforcement — 2026-10-13
+
+Parent instruction review in Codex; model version not exposed. The revised rules
+cover these decisions; no independent task or live tracker execution was run.
+
+| Scenario | Expected decision |
+| --- | --- |
+| Large uncertain effort with explicitly excluded offline mode | Track in-scope decisions and exploration separately; offline mode stays excluded |
+| Cross-layer feature versus sweeping migration | Prefer a usable slice; allow compatibility setup, caller batches and final contraction where intermediate checks justify it |
+| Work continues in another session | Carry decision links, relevant paths and completion evidence; no fixed session/token quota |
+
 ## Evidence and scope reinforcement — 2026-10-07
 
 Revision checks: body 3715 characters; 55 skill formats/catalogs validated.
