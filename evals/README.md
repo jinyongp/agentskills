@@ -6,6 +6,7 @@ Keep each skill's cases and results in its own folder.
 
 | Skill | Evaluation record |
 | --- | --- |
+| retro | [Observed workflow failures, existing controls, scope and proportional improvements](retro/README.md) |
 | domain-modeling | [Business terms, scenario probes, contextual rules and scoped records](domain-modeling/README.md) |
 | ci-fix | [Revision-specific CI, stable Actions, gates and bounded log recovery](ci-fix/README.md) |
 | security-review | [Attacker control, authorization, defenses, evidence and coverage](security-review/README.md) |
