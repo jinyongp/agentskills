@@ -1,4 +1,4 @@
-"""Run confirmation tests in a real Windows ConPTY using only the standard library."""
+"""Run confirmation tests in a real Windows ConPTY and interpret VT redraws."""
 
 import ctypes as c
 from ctypes import wintypes as w
@@ -6,6 +6,22 @@ import os
 import queue
 import threading
 import time
+
+import pyte
+
+
+class PromptScreen:
+    width, height = 240, 80
+
+    def __init__(self):
+        self.screen = pyte.Screen(self.width, self.height)
+        self.stream = pyte.ByteStream(self.screen)
+
+    def feed(self, chunk):
+        self.stream.feed(chunk)
+
+    def contains(self, prompt):
+        return prompt.decode("utf-8") in "\n".join(self.screen.display)
 
 
 class Coord(c.Structure):
@@ -66,7 +82,8 @@ def confirm_after(argv, cwd, env, mutate, response, wait_for):
     try:
         checked(create_pipe(c.byref(input_read), c.byref(input_write), None, 0))
         checked(create_pipe(c.byref(output_read), c.byref(output_write), None, 0))
-        result = create_console(Coord(120, 40), input_read, output_write, 0, c.byref(console))
+        screen = PromptScreen()
+        result = create_console(Coord(screen.width, screen.height), input_read, output_write, 0, c.byref(console))
         if result:
             raise OSError(f"CreatePseudoConsole failed: HRESULT {result & 0xffffffff:#x}")
         size = c.c_size_t()
@@ -83,7 +100,7 @@ def confirm_after(argv, cwd, env, mutate, response, wait_for):
         if any(any(char in word for char in '%!^"\r\n') for word in argv):
             raise ValueError("Unsupported terminal fixture argument")
         shell = os.path.join(os.environ["SystemRoot"], "System32", "cmd.exe")
-        command = c.create_unicode_buffer('"' + shell + '" /d /s /c "' +
+        command = c.create_unicode_buffer('"' + shell + '" /d /s /c "chcp 65001 >nul & ' +
                                           " ".join('"' + word + '"' for word in argv) + ' <CON >CON 2>CON"')
         environment = c.create_unicode_buffer("\0".join(f"{k}={v}" for k, v in sorted(env.items(), key=lambda item: item[0].upper())) + "\0")
         checked(create_process(shell, command, None, None, False, 0x80000 | 0x400,
@@ -105,11 +122,13 @@ def confirm_after(argv, cwd, env, mutate, response, wait_for):
         reader = threading.Thread(target=drain, daemon=True)
         reader.start()
         output, deadline = b"", time.monotonic() + 15
-        while wait_for not in output:
+        while not screen.contains(wait_for):
             if time.monotonic() > deadline or wait(process.process, 0) == 0:
                 raise AssertionError(f"Prompt missing; last 4096 bytes ({max(0, stats['bytes']-len(output[-4096:]))} omitted): {output[-4096:]!r}")
             try:
-                output = (output + chunks.get(timeout=0.05))[-65536:]
+                chunk = chunks.get(timeout=0.05)
+                output = (output + chunk)[-65536:]
+                screen.feed(chunk)
             except queue.Empty:
                 pass
         mutate()
