@@ -43,16 +43,16 @@ design complexity, shortcuts, or end-to-end completeness concerns.
    entries fail explicitly. Refresh queries if local work changes during inspection.
    Rename detection is disabled, so moves appear as old/new paths. Read selected
    untracked files separately; Git diff does not include their contents.
-4. Check accepted behavior and applicable repository standards separately; a pass
-   on one does not establish the other. Reuse lint/type checks for mechanical rules.
-   Trace relevant callers, contracts, tests and failure paths. Binary/generated
-   files, submodules and dependencies may need separate evidence.
-   Check accepted behavior, reachable recovery, and design cost/readability;
-   separate engineering observations from behavioral defects.
-   For changed tests, check independently justified expectations, actual coverage
-   gaps, real versus mocked boundaries, and assertions that constrain valid changes.
-   Report duplication or brittleness when it causes concrete maintenance cost or
-   violates project policy; keep stylistic preferences separate from defects.
+4. Review these concerns separately; a pass in one does not establish the others.
+   - **Behavior and standards:** Check accepted behavior and repository rules
+     independently. Trace callers, contracts, tests, failures, and recovery; reuse
+     lint/type checks for mechanical rules. Binary/generated files, submodules,
+     and dependencies may need separate evidence.
+   - **Design:** Assess readability and demonstrated maintenance cost. Separate
+     engineering observations and stylistic preferences from behavioral defects.
+   - **Changed tests:** Check independent expectations, meaningful coverage gaps,
+     real versus mocked boundaries, and constraints on valid implementations.
+     Report duplication/brittleness for concrete cost or project-policy violations.
 5. For each candidate finding, establish a concrete trigger, violated expectation,
    impact, and changed code location. Check existing behavior and repository rules;
    discard speculative issues and preferences without behavioral consequences.

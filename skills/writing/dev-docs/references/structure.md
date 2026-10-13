@@ -1,71 +1,84 @@
-# Documentation form and navigation
+# Documentation structure and presentation
 
-Read when choosing a form or restructuring a documentation area.
+Read when drafting or reviewing organization, prose, lists, tables, examples, or navigation.
 
-## Choose the reader's next action
+## Identify the reader's task
 
-A beginner learning a workflow needs a coherent guided path and visible success.
-An experienced reader completing a task needs prerequisites, decisions, commands,
-and relevant recovery. Someone looking up an interface needs precise parameters,
-defaults, errors, units, and version applicability. Understanding a design needs
-reasons, boundaries, and tradeoffs. Use the form that answers the request; a small
-product need not create four separate document trees.
+Choose the form from what the reader needs:
 
-The [Diataxis framework](https://diataxis.fr/) distinguishes tutorial, how-to,
-reference, and explanation needs. Treat this as a useful design lens rather than
-an enforced repository layout. Keep conceptual discussion out of a command sequence
-when it blocks progress, linking an explanation when the reader needs one.
+- **Learn a workflow:** a coherent path with prerequisites and recognizable success.
+- **Complete a task:** direct steps, relevant decisions, and recovery.
+- **Look up an interface:** exact names, parameters, defaults, errors, and versions.
+- **Understand a design:** reasons, boundaries, and tradeoffs.
 
-## Scope and navigation
+The [Diataxis framework](https://diataxis.fr/) distinguishes these needs. Use it as
+a lens; a small product does not need a mandatory four-part documentation tree.
 
-A README should give enough orientation and first-use information for its audience.
-Link deeper material when it has a separate reader task. Organize around actual
-tasks and public concepts rather than copying internal folders into a table of contents.
-Keep required information available without relying on an undocumented chat history.
+## Group information before formatting
 
-Preserve stable anchors, cross-links, and supported-version access when reorganizing.
-Inspect known inbound links and redirect support before moving published paths.
-If redirects cannot be verified, report the gap rather than silently promising them.
-Update only relevant catalogs or generated indexes through the project's tooling.
+Open with the task and its answer or outcome. A lookup page can start with the
+interface and applicability. Preserve deliberate narrative sequencing where relevant.
 
-## Make the main path visible
+Give distinct reader questions useful headings. Separate setup, defaults,
+exceptions, recovery, and internals when mixing them forces readers to classify
+facts themselves. Replacing every sentence with a bullet does not repair mixed scope.
 
-Use these decisions when drafting or reviewing; they are not a word-count target
-or a requirement to split every subject into its own page.
+Keep a detail beside the step when it changes the next action, prevents a relevant
+failure, or explains the result. Link independent variants, design rationale, or
+internals where needed. Keep limits and cautions before the affected operation.
+Preserve useful source notes while shaping the requested document; drafting does
+not require rewriting those sources or consuming every fragment.
 
-| Inspect | Decision |
-| --- | --- |
-| Opening and headings | Name the task and its answer or outcome before supporting detail. A lookup page names the interface and applicability instead of inventing a tutorial. |
-| Paragraph on the main path | Retain it here if it changes an action or choice, prevents a relevant failure, or explains the shown result. Put independent rationale or implementation mechanics in a linked section. |
-| Code example | Introduce the behavior it demonstrates, keep only setup needed for that behavior, and explain how to recognize the result. Use separate labeled examples for independent variants; retain integrated examples when composition is the task. |
-| Instructions between setup and success | Keep prerequisites and applicable safety or correctness warnings before the affected step. Place optional alternatives and deeper mechanics after success or behind a specific link. |
-| Repeated explanation | Keep a canonical definition and a link; repeat only the local condition needed to act. |
-| Review finding | Cite the passage, the reader task it obstructs, and the concrete move, cut, or rewrite. Distinguish a blocked or misleading path from distracting detail; describe the effect rather than calling the page merely verbose. |
+## Choose a form that supports use
 
-For an API-call guide, a normal request and response belong on the main path.
-Prototype construction or clone semantics belong there only when they affect that
-call or the reader's next operation. A mutation caveat can stay beside the affected
-step while its implementation explanation moves to a linked section.
+- **Prose:** explain context, reasons, or cause and effect in connected sentences.
+- **Bullets:** expose independent requirements, conditions, or alternatives.
+- **Numbered steps:** show actions whose order matters for completion.
+- **Task headings and fenced code:** let readers find and execute an operation.
+- **Comparison tables:** compare attributes that change a choice, such as platform
+  support, requirements, or behavior. Shared column labels alone do not justify a table.
+- **Lookup tables:** retain compact mappings that help readers find an exact value
+  or meaning, such as option/default or term/definition pairs.
+- **Specific links:** route separate tasks and optional workflows to their own detail.
 
-Review readability separately from command correctness: a compiling example can
-still bury its purpose. Inspect the opening and heading sequence for the promised
-task, then follow a representative example from setup to result. Check whether its
-meaning depends on unrelated internal explanations. Preserve qualifications needed
-for correct use; shorten by relocating competing topics and removing repetition.
+A task/command/description table often adds no useful comparison. Long link lists,
+commands, or paragraphs inside cells can hide structure again; use grouped lists,
+task examples, or short summaries with detail links. Do not add formats solely for
+variety or impose paragraph, table, or section quotas.
 
-## Establish ideas before depending on them
+## Build a complete example
 
-Infer reader prerequisites from the requested audience and task; ask only when
-the ambiguity changes the explanation. Introduce the concept as well as its name
-before a later example depends on it. An expert reference can assume documented
-prerequisites; a beginner guide cannot silently require unrelated internal knowledge.
-Move a necessary definition before its first use, but keep unrelated definitions
-off the opening path.
+Introduce what the example demonstrates, then keep its required setup, inputs,
+public invocation, and recognizable result together. Keep inputs consistent with
+preceding setup. Separate independent variants; retain composition when the example
+is intended to demonstrate APIs working together.
 
-Check each paragraph against the promised task: what needed action, reason,
-qualification or result would disappear if it were cut? Keep that contribution;
-move competing topics or omit unused source fragments. For assembled notes, preserve
-source material while shaping the requested document. When the evidence lacks a
-required example, obtain it, label a hypothetical illustration, or narrow the claim;
-never invent observed results or author experiences. Draft continuously unless the
-user requested collaborative choices; per-paragraph approval is not required.
+An API call need not teach object prototypes first. Keep a field-access caveat beside
+the call if it changes how the response is used; link unrelated mechanics separately.
+Introduce concepts before later reasoning relies on them, using the audience's stated
+prerequisites. Expert references need not become beginner tutorials.
+
+Missing output or examples need evidence, a labeled hypothetical illustration, or
+a narrower claim. Never invent observed results or author experiences. Retain names,
+qualifications, and conditions that affect the task.
+
+## Preserve navigation
+
+Keep supported-version access and useful anchors and URLs. Inspect known inbound
+links and redirect support before moving published paths; report gaps rather than
+promising unverified redirects. Update relevant generated indexes through their source.
+
+## Review discovery and completion separately
+
+1. Scan headings, opening lines, lists, table labels, and example introductions.
+   Can readers locate prerequisites, actions, choices, and results without reading
+   every paragraph? Identify buried conditions, mixed tasks, and excessive detail.
+2. Follow the selected task fully. Check that each step has its setup and that the
+   result is recognizable. Compiling commands, screenshots, and a docs build do not
+   establish usability or reader comprehension.
+
+For each obstruction, name the passage, affected task, reader impact, and a concrete
+regrouping, format change, or relocation. Prioritize missing/misleading instructions
+and structural obstacles before wording polish. Keep effective prose and necessary
+qualifications. Draft continuously unless collaboration was requested; paragraph-by-
+paragraph approval is not a default writing workflow.

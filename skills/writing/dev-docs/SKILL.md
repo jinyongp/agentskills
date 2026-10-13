@@ -18,7 +18,7 @@ This skill works alone. Accompanying language guidance refines the same delivera
 Review agreed capabilities; documenting a limit does not authorize adding its feature.
 
 Read [references/structure.md](references/structure.md) when drafting or reviewing
-explanatory prose, examples, or navigation; read [references/verification.md](references/verification.md)
+organization, prose, lists, tables, examples, or navigation; read [references/verification.md](references/verification.md)
 when validating commands, generated references, version claims, or examples.
 
 ## Procedure
@@ -29,13 +29,13 @@ when validating commands, generated references, version claims, or examples.
    implementation; resolve material conflicts before documenting a claim as supported.
 2. Start with selected paths and headings. Retrieve relevant sections rather than
    whole sites, source trees, or generated API dumps. Track omissions and recover
-   necessary context before claiming complete coverage. Existing generators or native
-   filters can bound mechanical output; report their limits and retrieval method.
-3. State the page's reader task and answer or outcome in its opening. Use headings
-   that locate actions, decisions, or lookup subjects. Keep details on the main path
-   when they change the reader's next action, prevent a relevant failure, or explain
-   the result; link separate design or internals material at the point of need.
-   Preserve useful URLs and real inbound links when reorganizing.
+   necessary context before claiming complete coverage. Bound output with existing
+   tools; report limits and retrieval method.
+3. Open with the reader task and answer or outcome. Group actions, decisions, and
+   lookup subjects under useful headings; choose prose, lists, tables, and code by
+   their relationships. Keep details that change the next action, prevent failure,
+   or explain the result beside the step; link separate design/internals material.
+   Preserve useful URLs and inbound links.
 4. Give required setup, steps, and a recognizable result. Introduce each example
    with what it demonstrates; keep its inputs consistent with the preceding setup.
    Separate optional variants from the first successful path. Keep API names, defaults,
@@ -47,19 +47,19 @@ when validating commands, generated references, version claims, or examples.
    suitable environment. Distinguish tested output from illustrative output. Avoid
    live writes or paid calls merely to validate an example; report unavailable setup
    or unsupported versions. Reuse link, build, snippet, type, and schema checks.
-7. Review whether the opening and headings expose the task and takeaway, and whether
-   a reader can follow the example without unrelated internals. Report obstructing
-   passages and their effect before minor completeness issues. Check missing setup,
-   broken links, contradictions, and stale generated sources.
+7. Check whether readers can locate prerequisites, steps, choices, and results
+   without reading every paragraph. Review grouping, format choice, and detail load
+   separately from command correctness. Prioritize obstructing structure and passages
+   over polish; name their effect and repair. Check missing setup, broken links,
+   contradictions, and stale generated sources.
    Add permanent example coverage only for a meaningful uncovered contract. Preserve
    user edits and report unresolved product/documentation disagreements.
 
 ## Result
 
-Return the document ready for its destination, or scoped review findings. Explain
-material assumptions and verification gaps separately. Report inspected scope,
-tested versions/examples, actual checks, and unverified paths; a docs build does
-not establish that every command or supported version works.
+Return the finished document or scoped findings. Explain assumptions and gaps
+separately. Report scope, tested versions/examples, actual checks, and unverified
+paths; a docs build does not establish that every command or supported version works.
 
 ## Saved records
 

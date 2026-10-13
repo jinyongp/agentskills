@@ -1,5 +1,15 @@
 # Accessibility evaluation
 
+## Presentation revision — 2026-10-13
+
+- **Scope:** text-contrast thresholds are grouped by normal and large text;
+  rounding, compositing, applicability, and exceptions remain separate checks.
+- **Checks:** full repository verification passed: 58 skills, 144 tests (one skipped),
+  skills CLI fixtures, and packed project/global lifecycle checks. Creator validation,
+  saved-record checks, and temporary Codex/Claude standalone installs also passed.
+- **Limits:** no browser audit, standards revalidation, or independent agent study
+  was run for this presentation change. Earlier evidence retains its recorded date.
+
 ## Cases
 
 | Request | Expected decision | Parent review |

@@ -6,12 +6,16 @@ to their explanations. Consult the criterion's applicability and exceptions.
 
 ## Contrast
 
-For SC 1.4.3, applicable normal text needs at least 4.5:1; large text needs 3:1.
-Large means at least 18pt (24 CSS px), or 14pt bold (about 18.67 CSS px), including
-equivalent sizes for applicable scripts. An 18px regular label is not large text.
+For SC 1.4.3, select the applicable text threshold:
+
+- **Normal text:** at least 4.5:1.
+- **Large text:** at least 3:1. Large means 18pt (24 CSS px) or larger, or 14pt bold
+  (about 18.67 CSS px) or larger, including equivalent sizes for applicable scripts.
+  An 18px regular label is not large text.
+
 Classify the unrounded ratio: 4.499:1 fails 4.5:1 even if the display rounds to 4.50.
-Account for rendered compositing and relevant background variations. Inactive,
-incidental, decorative, and logo text have specified exceptions.
+Account for rendered compositing and relevant background variations. Check the
+specified exceptions for inactive, incidental, decorative, and logo text.
 See [Text contrast](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html).
 
 SC 1.4.11 generally requires 3:1 for visual information needed to identify active

@@ -28,15 +28,16 @@ For a review-only request, return supported recommendations without editing file
    uncertainty, and exceptions accurate. Distinguish source claims from verified
    facts. Add factual detail only from supplied or verified evidence within scope;
    expose material gaps rather than invent specificity or silently strengthen claims.
-4. Find the answer or requested action and its supporting passages. In instructional
-   or decision prose, move a buried answer before its support and group examples with
-   the point they explain. Preserve deliberate narrative sequencing. Cut praise or
-   repeated conclusions when they add no supported claim or qualification. Name an
-   actor when omission makes responsibility ambiguous; keep modifiers by their claim.
-   Check concepts as well as jargon: the reader must know each idea before later
-   reasoning relies on it. Retain a paragraph's needed step, reason, qualification
-   or intended effect; relocate competing topics. A missing example needs source
-   evidence, a clearly hypothetical illustration, or a narrower claim.
+4. Organize the answer or requested action and its supporting passages.
+   - **Order:** Put a buried answer before its support in instructional/decision
+     prose; preserve deliberate narrative sequencing. Group examples with their
+     point and explain needed concepts before relying on them.
+   - **Clarity:** Name actors where omission obscures responsibility; keep modifiers
+     beside their claims.
+   - **Relevance:** Cut praise or repeated conclusions only when they add no supported
+     claim or qualification. Retain needed steps, reasons, qualifications, and effects;
+     relocate competing topics. Missing examples need evidence, a labeled hypothetical
+     illustration, or a narrower claim.
 5. Preserve intentional humor, formality, unusual phrasing, and author personality.
    Judge a phrase in context: punctuation or vocabulary alone does not establish
    poor writing or AI authorship. Avoid blanket word bans and mechanical scrubbing.

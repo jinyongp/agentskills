@@ -12,53 +12,57 @@ metadata:
 ## Scope
 
 Create, edit, or review consumer READMEs for libraries, CLIs, plugins, and SDKs.
-General guides, API references, runbooks, and profile READMEs have different tasks.
-Works alone. Follow requested language, release, audience, and scope. Review-only
-returns findings; documentation work does not authorize product changes or publication.
+Excludes general guides, API references, runbooks, and profile READMEs. Works alone.
+Follow requested language, release, audience, and scope. Review-only returns findings;
+documentation does not authorize product changes or publication.
+
+Read [references/structure.md](references/structure.md) when drafting or reviewing
+organization, prose, examples, lists, tables, or navigation.
 
 ## Procedure
 
 1. Identify package, consumer, distribution channel, and documented version from
-   relevant manifests, entry points, releases, and docs. Separate published behavior
-   from checkout changes; settle conflicts before claiming a command or API is available.
+   manifests, entry points, releases, and docs. Separate published behavior from
+   checkout changes; settle conflicts before claiming availability.
 2. Inspect selected paths/headings, then interfaces needed by the first example.
-   Use scoped queries, report omissions, and recover required detail. Keep full source
-   trees, API dumps, and logs out of default input; existing facts stay at their sources.
+   Use scoped queries, report omissions, and recover required detail; avoid full
+   source trees, API dumps, and logs by default.
 3. Open with the task solved and intended user. State a capability or boundary that
    helps adoption; substantiate comparisons and performance claims. Put installation
-   and first use before independent internals.
-4. Give one supported installation path using the actual package name. Include the
-   runtime, platform, peer dependency, permission, or configuration needed for that
-   path. Keep optional alternatives separate. A registry consumer should not need
-   repository cloning, contributor dependencies, or a dev server unless actually
-   required. Separate maintainer setup by link or heading.
+   and first use before independent internals. Group reader questions under useful
+   headings; choose prose, lists, tables, and code by the information's relationship.
+4. Give one supported install path with the actual package name and required runtime,
+   platform, peers, permissions, and configuration. Separate alternatives and maintainer
+   setup. Registry users need no clone, contributor tools, or dev server unless required.
 5. Build the smallest complete first-use example: required input/configuration,
-   public invocation, and how to recognize success. For a library/SDK, show imports
-   and the call; for a CLI, show the command; for a plugin, show registration and use.
-   Include cleanup or error handling when required for correct use. Label illustrative
-   output and placeholders; supply no real credentials. Each command or snippet must
-   follow from the setup shown, without relying on checkout-only files.
-6. Keep a detail beside a step if it changes the invocation, explains its result,
-   or prevents a relevant failure. Link full API tables, independent variants, and
-   design rationale at their point of need. Show limits before incompatible setup.
-   Add badges, contents, or contribution sections for verified status or navigation.
-   Link relevant license/contribution files; preserve useful anchors and URLs.
+   public invocation, and recognizable success. Show imports and a call for a
+   library/SDK, a command for a CLI, or registration and use for a plugin.
+   Include required cleanup/error handling. Label illustrative output and placeholders;
+   supply no real credentials. Each command or snippet must
+   follow from the setup without checkout-only files.
+6. Keep details that change invocation, explain results, or prevent failure beside
+   the step. Link full API tables, variants, and rationale where needed.
+   Show limits before incompatible setup.
+   Add badges or contents for verified status or navigation. Link license/contribution
+   files; preserve useful anchors and URLs.
 7. Walk the consumer path in a fresh temporary environment using the documented
    release when available. Check installation, entry-point resolution, required setup,
-   example completion, and the stated success signal with project tools. A checkout
+   example completion, and success signal. A checkout
    or local tarball verifies that candidate, not registry availability. Avoid live
    writes or paid calls solely for a docs check; state blocked prerequisites and
    untested behavior. Reuse existing link, type, snippet, and build checks.
-8. Follow purpose → install → example → success → deeper detail. For each defect,
-   name the passage/missing step, reader impact, and scoped repair. A docs build does
-   not prove usability. Preserve valid facts and user edits. Lasting tests protect
-   meaningful uncovered contracts, not headings, prose literals, or section counts.
+8. Review purpose → install → example → success → deeper detail. Separately check
+   whether headings, lists, and tables let readers locate setup, choices, and results
+   without reading every paragraph. Prioritize obstructing structure and excess detail
+   over polish. Name each passage/gap, reader impact, and repair. A docs build does
+   not prove usability. Preserve facts and edits; lasting tests protect meaningful
+   uncovered contracts, not headings, prose literals, or section counts.
 
 ## Result
 
-Return the requested README or prioritized findings. Separately report the documented
-version, exercised consumer path, actual evidence, and gaps. Keep review notes and
-unrelated implementation details out of the finished document.
+Return the README or prioritized findings. Separately report documented version,
+exercised path, evidence, and gaps. Keep review notes and unrelated internals out
+of the finished document.
 
 ## Saved records
 

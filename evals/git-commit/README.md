@@ -1,5 +1,15 @@
 # git-commit evaluation
 
+## Presentation revision — 2026-10-13
+
+- **Scope:** inspection commands now have task headings and fenced examples;
+  paging, output limits, hooks, and failure conditions retain their meaning.
+- **Checks:** full repository verification passed: 58 skills, 144 tests (one skipped),
+  skills CLI fixtures, and packed project/global lifecycle checks. Creator validation,
+  saved-record checks, and temporary Codex/Claude standalone installs also passed.
+- **Limits:** this revision did not repeat every historical commit fixture or measure
+  independent agent behavior. Earlier results below retain their original scope.
+
 The instructions' Git procedures were replayed by scripts in temporary repositories.
 Checks compare commit contents, HEAD, cached binary patches, and working-file bytes.
 These results do not measure independent agent selection or judgment.
