@@ -11,6 +11,7 @@ CHECKS = {
     "validate": ("scripts/validate_skills.py",),
     "test": ("-m", "unittest", "discover", "-s", "tests", "-v"),
     "smoke": ("scripts/smoke_install.py",),
+    "package": ("scripts/smoke_package.py",),
 }
 
 

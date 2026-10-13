@@ -5,6 +5,8 @@ from pathlib import Path
 import subprocess
 import tempfile
 
+from npm_cli import npm_command
+
 
 ROOT = Path(__file__).resolve().parents[1]
 CLI_PACKAGE = "skills@1.7.0"
@@ -12,11 +14,12 @@ CLI_PACKAGE = "skills@1.7.0"
 
 def run_cli(project: Path, source: Path, *options: str) -> str:
     result = subprocess.run(
-        ["npx", "--yes", CLI_PACKAGE, "add", str(source), *options],
+        [*npm_command("npx"), "--yes", CLI_PACKAGE, "add", str(source), *options],
         cwd=project,
         env={**os.environ, "DISABLE_TELEMETRY": "1", "CI": "1"},
         capture_output=True,
         text=True,
+        encoding="utf-8",
         timeout=120,
     )
     if result.returncode:
@@ -29,7 +32,7 @@ def main() -> None:
         temp = Path(directory)
         source, project = temp / "source", temp / "project"
         project.mkdir()
-        template = (ROOT / "templates" / "skill.md.tmpl").read_text()
+        template = (ROOT / "templates" / "skill.md.tmpl").read_text(encoding="utf-8")
         selected = "scaffold-smoke-a"
         other = "scaffold-smoke-b"
         bundles = {
@@ -42,11 +45,11 @@ def main() -> None:
             skill.mkdir(parents=True)
             content = template.replace("name: my-skill", f"name: {name}")
             content = content.replace("category: workflow", f"category: {category}")
-            (skill / "SKILL.md").write_text(content)
+            (skill / "SKILL.md").write_text(content, encoding="utf-8", newline="\n")
             for relative, value in bundles.items():
                 path = skill / relative
                 path.parent.mkdir(exist_ok=True)
-                path.write_text(value)
+                path.write_text(value, encoding="utf-8", newline="\n")
 
         listing = run_cli(project, source, "--list")
         if selected not in listing or other not in listing:

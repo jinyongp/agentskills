@@ -33,6 +33,7 @@ metadata:
 
    This optional helper needs Python 3.11+ and POSIX. It performs no shell expansion,
    preserves existing logs, and reports at most 4,000 characters without raw output.
+   On native Windows, run reproductions directly and capture logs with project tools.
    Commands run with existing permissions; choose their side effects deliberately.
    The default 300-second timeout kills the command's process group.
 3. Read only relevant evidence. Search the log or use

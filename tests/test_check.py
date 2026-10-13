@@ -21,6 +21,7 @@ class CheckRunnerTests(unittest.TestCase):
         scripts.mkdir()
         (scripts / "validate_skills.py").write_text('print("VALIDATE_OK")\n')
         (scripts / "smoke_install.py").write_text('print("SMOKE_OK")\n')
+        (scripts / "smoke_package.py").write_text('print("PACKAGE_OK")\n')
         tests = self.root / "tests"
         tests.mkdir()
         (tests / "test_fixture.py").write_text(
@@ -43,6 +44,7 @@ class CheckRunnerTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertLess(result.stdout.index("VALIDATE_OK"), result.stdout.index("TEST_OK"))
         self.assertLess(result.stdout.index("TEST_OK"), result.stdout.index("SMOKE_OK"))
+        self.assertLess(result.stdout.index("SMOKE_OK"), result.stdout.index("PACKAGE_OK"))
 
     def test_validate_does_not_run_tests_or_installation(self):
         result = self.run_check("validate")

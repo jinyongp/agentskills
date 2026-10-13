@@ -26,7 +26,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: "22.22.2"
           package-manager-cache: false
@@ -41,7 +41,7 @@ jobs:
           }
           JS
       - name: Publish npm package
-        uses: releaseway/npm-actions@269fbdeac83fed2df2880915726ed91edbe1bbdd # v0.4.0
+        uses: releaseway/npm-actions@680948414bbe6bfe64e94f776c3514ad44f3dd69 # v0.5.1
 
   release:
     needs: publish
@@ -56,7 +56,7 @@ jobs:
           fetch-depth: 0
           fetch-tags: true
       - name: Publish GitHub Release
-        uses: releaseway/actions@c054f2de3448e79e5d854155e701e13ad31a520c # v0.3.1
+        uses: releaseway/actions@5841e545ff259790a3b2461299e741d62c69a73d # v0.4.1
         with:
           tag: ${{ github.ref_name }}
           commit: ${{ github.sha }}
