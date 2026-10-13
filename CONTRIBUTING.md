@@ -330,8 +330,8 @@ Windows ConPTY adapter in `tests/windows_terminal.py`, with the development-only
 `pyte` dependency interpreting terminal redraws. The adapter bounds buffered terminal
 output and reports omitted bytes on failure. Native Codex
 0.162.0-alpha.17.2 discovered both project and global installations through its
-local skills API. Windows 10 desktop, native Claude discovery and remote execution
-of the new CI matrix remain pending acceptance checks. Optional POSIX process-group
+local skills API. Windows 10 desktop and native Claude discovery remain pending
+acceptance checks. Optional POSIX process-group
 helpers retain their documented platform scope.
 
 Keep `rules/base.md` limited to concise principles that apply to every task.
