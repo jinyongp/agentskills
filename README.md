@@ -132,7 +132,7 @@ npx @jinyongp/agentskills@latest add --agent codex --project "C:\Projects\My App
 npx @jinyongp/agentskills@latest update --global --yes
 ```
 
-Native Windows installations use directory junctions on writable local NTFS
+Native Windows 11 installations use directory junctions on writable local NTFS
 volumes; Administrator access and Developer Mode are not required. Project paths
 may contain spaces and Unicode. Global `~` paths in the table above use the
 Windows user's home directory. The CLI checks connection support on the target
@@ -147,13 +147,15 @@ and relocation of existing junctions are outside the initial support scope.
 If Windows reports a file in use, close the process holding that file and retry;
 retain any backup paths reported by a failed rollback.
 
-Native regression and packed-package tests have passed on Windows build 26300
-with a non-administrator token and Developer Mode disabled. CI is configured for Windows
+Native regression and packed-package tests have passed on Windows 11 build 26300
+with a non-administrator token and Developer Mode disabled. CI runs Windows
 Server 2022 and Linux with Node 22.20.0, 22.x and 24.x. ConPTY tests also cover
 Windows confirmation, cancellation and edits made while a prompt is pending.
-Native Codex 0.162.0-alpha.17.2 has discovered project and global installations
-through its local skills API. Windows 10 desktop and native Claude discovery
-still require separate acceptance evidence.
+Native Codex 0.162.1 and Claude Code 2.1.296 discovered project and global
+installations and stopped discovering them after removal. Codex reads the shared
+source; Claude follows the junction. CI repeats these checks without account
+credentials or model requests. Windows 10 is unverified and outside the verified
+support claim.
 
 Skill installation and helper execution have separate prerequisites. The optional
 `verify`, `debug`, and `ci-fix` Python runners require POSIX process groups. On

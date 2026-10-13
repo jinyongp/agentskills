@@ -60,3 +60,6 @@ jobs:
         run: uv run --locked check.py package
       - name: Verify skills CLI compatibility
         run: uv run --locked check.py smoke
+      - name: Verify native Codex and Claude skill discovery
+        if: matrix.os == 'windows-2022' && matrix.node == '22.20.0'
+        run: uv run --locked python scripts/smoke_agents.py --download-windows-agents

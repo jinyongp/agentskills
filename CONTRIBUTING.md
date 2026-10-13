@@ -297,18 +297,24 @@ that agent connections are junctions. All homes and npm caches are isolated.
 `scripts/npm_cli.py` invokes npm/npx JavaScript entrypoints directly so Python
 does not need to execute `.cmd` files through an implicit shell.
 
-The Windows support contract targets writable local NTFS without elevation or
+The Windows 11 support contract targets writable local NTFS without elevation or
 Developer Mode. CI may run elevated; supplement it with a standard-user desktop
 run and record the token, OS, filesystem, shells and Node versions. Windows build
 26300 has been checked with a SAFER normal-user token and Developer Mode off.
 Confirmation/cancellation and prompt-time conflict tests use POSIX PTYs or the
 Windows ConPTY adapter in `tests/windows_terminal.py`, with the development-only
 `pyte` dependency interpreting terminal redraws. The adapter bounds buffered terminal
-output and reports omitted bytes on failure. Native Codex
-0.162.0-alpha.17.2 discovered both project and global installations through its
-local skills API. Windows 10 desktop and native Claude discovery remain pending
-acceptance checks. Optional POSIX process-group
-helpers retain their documented platform scope.
+output and reports omitted bytes on failure. Native Codex 0.162.1 and Claude Code
+2.1.296 passed project/global skill discovery before installation, after installation
+and after removal. Codex discovers the shared source; Claude reads the junction.
+Repeat this check with `uv run --locked python scripts/smoke_agents.py --codex <exe>
+--claude <exe>`, or use `--download-windows-agents` on Windows x64 to fetch the pinned
+official builds with verified integrity hashes. CI runs this check on its minimum-Node
+Windows job. It isolates agent profiles, disables ancillary traffic, sends only
+local discovery requests and points providers at a closed localhost port. Agent
+binaries remain temporary development tools and are never bundled in the npm package.
+Windows 10 has not been verified; it is outside this completed support scope.
+Optional POSIX process-group helpers retain their documented platform scope.
 
 Keep `rules/base.md` limited to concise principles that apply to every task.
 Task-specific procedures belong in independently installable skills. Installer
