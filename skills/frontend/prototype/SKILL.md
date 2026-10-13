@@ -1,6 +1,6 @@
 ---
 name: prototype
-description: "Build distinct interactive UI alternatives for a requested comparison, using isolated previews and realistic context. Explain tradeoffs, let the user choose, and integrate a selected direction when authorized."
+description: "Build isolated interactive prototypes to compare UI directions or resolve business-logic and state-model questions. Demonstrate relevant scenarios, capture the decision and limits, and integrate only when authorized."
 license: MIT
 metadata:
   author: jinyongp
@@ -11,15 +11,15 @@ metadata:
 
 ## Scope
 
-Build UI alternatives when the user requests exploration or comparison. Ordinary
-implementation and a narrow repair do not require multiple versions. Preserve the
-requested surface and product constraints; a larger brief may need staged exploration,
-not an automatic reduction to one component.
+Build a prototype to answer a named design question: compare UI directions, or
+exercise a business rule/state model. Ordinary implementation and narrow repairs
+need no prototype. Preserve the requested surface and product constraints; stage
+larger explorations without automatically reducing them to one component.
 
-Inspect the selected component, real surrounding context, tokens, stack, and user
-requirements. Reuse project preview tooling. Read
-[references/comparison.md](references/comparison.md) when designing the comparison
-surface or promoting a choice.
+Inspect the relevant context, stack and requirements; reuse project preview tools.
+For UI comparisons, read [references/comparison.md](references/comparison.md).
+For logic or state questions, read [references/logic.md](references/logic.md) and
+follow that branch instead of building compulsory visual alternatives.
 
 ## Build and compare
 

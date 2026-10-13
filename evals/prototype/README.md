@@ -1,5 +1,21 @@
 # Prototype evaluation
 
+## Logic branch — 2026-10-13
+
+Parent instruction review in Codex; model version not exposed. No independent
+agent run or interactive preview execution was performed for these cases.
+
+| Scenario | Expected decision |
+| --- | --- |
+| Explore cancellation while payment is pending | Name the question; expose states/actions, reset, normal/disputed/illegal scenarios |
+| User chooses an existing CLI sandbox | Reuse it; no mandatory HTML or framework |
+| In-memory demo passes retry scenarios | Conclude only about the modeled rules; do not claim real concurrency/persistence works |
+| Compare visual layouts | Use the existing UI branch; do not force a state-machine demo |
+| Prototype only; production behavior is disputed | Record the unresolved policy; no silent rule change, promotion or commit |
+
+The logic reference loads only for logic/state questions. Generic inspection
+caps and independent selection are unmeasured; format and packaging are separate.
+
 ## Decision clarity review — 2026-10-07
 
 Parent instruction review; model version not recorded.
