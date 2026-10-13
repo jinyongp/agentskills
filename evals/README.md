@@ -119,6 +119,51 @@ instructions eliminate the observed problems.
 
 ## Authoring policy verification
 
+### Agent instruction writing — 2026-10-13
+
+#### Revision verification
+
+Added domain-modeling and retro; reinforced plan, queue, prototype, write, rewrite,
+dev-docs, debug, code-review and git-pr. Authoring guidance lives in CONTRIBUTING.md.
+All documentation and evaluation cases are English. Matt Pocock adaptations pin
+commit `49dd158d1076134a641b33efb035946536778336`; standalone skills retain their
+own upstream license and attribution outside runtime instructions. The maintainer
+guide's attribution/license is in the root NOTICE.md.
+
+Actual `uv run --locked check.py` passed: 58 skill formats/catalogs, 133 tests,
+and skills@1.7.0 fixture discovery/selective installation. Local runtime-reference
+links, saved-record fragments, copyright notices and body limits passed for all
+11 added/changed skills. Bodies range from 3,159 to 3,982 characters.
+
+An actual npm tarball was installed through npx into an isolated temporary project
+for Codex and Claude. All files of the 11 selected skills matched source bytes;
+Codex read the shared project directory and Claude linked to the same content.
+Tarball checks found all selected resources and no Python caches. Actual
+skills@1.7.0 installation of domain-modeling, retro and prototype also matched
+every source file and installed no unselected skills. The first package replay
+used an incorrect expected Codex project path; the harness was corrected to the
+declared `.agents/skills` destination and rerun successfully, without source edits.
+
+These checks establish format and distribution, not independent agent behavior
+or comparative skill benefit. Decision cases are parent instruction reviews.
+No package publication, personal installation, or live tracker/PR operation was run.
+
+#### Authoring decisions
+
+Parent instruction review in Codex; model version not exposed. The authoring
+guide now defines reading conditions, co-located decisions, observable completion,
+repository lookups and evidence-based pruning. No independent authoring run or
+causal improvement was measured.
+
+| Case | Expected decision |
+| --- | --- |
+| UI-only reference and logic-only reference | Load the branch relevant to the actual question, not both by default |
+| Rule and its exception appear in distant sections | Co-locate them and state their resulting action |
+| Current command/version is cheap to retrieve | Point to its source instead of maintaining a prompt copy |
+| A standalone skill needs a safety boundary | Retain it locally even when maintainers share a canonical fragment |
+| One session did not exercise a constraint | Non-use does not establish redundancy; evaluate relevant cases before pruning |
+| A coined term supposedly improves agent behavior | Treat the benefit as unverified until realistic execution supports it |
+
 ### Research, security and CI additions — 2026-10-07
 
 Attribution layout was corrected afterward: upstream provenance and license notices

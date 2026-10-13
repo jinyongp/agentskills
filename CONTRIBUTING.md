@@ -110,6 +110,30 @@ Unknown intent needs evidence or clarification; it does not authorize expanded
 features, recovery flows, hardening, or tests. Review every requested area while
 limiting repeated review to changed effects and invalidated evidence.
 
+## Writing instructions for agents
+
+For each description or reference link, name the task or decision that should
+trigger it. List genuinely different branches, not multiple synonyms for one task.
+Keep guidance needed on every branch in SKILL.md; load substantial branch-specific
+detail through a local reference with its reading condition beside the link.
+
+Group a rule with its definition, applicable exception, and resulting action so a
+reader need not assemble the decision from scattered sections. State completion
+as observable evidence within the requested scope. Sharpen an unclear criterion
+before adding another phase, skill, agent, or approval gate.
+
+Prefer a source pointer for cheap repository lookups such as commands, versions,
+or current paths. Retain local copies of essential boundaries when standalone
+installation needs them; single-source maintenance must not create a runtime
+dependency on another skill or this repository's instructions.
+
+When pruning guidance, identify the behavior it should change and review a case
+needing it alongside a legitimate alternative. Non-use in one session does not
+prove a rule is redundant. Measure behavioral claims with realistic runs before
+claiming a benefit from terminology, wording, or deletion; format checks alone
+cannot establish effectiveness. Express current choices directly while preserving
+necessary safety, data and compatibility constraints.
+
 ## Tool selection
 
 Task skills choose tools from the user's current instructions and applicable repository
