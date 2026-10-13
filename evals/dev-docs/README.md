@@ -1,5 +1,17 @@
 # Developer documentation evaluation
 
+## Source material and concept order — 2026-10-13
+
+Parent instruction review in Codex; model version not exposed. The written rules
+cover these cases; no independent drafting run or comparative quality claim.
+
+| Scenario | Expected decision |
+| --- | --- |
+| Beginner guide uses a domain idea before explaining it | Introduce the needed idea before the dependent example |
+| Expert API reference already declares prerequisites | Reuse them; do not expand into a beginner tutorial |
+| Notes contain internals unrelated to the promised task | Preserve source notes; move or omit the tangent from the requested document |
+| Missing example output | Obtain evidence or label illustration; no fabricated observed result |
+
 ## Accepted-scope review — 2026-10-07
 
 Parent instruction review; model version not recorded. Paired case:

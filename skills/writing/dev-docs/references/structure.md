@@ -52,3 +52,20 @@ still bury its purpose. Inspect the opening and heading sequence for the promise
 task, then follow a representative example from setup to result. Check whether its
 meaning depends on unrelated internal explanations. Preserve qualifications needed
 for correct use; shorten by relocating competing topics and removing repetition.
+
+## Establish ideas before depending on them
+
+Infer reader prerequisites from the requested audience and task; ask only when
+the ambiguity changes the explanation. Introduce the concept as well as its name
+before a later example depends on it. An expert reference can assume documented
+prerequisites; a beginner guide cannot silently require unrelated internal knowledge.
+Move a necessary definition before its first use, but keep unrelated definitions
+off the opening path.
+
+Check each paragraph against the promised task: what needed action, reason,
+qualification or result would disappear if it were cut? Keep that contribution;
+move competing topics or omit unused source fragments. For assembled notes, preserve
+source material while shaping the requested document. When the evidence lacks a
+required example, obtain it, label a hypothetical illustration, or narrow the claim;
+never invent observed results or author experiences. Draft continuously unless the
+user requested collaborative choices; per-paragraph approval is not required.

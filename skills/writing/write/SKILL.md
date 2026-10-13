@@ -22,6 +22,9 @@ own scope. For existing prose, follow the requested editing scope instead.
    that purpose and the destination; match a supplied voice sample where available.
 2. Read relevant source material selectively. For large inputs, track sections
    inspected and material gaps; retrieve context needed for claims before drafting.
+   When the brief is raw notes, separate collecting useful material from ordering
+   the argument. Preserve supplied anecdotes, quotations and distinctive wording
+   as sources; drafting need not consume every fragment or rewrite the source file.
 3. Distinguish supplied claims, verified facts, and interpretation. Preserve
    conditions, attribution, uncertainty, and exceptions. Use evidence for numbers,
    quotations, results, and concrete examples; label hypothetical examples clearly.
@@ -31,6 +34,9 @@ own scope. For existing prose, follow the requested editing scope instead.
    Introduce terms before relying on them, keep qualifications beside their claims,
    and group each example with the point it explains. Use headings for findable topics
    and lists for comparable items or ordered steps; connect reasoning in prose.
+   Check what the audience already knows; establish missing ideas before later
+   passages depend on them. Keep a paragraph when removing it loses a needed step,
+   reason, qualification or intended effect. Avoid definition-heavy openings.
 5. For praise or a conclusion, identify the claim or evidence it adds. Replace an
    unsupported evaluation with the supplied fact; remove a restatement that adds no
    consequence or qualification. Keep intentional personality and repetition. Judge

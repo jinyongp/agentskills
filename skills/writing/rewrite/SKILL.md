@@ -33,6 +33,10 @@ For a review-only request, return supported recommendations without editing file
    the point they explain. Preserve deliberate narrative sequencing. Cut praise or
    repeated conclusions when they add no supported claim or qualification. Name an
    actor when omission makes responsibility ambiguous; keep modifiers by their claim.
+   Check concepts as well as jargon: the reader must know each idea before later
+   reasoning relies on it. Retain a paragraph's needed step, reason, qualification
+   or intended effect; relocate competing topics. A missing example needs source
+   evidence, a clearly hypothetical illustration, or a narrower claim.
 5. Preserve intentional humor, formality, unusual phrasing, and author personality.
    Judge a phrase in context: punctuation or vocabulary alone does not establish
    poor writing or AI authorship. Avoid blanket word bans and mechanical scrubbing.

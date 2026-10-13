@@ -1,5 +1,16 @@
 # Write evaluation
 
+## Source material and concept order — 2026-10-13
+
+Parent instruction review in Codex; model version not exposed. The written rules
+cover these cases; no independent drafting run or comparative quality claim.
+
+| Scenario | Expected decision |
+| --- | --- |
+| Raw fragments include an unused tangent and personal anecdote | Preserve original source material; use only material serving the brief; do not invent experience |
+| Beginner text uses an unnamed concept before its definition | Establish the idea before relying on it without burying the opening in a glossary |
+| Author supplied a purposeful narrative reveal | Preserve its sequence and voice; no compulsory answer-first structure |
+
 ## Decision clarity review — 2026-10-07
 
 Parent instruction review; model version not recorded.

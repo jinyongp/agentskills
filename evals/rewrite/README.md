@@ -1,5 +1,16 @@
 # Rewrite evaluation
 
+## Source material and concept order — 2026-10-13
+
+Parent instruction review in Codex; model version not exposed. The written rules
+cover these cases; no independent drafting run or comparative quality claim.
+
+| Scenario | Expected decision |
+| --- | --- |
+| Polished sentences still depend on an unexplained concept | Reorder/clarify the concept, not merely remove jargon |
+| Paragraph adds a material exception | Retain it even if shorter prose is possible |
+| Draft needs an unsupported experience-based example | Seek evidence, mark a hypothetical illustration, or narrow the claim; no invented anecdote |
+
 ## Decision clarity review — 2026-10-07
 
 Parent instruction review; model version not recorded.
