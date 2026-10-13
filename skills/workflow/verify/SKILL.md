@@ -12,6 +12,7 @@ metadata:
 ## Scope
 
 - The optional runner needs Python 3.11+ on POSIX; checks need their own environment.
+  On Windows, run checks directly with project log capture.
 - Validate the requested change or target. Editing fixes, publishing, and changing
   unrelated configuration require task authorization.
 - Select checks for plausible failures, not a fixed checklist. Report not-needed

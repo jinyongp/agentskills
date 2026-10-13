@@ -10,7 +10,7 @@ const readline = require('node:readline/promises');
 
 const ROOT = __dirname;
 const PACKAGE = require('./package.json');
-const BIN = Object.keys(PACKAGE.bin)[0];
+const BIN = Object.keys(PACKAGE.bin)[0] + (process.platform === 'win32' ? '.cmd' : '');
 const START = '<!-- agentskills:rules:start -->';
 const END = '<!-- agentskills:rules:end -->';
 const NAME = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
@@ -102,7 +102,8 @@ function commandLine(command, values = {}) {
     if (option.type !== 'flag') words.push(...(Array.isArray(value) ? value : [value]).map(String));
   }
   parse(words.slice(1));
-  return words.map(word => /^[a-zA-Z0-9_./:@-]+$/.test(word) ? word : `'${word.replaceAll("'", "'\\''")}'`).join(' ');
+  return words.map(word => /^[a-zA-Z0-9_./:@-]+$/.test(word) ? word
+    : `'${word.replaceAll("'", process.platform === 'win32' ? "''" : "'\\''")}'`).join(' ');
 }
 
 function help(topic) {
@@ -155,6 +156,7 @@ function help(topic) {
     ...optionRows,
     ...defaultNotes, ...ruleNotes,
     ...(definition?.selection === 'installed' ? ['Named skill examples require an existing installation in this scope.', ''] : []),
+    ...(process.platform === 'win32' ? ['Quoted examples use PowerShell syntax.', ''] : []),
     'Examples:',
     ...examples.map(example => `  ${example}`), '',
   ].join('\n'));
@@ -237,6 +239,18 @@ function equalFiles(left, right) {
   return keys.length === Object.keys(right).length && keys.every(key => left[key] === right[key]);
 }
 
+function copySkill(source, destination) {
+  // Avoid fs.cpSync's native Windows path conversion: supported Node releases
+  // can terminate the process on non-ASCII paths, bypassing rollback entirely.
+  fs.mkdirSync(destination);
+  for (const entry of fs.readdirSync(source, { withFileTypes: true })) {
+    const from = path.join(source, entry.name), to = path.join(destination, entry.name);
+    if (entry.isDirectory()) copySkill(from, to);
+    else if (entry.isFile()) fs.copyFileSync(from, to, fs.constants.COPYFILE_EXCL);
+    else fail(`Unsupported file or symbolic link at ${from}; left untouched`);
+  }
+}
+
 function bytes(file) {
   return fs.existsSync(file) ? fs.readFileSync(file) : null;
 }
@@ -309,6 +323,43 @@ function loadState(file) {
 }
 function present(file) { try { fs.lstatSync(file); return true; } catch (error) { if (error.code === 'ENOENT') return false; throw error; } }
 
+function connectionTarget(shared, target) {
+  return process.platform === 'win32' ? shared : path.relative(path.dirname(target), shared);
+}
+
+function createConnection(shared, target) {
+  fs.symlinkSync(connectionTarget(shared, target), target, process.platform === 'win32' ? 'junction' : 'dir');
+}
+
+function sameConnection(target, link, shared) {
+  // Junction readlink results can use the Windows extended-length namespace.
+  const plain = value => process.platform === 'win32'
+    ? value.replace(/^\\\\\?\\UNC\\/i, '\\\\').replace(/^\\\\\?\\/, '') : value;
+  const resolved = path.resolve(path.dirname(target), plain(link));
+  if (resolved === shared) return true;
+  if (process.platform !== 'win32') return false;
+  try {
+    // Accept filesystem-confirmed casing aliases, without accepting a redirected
+    // target or parent as another route to the canonical directory.
+    safe(path.parse(resolved).root, path.relative(path.parse(resolved).root, resolved));
+    return fs.realpathSync.native(resolved) === fs.realpathSync.native(shared);
+  } catch { return false; }
+}
+
+function probeConnections(base) {
+  const parent = safe(base, '.agents');
+  fs.mkdirSync(parent, { recursive: true });
+  const probe = fs.mkdtempSync(path.join(parent, '.agentskills-link-probe-'));
+  const source = path.join(probe, 'source'), link = path.join(probe, 'connection');
+  try {
+    fs.mkdirSync(source);
+    createConnection(source, link);
+    if (!sameConnection(link, fs.readlinkSync(link), source)) fail('Created connection has an unexpected target');
+  } catch (error) {
+    fail(`Cannot create a skill connection on the destination volume at ${parent}: ${error.message}. Use a writable local ${process.platform === 'win32' ? 'NTFS directory supporting junctions' : 'filesystem supporting symbolic links'}. No selected changes applied.`);
+  } finally { fs.rmSync(probe, { recursive: true, force: true }); }
+}
+
 // Only an explicitly recorded connection may be a symlink, and only to its shared skill.
 function describe(base, relative) {
   const target = path.join(safe(base, path.dirname(relative)), path.basename(relative));
@@ -346,7 +397,7 @@ function skillOperation(base, scope, state, name, selected, definition, availabl
     const legacy = owned && Object.hasOwn(state.agents[agent].legacy || {}, name);
     if (!owned && current) fail(`Existing unowned skill: ${path.join(base, relative)}; left untouched`);
     if (legacy && current && (current.link !== undefined || !equalFiles(current.files, state.agents[agent].legacy[name]))) fail(`Locally modified skill: ${path.join(base, relative)}; left untouched`);
-    if (owned && !legacy && current && (current.link === undefined || path.resolve(path.dirname(path.join(base, relative)), current.link) !== shared)) fail(`Changed skill connection: ${path.join(base, relative)}; left untouched`);
+    if (owned && !legacy && current && (current.link === undefined || !sameConnection(path.join(base, relative), current.link, shared))) fail(`Changed skill connection: ${path.join(base, relative)}; left untouched`);
     if (owned && !current && !definition.removes) fail(`Installed connection is missing: ${path.join(base, relative)}; restore it or remove its record first`);
   }
   if (!definition.removes && !Object.hasOwn(available, name)) fail(`Skill no longer bundled: ${name}; remove explicitly`);
@@ -365,8 +416,7 @@ function skillOperation(base, scope, state, name, selected, definition, availabl
     if (definition.removes) {
       if (selected.includes(agent) && current) replacements.push({ relative, type: 'remove' });
     } else {
-      const link = path.relative(path.dirname(path.join(base, relative)), shared);
-      if (!current || current.link !== link) replacements.push({ relative, type: 'link', link });
+      if (!current || current.link === undefined) replacements.push({ relative, type: 'link' });
     }
   }
   const migration = !definition.removes && owners.some(agent => Object.hasOwn(state.agents[agent].legacy || {}, name));
@@ -378,7 +428,7 @@ function skillOperation(base, scope, state, name, selected, definition, availabl
     safe(base, sharedRelative);
     for (const [relative, before] of inspected) if (!sameDescription(describe(base, relative), before)) fail(`Skill changed after inspection: ${path.join(base, relative)}; retry`);
   };
-  return { kind: 'skill', name, action, changed: Boolean(changed), agents: participants, destination: shared, check, apply() {
+  return { kind: 'skill', name, action, changed: Boolean(changed), needsConnection: replacements.some(r => r.type === 'link'), agents: participants, destination: shared, check, apply() {
     const saved = structuredClone(state);
     const staged = [], applied = [];
     const rollback = () => {
@@ -397,9 +447,9 @@ function skillOperation(base, scope, state, name, selected, definition, availabl
         const entry = { target, temporary, backup, replaced: false };
         staged.push(entry);
         if (replacement.type === 'copy') {
-          fs.cpSync(replacement.source, temporary, { recursive: true, verbatimSymlinks: true });
+          copySkill(replacement.source, temporary);
           if (!equalFiles(snapshot(temporary), replacement.files)) fail(`Bundled skill changed during copying: ${name}`);
-        } else if (replacement.type === 'link') fs.symlinkSync(replacement.link, temporary, 'dir');
+        } else if (replacement.type === 'link') createConnection(shared, temporary);
       }
       check();
       for (const entry of staged) {
@@ -469,7 +519,7 @@ async function main() {
         const needsAgent = definition.requiresAgent && !retry.agent;
         if (needsAgent) retry.agent = OPTIONS.agent.choices()[0];
         const agentNote = needsAgent ? ` Choose the intended ${flag('agent')}: ${OPTIONS.agent.choices().join(', ')}.` : '';
-        fail(`Non-interactive input. Retry with ${commandLine(opts.command, retry)}, or run in a terminal to review changes.${agentNote}`);
+        fail(`Non-interactive input. Retry with ${commandLine(opts.command, retry)}, or run in a terminal to review changes.${agentNote}${process.platform === 'win32' ? ' Quoted retry commands use PowerShell syntax.' : ''}`);
       }
       prompt = readline.createInterface({ input: process.stdin, output: process.stdout });
       prompt.on('SIGINT', () => cancellation.abort());
@@ -558,7 +608,9 @@ async function main() {
           const existed = fs.existsSync(file);
           const mode = existed ? fs.statSync(file).mode : 0o600;
           const original = bytes(file);
-          const text = existed ? utf8(original, file) : '';
+          const decoded = existed ? utf8(original, file) : '';
+          const bom = decoded.startsWith('\uFEFF') ? '\uFEFF' : '';
+          const text = decoded.slice(bom.length);
           const previous = rulesBlock(text, file);
           if (previous && !record.rules) fail(`Existing unowned rules block in ${file}; left untouched. Pass ${flag('noRules')} to manage skills without this block.`);
           if (record.rules && (!previous || hash(previous.text) !== record.rules.hash)) fail(`Locally modified or missing rules block in ${file}; left untouched. Restore the managed block, or pass ${flag('noRules')} to manage skills without changing rules.`);
@@ -567,7 +619,7 @@ async function main() {
           // Prepend a newline-terminated block so removing it restores existing prose byte-for-byte.
           const content = previous ? text.slice(0, previous.start) + replacement + text.slice(previous.end) : `${next}\n${text}`;
           const removing = definition.removes;
-          const final = removing && previous ? text.slice(0, previous.start) + text.slice(previous.end + (text[previous.end] === '\n' ? 1 : 0)) : content;
+          const final = bom + (removing && previous ? text.slice(0, previous.start) + text.slice(previous.end + (text[previous.end] === '\n' ? 1 : 0)) : content);
           const operation = { kind: 'rules', agent, action: removing ? 'remove' : previous ? 'update' : 'add', destination: file, check() {
             safe(base, path.relative(base, file));
             if (!sameBytes(bytes(file), original)) fail(`Rules document changed after inspection: ${file}; retry to inspect the new state`);
@@ -604,6 +656,7 @@ async function main() {
       safe(base, path.relative(base, stateFile));
       if (!sameBytes(bytes(stateFile), originalState)) fail(`Installation record changed after inspection: ${stateFile}; retry`);
       for (const inspection of inspections) inspection.check();
+      if (operations.some(operation => operation.needsConnection)) probeConnections(base);
       let completed = 0;
       try {
         for (const operation of operations) {

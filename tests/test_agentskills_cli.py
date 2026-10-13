@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 import shutil
 import shlex
+import stat
 import subprocess
 import tempfile
 import time
@@ -15,9 +16,17 @@ import unittest
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def is_connection(file):
+    try:
+        info = file.lstat()
+        return stat.S_ISLNK(info.st_mode) or getattr(info, "st_reparse_tag", None) == getattr(stat, "IO_REPARSE_TAG_MOUNT_POINT", -1)
+    except FileNotFoundError:
+        return False
+
+
 class AgentskillsCliTests(unittest.TestCase):
     def setUp(self):
-        self.temp = tempfile.TemporaryDirectory()
+        self.temp = tempfile.TemporaryDirectory(prefix="agentskills 한글's ")
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
         self.source = self.root / "source"
@@ -28,23 +37,43 @@ class AgentskillsCliTests(unittest.TestCase):
         shutil.copyfile(ROOT / "agentskills.js", self.source / "agentskills.js")
         shutil.copyfile(ROOT / "package.json", self.source / "package.json")
         (self.source / "rules").mkdir()
-        (self.source / "rules/base.md").write_text("# Shared rules\nRespect agreed scope.\n")
+        (self.source / "rules/base.md").write_text("# Shared rules\nRespect agreed scope.\n", encoding="utf-8", newline="\n")
         for name in ("alpha", "beta"):
             skill = self.source / "skills/workflow" / name
             skill.mkdir(parents=True)
-            (skill / "SKILL.md").write_text(f"---\nname: {name}\n---\nInitial guidance.\n")
-            (skill / "LICENSE").write_text("Fixture license\n")
+            (skill / "SKILL.md").write_text(f"---\nname: {name}\n---\nInitial guidance.\n", encoding="utf-8", newline="\n")
+            (skill / "LICENSE").write_text("Fixture license\n", encoding="utf-8", newline="\n")
             (skill / "references").mkdir()
-            (skill / "references/detail.md").write_text("Bundled detail\n")
+            (skill / "references/detail.md").write_text("Bundled detail\n", encoding="utf-8", newline="\n")
         self.cli = self.source / "agentskills.js"
+        self.env = {**os.environ, "HOME": str(self.home), "USERPROFILE": str(self.home), "PYTHONUTF8": "1"}
+        resolved = subprocess.run(["node", "-p", "require('node:os').homedir()"],
+                                  env=self.env, capture_output=True, text=True, encoding="utf-8", check=True)
+        self.assertEqual(Path(resolved.stdout.strip()).resolve(), self.home.resolve())
+
+    def connection(self, target, destination):
+        # Real junctions need no Windows symlink privilege or Developer Mode.
+        subprocess.run(["node", "-e", "const fs=require('node:fs'),p=require('node:path');"
+                        "fs.symlinkSync(p.resolve(process.argv[1]),process.argv[2],"
+                        "process.platform==='win32'?'junction':'dir');", str(target), str(destination)],
+                       check=True, env=self.env, capture_output=True)
+
+    def unlink_connection(self, destination):
+        subprocess.run(["node", "-e", "require('node:fs').rmSync(process.argv[1],{recursive:true,force:true})",
+                        str(destination)], check=True, env=self.env, capture_output=True)
+
+    def preload(self, file):
+        return {"NODE_OPTIONS": f'--require="{file.as_posix()}"'}
 
     def run_cli(self, command, *args, success=True, env_extra=None):
         result = subprocess.run(
             ["node", str(self.cli), command, *args, *(["--yes"] if command in ("add", "update", "remove") else [])],
             cwd=self.project,
-            env={**os.environ, "HOME": str(self.home), **(env_extra or {})},
+            env={**self.env, **(env_extra or {})},
+            stdin=subprocess.DEVNULL,
             capture_output=True,
             text=True,
+            encoding="utf-8",
             timeout=20,
         )
         self.assertEqual(result.returncode == 0, success, result.stdout + result.stderr)
@@ -64,12 +93,12 @@ class AgentskillsCliTests(unittest.TestCase):
                 target = base / directory / name
                 shutil.copytree(self.source / "skills/workflow" / name, target)
                 record["skills"][name] = {
-                    str(file.relative_to(target)): hashlib.sha256(file.read_bytes()).hexdigest()
+                    file.relative_to(target).as_posix(): hashlib.sha256(file.read_bytes()).hexdigest()
                     for file in target.rglob("*") if file.is_file()
                 }
         state_file = base / (".local/share/agentskills/install.json" if global_scope else ".agents/agentskills.json")
         state_file.parent.mkdir(parents=True, exist_ok=True)
-        state_file.write_text(json.dumps(state))
+        state_file.write_text(json.dumps(state), encoding="utf-8", newline="\n")
         return state_file
 
     def test_shared_source_updates_all_connections_and_survives_partial_removal(self):
@@ -84,22 +113,22 @@ class AgentskillsCliTests(unittest.TestCase):
                 claude = base / ".claude/skills/alpha"
                 codex = self.skill("alpha", global_scope)
                 self.assertEqual(shared.stat().st_ino, inode)
-                self.assertFalse(shared.is_symlink())
-                self.assertTrue(claude.is_symlink())
+                self.assertFalse(is_connection(shared))
+                self.assertTrue(is_connection(claude))
                 self.assertEqual(claude.resolve(), shared)
-                self.assertEqual(codex.is_symlink(), global_scope)
-                (self.source / "skills/workflow/alpha/SKILL.md").write_text(f"Updated {global_scope}\n")
+                self.assertEqual(is_connection(codex), global_scope)
+                (self.source / "skills/workflow/alpha/SKILL.md").write_text(f"Updated {global_scope}\n", encoding="utf-8", newline="\n")
                 result = self.run_cli("update", "--agent", "codex", "--no-rules", *scope)
                 self.assertIn("Update (1): alpha", result.stdout)
-                self.assertEqual((claude / "SKILL.md").read_text(), f"Updated {global_scope}\n")
+                self.assertEqual((claude / "SKILL.md").read_text(encoding="utf-8"), f"Updated {global_scope}\n")
                 self.run_cli("remove", "--agent", "codex", "--no-rules", *scope)
                 self.assertTrue(shared.exists())
                 self.assertTrue(claude.exists())
                 if global_scope:
-                    self.assertFalse(codex.is_symlink())
+                    self.assertFalse(is_connection(codex))
                 self.run_cli("remove", "--agent", "claude", "--no-rules", *scope)
                 self.assertFalse(shared.exists())
-                self.assertFalse(claude.is_symlink())
+                self.assertFalse(is_connection(claude))
 
     def test_legacy_update_consolidates_both_agents_in_each_scope(self):
         for global_scope in (False, True):
@@ -108,15 +137,15 @@ class AgentskillsCliTests(unittest.TestCase):
                 scope = ["--global"] if global_scope else []
                 base = self.home if global_scope else self.project
                 self.run_cli("update", "--agent", "codex", "--no-rules", *scope)
-                state = json.loads(state_file.read_text())
+                state = json.loads(state_file.read_text(encoding="utf-8"))
                 self.assertEqual(state["version"], 2)
                 self.assertEqual(set(state["skills"]), {"alpha"})
                 for agent in ("codex", "claude"):
                     self.assertEqual(state["agents"][agent]["skills"], {"alpha": True})
                     self.assertNotIn("legacy", state["agents"][agent])
-                self.assertTrue((base / ".claude/skills/alpha").is_symlink())
+                self.assertTrue(is_connection(base / ".claude/skills/alpha"))
                 self.assertEqual((base / ".claude/skills/alpha").resolve(), base / ".agents/skills/alpha")
-                self.assertEqual((self.skill("alpha", global_scope) / "LICENSE").read_text(), "Fixture license\n")
+                self.assertEqual((self.skill("alpha", global_scope) / "LICENSE").read_text(encoding="utf-8"), "Fixture license\n")
 
     def test_migration_record_failure_restores_copies_and_retry_keeps_progress(self):
         state_file = self.legacy_install()
@@ -127,24 +156,24 @@ class AgentskillsCliTests(unittest.TestCase):
                 "const fs=require('node:fs');const rename=fs.renameSync;let count=0;"
                 f"fs.renameSync=function(a,b){{if(b==={json.dumps(str(state_file))}&&++count==={failure})"
                 "{throw new Error('Injected record failure');}return rename.apply(this,arguments);};\n"
-            )
+            , encoding="utf-8", newline="\n")
             self.run_cli("update", "--agent", "codex", "--global", "--no-rules", success=False,
-                         env_extra={"NODE_OPTIONS": f"--require={preload}"})
+                         env_extra=self.preload(preload))
             if failure == 1:
                 self.assertEqual(state_file.read_bytes(), original)
             else:
-                state = json.loads(state_file.read_text())
+                state = json.loads(state_file.read_text(encoding="utf-8"))
                 self.assertEqual(set(state["skills"]), {"alpha"})
                 self.assertEqual(set(state["agents"]["claude"]["legacy"]), {"beta"})
-                self.assertTrue(self.skill("alpha", True).is_symlink())
+                self.assertTrue(is_connection(self.skill("alpha", True)))
             for agent in ("codex", "claude"):
                 beta = self.home / f".{agent}/skills/beta"
                 self.assertTrue(beta.is_dir())
-                self.assertFalse(beta.is_symlink())
+                self.assertFalse(is_connection(beta))
         self.run_cli("update", "--global", "--no-rules")
         for name in ("alpha", "beta"):
-            self.assertTrue(self.skill(name, True).is_symlink())
-            self.assertTrue((self.home / f".claude/skills/{name}").is_symlink())
+            self.assertTrue(is_connection(self.skill(name, True)))
+            self.assertTrue(is_connection(self.home / f".claude/skills/{name}"))
 
     def test_migration_rejects_foreign_source_and_cannot_fall_back_to_copies(self):
         state_file = self.legacy_install(names=("alpha",))
@@ -155,12 +184,12 @@ class AgentskillsCliTests(unittest.TestCase):
         self.assertEqual(state_file.read_bytes(), before)
         shutil.rmtree(shared)
         preload = self.root / "deny-symlink.cjs"
-        preload.write_text("require('node:fs').symlinkSync=()=>{throw new Error('Links unavailable');};\n")
+        preload.write_text("require('node:fs').symlinkSync=()=>{throw new Error('Links unavailable');};\n", encoding="utf-8", newline="\n")
         self.run_cli("update", "--global", "--no-rules", success=False,
-                     env_extra={"NODE_OPTIONS": f"--require={preload}"})
+                     env_extra=self.preload(preload))
         self.assertFalse(shared.exists())
         self.assertEqual(state_file.read_bytes(), before)
-        self.assertFalse(self.skill("alpha", True).is_symlink())
+        self.assertFalse(is_connection(self.skill("alpha", True)))
 
     def test_update_checks_other_agents_links_and_shared_edits(self):
         for agent in ("codex", "claude"):
@@ -169,17 +198,17 @@ class AgentskillsCliTests(unittest.TestCase):
         link = os.readlink(claude)
         foreign = self.root / "foreign"
         foreign.mkdir()
-        (foreign / "note").write_text("Preserve\n")
-        claude.unlink()
-        claude.symlink_to(foreign, target_is_directory=True)
+        (foreign / "note").write_text("Preserve\n", encoding="utf-8", newline="\n")
+        self.unlink_connection(claude)
+        self.connection(foreign, claude)
         self.run_cli("update", "--agent", "codex", "--no-rules", success=False)
         self.run_cli("remove", "--agent", "codex", "--no-rules", success=False)
-        self.assertEqual((foreign / "note").read_text(), "Preserve\n")
-        claude.unlink()
-        claude.symlink_to(link, target_is_directory=True)
-        (claude / "SKILL.md").write_text("User edit through Claude\n")
+        self.assertEqual((foreign / "note").read_text(encoding="utf-8"), "Preserve\n")
+        self.unlink_connection(claude)
+        self.connection(Path(os.path.abspath(claude.parent / link)), claude)
+        (claude / "SKILL.md").write_text("User edit through Claude\n", encoding="utf-8", newline="\n")
         self.run_cli("update", "--agent", "codex", "--no-rules", success=False)
-        self.assertEqual((self.skill("alpha") / "SKILL.md").read_text(), "User edit through Claude\n")
+        self.assertEqual((self.skill("alpha") / "SKILL.md").read_text(encoding="utf-8"), "User edit through Claude\n")
 
     def test_legacy_removal_leaves_other_copy_available_for_migration(self):
         state_file = self.legacy_install(names=("alpha",), global_scope=False)
@@ -187,11 +216,11 @@ class AgentskillsCliTests(unittest.TestCase):
         self.assertFalse(self.skill("alpha").exists())
         claude = self.project / ".claude/skills/alpha"
         self.assertTrue(claude.is_dir())
-        self.assertFalse(claude.is_symlink())
+        self.assertFalse(is_connection(claude))
         self.run_cli("update", "--agent", "claude", "--no-rules")
-        self.assertTrue(claude.is_symlink())
+        self.assertTrue(is_connection(claude))
         self.assertEqual(claude.resolve(), self.skill("alpha"))
-        self.assertEqual(set(json.loads(state_file.read_text())["skills"]), {"alpha"})
+        self.assertEqual(set(json.loads(state_file.read_text(encoding="utf-8"))["skills"]), {"alpha"})
 
     def test_missing_shared_source_requires_explicit_record_removal(self):
         for agent in ("codex", "claude"):
@@ -200,15 +229,103 @@ class AgentskillsCliTests(unittest.TestCase):
         self.run_cli("update", "--global", "--no-rules", success=False)
         self.run_cli("remove", "--global", "--no-rules")
         for agent in ("codex", "claude"):
-            self.assertFalse((self.home / f".{agent}/skills/alpha").is_symlink())
-        state = json.loads((self.home / ".local/share/agentskills/install.json").read_text())
+            self.assertFalse(is_connection(self.home / f".{agent}/skills/alpha"))
+        state = json.loads((self.home / ".local/share/agentskills/install.json").read_text(encoding="utf-8"))
         self.assertEqual(state["skills"], {})
+
+    def test_existing_absolute_connection_is_reused_without_rewriting(self):
+        self.run_cli("add", "--agent", "claude", "--skill", "alpha", "--no-rules")
+        link = self.project / ".claude/skills/alpha"
+        self.unlink_connection(link)
+        self.connection(self.skill("alpha"), link)
+        before = link.lstat().st_mtime_ns
+        result = self.run_cli("update", "--no-rules")
+        self.assertIn("Already up to date", result.stdout)
+        self.assertEqual(link.lstat().st_mtime_ns, before)
+        self.run_cli("remove", "--no-rules")
+        self.assertFalse(is_connection(link))
+
+    def test_link_probe_failure_prevents_all_selected_changes(self):
+        preload = self.root / "deny-links.cjs"
+        preload.write_text("require('node:fs').symlinkSync=()=>{throw new Error('Links unavailable');};\n",
+                           encoding="utf-8", newline="\n")
+        result = self.run_cli("add", "--agent", "claude", success=False, env_extra=self.preload(preload))
+        self.assertIn("destination volume", result.stderr)
+        self.assertIn(str(self.project / ".agents"), result.stderr)
+        self.assertFalse(self.skill("alpha").exists())
+        self.assertFalse(self.skill("beta").exists())
+        self.assertFalse((self.project / "CLAUDE.md").exists())
+        self.assertFalse((self.project / ".agents/agentskills.json").exists())
+        self.assertEqual(list((self.project / ".agents").iterdir()), [])
+
+    def test_connection_staging_failure_preserves_legacy_installation(self):
+        record = self.legacy_install(names=("alpha",))
+        before = record.read_bytes()
+        preload = self.root / "fail-staged-link.cjs"
+        preload.write_text(
+            "const fs=require('node:fs'),link=fs.symlinkSync;"
+            "fs.symlinkSync=function(a,b){if(!b.includes('.agentskills-link-probe-'))"
+            "throw new Error('Injected staging failure');return link.apply(this,arguments);};\n",
+            encoding="utf-8", newline="\n")
+        result = self.run_cli("update", "--global", "--no-rules", success=False, env_extra=self.preload(preload))
+        self.assertIn("Completed 0/1", result.stderr)
+        self.assertEqual(record.read_bytes(), before)
+        for agent in ("codex", "claude"):
+            directory = self.home / f".{agent}/skills/alpha"
+            self.assertFalse(is_connection(directory))
+            self.assertEqual((directory / "LICENSE").read_text(encoding="utf-8"), "Fixture license\n")
+        self.assertFalse((self.home / ".agents/skills/alpha").exists())
+
+    @unittest.skipUnless(os.name == "nt", "Windows path namespace and junction behavior")
+    def test_windows_namespace_and_drive_case_connection_remains_unchanged(self):
+        self.run_cli("add", "--agent", "claude", "--skill", "alpha", "--no-rules")
+        link = self.project / ".claude/skills/alpha"
+        shared = str(self.skill("alpha"))
+        self.unlink_connection(link)
+        self.connection(Path("\\\\?\\" + shared[0].lower() + shared[1:]), link)
+        result = self.run_cli("update", "--no-rules")
+        self.assertIn("Already up to date", result.stdout)
+        self.assertEqual(link.resolve(), self.skill("alpha").resolve())
+
+    def test_rule_replace_failure_restores_original_and_record(self):
+        rules = self.project / "AGENTS.md"
+        rules.write_bytes(b"# Existing\r\nKeep exact bytes\r\n")
+        self.run_cli("add", "--agent", "codex", "--rules-only")
+        before = rules.read_bytes()
+        record = self.project / ".agents/agentskills.json"
+        original_record = record.read_bytes()
+        (self.source / "rules/base.md").write_text("Changed rules\n", encoding="utf-8", newline="\n")
+        preload = self.root / "fail-rules-rename.cjs"
+        preload.write_text(
+            "const fs=require('node:fs'),rename=fs.renameSync;"
+            f"fs.renameSync=function(a,b){{if(b==={json.dumps(str(rules))}&&a.endsWith('.tmp'))"
+            "{const e=new Error('File in use');e.code='EPERM';throw e;}return rename.apply(this,arguments);};\n",
+            encoding="utf-8", newline="\n")
+        self.run_cli("update", success=False, env_extra=self.preload(preload))
+        self.assertEqual(rules.read_bytes(), before)
+        self.assertEqual(record.read_bytes(), original_record)
+        self.assertEqual(list(self.project.glob("AGENTS.md.*")), [])
+
+    def test_partial_skill_copy_failure_preserves_installed_version(self):
+        self.run_cli("add", "--agent", "codex", "--skill", "alpha", "--no-rules")
+        record = self.project / ".agents/agentskills.json"
+        before = record.read_bytes()
+        original = (self.skill("alpha") / "SKILL.md").read_bytes()
+        (self.source / "skills/workflow/alpha/SKILL.md").write_text("New version\n", encoding="utf-8", newline="\n")
+        preload = self.root / "fail-copy.cjs"
+        preload.write_text("const fs=require('node:fs'),copy=fs.copyFileSync;let n=0;"
+                           "fs.copyFileSync=function(){if(++n===2)throw new Error('Copy failed');"
+                           "return copy.apply(this,arguments);};\n", encoding="utf-8", newline="\n")
+        self.run_cli("update", "--no-rules", success=False, env_extra=self.preload(preload))
+        self.assertEqual(record.read_bytes(), before)
+        self.assertEqual((self.skill("alpha") / "SKILL.md").read_bytes(), original)
+        self.assertEqual({p.name for p in self.skill("alpha").parent.iterdir()}, {"alpha"})
 
     def test_help_examples_execute_with_current_catalog_and_package_entrypoint(self):
         package_file = self.source / "package.json"
-        package = json.loads(package_file.read_text())
+        package = json.loads(package_file.read_text(encoding="utf-8"))
         package["bin"] = {"fixture-skills": "agentskills.js"}
-        package_file.write_text(json.dumps(package))
+        package_file.write_text(json.dumps(package), encoding="utf-8", newline="\n")
         for old, new in (("alpha", "delta"), ("beta", "epsilon")):
             directory = self.source / "skills/workflow" / old
             directory.rename(directory.with_name(new))
@@ -220,11 +337,11 @@ class AgentskillsCliTests(unittest.TestCase):
                     self.run_cli("add", "--agent", "codex")
                     self.run_cli("add", "--agent", "codex", "--global")
                     binary, command, *args = shlex.split(example)
-                    self.assertEqual(binary, "fixture-skills")
+                    self.assertEqual(binary, "fixture-skills.cmd" if os.name == "nt" else "fixture-skills")
                     if command == "add" and "--agent" not in args:
                         args += ["--agent", "codex"]
                     self.run_cli(command, *args)
-                    state = json.loads((self.project / ".agents/agentskills.json").read_text())
+                    state = json.loads((self.project / ".agents/agentskills.json").read_text(encoding="utf-8"))
                     expected = {"epsilon"} if command == "remove" and "--skill" in args else {"delta", "epsilon"}
                     self.assertEqual(set(state["agents"]["codex"]["skills"]), expected)
                     self.run_cli("remove")
@@ -238,13 +355,19 @@ class AgentskillsCliTests(unittest.TestCase):
             with self.subTest(scope=scope_args):
                 result = subprocess.run(
                     ["node", str(self.cli), "add", "-a", "claude", *scope_args, "-s", "beta", "--no-rules"],
-                    cwd=self.project, env={**os.environ, "HOME": str(self.home)},
-                    capture_output=True, text=True, timeout=20,
+                    cwd=self.project, env=self.env,
+                    stdin=subprocess.DEVNULL, capture_output=True, text=True, encoding="utf-8", timeout=20,
                 )
                 self.assertNotEqual(result.returncode, 0)
                 advice = result.stderr.split("Retry with ", 1)[1].split(", or run in a terminal", 1)[0]
-                _, command, *args = shlex.split(advice)
-                self.run_cli(command, *args)
+                if os.name == "nt":
+                    script = "function agentskills.cmd { & node '" + str(self.cli).replace("'", "''") + "' @args }; " + advice
+                    result = subprocess.run(["powershell.exe", "-NoProfile", "-NonInteractive", "-Command", script],
+                                            cwd=self.project, env=self.env, capture_output=True, timeout=20)
+                    self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+                else:
+                    _, command, *args = shlex.split(advice)
+                    self.run_cli(command, *args)
                 installed = base / ".claude/skills"
                 self.assertEqual({entry.name for entry in installed.iterdir()}, {"beta"})
                 rules = base / (".claude/CLAUDE.md" if base == self.home else "CLAUDE.md")
@@ -261,13 +384,16 @@ class AgentskillsCliTests(unittest.TestCase):
         self.run_cli("list", "-a", "codex", "-g")
 
     def confirm_after(self, args, mutate, response=b"y\n", wait_for=b"Apply? [y/N]"):
+        if os.name == "nt":
+            from windows_terminal import confirm_after
+            return confirm_after(["node", str(self.cli), *args], self.project, self.env, mutate, response, wait_for)
         import pty
         import select
 
         master, slave = pty.openpty()
         process = subprocess.Popen(
             ["node", str(self.cli), *args], cwd=self.project,
-            stdin=slave, stdout=slave, stderr=slave,
+            stdin=slave, stdout=slave, stderr=slave, env=self.env,
         )
         os.close(slave)
         try:
@@ -292,19 +418,19 @@ class AgentskillsCliTests(unittest.TestCase):
         rules.write_bytes(original)
         self.run_cli("add", "--agent", "codex", "--skill", "alpha")
         self.assertFalse(self.skill("beta").exists())
-        self.assertEqual((self.skill("alpha") / "LICENSE").read_text(), "Fixture license\n")
+        self.assertEqual((self.skill("alpha") / "LICENSE").read_text(encoding="utf-8"), "Fixture license\n")
         self.run_cli("add", "--agent", "codex", "--skill", "beta")
         source = self.source / "skills/workflow/alpha"
         (source / "references/detail.md").unlink()
-        (source / "references/new.md").write_text("Changed public guidance\n")
-        (self.source / "rules/base.md").write_text("New shared rules\n")
+        (source / "references/new.md").write_text("Changed public guidance\n", encoding="utf-8", newline="\n")
+        (self.source / "rules/base.md").write_text("New shared rules\n", encoding="utf-8", newline="\n")
         self.run_cli("update")
         self.assertFalse((self.skill("alpha") / "references/detail.md").exists())
-        self.assertEqual((self.skill("alpha") / "references/new.md").read_text(), "Changed public guidance\n")
-        self.assertIn("New shared rules", rules.read_text())
+        self.assertEqual((self.skill("alpha") / "references/new.md").read_text(encoding="utf-8"), "Changed public guidance\n")
+        self.assertIn("New shared rules", rules.read_text(encoding="utf-8"))
         self.run_cli("remove", "--skill", "alpha", "--no-rules")
         self.assertTrue(self.skill("beta").exists())
-        self.assertIn("New shared rules", rules.read_text())
+        self.assertIn("New shared rules", rules.read_text(encoding="utf-8"))
         self.run_cli("remove")
         self.assertFalse(self.skill("beta").exists())
         self.assertEqual(rules.read_bytes(), original)
@@ -315,13 +441,13 @@ class AgentskillsCliTests(unittest.TestCase):
                  self.project / ".agents/agentskills.json"]
         before = {p: (p.stat().st_ino, p.stat().st_mtime_ns) for p in paths}
         preload = self.root / "deny-writes.cjs"
-        preload.write_text("const fs=require('node:fs');for(const k of ['renameSync','cpSync','writeFileSync'])fs[k]=()=>{throw new Error('Unexpected write');};\n")
-        result = self.run_cli("update", env_extra={"NODE_OPTIONS": f"--require={preload}"})
+        preload.write_text("const fs=require('node:fs');for(const k of ['renameSync','copyFileSync','writeFileSync'])fs[k]=()=>{throw new Error('Unexpected write');};\n", encoding="utf-8", newline="\n")
+        result = self.run_cli("update", env_extra=self.preload(preload))
         self.assertIn("Already up to date", result.stdout)
         self.assertIn("Unchanged: 2 skills", result.stdout)
         self.assertNotIn("Apply?", result.stdout)
         self.assertEqual(before, {p: (p.stat().st_ino, p.stat().st_mtime_ns) for p in paths})
-        (self.source / "skills/workflow/alpha/SKILL.md").write_text("Updated guidance\n")
+        (self.source / "skills/workflow/alpha/SKILL.md").write_text("Updated guidance\n", encoding="utf-8", newline="\n")
         result = self.run_cli("update")
         self.assertIn("Update (1): alpha", result.stdout)
         self.assertIn("Unchanged: 1 skill", result.stdout)
@@ -336,12 +462,12 @@ class AgentskillsCliTests(unittest.TestCase):
         for name in names:
             skill = self.source / "skills/workflow" / name
             skill.mkdir()
-            (skill / "SKILL.md").write_text(f"---\nname: {name}\n---\nGuidance\n")
+            (skill / "SKILL.md").write_text(f"---\nname: {name}\n---\nGuidance\n", encoding="utf-8", newline="\n")
         self.run_cli("add", "--agent", "codex")
         self.run_cli("add", "--agent", "claude", "--skill", "alpha")
         for name in names:
-            (self.source / "skills/workflow" / name / "SKILL.md").write_text("Updated guidance\n")
-        (self.source / "rules/base.md").write_text("Updated shared rules\n")
+            (self.source / "skills/workflow" / name / "SKILL.md").write_text("Updated guidance\n", encoding="utf-8", newline="\n")
+        (self.source / "rules/base.md").write_text("Updated shared rules\n", encoding="utf-8", newline="\n")
         result = self.run_cli("update")
         self.assertEqual(result.stdout.count(str(self.project / ".agents/skills")), 1)
         self.assertEqual(result.stdout.count(str(self.project / ".claude/skills")), 1)
@@ -358,44 +484,44 @@ class AgentskillsCliTests(unittest.TestCase):
     def test_preflight_conflict_preserves_all_selected_skills(self):
         self.run_cli("add", "--agent", "codex")
         modified = self.skill("beta") / "references/detail.md"
-        modified.write_text("User edit\n")
+        modified.write_text("User edit\n", encoding="utf-8", newline="\n")
         before = (self.skill("alpha") / "SKILL.md").read_bytes()
-        (self.source / "skills/workflow/alpha/SKILL.md").write_text("New alpha version\n")
+        (self.source / "skills/workflow/alpha/SKILL.md").write_text("New alpha version\n", encoding="utf-8", newline="\n")
         self.run_cli("update", success=False)
         self.assertEqual((self.skill("alpha") / "SKILL.md").read_bytes(), before)
         self.run_cli("remove", success=False)
-        self.assertEqual(modified.read_text(), "User edit\n")
-        modified.write_text("Bundled detail\n")
-        (self.skill("beta") / "user-note.txt").write_text("Additional user file\n")
+        self.assertEqual(modified.read_text(encoding="utf-8"), "User edit\n")
+        modified.write_text("Bundled detail\n", encoding="utf-8", newline="\n")
+        (self.skill("beta") / "user-note.txt").write_text("Additional user file\n", encoding="utf-8", newline="\n")
         self.run_cli("remove", success=False)
         self.assertTrue(self.skill("alpha").exists())
 
     def test_unowned_skill_and_rules_blocks_are_never_adopted(self):
         target = self.skill("alpha")
         target.mkdir(parents=True)
-        (target / "SKILL.md").write_text("Someone else's skill\n")
+        (target / "SKILL.md").write_text("Someone else's skill\n", encoding="utf-8", newline="\n")
         self.run_cli("add", "--agent", "codex", "--skill", "alpha", success=False)
-        self.assertEqual((target / "SKILL.md").read_text(), "Someone else's skill\n")
+        self.assertEqual((target / "SKILL.md").read_text(encoding="utf-8"), "Someone else's skill\n")
         self.assertFalse((self.project / "AGENTS.md").exists())
         original = "<!-- agentskills:rules:start -->\nExisting rules\n<!-- agentskills:rules:end -->\n"
-        (self.project / "AGENTS.md").write_text(original)
+        (self.project / "AGENTS.md").write_text(original, encoding="utf-8", newline="\n")
         self.run_cli("add", "--agent", "codex", "--rules-only", success=False)
-        self.assertEqual((self.project / "AGENTS.md").read_text(), original)
+        self.assertEqual((self.project / "AGENTS.md").read_text(encoding="utf-8"), original)
 
     def test_rules_edits_and_damaged_markers_block_updates_and_removal(self):
         self.run_cli("add", "--agent", "codex", "--rules-only")
         rules = self.project / "AGENTS.md"
-        original = rules.read_text()
+        original = rules.read_text(encoding="utf-8")
         for modified in (
             original.replace("Respect agreed scope.", "User's rules."),
             original.replace("<!-- agentskills:rules:end -->", ""),
             original + "<!-- agentskills:rules:start -->",
         ):
             with self.subTest(modified=modified):
-                rules.write_text(modified)
+                rules.write_text(modified, encoding="utf-8", newline="\n")
                 self.run_cli("update", success=False)
                 self.run_cli("remove", success=False)
-                self.assertEqual(rules.read_text(), modified)
+                self.assertEqual(rules.read_text(encoding="utf-8"), modified)
 
     def test_global_and_agent_scopes_are_isolated(self):
         self.run_cli("add", "--agent", "codex", "--global", "--skill", "alpha")
@@ -414,19 +540,23 @@ class AgentskillsCliTests(unittest.TestCase):
     def test_symlinked_parents_and_installed_files_are_left_untouched(self):
         outside = self.root / "outside"
         outside.mkdir()
-        (self.project / ".agents").symlink_to(outside, target_is_directory=True)
+        self.connection(outside, self.project / ".agents")
         self.run_cli("add", "--agent", "codex", success=False)
         self.assertEqual(list(outside.iterdir()), [])
-        (self.project / ".agents").unlink()
+        self.unlink_connection(self.project / ".agents")
         self.run_cli("add", "--agent", "codex", "--skill", "alpha")
         target = self.skill("alpha") / "references/detail.md"
         target.unlink()
         external = outside / "detail.md"
-        external.write_text("Outside the installation\n")
-        target.symlink_to(external)
+        external.write_text("Outside the installation\n", encoding="utf-8", newline="\n")
+        if os.name == "nt":
+            shutil.rmtree(target.parent)
+            self.connection(outside, target.parent)
+        else:
+            target.symlink_to(external)
         self.run_cli("update", success=False)
         self.run_cli("remove", success=False)
-        self.assertEqual(external.read_text(), "Outside the installation\n")
+        self.assertEqual(external.read_text(encoding="utf-8"), "Outside the installation\n")
 
     def test_invalid_selection_and_busy_lock_do_not_install(self):
         self.run_cli("add", "--agent", "codex", "--skill", "unknown", success=False)
@@ -434,21 +564,20 @@ class AgentskillsCliTests(unittest.TestCase):
         self.assertFalse((self.project / ".agents/skills").exists())
         self.run_cli("add", "--agent", "codex", "--skill", "../escape", success=False)
         lock = self.project / ".agents/agentskills.json.lock"
-        lock.write_text("Another operation\n")
+        lock.write_text("Another operation\n", encoding="utf-8", newline="\n")
         self.run_cli("add", "--agent", "codex", "--skill", "alpha", success=False)
-        self.assertEqual(lock.read_text(), "Another operation\n")
+        self.assertEqual(lock.read_text(encoding="utf-8"), "Another operation\n")
         lock.unlink()
         self.run_cli("add", "--agent", "codex", "--skill", "alpha")
-        state = json.loads((self.project / ".agents/agentskills.json").read_text())
+        state = json.loads((self.project / ".agents/agentskills.json").read_text(encoding="utf-8"))
         self.assertEqual(set(state["agents"]["codex"]["skills"]), {"alpha"})
 
-    @unittest.skipUnless(os.name == "posix", "Interactive PTY checks require POSIX")
     def test_changes_during_confirmation_abort_before_mutating_any_item(self):
         self.run_cli("add", "--agent", "codex", "--skill", "alpha")
         installed = self.skill("alpha") / "SKILL.md"
         rules = self.project / "AGENTS.md"
         state = self.project / ".agents/agentskills.json"
-        (self.source / "skills/workflow/alpha/SKILL.md").write_text("New version\n")
+        (self.source / "skills/workflow/alpha/SKILL.md").write_text("New version\n", encoding="utf-8", newline="\n")
         for edited in (installed, rules, state):
             with self.subTest(edited=edited.name):
                 originals = {file: file.read_bytes() for file in (installed, rules, state)}
@@ -461,23 +590,22 @@ class AgentskillsCliTests(unittest.TestCase):
                     for file, original in originals.items():
                         file.write_bytes(original)
 
-    @unittest.skipUnless(os.name == "posix", "Interactive PTY checks require POSIX")
     def test_parent_redirect_during_confirmation_does_not_touch_outside_files(self):
         self.run_cli("add", "--agent", "codex", "--skill", "alpha")
         outside = self.root / "outside"
         outside.mkdir()
         lock = outside / "agentskills.json.lock"
-        lock.write_text("Unrelated lock\n")
+        lock.write_text("Unrelated lock\n", encoding="utf-8", newline="\n")
         original = (self.skill("alpha") / "SKILL.md").read_bytes()
-        (self.source / "skills/workflow/alpha/SKILL.md").write_text("Updated guidance\n")
+        (self.source / "skills/workflow/alpha/SKILL.md").write_text("Updated guidance\n", encoding="utf-8", newline="\n")
 
         def redirect():
             (self.project / ".agents").rename(self.project / ".agents-original")
-            (self.project / ".agents").symlink_to(outside, target_is_directory=True)
+            self.connection(outside, self.project / ".agents")
 
         self.assertNotEqual(self.confirm_after(["update"], redirect), 0)
         self.assertEqual({file.name for file in outside.iterdir()}, {"agentskills.json.lock"})
-        self.assertEqual(lock.read_text(), "Unrelated lock\n")
+        self.assertEqual(lock.read_text(encoding="utf-8"), "Unrelated lock\n")
         self.assertEqual((self.project / ".agents-original/skills/alpha/SKILL.md").read_bytes(), original)
 
     def test_record_write_failure_rolls_back_install_update_and_removal(self):
@@ -488,8 +616,8 @@ class AgentskillsCliTests(unittest.TestCase):
             f"fs.renameSync=function(a,b){{if(b==={json.dumps(str(state))})"
             "{throw new Error('Injected record write failure');}"
             "return rename.apply(this,arguments);};\n"
-        )
-        injected = {"NODE_OPTIONS": f"--require={preload}"}
+        , encoding="utf-8", newline="\n")
+        injected = self.preload(preload)
         self.run_cli("add", "--agent", "codex", "--skill", "alpha", "--no-rules", success=False, env_extra=injected)
         self.assertFalse(self.skill("alpha").exists())
         self.assertFalse(state.exists())
@@ -497,15 +625,15 @@ class AgentskillsCliTests(unittest.TestCase):
         installed = self.skill("alpha") / "SKILL.md"
         original = installed.read_bytes()
         original_state = state.read_bytes()
-        (self.source / "skills/workflow/alpha/SKILL.md").write_text("New guidance\n")
+        (self.source / "skills/workflow/alpha/SKILL.md").write_text("New guidance\n", encoding="utf-8", newline="\n")
         self.run_cli("update", "--no-rules", success=False, env_extra=injected)
         self.assertEqual(installed.read_bytes(), original)
         self.assertEqual(state.read_bytes(), original_state)
         self.run_cli("update", "--no-rules")
-        self.assertEqual(installed.read_text(), "New guidance\n")
+        self.assertEqual(installed.read_text(encoding="utf-8"), "New guidance\n")
         before_remove = state.read_bytes()
         self.run_cli("remove", "--no-rules", success=False, env_extra=injected)
-        self.assertEqual(installed.read_text(), "New guidance\n")
+        self.assertEqual(installed.read_text(encoding="utf-8"), "New guidance\n")
         self.assertEqual(state.read_bytes(), before_remove)
         self.run_cli("remove", "--no-rules")
         self.assertFalse(self.skill("alpha").exists())
@@ -518,8 +646,8 @@ class AgentskillsCliTests(unittest.TestCase):
             f"fs.renameSync=function(a,b){{if(b==={json.dumps(str(state))})"
             "{throw new Error('Injected record write failure');}"
             "return rename.apply(this,arguments);};\n"
-        )
-        injected = {"NODE_OPTIONS": f"--require={preload}"}
+        , encoding="utf-8", newline="\n")
+        injected = self.preload(preload)
         rules = self.project / "AGENTS.md"
         original = b"# Keep project instructions\n"
         rules.write_bytes(original)
@@ -542,9 +670,13 @@ class AgentskillsCliTests(unittest.TestCase):
                 self.run_cli("add", "--agent", "codex", "--skill", "alpha", success=False)
                 self.assertEqual(rules.read_bytes(), original)
                 self.assertFalse(self.skill("alpha").exists())
-        original = b"\xef\xbb\xbf" + "# Project instructions\nNon-ASCII: café\n".encode()
+        original = b"\xef\xbb\xbf" + "# Project instructions\r\nNon-ASCII: café\r\n".encode()
         rules.write_bytes(original)
         self.run_cli("add", "--agent", "codex", "--rules-only")
+        self.assertTrue(rules.read_bytes().startswith(b"\xef\xbb\xbf<!-- agentskills:rules:start -->"))
+        self.assertIn("Already up to date", self.run_cli("update").stdout)
+        (self.source / "rules/base.md").write_text("Updated shared rules\n", encoding="utf-8", newline="\n")
+        self.run_cli("update")
         self.run_cli("remove")
         self.assertEqual(rules.read_bytes(), original)
 
@@ -556,10 +688,10 @@ class AgentskillsCliTests(unittest.TestCase):
         self.run_cli("add", "--agent", "codex", "--skill", "constructor", success=False)
         self.assertEqual(rules.read_bytes(), original)
         extra = self.skill("alpha") / "__proto__"
-        extra.write_text("Additional user file\n")
+        extra.write_text("Additional user file\n", encoding="utf-8", newline="\n")
         self.run_cli("update", "--no-rules", success=False)
         self.run_cli("remove", "--no-rules", success=False)
-        self.assertEqual(extra.read_text(), "Additional user file\n")
+        self.assertEqual(extra.read_text(encoding="utf-8"), "Additional user file\n")
         extra.unlink()
         source = self.source / "skills/workflow/constructor"
         shutil.copytree(self.source / "skills/workflow/alpha", source)
@@ -591,20 +723,22 @@ class AgentskillsCliTests(unittest.TestCase):
         self.assertEqual(list(self.project.iterdir()), [])
         self.assertEqual(list(self.home.iterdir()), [])
 
-    @unittest.skipUnless(os.name == "posix", "Interactive PTY checks require POSIX")
     def test_cancelling_confirmation_does_not_leave_a_lock_or_change_files(self):
         self.run_cli("add", "--agent", "codex", "--skill", "alpha")
         state = self.project / ".agents/agentskills.json"
         original = state.read_bytes()
         for response, expected in ((b"n\n", 0), (b"\x03", 130)):
             with self.subTest(response=response):
-                self.assertEqual(self.confirm_after(["remove"], lambda: None, response=response), expected)
+                result = self.confirm_after(["remove"], lambda: None, response=response)
+                # cmd.exe can report the native CTRL_C_EXIT status for the
+                # ConPTY process group even when Node handles cancellation.
+                accepted = (130, 0xC000013A) if os.name == "nt" and response == b"\x03" else (expected,)
+                self.assertIn(result, accepted)
                 self.assertEqual(state.read_bytes(), original)
                 self.assertTrue(self.skill("alpha").exists())
                 self.assertFalse((self.project / ".agents/agentskills.json.lock").exists())
         self.run_cli("update")
 
-    @unittest.skipUnless(os.name == "posix", "Interactive PTY checks require POSIX")
     def test_invalid_interactive_scope_cannot_fall_back_to_project_install(self):
         result = self.confirm_after(["add", "--agent", "codex"], lambda: None, response=b"globla\n", wait_for=b"Scope [")
         self.assertNotEqual(result, 0)
@@ -615,17 +749,17 @@ class AgentskillsCliTests(unittest.TestCase):
         self.run_cli("add", "--agent", "codex", "--no-rules")
         state = self.project / ".agents/agentskills.json"
         for name in ("alpha", "beta"):
-            (self.source / "skills/workflow" / name / "SKILL.md").write_text(f"Updated {name}\n")
+            (self.source / "skills/workflow" / name / "SKILL.md").write_text(f"Updated {name}\n", encoding="utf-8", newline="\n")
         preload = self.root / "fail-second-record.cjs"
         preload.write_text(
             "const fs=require('node:fs');const rename=fs.renameSync;let count=0;"
             f"fs.renameSync=function(a,b){{if(b==={json.dumps(str(state))}&&++count===2)"
             "{throw new Error('Injected second record write failure');}"
             "return rename.apply(this,arguments);};\n"
-        )
-        result = self.run_cli("update", "--no-rules", success=False, env_extra={"NODE_OPTIONS": f"--require={preload}"})
-        self.assertEqual((self.skill("alpha") / "SKILL.md").read_text(), "Updated alpha\n")
-        self.assertNotEqual((self.skill("beta") / "SKILL.md").read_text(), "Updated beta\n")
+        , encoding="utf-8", newline="\n")
+        result = self.run_cli("update", "--no-rules", success=False, env_extra=self.preload(preload))
+        self.assertEqual((self.skill("alpha") / "SKILL.md").read_text(encoding="utf-8"), "Updated alpha\n")
+        self.assertNotEqual((self.skill("beta") / "SKILL.md").read_text(encoding="utf-8"), "Updated beta\n")
         self.assertIn(str(state), result.stderr)
         self.run_cli("update", "--no-rules")
-        self.assertEqual((self.skill("beta") / "SKILL.md").read_text(), "Updated beta\n")
+        self.assertEqual((self.skill("beta") / "SKILL.md").read_text(encoding="utf-8"), "Updated beta\n")

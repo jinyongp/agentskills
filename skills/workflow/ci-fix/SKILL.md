@@ -35,6 +35,8 @@ When adding or editing Actions workflows, read [references/actions.md](reference
    selected pages with `python3 scripts/capture.py log --log <path> --offset <byte-offset>`;
    recover needed `next_offset` pages. The command's exit status describes retrieval
    or local execution, not remote CI success. Keep secrets out of shared excerpts.
+   On native Windows, run commands directly and capture logs with project tools;
+   share bounded excerpts with explicit omissions.
 3. Trace the failing assertion, compiler/lint error, dependency resolution, runtime
    mismatch, or credential/resource failure to its cause. Reproduce with relevant
    versions and project commands when practical. Keep observed causes separate from

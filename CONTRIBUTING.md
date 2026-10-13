@@ -212,8 +212,10 @@ You can run each check separately:
 | `uv run check.py validate` | Skill formats and category layout |
 | `uv run check.py test` | Normal and failure cases for validators and runtime scripts |
 | `uv run check.py smoke` | CLI discovery, selective installation, resource copying |
+| `uv run check.py package` | Packed npm CLI, native shell entrypoints, shared updates and removal |
 
-`validate` and `test` do not require Node.js or npm.
+`validate` does not require Node.js or npm. Installer integration tests require
+Node.js; the installation and package smoke checks also require npm.
 Repository validation uses the official `skills-ref` validator and checks category layout,
 ASCII names, repository-wide name uniqueness, and matching `metadata.category`.
 An empty initial catalog is valid; an existing skill directory must contain `SKILL.md`.
@@ -257,6 +259,11 @@ to download the CLI from npm. To change the CLI version, update `CLI_PACKAGE`
 in `scripts/smoke_install.py` and rerun the check.
 
 GitHub Actions runs `uv run --locked check.py` on main branch pushes, PRs, and manual runs.
+The reusable validation workflow also runs format checks, installer integration
+tests, packed CLI lifecycle tests and skills CLI smoke checks on Ubuntu and
+Windows Server 2022 with Node 22.20.0, 22.x and 24.x. The Release workflow depends
+on that entire reusable workflow, so a failed Windows matrix job prevents npm
+publication. Keep all matrix jobs required by that dependency.
 `--locked` checks that `pyproject.toml` matches the committed dependency lockfile.
 After adding a real skill, verify its local installation and behavior separately.
 
@@ -282,13 +289,34 @@ Before release, run `npm pack --dry-run` and exercise the produced tarball throu
 and that maintainer files and Python caches are excluded. An npm release requires
 an explicit publication request; local commits do not make `npx` examples available.
 
+`uv run check.py package` packs into a temporary directory, installs that tarball
+without lifecycle hooks, and invokes the installed npm shim. It checks both scopes,
+both agents, bundled file bytes, shared updates, partial/final removal, and BOM/CRLF
+prose preservation. Native Windows runs both PowerShell and cmd.exe and verifies
+that agent connections are junctions. All homes and npm caches are isolated.
+`scripts/npm_cli.py` invokes npm/npx JavaScript entrypoints directly so Python
+does not need to execute `.cmd` files through an implicit shell.
+
+The Windows support contract targets writable local NTFS without elevation or
+Developer Mode. CI may run elevated; supplement it with a standard-user desktop
+run and record the token, OS, filesystem, shells and Node versions. Windows build
+26300 has been checked with a SAFER normal-user token and Developer Mode off.
+Confirmation/cancellation and prompt-time conflict tests use POSIX PTYs or the
+standard-library Windows ConPTY adapter in `tests/windows_terminal.py`. The adapter
+bounds buffered terminal output and reports omitted bytes on failure. Native Codex
+0.162.0-alpha.17.2 discovered both project and global installations through its
+local skills API. Windows 10 desktop, native Claude discovery and remote execution
+of the new CI matrix remain pending acceptance checks. Optional POSIX process-group
+helpers retain their documented platform scope.
+
 Keep `rules/base.md` limited to concise principles that apply to every task.
 Task-specific procedures belong in independently installable skills. Installer
 state belongs to the selected target, and project instructions outside managed
 markers must survive installation, updates, and removal.
 
 Store skill content once per scope in `.agents/skills/`; agent destinations use
-relative symlinks unless they read that directory directly. Version 2 records
+relative symlinks on Linux/WSL or absolute-target directory junctions on Windows,
+unless they read that directory directly. Version 2 records
 track shared content separately from agent connections. Validate ownership of
 every connected destination before modifying shared content. Migrate version 1
 copies per selected skill, preserving unmigrated records and completed progress.
