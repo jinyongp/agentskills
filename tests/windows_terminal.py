@@ -94,14 +94,16 @@ def confirm_after(argv, cwd, env, mutate, response, wait_for):
         checked(update_attributes(attributes, 0, 0x20016, console, c.sizeof(console), None, None))
         startup = StartupEx()
         startup.startup.cb = c.sizeof(startup)
+        # Null standard handles with STARTF_USESTDHANDLES make console clients
+        # obtain handles from this ConPTY instead of the redirected test runner.
+        # https://github.com/microsoft/terminal/discussions/15814
+        startup.startup.flags = 0x100
         startup.attributes = c.cast(attributes, pointer)
-        # The test runner redirects its own stdout. Reopen the attached console
-        # in the child so those redirected handles cannot bypass the ConPTY.
         if any(any(char in word for char in '%!^"\r\n') for word in argv):
             raise ValueError("Unsupported terminal fixture argument")
         shell = os.path.join(os.environ["SystemRoot"], "System32", "cmd.exe")
         command = c.create_unicode_buffer('"' + shell + '" /d /s /c "chcp 65001 >nul & ' +
-                                          " ".join('"' + word + '"' for word in argv) + ' <CON >CON 2>CON"')
+                                          " ".join('"' + word + '"' for word in argv) + '"')
         environment = c.create_unicode_buffer("\0".join(f"{k}={v}" for k, v in sorted(env.items(), key=lambda item: item[0].upper())) + "\0")
         checked(create_process(shell, command, None, None, False, 0x80000 | 0x400,
                                environment, str(cwd), c.byref(startup), c.byref(process)))
