@@ -1,6 +1,7 @@
 """Exercise complete, bounded catalogs and automatic scaffold synchronization."""
 
 from pathlib import Path
+import os
 import re
 import shutil
 import subprocess
@@ -119,6 +120,37 @@ class SkillIndexTests(unittest.TestCase):
         self.assertEqual(self.snapshot(), before)
         update_index(self.root)
         self.assertEqual(validate_repository(self.root)[1], [])
+
+    def test_read_only_freshness_survives_autocrlf_checkout(self):
+        self.add("verify", "Run checks.")
+        self.write_catalogs()
+        update_index(self.root)
+        attributes = ROOT / ".gitattributes"
+        if attributes.exists():
+            shutil.copyfile(attributes, self.root / attributes.name)
+        (self.root / "control.txt").write_bytes(b"one\ntwo\n")
+        env = {**os.environ, "GIT_CONFIG_NOSYSTEM": "1", "GIT_CONFIG_GLOBAL": os.devnull}
+
+        def git(*args):
+            result = subprocess.run(["git", *args], env=env, capture_output=True, text=True)
+            self.assertEqual(result.returncode, 0, result.stderr)
+
+        git("-C", str(self.root), "init", "-q")
+        git("-C", str(self.root), "add", "--", ".")
+        git("-C", str(self.root), "-c", "user.name=Index Fixture", "-c",
+            "user.email=index@example.invalid", "commit", "-qm", "test(index): seed checkout fixture")
+        with tempfile.TemporaryDirectory() as directory:
+            checkout = Path(directory) / "checkout"
+            git("clone", "--quiet", "--config", "core.autocrlf=true", str(self.root), str(checkout))
+            self.assertEqual((checkout / "control.txt").read_bytes(), b"one\r\ntwo\r\n")
+            before = {p: p.read_bytes() for p in (checkout / INDEX).rglob("*") if p.is_file()}
+            self.assertEqual(index_errors(checkout), [])
+            self.assertEqual({p: p.read_bytes() for p in before}, before)
+            page = checkout / INDEX / "references/catalog/workflow.md"
+            page.write_bytes(page.read_bytes().replace(b"Run checks.", b"Changed intent."))
+            changed = page.read_bytes()
+            self.assertTrue(any("stale" in error for error in index_errors(checkout)))
+            self.assertEqual(page.read_bytes(), changed)
 
     def test_missing_duplicate_and_removed_catalog_entries_do_not_change_index(self):
         self.add("verify", "Run checks.")
