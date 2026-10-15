@@ -149,6 +149,7 @@ def inspect(args):
     operations = [label for name, label in (
         ("MERGE_HEAD", "merge"), ("rebase-merge", "rebase"), ("rebase-apply", "rebase-or-am"),
         ("CHERRY_PICK_HEAD", "cherry-pick"), ("REVERT_HEAD", "revert"), ("sequencer", "sequencer"),
+        ("BISECT_START", "bisect"),
     ) if (git_dir / name).exists()]
     counts = {"staged": 0, "unstaged": 0, "untracked": 0, "conflicted": 0}
     for entry in files:

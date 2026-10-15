@@ -41,6 +41,8 @@ metadata:
    needed pages with `--mode ignored --path <absolute-path>`; Git-clean alone
    does not establish that valuable local data is absent.
    Preserve valuable work or obtain authorization for the identified loss.
+   An active operation, including bisect, means the checkout is in use. Do not
+   remove it without authorization covering loss of that operation's state.
 6. Remove the requested clean, unused linked checkout from another worktree using
    `git worktree remove <absolute-path>`. Keep the main checkout and branch.
    Force requires explicit authorization covering the target and loss; do not

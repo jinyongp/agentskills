@@ -7,7 +7,13 @@ For clearly separate paths:
 
 1. Save `git diff --cached --binary -- <excluded-paths>` outside the worktree;
    preserve exact paths, staged diff, and affected working-file contents.
-2. Temporarily unstage only those paths with `git restore --staged -- <paths>`.
+2. With an existing HEAD, temporarily unstage only those paths with
+   `git --literal-pathspecs restore --staged -- <paths>`.
+   Before the first commit, HEAD does not exist. Create an empty tree with
+   `git hash-object -w -t tree --stdin`, supplying zero-byte stdin through the
+   current shell or process API. Use the returned object ID as `<empty-tree-id>`:
+   `git --literal-pathspecs restore --staged --source <empty-tree-id> -- <paths>`.
+   Both branches change only selected index entries; preserve working-file bytes.
 3. Stage and verify the requested group; commit only when authorized and checks pass.
 4. On success or failure, use `git apply --cached <saved-patch>` to restore exclusion
    staging. Verify its cached diff and working-file contents against the saved state.

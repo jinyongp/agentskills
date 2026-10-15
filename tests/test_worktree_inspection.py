@@ -122,6 +122,25 @@ class WorktreeInspectionTests(unittest.TestCase):
         self.assertEqual(self.call('--mode', 'ignored', '--path', work)[1]['items'], [{'path': 'private.note'}])
         self.assertEqual((work / 'private.note').read_bytes(), b'valuable local data')
 
+    def test_clean_linked_worktree_bisect_is_visible_and_preserved(self):
+        for i in range(3):
+            (self.repo / 'feature.txt').write_text(f'revision {i}\n')
+            self.git('commit', '-am', f'test: revision {i}')
+        work = self.root / 'bisect'
+        self.git('worktree', 'add', '--detach', str(work), 'HEAD')
+        self.git('-C', str(work), 'bisect', 'start', 'HEAD', 'HEAD~3')
+        git_dir = Path(self.git('-C', str(work), 'rev-parse', '--absolute-git-dir').strip())
+        state = git_dir / 'BISECT_LOG'
+        before = (state.read_bytes(), self.git('-C', str(work), 'rev-parse', 'HEAD'),
+                  (git_dir / 'index').read_bytes())
+        result = self.call('--mode', 'state', '--path', work)[1]
+        self.assertFalse(result['dirty'])
+        self.assertIn('bisect', result['operations'])
+        self.assertEqual(before, (state.read_bytes(), self.git('-C', str(work), 'rev-parse', 'HEAD'),
+                                  (git_dir / 'index').read_bytes()))
+        self.git('-C', str(work), 'bisect', 'reset')
+        self.assertEqual(self.call('--mode', 'state', '--path', work)[1]['operations'], [])
+
 
 if __name__ == '__main__':
     unittest.main()

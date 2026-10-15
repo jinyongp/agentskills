@@ -1,6 +1,6 @@
 ---
 name: git-commit
-description: Commit, stage, unstage, split pending commits, or draft commit messages when requested. Inspect changes, preserve excluded work, and follow repository message conventions.
+description: Inspect staged commit hygiene, stage, unstage, split commits, or draft messages when requested. Preserve excluded work; inspection alone performs no Git mutation.
 license: MIT
 metadata:
   author: jinyongp
@@ -19,6 +19,9 @@ metadata:
   Pause affected commits for conflicts, an unrelated active operation, unsupported
   detached HEAD, secrets, or failed checks. Missing initial history is normal.
 - Source edits, amend/history rewriting, force, and hook bypass need authorization.
+
+Read [references/staged-hygiene.md](references/staged-hygiene.md) for a staged
+hygiene inspection or gate request. Inspection-only stops before staging or commit.
 
 ## Procedure
 

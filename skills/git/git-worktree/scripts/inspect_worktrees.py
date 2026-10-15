@@ -84,6 +84,7 @@ def state(repo):
     operations = [label for marker, label in (
         ('MERGE_HEAD', 'merge'), ('rebase-merge', 'rebase'), ('rebase-apply', 'rebase-or-am'),
         ('CHERRY_PICK_HEAD', 'cherry-pick'), ('REVERT_HEAD', 'revert'), ('sequencer', 'sequencer'),
+        ('BISECT_START', 'bisect'),
     ) if (git_dir / marker).exists()]
     ignored = git(repo, 'ls-files', '--others', '--ignored', '--exclude-standard', '-z').split('\0')
     return {'mode': 'state', 'counts': counts, 'dirty': any(counts.values()),

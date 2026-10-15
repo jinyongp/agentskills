@@ -6,7 +6,7 @@ Choose the Git operation you want to perform. Each skill preserves unrelated wor
 
 ## Commit and publish changes
 
-- [git-commit](git-commit/SKILL.md) — Inspect, stage, split, and commit selected changes.
+- [git-commit](git-commit/SKILL.md) — Inspect staged hygiene or prepare and commit selected changes.
 - [git-pr](git-pr/SKILL.md) — Draft, create, or update a GitHub pull request.
 - [git-sync](git-sync/SKILL.md) — Fetch, pull, push, or inspect branch synchronization.
 

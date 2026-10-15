@@ -146,6 +146,23 @@ class GitInspectionTests(unittest.TestCase):
         self.assertEqual(Path(data["repository"]), linked)
         self.assertEqual(data["operations"], [])
 
+    def test_bisect_without_checkout_is_visible_and_preserved(self):
+        self.seed()
+        for i in range(3):
+            (self.repo / "tracked.txt").write_text(f"revision {i}\n")
+            self.git("commit", "-am", f"test: revision {i}")
+        self.git("bisect", "start", "--no-checkout", "HEAD", "HEAD~3")
+        state = self.repo / ".git/BISECT_LOG"
+        before = (state.read_bytes(), self.git("rev-parse", "HEAD"),
+                  (self.repo / ".git/index").read_bytes())
+        data = self.inspect()
+        self.assertEqual(data["branch"], "main")
+        self.assertIn("bisect", data["operations"])
+        self.assertEqual(before, (state.read_bytes(), self.git("rev-parse", "HEAD"),
+                                  (self.repo / ".git/index").read_bytes()))
+        self.git("bisect", "reset")
+        self.assertEqual(self.inspect()["operations"], [])
+
     def test_template_is_opt_in_and_paged(self):
         self.seed()
         template = self.repo / "message.tmpl"

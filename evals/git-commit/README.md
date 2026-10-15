@@ -98,3 +98,38 @@ hook. Disabling it per query preserves the marker's absence, HEAD, index, worktr
 content, and accurate change counts. Commit hooks are unaffected.
 After the fix, all 76 tests and full repository verification passed. Selective
 installation copied all six files exactly; format, license, and local links passed.
+
+## 2026-10-15 conditional workflow additions
+
+- Revision: uncommitted changes based on 4d972c2103595674f2d84d7552da861b9a66e4b0.
+- Evidence: parent instruction review and format/distribution regression checks.
+
+Added a conditional staged-hygiene reference and inspection-only boundary.
+Parent review checked staged-versus-working contents, legitimate logging/assets,
+redacted credential evidence, and incomplete inspection. Size/content must come
+from staged blobs; inspection stops before staging or commit. Existing Git helper
+regressions passed, but no independent agent hygiene verdict was measured.
+
+Full verification passed: 65 skills, 160 tests with one platform skip, and both
+skills CLI and packed CLI checks. The package installed this skill's new references
+for Codex/Claude in isolated project/global scopes and compared all files with
+their sources. Older evidence above retains its original scope and date.
+
+## Initial commits and bisect regression — 2026-10-15
+
+- Revision: uncommitted working tree based on 4d972c2103595674f2d84d7552da861b9a66e4b0.
+- The no-checkout bisect regression failed before the fix. The inspector now
+  recognizes BISECT_START while preserving the branch, HEAD, index, and bisect log;
+  reset removes the reported operation. Twelve inspection tests passed afterward.
+- The prior staging recipe failed before the first commit because restore's
+  default source is nonexistent HEAD. The initial-commit branch now creates an
+  empty tree using zero-byte stdin and restores selected index entries from it.
+- Two new scripted replay tests cover existing/unborn HEAD and successful/failed
+  commit hooks. Excluded text and binary index blobs differ from working contents;
+  exact excluded entries, binary patches, and working bytes survive restoration.
+  Successful commits contain only the selected file; failed hooks preserve HEAD.
+- Full verification passed 66 skill formats, 164 tests with one Windows-only skip,
+  and skills CLI/packed CLI installation checks. No hooks were bypassed by the
+  tested staging procedure. Fixtures isolate author identity and signing settings.
+- These are Git workflow replays and helper regressions, not independent agent
+  staging or commit-message evaluations. Earlier results retain their original scope.
