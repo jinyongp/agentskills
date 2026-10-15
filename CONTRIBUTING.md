@@ -25,7 +25,27 @@ The command prepares:
 
 New entries appear under `New skills`; move them to the appropriate task group
 and refine their short descriptions before committing.
-It requires an existing category and rejects duplicate names or existing evaluation folders.
+
+When the `index` skill exists, preparation also refreshes its bundled catalog.
+The category README entries are the single source for its short skill descriptions.
+Normal verification refreshes the index automatically, so catalog edits do not
+require a separate generation command:
+
+```bash
+uv run check.py validate
+```
+
+Generated catalog pages stay within 2,500 characters and split automatically.
+Missing/duplicate catalog entries and references to removed skills still fail.
+CI uses `uv run --locked check.py --check-index` to reject stale committed pages
+without regenerating them. Use `uv run check.py validate --check-index` for the
+same freshness check locally, or `uv run scripts/generate_index.py` to regenerate
+without running validation. Edit category catalogs rather than generated pages
+under `skills/tooling/index/references/catalog/`. Include refreshed output in the
+same commit as the catalog change.
+
+The preparation command requires an existing category and rejects duplicate names
+or existing evaluation folders.
 
 You can also supply a description:
 
@@ -293,6 +313,10 @@ It is not a runtime dependency of installed skills.
 Authors must check that referenced files exist and evaluate actual behavior using
 the [evaluation guide](evals/README.md).
 Format validation does not establish instruction quality or compatibility with every agent.
+
+For a focused quality review, use [skill-review](skills/tooling/skill-review/SKILL.md).
+It checks discovery, decision rules, standalone resources, and evaluation evidence;
+its findings complement format and installation checks.
 
 Refine the catalog descriptions added by the preparation command.
 When renaming, moving, or removing skills, update root and category catalog links

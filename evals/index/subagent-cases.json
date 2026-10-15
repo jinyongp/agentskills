@@ -1,0 +1,106 @@
+{
+  "purpose": "Blind task-selection fixtures; expectations remain outside the evaluated projects and task prompts",
+  "cases": [
+    {
+      "id": "case-a",
+      "installed": "all",
+      "prompt": "Review the change to example.py against contract.txt. Report concrete defects with exact locations. Do not edit files.",
+      "files": {
+        "example.py": "def double(value):\n    return value + 1\n",
+        "runner.py": "from example import double\nprint(double(3))\n",
+        "contract.txt": "double(value) returns value multiplied by two. The public CLI entrypoint is python3 runner.py.\n"
+      },
+      "expectations": {
+        "required_skills": [
+          "code-review"
+        ],
+        "required_catalogs": [
+          "workflow.md"
+        ],
+        "forbidden_selected_skills": [
+          "review-loop"
+        ],
+        "output": "Identify the mismatch between addition and multiplication; proposed corrections must remain recommendations."
+      }
+    },
+    {
+      "id": "case-b",
+      "installed": "all",
+      "prompt": "Prepare a human manual QA checklist for the change to double in example.py using contract.txt. Include setup, actions, and expected outcomes. Do not execute the application or tests, or edit files.",
+      "files": {
+        "example.py": "def double(value):\n    return value + 1\n",
+        "runner.py": "from example import double\nprint(double(3))\n",
+        "contract.txt": "double(value) returns value multiplied by two. The public CLI entrypoint is python3 runner.py.\n"
+      },
+      "expectations": {
+        "required_skills": [
+          "qa-checklist"
+        ],
+        "required_catalogs": [
+          "workflow.md"
+        ],
+        "output": "Give planned CLI actions and multiplication-based expectations without implying execution."
+      }
+    },
+    {
+      "id": "case-c",
+      "installed": "all",
+      "prompt": "Prepare an inline packet so another session can continue the same task, using session.txt for decisions unavailable from the repository and source paths for recoverable facts. Preserve deferred work and pending checks. Do not implement, commit, publish, contact another agent, or save files.",
+      "files": {
+        "example.py": "def double(value):\n    return value + 1\n",
+        "runner.py": "from example import double\nprint(double(3))\n",
+        "contract.txt": "double(value) returns value multiplied by two. The public CLI entrypoint is python3 runner.py.\n",
+        "session.txt": "Goal: correct double to match contract.txt. Accepted scope: integer inputs only; validation of other types is deliberately deferred. The previous session identified addition instead of multiplication by static inspection. No source correction or test run has occurred. Next action is to apply the scoped correction and verify integer examples after resumption. Current request only prepares transfer context; it does not authorize that next action now.\n"
+      },
+      "expectations": {
+        "required_skills": [
+          "handoff"
+        ],
+        "required_catalogs": [
+          "workflow.md",
+          "workflow-2.md"
+        ],
+        "output": "Provide an inline transfer packet preserving integer-only scope, deferred validation, unrun checks, and lookups. Do not implement or spawn another agent."
+      }
+    },
+    {
+      "id": "case-d",
+      "installed": "index-only",
+      "prompt": "Explain how runner.py reaches double and prints its result, with exact file and line citations. Do not diagnose defects, propose fixes, run the program, install anything, or edit files.",
+      "files": {
+        "example.py": "def double(value):\n    return value + 1\n",
+        "runner.py": "from example import double\nprint(double(3))\n",
+        "contract.txt": "double(value) returns value multiplied by two. The public CLI entrypoint is python3 runner.py.\n"
+      },
+      "expectations": {
+        "required_skills": [],
+        "required_catalogs": [
+          "workflow.md"
+        ],
+        "unavailable_skill": "trace",
+        "output": "Verify no task skill is available in the permitted project installation; acknowledge the gap and explain the source path/result inline without installation or diagnosing a defect."
+      }
+    },
+    {
+      "id": "case-e",
+      "installed": "all",
+      "prompt": "Plan a scoped fix for the mobile browser keyboard issue in report.txt using index.html and styles.css. Preserve zoom and accessible form controls. Return the plan inline; do not edit files, start a server, run the app, or install dependencies.",
+      "files": {
+        "index.html": "<!doctype html>\n<html lang=\"en\"><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><link rel=\"stylesheet\" href=\"styles.css\"></head><body><main class=\"app\"><form><label for=\"message\">Message</label><input id=\"message\" name=\"message\"><button type=\"submit\" class=\"submit\">Send</button></form></main></body></html>\n",
+        "styles.css": ".app { min-height: 100vh; }\n.submit { position: fixed; bottom: 0; left: 0; }\n",
+        "report.txt": "User report: on an iPhone in Safari and an Android phone in Chrome, opening the keyboard can cover the Send button. Desktop typing does not reproduce it. Supported targets are these mobile browsers. No runtime/browser trace or device is supplied in this fixture; treat cause and platform-specific behavior as unverified until reproduced.\n"
+      },
+      "expectations": {
+        "required_skills": [
+          "plan",
+          "mobile-web"
+        ],
+        "required_catalogs": [
+          "workflow.md",
+          "frontend.md"
+        ],
+        "output": "Combine planning and relevant mobile-browser guidance. Preserve zoom, focus, and control access; mark runtime/device reproduction and final checks pending rather than claiming a verified fix."
+      }
+    }
+  ]
+}

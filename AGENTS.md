@@ -2,6 +2,7 @@
 
 This repository distributes standalone Agent Skills through its bundled CLI and the skills CLI.
 
+- Before a new substantive task, read `skills/tooling/index/SKILL.md`, select relevant catalog pages, and read the applicable skills before starting work. Reuse loaded instructions during the same task; reconsider selection when scope changes.
 - Write all documentation, skill instructions, references, catalogs, and evaluation notes in English.
 - Keep installable skills at `skills/<category>/<skill-name>/SKILL.md`.
 - Keep skill names unique across the repository and equal to their directory names.
@@ -19,7 +20,7 @@ This repository distributes standalone Agent Skills through its bundled CLI and 
 - Use scripts for repeated mechanical inspection or large-output reduction. Start with bounded summaries; request only relevant detail, with explicit omission counts and pagination.
 - Define and test inspection output limits, including large inputs and failures. Never treat truncated information as complete or shorten exact paths silently.
 - Add tests for meaningful uncovered behavior, reuse existing checks, and keep maintenance cost proportional. Follow the testing principles in CONTRIBUTING.md.
-- Run `uv run check.py` for full verification, or `uv run check.py validate` for skill format and catalog checks. CI adds `--locked` to enforce the committed dependency lockfile.
+- Run `uv run check.py` for full verification, or `uv run check.py validate` for skill format and catalog checks; both refresh the index first. CI adds `--locked` and `--check-index` to enforce the dependency lockfile and reject stale generated files without rewriting them.
 - Preserve third-party licenses and attribution. Original repository content uses MIT.
 - Keep attribution and source-license notices in each skill's LICENSE and NOTICE.md, outside runtime instructions and references. Retain task-relevant technical source links.
 - Use `rg` for searches and preserve unrelated changes.

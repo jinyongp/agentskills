@@ -20,7 +20,9 @@ The temporary project is deleted afterward. The first run needs a network connec
 to download the CLI from npm. To change the CLI version, update `CLI_PACKAGE`
 in `scripts/smoke_install.py` and rerun the check.
 
-GitHub Actions runs `uv run --locked check.py` on main branch pushes, PRs, and manual runs.
+GitHub Actions runs `uv run --locked check.py --check-index` on main branch pushes,
+PRs, and manual runs. Local full/format checks refresh the skill index first;
+CI verifies committed generated files without rewriting them.
 The reusable validation workflow also runs format checks, installer integration
 tests, packed CLI lifecycle tests and skills CLI smoke checks on Ubuntu and
 Windows Server 2022 with Node 22.20.0, 22.x and 24.x. The Release workflow depends

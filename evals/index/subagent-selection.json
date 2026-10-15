@@ -1,0 +1,399 @@
+{
+  "date": "2026-10-15",
+  "revision": "Uncommitted working tree based on 4d972c2103595674f2d84d7552da861b9a66e4b0",
+  "evidence_type": "Five actual collaboration subagents plus one same-agent status follow-up; parent semantic grades and independent Linux filesystem-access observations",
+  "fork_turns": "none for every initial task; no expected skill or desired task output in prompt",
+  "model": "Inherited default; exact identity and token/timing/billing counters unavailable",
+  "context": "Project AGENTS.md requires index before substantive work. Installed selection constrained to project copies, excluding global/source-collection skills. Four cases contain all 66 skills; missing-workflow case contains index only.",
+  "isolation": "Disposable copies with read-only task instructions; collaboration subagents share filesystem/tool permissions rather than separate enforced sandboxes. SHA-256 manifests include all project files, including Git internals, and matched after execution.",
+  "filesystem_monitor": {
+    "trace": "subagent-file-access.jsonl",
+    "events": {
+      "events_seen": 240,
+      "recorded": 240,
+      "omitted": 0,
+      "kernel_overflows": 0,
+      "complete": true
+    },
+    "implementation": "Temporary Python/ctypes inotify helper watched 490 project directories for open/access/read-close events; controlled parent read probes succeeded for all five projects before tasks. It stopped before post-run fingerprint reads. Git directories excluded from access watches but included in byte snapshots.",
+    "limits": [
+      "Events verify filesystem access and ordering, not full-text consumption or model attention",
+      "inotify carries no process attribution; one agent per project, no parent skill/source reads during observation except marked .monitor-probe reads",
+      "Concurrent catalog reads may appear in either order; each required page preceded the selected workflow",
+      "Full subagent tool traces unavailable; commands/results are agent-reported or parent-normalized excerpts, distinct from observed filesystem accesses",
+      "No events omitted; no kernel overflow detected"
+    ]
+  },
+  "setup_failure": "First temporary Git setup commit was rejected by existing Conventional Commit hook. Setup rerun with a Conventional Commit message and unchanged normal hooks; no evaluator task ran on the abandoned partial fixture.",
+  "runs": [
+    {
+      "case": "case-a",
+      "agent_task": "/root/index_case_a",
+      "prompt": "Review the change to example.py against contract.txt. Report concrete defects with exact locations. Do not edit files.",
+      "installed_project_skills": 66,
+      "index_sha256": "a3fd45d7631c49900d70c139a0fef6272deb98d45340fad492ac539cde1eb869",
+      "index_bundle_sha256": {
+        ".agents/skills/index/LICENSE": "836463c932d74d407a4d9509c322cbe5688dfe2292ac02920d0845a3613b12bc",
+        ".agents/skills/index/NOTICE.md": "a71379f7cb5c1dec36531952f5297314b6ba04287a12aa00c04e3fbad634b685",
+        ".agents/skills/index/SKILL.md": "a3fd45d7631c49900d70c139a0fef6272deb98d45340fad492ac539cde1eb869",
+        ".agents/skills/index/references/catalog/frontend.md": "8b40eef4d0d44c48884f01b65d753c29ee3f5f99a4431df4728e0a783a3d8b6f",
+        ".agents/skills/index/references/catalog/git.md": "f635eef7fdd5b9a618ae02be4a53b8f15ff395383aa5f675eb05ae712422179d",
+        ".agents/skills/index/references/catalog/tooling.md": "6ad1e13157e03bbddd40640f7dd854d340316a338713da3319084b2e8b71dd7d",
+        ".agents/skills/index/references/catalog/workflow-2.md": "7d6829d38b59598d2dca7aac24bc0070495096012576034dbb72b408b3df24cc",
+        ".agents/skills/index/references/catalog/workflow.md": "25e0e2989ebdd044f0b6ff04a6de9b36d2c31541b8775fe92083560db36c7a1a",
+        ".agents/skills/index/references/catalog/writing.md": "fd99852cbfc0cc7774700ee3e85abe14521f7bcb0b85b55ea577cf9b21a46728"
+      },
+      "parent_semantic_grade": {
+        "requested_result_satisfied": true,
+        "expected_workflows_accessed": true,
+        "required_catalogs_accessed_before_workflows": true,
+        "missing_skill_fallback_passed": null,
+        "scope_preserved": true
+      },
+      "required_workflows": [
+        "code-review"
+      ],
+      "actual_task_skill_entrypoints_accessed": [
+        "code-review"
+      ],
+      "unique_skill_files_accessed": 5,
+      "unique_catalog_pages_accessed": [
+        ".agents/skills/index/references/catalog/workflow.md"
+      ],
+      "first_access_sequence": {
+        "AGENTS.md": 17,
+        ".gitignore": 20,
+        ".agents/skills/index/SKILL.md": 26,
+        ".agents/skills/index/references/catalog/workflow.md": 35,
+        ".agents/skills/code-review/SKILL.md": 38,
+        ".agents/skills/code-review/references/focused-checks.md": 80,
+        "runner.py": 83,
+        "contract.txt": 86,
+        ".agents/skills/code-review/scripts/inspect_changes.py": 89,
+        "example.py": 102
+      },
+      "project_file_count": 285,
+      "project_bytes_preserved": true,
+      "project_snapshot_sha256": "a056b660aa8e8f96173b8dab2f2cf4f25003510089c19bf97c40df4bb4b31769",
+      "result_excerpt": "Multiplication contract is broken: example.py:2 changes value * 2 to value + 1. The public entrypoint prints 4 for input 3; the required result is 6. No files edited.",
+      "scope_evidence": "Agent reported running the reviewed pure fixture with PYTHONDONTWRITEBYTECODE=1; confirmed 4; no source or Git bytes changed. Severity calibration was not graded.",
+      "reported_reads": [
+        "AGENTS.md",
+        ".agents/skills/index/SKILL.md",
+        ".agents/skills/index/references/catalog/workflow.md",
+        ".agents/skills/code-review/SKILL.md",
+        ".agents/skills/code-review/references/focused-checks.md"
+      ],
+      "reported_commands": [
+        "cat of the five instruction/reference files",
+        "rg --files --hidden excluding Git and Python caches",
+        "rg --files --hidden --no-ignore .agents/skills",
+        "nl -ba contract.txt",
+        "nl -ba runner.py",
+        "nl -ba example.py",
+        "interactive Bash inspection helper summary",
+        "interactive Bash inspection helper --mode diff --path example.py",
+        "bash -ic 'PYTHONDONTWRITEBYTECODE=1 python3 runner.py'"
+      ],
+      "inspection_notes": "Interactive shell reported job-control and fnm symlink permission errors; all requested commands reported successful."
+    },
+    {
+      "case": "case-b",
+      "agent_task": "/root/index_case_b",
+      "prompt": "Prepare a human manual QA checklist for the change to double in example.py using contract.txt. Include setup, actions, and expected outcomes. Do not execute the application or tests, or edit files.",
+      "installed_project_skills": 66,
+      "index_sha256": "a3fd45d7631c49900d70c139a0fef6272deb98d45340fad492ac539cde1eb869",
+      "index_bundle_sha256": {
+        ".agents/skills/index/LICENSE": "836463c932d74d407a4d9509c322cbe5688dfe2292ac02920d0845a3613b12bc",
+        ".agents/skills/index/NOTICE.md": "a71379f7cb5c1dec36531952f5297314b6ba04287a12aa00c04e3fbad634b685",
+        ".agents/skills/index/SKILL.md": "a3fd45d7631c49900d70c139a0fef6272deb98d45340fad492ac539cde1eb869",
+        ".agents/skills/index/references/catalog/frontend.md": "8b40eef4d0d44c48884f01b65d753c29ee3f5f99a4431df4728e0a783a3d8b6f",
+        ".agents/skills/index/references/catalog/git.md": "f635eef7fdd5b9a618ae02be4a53b8f15ff395383aa5f675eb05ae712422179d",
+        ".agents/skills/index/references/catalog/tooling.md": "6ad1e13157e03bbddd40640f7dd854d340316a338713da3319084b2e8b71dd7d",
+        ".agents/skills/index/references/catalog/workflow-2.md": "7d6829d38b59598d2dca7aac24bc0070495096012576034dbb72b408b3df24cc",
+        ".agents/skills/index/references/catalog/workflow.md": "25e0e2989ebdd044f0b6ff04a6de9b36d2c31541b8775fe92083560db36c7a1a",
+        ".agents/skills/index/references/catalog/writing.md": "fd99852cbfc0cc7774700ee3e85abe14521f7bcb0b85b55ea577cf9b21a46728"
+      },
+      "parent_semantic_grade": {
+        "requested_result_satisfied": true,
+        "expected_workflows_accessed": true,
+        "required_catalogs_accessed_before_workflows": true,
+        "missing_skill_fallback_passed": null,
+        "scope_preserved": true
+      },
+      "required_workflows": [
+        "qa-checklist"
+      ],
+      "actual_task_skill_entrypoints_accessed": [
+        "qa-checklist"
+      ],
+      "unique_skill_files_accessed": 6,
+      "unique_catalog_pages_accessed": [
+        ".agents/skills/index/references/catalog/workflow.md",
+        ".agents/skills/index/references/catalog/writing.md"
+      ],
+      "first_access_sequence": {
+        "AGENTS.md": 23,
+        ".gitignore": 32,
+        ".agents/skills/index/SKILL.md": 41,
+        ".agents/skills/index/references/catalog/workflow.md": 50,
+        ".agents/skills/index/references/catalog/writing.md": 53,
+        ".agents/skills/qa-checklist/SKILL.md": 65,
+        "contract.txt": 68,
+        "example.py": 71,
+        "runner.py": 74,
+        ".agents/skills/qa-checklist/references/change-inspection.md": 122,
+        ".agents/skills/qa-checklist/scripts/inspect_changes.py": 158
+      },
+      "project_file_count": 285,
+      "project_bytes_preserved": true,
+      "project_snapshot_sha256": "7f87d25cc971433ca734ec520cb922fcab862a55d57655d4790841a803f40138",
+      "result_excerpt": "Planned manual QA; no application or tests were executed. Setup: Python 3 and a terminal at the checkout. Action: run python3 runner.py. Expected: successful exit, exactly 6 plus newline. Static implementation would yield 4. Other inputs cannot be checked through the fixed-input CLI.",
+      "scope_evidence": "No application or test execution reported; helper inspected Git summary/diff only. Project bytes unchanged.",
+      "reported_reads": [
+        "AGENTS.md",
+        ".agents/skills/index/SKILL.md",
+        ".agents/skills/index/references/catalog/workflow.md",
+        ".agents/skills/index/references/catalog/writing.md",
+        ".agents/skills/qa-checklist/SKILL.md",
+        "contract.txt",
+        "example.py",
+        "runner.py",
+        ".agents/skills/qa-checklist/references/change-inspection.md"
+      ],
+      "reported_commands": [
+        "cat AGENTS.md",
+        "rg --files --hidden with Git/evaluation/Python-cache exclusions",
+        "rg --files --hidden --no-ignore .agents/skills/index",
+        "cat .agents/skills/index/SKILL.md",
+        "cat workflow.md writing.md",
+        "cat qa-checklist/SKILL.md contract.txt example.py runner.py",
+        "cat qa-checklist/references/change-inspection.md",
+        "interactive Bash inspection helper summary",
+        "interactive Bash inspection helper --mode diff --path example.py"
+      ],
+      "inspection_notes": "Interactive shell reported job-control and fnm symlink permission errors; both helper commands reported successful."
+    },
+    {
+      "case": "case-c",
+      "agent_task": "/root/index_case_c",
+      "prompt": "Prepare an inline packet so another session can continue the same task, using session.txt for decisions unavailable from the repository and source paths for recoverable facts. Preserve deferred work and pending checks. Do not implement, commit, publish, contact another agent, or save files.",
+      "installed_project_skills": 66,
+      "index_sha256": "a3fd45d7631c49900d70c139a0fef6272deb98d45340fad492ac539cde1eb869",
+      "index_bundle_sha256": {
+        ".agents/skills/index/LICENSE": "836463c932d74d407a4d9509c322cbe5688dfe2292ac02920d0845a3613b12bc",
+        ".agents/skills/index/NOTICE.md": "a71379f7cb5c1dec36531952f5297314b6ba04287a12aa00c04e3fbad634b685",
+        ".agents/skills/index/SKILL.md": "a3fd45d7631c49900d70c139a0fef6272deb98d45340fad492ac539cde1eb869",
+        ".agents/skills/index/references/catalog/frontend.md": "8b40eef4d0d44c48884f01b65d753c29ee3f5f99a4431df4728e0a783a3d8b6f",
+        ".agents/skills/index/references/catalog/git.md": "f635eef7fdd5b9a618ae02be4a53b8f15ff395383aa5f675eb05ae712422179d",
+        ".agents/skills/index/references/catalog/tooling.md": "6ad1e13157e03bbddd40640f7dd854d340316a338713da3319084b2e8b71dd7d",
+        ".agents/skills/index/references/catalog/workflow-2.md": "7d6829d38b59598d2dca7aac24bc0070495096012576034dbb72b408b3df24cc",
+        ".agents/skills/index/references/catalog/workflow.md": "25e0e2989ebdd044f0b6ff04a6de9b36d2c31541b8775fe92083560db36c7a1a",
+        ".agents/skills/index/references/catalog/writing.md": "fd99852cbfc0cc7774700ee3e85abe14521f7bcb0b85b55ea577cf9b21a46728"
+      },
+      "parent_semantic_grade": {
+        "requested_result_satisfied": true,
+        "expected_workflows_accessed": true,
+        "required_catalogs_accessed_before_workflows": true,
+        "missing_skill_fallback_passed": null,
+        "scope_preserved": true
+      },
+      "required_workflows": [
+        "handoff"
+      ],
+      "actual_task_skill_entrypoints_accessed": [
+        "handoff"
+      ],
+      "unique_skill_files_accessed": 4,
+      "unique_catalog_pages_accessed": [
+        ".agents/skills/index/references/catalog/workflow.md",
+        ".agents/skills/index/references/catalog/workflow-2.md"
+      ],
+      "first_access_sequence": {
+        "AGENTS.md": 29,
+        ".agents/skills/index/SKILL.md": 47,
+        ".agents/skills/index/references/catalog/workflow.md": 56,
+        ".agents/skills/index/references/catalog/workflow-2.md": 59,
+        ".agents/skills/handoff/SKILL.md": 113,
+        "session.txt": 146,
+        "contract.txt": 149,
+        "example.py": 152,
+        "runner.py": 155
+      },
+      "project_file_count": 265,
+      "project_bytes_preserved": true,
+      "project_snapshot_sha256": "0470271b17817f9c369d10602f8c12dab71134450c89a6202e83e35ca60b23b0",
+      "result_excerpt": "Continuation packet: accepted scope is integer inputs; other-type validation deliberately deferred. Previous finding was static; no correction or test run has occurred. Current request prepares transfer only. After resumption under implementation authorization, correct double and verify integers and CLI. Give exact lookups to AGENTS.md, contract.txt, example.py, runner.py and session.txt.",
+      "scope_evidence": "Inline packet only; no implementation, saving, publication, or further delegation reported. Project bytes unchanged.",
+      "reported_reads": [
+        "AGENTS.md",
+        ".agents/skills/index/SKILL.md",
+        ".agents/skills/index/references/catalog/workflow.md",
+        ".agents/skills/index/references/catalog/workflow-2.md",
+        ".agents/skills/handoff/SKILL.md"
+      ],
+      "reported_commands": [
+        "cat AGENTS.md",
+        "rg --files --hidden with dependency/Git/evaluation/source-collection exclusions",
+        "individual cat of index, two workflow catalog pages, and handoff",
+        "cat session.txt",
+        "nl -ba contract.txt example.py runner.py",
+        "rg -n double/return/runner.py/print in source and contract"
+      ],
+      "inspection_notes": null
+    },
+    {
+      "case": "case-d",
+      "agent_task": "/root/index_case_d",
+      "prompt": "Explain how runner.py reaches double and prints its result, with exact file and line citations. Do not diagnose defects, propose fixes, run the program, install anything, or edit files.",
+      "installed_project_skills": 1,
+      "index_sha256": "a3fd45d7631c49900d70c139a0fef6272deb98d45340fad492ac539cde1eb869",
+      "index_bundle_sha256": {
+        ".agents/skills/index/LICENSE": "836463c932d74d407a4d9509c322cbe5688dfe2292ac02920d0845a3613b12bc",
+        ".agents/skills/index/NOTICE.md": "a71379f7cb5c1dec36531952f5297314b6ba04287a12aa00c04e3fbad634b685",
+        ".agents/skills/index/SKILL.md": "a3fd45d7631c49900d70c139a0fef6272deb98d45340fad492ac539cde1eb869",
+        ".agents/skills/index/references/catalog/frontend.md": "8b40eef4d0d44c48884f01b65d753c29ee3f5f99a4431df4728e0a783a3d8b6f",
+        ".agents/skills/index/references/catalog/git.md": "f635eef7fdd5b9a618ae02be4a53b8f15ff395383aa5f675eb05ae712422179d",
+        ".agents/skills/index/references/catalog/tooling.md": "6ad1e13157e03bbddd40640f7dd854d340316a338713da3319084b2e8b71dd7d",
+        ".agents/skills/index/references/catalog/workflow-2.md": "7d6829d38b59598d2dca7aac24bc0070495096012576034dbb72b408b3df24cc",
+        ".agents/skills/index/references/catalog/workflow.md": "25e0e2989ebdd044f0b6ff04a6de9b36d2c31541b8775fe92083560db36c7a1a",
+        ".agents/skills/index/references/catalog/writing.md": "fd99852cbfc0cc7774700ee3e85abe14521f7bcb0b85b55ea577cf9b21a46728"
+      },
+      "parent_semantic_grade": {
+        "requested_result_satisfied": true,
+        "expected_workflows_accessed": true,
+        "required_catalogs_accessed_before_workflows": true,
+        "missing_skill_fallback_passed": true,
+        "scope_preserved": true
+      },
+      "required_workflows": [],
+      "actual_task_skill_entrypoints_accessed": [],
+      "unique_skill_files_accessed": 3,
+      "unique_catalog_pages_accessed": [
+        ".agents/skills/index/references/catalog/workflow.md",
+        ".agents/skills/index/references/catalog/writing.md"
+      ],
+      "first_access_sequence": {
+        "AGENTS.md": 44,
+        ".agents/skills/index/SKILL.md": 62,
+        ".agents/skills/index/references/catalog/workflow.md": 116,
+        ".agents/skills/index/references/catalog/writing.md": 119,
+        "runner.py": 185,
+        "example.py": 188
+      },
+      "project_file_count": 14,
+      "project_bytes_preserved": true,
+      "project_snapshot_sha256": "600ac362689ddcf090420ee09f54aaaa703f3aacf36d4aa7ddb49d192c157fc1",
+      "result_excerpt": "runner.py:1 imports double from example; runner.py:2 calls double(3) and prints the return. example.py:1 defines double; line 2 returns value + 1. Source-derived printed result is 4. Catalogued trace skill is not installed locally. Runtime output and timing were not measured; execution was prohibited.",
+      "scope_evidence": "Only index is installed in the permitted skill context. Agent acknowledged the missing workflow and completed static explanation without diagnosing a defect, suggesting fixes, installing, or executing. Project bytes unchanged.",
+      "reported_reads": [
+        "AGENTS.md",
+        ".agents/skills/index/SKILL.md",
+        ".agents/skills/index/references/catalog/workflow.md",
+        ".agents/skills/index/references/catalog/writing.md"
+      ],
+      "reported_commands": [
+        "cat AGENTS.md",
+        "rg --files -g SKILL.md -g '*.md' -g '*.py' with AGENTS/Git exclusions --hidden",
+        "cat .agents/skills/index/SKILL.md",
+        "cat workflow.md writing.md",
+        "nl -ba runner.py; nl -ba example.py"
+      ],
+      "inspection_notes": null
+    },
+    {
+      "case": "case-e",
+      "agent_task": "/root/index_case_e",
+      "prompt": "Plan a scoped fix for the mobile browser keyboard issue in report.txt using index.html and styles.css. Preserve zoom and accessible form controls. Return the plan inline; do not edit files, start a server, run the app, or install dependencies.",
+      "installed_project_skills": 66,
+      "index_sha256": "a3fd45d7631c49900d70c139a0fef6272deb98d45340fad492ac539cde1eb869",
+      "index_bundle_sha256": {
+        ".agents/skills/index/LICENSE": "836463c932d74d407a4d9509c322cbe5688dfe2292ac02920d0845a3613b12bc",
+        ".agents/skills/index/NOTICE.md": "a71379f7cb5c1dec36531952f5297314b6ba04287a12aa00c04e3fbad634b685",
+        ".agents/skills/index/SKILL.md": "a3fd45d7631c49900d70c139a0fef6272deb98d45340fad492ac539cde1eb869",
+        ".agents/skills/index/references/catalog/frontend.md": "8b40eef4d0d44c48884f01b65d753c29ee3f5f99a4431df4728e0a783a3d8b6f",
+        ".agents/skills/index/references/catalog/git.md": "f635eef7fdd5b9a618ae02be4a53b8f15ff395383aa5f675eb05ae712422179d",
+        ".agents/skills/index/references/catalog/tooling.md": "6ad1e13157e03bbddd40640f7dd854d340316a338713da3319084b2e8b71dd7d",
+        ".agents/skills/index/references/catalog/workflow-2.md": "7d6829d38b59598d2dca7aac24bc0070495096012576034dbb72b408b3df24cc",
+        ".agents/skills/index/references/catalog/workflow.md": "25e0e2989ebdd044f0b6ff04a6de9b36d2c31541b8775fe92083560db36c7a1a",
+        ".agents/skills/index/references/catalog/writing.md": "fd99852cbfc0cc7774700ee3e85abe14521f7bcb0b85b55ea577cf9b21a46728"
+      },
+      "parent_semantic_grade": {
+        "requested_result_satisfied": true,
+        "expected_workflows_accessed": true,
+        "required_catalogs_accessed_before_workflows": true,
+        "missing_skill_fallback_passed": null,
+        "scope_preserved": true
+      },
+      "required_workflows": [
+        "plan",
+        "mobile-web"
+      ],
+      "actual_task_skill_entrypoints_accessed": [
+        "plan",
+        "mobile-web",
+        "accessibility"
+      ],
+      "unique_skill_files_accessed": 8,
+      "unique_catalog_pages_accessed": [
+        ".agents/skills/index/references/catalog/frontend.md",
+        ".agents/skills/index/references/catalog/workflow.md"
+      ],
+      "first_access_sequence": {
+        "AGENTS.md": 77,
+        ".agents/skills/index/SKILL.md": 143,
+        ".agents/skills/index/references/catalog/frontend.md": 210,
+        ".agents/skills/index/references/catalog/workflow.md": 213,
+        ".agents/skills/plan/SKILL.md": 216,
+        ".agents/skills/mobile-web/SKILL.md": 219,
+        ".agents/skills/accessibility/SKILL.md": 222,
+        "report.txt": 225,
+        "index.html": 228,
+        "styles.css": 231,
+        ".agents/skills/mobile-web/references/platform.md": 236,
+        ".agents/skills/plan/references/design-scope.md": 239
+      },
+      "project_file_count": 264,
+      "project_bytes_preserved": true,
+      "project_snapshot_sha256": "d7c2978bb967990eebb44a11c535ec3cee7826e2e3244e13d8143a837e35f11b",
+      "result_excerpt": "Fixed Send positioning is a plausible contributor, but cause is unverified without device traces. Plan reproduction on supported mobile browsers, try normal document flow as a scoped candidate, preserve zoom/labels/native controls/focus, and verify keyboard reachability, orientation, chrome and zoom. Implementation and final acceptance depend on observed reproduction. No behavioral checks run.",
+      "scope_evidence": "Plan plus mobile-web and accessibility guidance; no edits, server, app execution or dependency install reported. Runtime claims stayed pending. Project bytes unchanged.",
+      "reported_reads": [
+        "AGENTS.md",
+        ".agents/skills/index/SKILL.md",
+        ".agents/skills/index/references/catalog/workflow.md",
+        ".agents/skills/index/references/catalog/frontend.md",
+        ".agents/skills/plan/SKILL.md",
+        ".agents/skills/mobile-web/SKILL.md",
+        ".agents/skills/accessibility/SKILL.md",
+        ".agents/skills/mobile-web/references/platform.md",
+        ".agents/skills/plan/references/design-scope.md"
+      ],
+      "reported_commands": [
+        "cat AGENTS.md",
+        "bounded rg --files with hidden paths and exclusions",
+        "cat each selected instruction/catalog",
+        "nl -ba report.txt index.html styles.css",
+        "heading/keyword rg in mobile-web/references/platform.md",
+        "sed -n 6,36p mobile-web/references/platform.md",
+        "cat plan/references/design-scope.md"
+      ],
+      "inspection_notes": null
+    }
+  ],
+  "same_task_followup": {
+    "agent_task": "/root/index_case_a",
+    "prompt": "For the same review, what is the current status? Reply briefly inline, then append any new reads or commands performed for this response.",
+    "response": "Review complete. One P1 defect: example.py:2 adds one instead of doubling; the public CLI prints 4 where the contract requires 6. No files edited. New reads or commands: none.",
+    "total_index_open_events_across_initial_and_followup": 1,
+    "read_reuse_observed": true,
+    "limits": "One status follow-up; changed-scope reselection and broader multi-turn behavior not tested."
+  },
+  "unknowns": [
+    "All-task routing and repeated-trial reliability",
+    "Comparative token/latency/billing benefit over native metadata selection",
+    "Review priority/severity calibration and exhaustive task quality",
+    "Activation without the project rule requiring index",
+    "Global-context removal: outside-project skill use was prohibited by task contract, not filesystem enforcement"
+  ]
+}

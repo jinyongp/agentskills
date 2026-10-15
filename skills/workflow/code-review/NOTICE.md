@@ -8,3 +8,7 @@ Upstream copyright and permission are retained in LICENSE.
 Adapted on 2026-10-13: Separate contract and standards review; assess caller knowledge and preserve
 meaningful coverage before replacing tests. No mandatory subagents, smell quotas
 or adapter counts.
+
+2026-10-15: added original decision-compliance and focused behavior-check references
+from agreed repository requirements. Public Unlearn workflow categories informed
+the task discussion; no upstream instructions or resources were incorporated.

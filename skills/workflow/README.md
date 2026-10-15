@@ -7,10 +7,12 @@ Choose a skill for the work you need done. These are independent workflows, not 
 ## Understand and plan
 
 - [survey](survey/SKILL.md) — Map a repository without running project code.
+- [trace](trace/SKILL.md) — Explain one codebase journey with source citations.
 - [research](research/SKILL.md) — Investigate an external question using primary evidence.
 - [domain-modeling](domain-modeling/SKILL.md) — Resolve ambiguous business terms and rules.
+- [spec-generator](spec-generator/SKILL.md) — Define product requirements, roles, and feature flows.
 - [plan](plan/SKILL.md) — Set scope, decisions, work units, and completion checks.
-- [queue](queue/SKILL.md) — Draft a task queue or register requested tasks.
+- [queue](queue/SKILL.md) — Draft task queues or preserve plans as local checklists.
 
 ## Implement and troubleshoot
 
@@ -23,15 +25,19 @@ Choose a skill for the work you need done. These are independent workflows, not 
 
 ## Review and verify
 
-- [code-review](code-review/SKILL.md) — Report concrete defects in selected changes.
+- [review-map](review-map/SKILL.md) — Map change risk and reading order for human review.
+- [code-review](code-review/SKILL.md) — Review changes for defects or recorded decision compliance.
 - [review-loop](review-loop/SKILL.md) — Review and fix agreed scope through completion.
+- [dependency-review](dependency-review/SKILL.md) — Assess dependency adoption and changed package tradeoffs.
 - [security-review](security-review/SKILL.md) — Trace exploitable defects across a security boundary.
+- [qa-checklist](qa-checklist/SKILL.md) — Prepare manual actions, setup, and expected outcomes.
 - [verify](verify/SKILL.md) — Run useful checks and report evidence and gaps.
+- [preflight](preflight/SKILL.md) — Identify deployment prerequisites and operational actions.
 - [close](close/SKILL.md) — Assess completion and commit readiness from existing evidence.
 
 ## Test
 
-- [test](test/SKILL.md) — Decide whether coverage is needed and choose its boundary.
+- [test](test/SKILL.md) — Assess coverage, suggest cases, and choose test boundaries.
 - [test-unit](test-unit/SKILL.md) — Check isolated calculations and state transitions.
 - [test-integration](test-integration/SKILL.md) — Exercise real dependency and module boundaries.
 - [test-contract](test-contract/SKILL.md) — Check consumer and provider compatibility.

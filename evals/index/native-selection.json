@@ -1,0 +1,293 @@
+{
+  "date": "2026-10-15",
+  "revision": "Uncommitted working tree based on 4d972c2103595674f2d84d7552da861b9a66e4b0",
+  "evidence_type": "Fresh native Codex CLI task executions, parent-scored traces and outputs",
+  "cli_version": "codex-cli 0.160.0",
+  "model": "CLI default with --ignore-user-config; exact model not emitted in these traces",
+  "project_skills": 66,
+  "fixture_root_temp_path": "/tmp/agentskills-routing-tuycmjza",
+  "sandbox": "read-only",
+  "session_mode": "ephemeral, one fresh process per request",
+  "global_context_limit": "User/global skills and host instructions were not fully isolated. No expected skill name or prior findings appeared in task prompts.",
+  "runs": [
+    {
+      "case": "review",
+      "prompt": "Review example.py against contract.txt. Report supported defects with exact locations. Do not edit files.",
+      "expected_skill": "code-review",
+      "index_sha256": "eef6ba1858a300b0ea13d06b6b43906b2b8fee9eb7876c89861b2da76e5bdd45",
+      "native_turn_completed": true,
+      "workflow_read_observed": true,
+      "index_before_workflow": true,
+      "catalog_before_workflow": true,
+      "elapsed_seconds": 16.06,
+      "usage": {
+        "input_tokens": 90094,
+        "cached_input_tokens": 68736,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 469,
+        "reasoning_output_tokens": 19
+      },
+      "commands": [
+        {
+          "event": 5,
+          "command": "/usr/bin/zsh -lc 'cat .agents/skills/index/SKILL.md'",
+          "exit_code": 0,
+          "output_chars": 2946
+        },
+        {
+          "event": 7,
+          "command": "/usr/bin/zsh -lc \"pwd; rg --files -g 'example.py' -g 'contract.txt' -g 'AGENTS.md'\"",
+          "exit_code": 0,
+          "output_chars": 68
+        },
+        {
+          "event": 9,
+          "command": "/usr/bin/zsh -lc 'cat .agents/skills/index/references/catalog/workflow.md; cat .agents/skills/code-review/SKILL.md'",
+          "exit_code": 0,
+          "output_chars": 6684
+        },
+        {
+          "event": 11,
+          "command": "/usr/bin/zsh -lc 'nl -ba example.py; nl -ba contract.txt; cat AGENTS.md'",
+          "exit_code": 0,
+          "output_chars": 1890
+        },
+        {
+          "event": 14,
+          "command": "/usr/bin/zsh -lc 'python3 .agents/skills/code-review/scripts/inspect_changes.py --repo /tmp/agentskills-routing-tuycmjza'",
+          "exit_code": 0,
+          "output_chars": 110
+        },
+        {
+          "event": 16,
+          "command": "/usr/bin/zsh -lc \"python3 -B -c 'from example import double; print(f\\\"double(3): actual={double(3)}, expected={3 * 2}\\\")'\"",
+          "exit_code": 0,
+          "output_chars": 32
+        }
+      ],
+      "raw_trace_temp_path": "/tmp/agentskills-routing-review-v3.jsonl",
+      "scope_evidence": "Parent reviewed final output and completed commands; no implementation writes observed. SHA-256 snapshots matched for all project files in the four later runs; the review run preserved source bytes and Git diff state.",
+      "full_workflow_text_in_tool_output": true,
+      "full_index_hash_in_tool_output": true
+    },
+    {
+      "case": "manual-qa",
+      "prompt": "Prepare a human manual QA checklist for the change to double in example.py, using contract.txt as the expected behavior. Include setup, actions, and expected results. Do not execute tests or edit files.",
+      "expected_skill": "qa-checklist",
+      "index_sha256": "eef6ba1858a300b0ea13d06b6b43906b2b8fee9eb7876c89861b2da76e5bdd45",
+      "native_turn_completed": true,
+      "workflow_read_observed": true,
+      "index_before_workflow": true,
+      "catalog_before_workflow": false,
+      "elapsed_seconds": 17.85,
+      "usage": {
+        "input_tokens": 114377,
+        "cached_input_tokens": 101760,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 583,
+        "reasoning_output_tokens": 0
+      },
+      "commands": [
+        {
+          "event": 5,
+          "command": "/usr/bin/zsh -lc 'cat .agents/skills/index/SKILL.md'",
+          "exit_code": 0,
+          "output_chars": 2946
+        },
+        {
+          "event": 7,
+          "command": "/usr/bin/zsh -lc \"pwd; rg --files -g 'example.py' -g 'contract.txt' -g 'AGENTS.md'\"",
+          "exit_code": 0,
+          "output_chars": 68
+        },
+        {
+          "event": 9,
+          "command": "/usr/bin/zsh -lc 'cat .agents/skills/qa-checklist/SKILL.md'",
+          "exit_code": 0,
+          "output_chars": 3176
+        },
+        {
+          "event": 11,
+          "command": "/usr/bin/zsh -lc 'cat .agents/skills/index/references/catalog/workflow.md'",
+          "exit_code": 0,
+          "output_chars": 2439
+        },
+        {
+          "event": 13,
+          "command": "/usr/bin/zsh -lc 'cat AGENTS.md contract.txt example.py; git diff -- example.py; git status --short'",
+          "exit_code": 0,
+          "output_chars": 2077
+        },
+        {
+          "event": 15,
+          "command": "/usr/bin/zsh -lc 'cat .agents/skills/qa-checklist/references/change-inspection.md'",
+          "exit_code": 0,
+          "output_chars": 1518
+        },
+        {
+          "event": 17,
+          "command": "/usr/bin/zsh -lc 'python3 scripts/inspect_changes.py --repo /tmp/agentskills-routing-tuycmjza'",
+          "exit_code": 0,
+          "output_chars": 110
+        }
+      ],
+      "raw_trace_temp_path": "/tmp/agentskills-routing-manual-qa.jsonl",
+      "scope_evidence": "Parent reviewed final output and completed commands; no implementation writes observed. SHA-256 snapshots matched for all project files in the four later runs; the review run preserved source bytes and Git diff state.",
+      "full_workflow_text_in_tool_output": true,
+      "full_index_hash_in_tool_output": true
+    },
+    {
+      "case": "product-spec",
+      "prompt": "Draft product requirements for a local single-user reading list: add URLs, mark read or unread, and filter by that state. Accounts, sync, and sharing are excluded. Keep the specification inline; do not implement it or create implementation tasks.",
+      "expected_skill": "spec-generator",
+      "index_sha256": "eef6ba1858a300b0ea13d06b6b43906b2b8fee9eb7876c89861b2da76e5bdd45",
+      "native_turn_completed": true,
+      "workflow_read_observed": true,
+      "index_before_workflow": true,
+      "catalog_before_workflow": true,
+      "elapsed_seconds": 26.39,
+      "usage": {
+        "input_tokens": 65584,
+        "cached_input_tokens": 54272,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 686,
+        "reasoning_output_tokens": 43
+      },
+      "commands": [
+        {
+          "event": 5,
+          "command": "/usr/bin/zsh -lc 'cat .agents/skills/index/SKILL.md'",
+          "exit_code": 0,
+          "output_chars": 2946
+        },
+        {
+          "event": 7,
+          "command": "/usr/bin/zsh -lc 'cat .agents/skills/index/references/catalog/workflow.md .agents/skills/index/references/catalog/writing.md .agents/skills/spec-generator/SKILL.md'",
+          "exit_code": 0,
+          "output_chars": 6761
+        }
+      ],
+      "raw_trace_temp_path": "/tmp/agentskills-routing-product-spec.jsonl",
+      "scope_evidence": "Parent reviewed final output and completed commands; no implementation writes observed. SHA-256 snapshots matched for all project files in the four later runs; the review run preserved source bytes and Git diff state.",
+      "full_workflow_text_in_tool_output": true,
+      "full_index_hash_in_tool_output": true
+    },
+    {
+      "case": "trace",
+      "prompt": "Explain how runner.py reaches double and prints its result. Follow the actual source with exact file and line citations. Do not diagnose defects, propose fixes, or edit files.",
+      "expected_skill": "trace",
+      "index_sha256": "eef6ba1858a300b0ea13d06b6b43906b2b8fee9eb7876c89861b2da76e5bdd45",
+      "native_turn_completed": true,
+      "workflow_read_observed": true,
+      "index_before_workflow": true,
+      "catalog_before_workflow": true,
+      "elapsed_seconds": 14.11,
+      "usage": {
+        "input_tokens": 88384,
+        "cached_input_tokens": 77056,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 417,
+        "reasoning_output_tokens": 0
+      },
+      "commands": [
+        {
+          "event": 5,
+          "command": "/usr/bin/zsh -lc 'cat .agents/skills/index/SKILL.md'",
+          "exit_code": 0,
+          "output_chars": 2946
+        },
+        {
+          "event": 7,
+          "command": "/usr/bin/zsh -lc \"cat .agents/skills/index/references/catalog/workflow.md; cat .agents/skills/trace/SKILL.md; rg --files -g '\"'!*.md'\"' -g '\"'!*lock*'\"' -g '\"'!SKILL*'\"' | head -60\"",
+          "exit_code": 0,
+          "output_chars": 5380
+        },
+        {
+          "event": 9,
+          "command": "/usr/bin/zsh -lc \"nl -ba runner.py; nl -ba example.py; nl -ba contract.txt; rg --files -g 'AGENTS.md'\"",
+          "exit_code": 0,
+          "output_chars": 176
+        }
+      ],
+      "raw_trace_temp_path": "/tmp/agentskills-routing-trace.jsonl",
+      "scope_evidence": "Parent reviewed final output and completed commands; no implementation writes observed. SHA-256 snapshots matched for all project files in the four later runs; the review run preserved source bytes and Git diff state.",
+      "full_workflow_text_in_tool_output": true,
+      "full_index_hash_in_tool_output": true
+    },
+    {
+      "case": "manual-qa-clarified",
+      "prompt": "Prepare a human manual QA checklist for the change to double in example.py, using contract.txt as the expected behavior. Include setup, actions, and expected results. Do not execute tests or edit files.",
+      "expected_skill": "qa-checklist",
+      "index_sha256": "a3fd45d7631c49900d70c139a0fef6272deb98d45340fad492ac539cde1eb869",
+      "native_turn_completed": true,
+      "workflow_read_observed": true,
+      "index_before_workflow": true,
+      "catalog_before_workflow": true,
+      "elapsed_seconds": 24.68,
+      "usage": {
+        "input_tokens": 136853,
+        "cached_input_tokens": 112768,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 679,
+        "reasoning_output_tokens": 36
+      },
+      "commands": [
+        {
+          "event": 5,
+          "command": "/usr/bin/zsh -lc 'cat .agents/skills/index/SKILL.md'",
+          "exit_code": 0,
+          "output_chars": 2993
+        },
+        {
+          "event": 7,
+          "command": "/usr/bin/zsh -lc \"pwd; rg --files -g 'example.py' -g 'contract.txt' -g 'AGENTS.md'\"",
+          "exit_code": 0,
+          "output_chars": 68
+        },
+        {
+          "event": 9,
+          "command": "/usr/bin/zsh -lc 'cat .agents/skills/index/references/catalog/workflow.md'",
+          "exit_code": 0,
+          "output_chars": 2439
+        },
+        {
+          "event": 11,
+          "command": "/usr/bin/zsh -lc 'cat .agents/skills/qa-checklist/SKILL.md'",
+          "exit_code": 0,
+          "output_chars": 3176
+        },
+        {
+          "event": 13,
+          "command": "/usr/bin/zsh -lc 'cat AGENTS.md contract.txt example.py; git diff -- example.py'",
+          "exit_code": 0,
+          "output_chars": 2050
+        },
+        {
+          "event": 16,
+          "command": "/usr/bin/zsh -lc 'cat .agents/skills/qa-checklist/references/change-inspection.md'",
+          "exit_code": 0,
+          "output_chars": 1518
+        },
+        {
+          "event": 18,
+          "command": "/usr/bin/zsh -lc 'python3 .agents/skills/qa-checklist/scripts/inspect_changes.py --repo /tmp/agentskills-routing-tuycmjza'",
+          "exit_code": 0,
+          "output_chars": 110
+        }
+      ],
+      "raw_trace_temp_path": "/tmp/agentskills-routing-manual-qa-clarified.jsonl",
+      "scope_evidence": "Parent reviewed final output and completed commands; no implementation writes observed. SHA-256 snapshots matched for all project files in the four later runs; the review run preserved source bytes and Git diff state.",
+      "full_workflow_text_in_tool_output": true,
+      "full_index_hash_in_tool_output": true
+    }
+  ],
+  "not_established": [
+    "selection across all 66 task types",
+    "multi-turn reuse",
+    "missing-skill fallback",
+    "permission judgment without sandbox enforcement",
+    "with/without-index benefit",
+    "token or latency savings",
+    "behavior on other models, clients, platforms, or repeated trials"
+  ]
+}

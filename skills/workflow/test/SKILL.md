@@ -1,6 +1,6 @@
 ---
 name: test
-description: "Assess test needs and choose a useful testing boundary. Design behavior checks when a specialized workflow is unnecessary; reuse existing coverage or static validation before adding tests."
+description: "Assess coverage needs, suggest test cases, or design and implement behavior checks within the requested scope. Reuse existing coverage and static validation before adding tests."
 license: MIT
 metadata:
   author: jinyongp
@@ -18,6 +18,9 @@ metadata:
 - Choose coverage here when the boundary is unclear. Integration work exercises real
   dependencies; suite maintenance assesses existing tests and their ongoing cost.
 
+Read [references/case-ideas.md](references/case-ideas.md) for test-idea requests
+or uncovered-case discovery. Ideas-only scope creates and executes no tests.
+
 ## Principles
 
 - Protect an agreed contract and named failure. Preserve deliberate scope limits;
@@ -32,9 +35,9 @@ metadata:
 - Assert only contract-relevant details. Exact literals, static HTML attributes,
   JSON shapes, ordering, snapshots, and architecture rules need a concrete behavioral,
   accessibility, compatibility, or explicit project-policy reason.
-- Assign syntax, types, style, and declarative structure to suitable existing lint,
-  type, schema, or architecture tools. Runtime tests cover semantics and integration
-  those checks cannot establish; do not recreate validators with ad hoc assertions.
+- Use existing lint, type, schema, or architecture checks for mechanical rules;
+  runtime tests cover semantics/integration they cannot establish. Do not duplicate
+  validators with ad hoc assertions.
 - Choose cases by distinct failure mechanisms and meaningful boundaries. Repeat
   coverage across layers only for additional evidence, such as real wiring or
   serialization. Avoid exhaustive combinations without a supported risk.
@@ -46,9 +49,8 @@ metadata:
 
 ## Procedure
 
-1. Identify the failure, expected contract, existing coverage, and relevant static
-   checks through targeted inspection. Resolve missing requirements that prevent a
-   valid expectation; an observed current output is not sufficient justification.
+1. Identify the failure, justified expectation, existing coverage, and useful static
+   checks. Resolve missing requirements; current output alone is not an oracle.
 2. Choose: reuse, extend an existing test, add a test, use a static check, perform
    one-off validation, or add nothing. Explain the material coverage gap and cost
    briefly; an adequate existing check is a valid stopping point.
@@ -61,9 +63,8 @@ metadata:
 
 ## Result
 
-State the decision, protected failure/contract, changed tests or reused checks,
-executed results and tested state, and remaining gaps. Test counts and coverage
-percentages alone do not establish confidence.
+Report the decision, protected contract/failure, changed tests or reused checks,
+actual results/state, and gaps. Counts or coverage alone do not establish confidence.
 
 ## Saved records
 

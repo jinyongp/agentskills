@@ -6,6 +6,10 @@ from pathlib import Path
 import re
 
 from skills_ref import read_properties, validate
+if __package__:
+    from .generate_index import index_errors
+else:
+    from generate_index import index_errors
 
 
 SLUG = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*")
@@ -81,6 +85,8 @@ def validate_repository(root: Path) -> tuple[int, list[str]]:
             if skill.is_dir() and not (skill / "SKILL.md").is_file():
                 errors.append(f"{skill.relative_to(root)}: missing SKILL.md")
 
+    if not errors:
+        errors.extend(index_errors(root))
     return count, errors
 
 

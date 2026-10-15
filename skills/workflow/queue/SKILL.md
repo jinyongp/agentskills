@@ -1,6 +1,6 @@
 ---
 name: queue
-description: "Convert settled plans or work items into a task queue draft, or register them in the selected project tool when requested. Preserve scope, meaningful dependencies, and existing task identities."
+description: "Convert settled work into a task queue or preserve a plan as a local checklist. Register tasks only when requested; retain scope, meaningful dependencies, and existing identities."
 license: MIT
 metadata:
   author: jinyongp
@@ -16,6 +16,10 @@ metadata:
 - Drafting a queue creates no task records. Registration requires a user request
   and the destination/tool selected by the user or project; ask only if missing.
   Use that tool's documented commands without installing or switching trackers.
+
+For a requested local checklist, read
+[references/checklists.md](references/checklists.md). Preserve the supplied
+structure in that mode instead of applying the regrouping steps below.
 
 ## Procedure
 

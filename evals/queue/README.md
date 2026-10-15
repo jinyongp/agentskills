@@ -49,3 +49,19 @@ Linux/WSL, Codex parent review, 2026-10-07. No tracker selected or invoked.
 
 Instruction boundaries reviewed. Mechanical verification is recorded after execution;
 it does not establish tracker behavior or independent skill effectiveness.
+
+## 2026-10-15 conditional workflow additions
+
+- Revision: uncommitted changes based on 4d972c2103595674f2d84d7552da861b9a66e4b0.
+- Evidence: parent instruction review and format/distribution regression checks.
+
+Added a local-checklist mode that preserves supplied structure instead of
+regrouping into tracker tasks. Parent review checked unapproved drafts, existing
+checked items, optional notes, and implementation awaiting required verification.
+File creation does not execute tasks or register tracker records. No independent
+agent conversion or ongoing progress session was run.
+
+Full verification passed: 65 skills, 160 tests with one platform skip, and both
+skills CLI and packed CLI checks. The package installed this skill's new references
+for Codex/Claude in isolated project/global scopes and compared all files with
+their sources. Older evidence above retains its original scope and date.

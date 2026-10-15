@@ -8,6 +8,7 @@ import re
 import shutil
 
 from scripts.validate_skills import MAX_DESCRIPTION_CHARS, SLUG, validate_repository
+from scripts.generate_index import restore_index, snapshot_index, update_index
 
 
 ROOT = Path(__file__).resolve().parent
@@ -103,6 +104,7 @@ def prepare_skill(
     entries += f"\n- [{name}]({name}/SKILL.md) — {summary}\n\n"
     updated_category = before + START + entries + END + after
 
+    index_originals = snapshot_index(root)
     skill.mkdir()
     created_evaluation = False
     modified_catalogs: list[Path] = []
@@ -112,17 +114,22 @@ def prepare_skill(
         created_evaluation = True
         (skill / "SKILL.md").write_text(content, encoding="utf-8")
         (evaluation / "README.md").write_text(evaluation_content, encoding="utf-8")
-        _, errors = validate_repository(root)
-        if errors:
-            raise ValueError("Generated skill is invalid:\n" + "\n".join(errors))
         for path, updated in ((catalog, "".join(rows)), (category_catalog, updated_category)):
             modified_catalogs.append(path)
             path.write_text(updated, encoding="utf-8")
+        update_index(root)
+        _, errors = validate_repository(root)
+        if errors:
+            raise ValueError("Generated skill is invalid:\n" + "\n".join(errors))
     except (OSError, ValueError) as exc:
+        restore_errors = []
+        try:
+            restore_index(root, index_originals)
+        except OSError as restore_error:
+            restore_errors.append(f"index: {restore_error}")
         shutil.rmtree(skill)
         if created_evaluation:
             shutil.rmtree(evaluation)
-        restore_errors = []
         for path in modified_catalogs:
             try:
                 path.write_text(originals[path], encoding="utf-8")
@@ -147,7 +154,7 @@ def main() -> int:
     except (ValueError, OSError) as exc:
         parser.exit(1, f"ERROR: {exc}\n")
     print(f"Created {skill.relative_to(ROOT)}/SKILL.md")
-    print(f"Created evals/{args.name}/README.md and updated both catalogs.")
+    print(f"Created evals/{args.name}/README.md and updated catalogs and the bundled index when present.")
     print("Write the instructions and evaluation cases, then run: uv run check.py")
     return 0
 

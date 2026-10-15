@@ -76,3 +76,19 @@ All 14 skills validated; all 67 existing tests and CLI installation checks passe
 Creator validation and actual selective installation of test passed; both bundled
 files match their installed copies byte for byte. Local links and the MIT copy passed.
 No runtime helper, testing dependency, or new assertion-only test was added.
+
+## 2026-10-15 conditional workflow additions
+
+- Revision: uncommitted changes based on 4d972c2103595674f2d84d7552da861b9a66e4b0.
+- Evidence: parent instruction review and format/distribution regression checks.
+
+Added a conditional case-ideas reference. Parent review checked an ideas-only
+request, partial/unknown coverage, implementation-derived limits, and a legitimate
+no-additions result. Ideas-only scope creates and executes no tests; proposed
+expectations retain independent justification. No fresh-agent ideas session was
+run, so suggestion quality/activation improvements remain unknown.
+
+Full verification passed: 65 skills, 160 tests with one platform skip, and both
+skills CLI and packed CLI checks. The package installed this skill's new references
+for Codex/Claude in isolated project/global scopes and compared all files with
+their sources. Older evidence above retains its original scope and date.

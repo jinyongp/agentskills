@@ -10,6 +10,7 @@ Find a skill by category. Each record states its own checked revision, evidence,
 - [close](close/README.md)
 - [code-review](code-review/README.md)
 - [db-migrate](db-migrate/README.md)
+- [dependency-review](dependency-review/README.md)
 - [debug](debug/README.md)
 - [dependency-update](dependency-update/README.md)
 - [domain-modeling](domain-modeling/README.md)
@@ -17,11 +18,15 @@ Find a skill by category. Each record states its own checked revision, evidence,
 - [implement](implement/README.md)
 - [optimize](optimize/README.md)
 - [plan](plan/README.md)
+- [preflight](preflight/README.md)
+- [qa-checklist](qa-checklist/README.md)
 - [queue](queue/README.md)
 - [research](research/README.md)
 - [retro](retro/README.md)
 - [review-loop](review-loop/README.md)
+- [review-map](review-map/README.md)
 - [security-review](security-review/README.md)
+- [spec-generator](spec-generator/README.md)
 - [survey](survey/README.md)
 - [test](test/README.md)
 - [test-contract](test-contract/README.md)
@@ -30,6 +35,7 @@ Find a skill by category. Each record states its own checked revision, evidence,
 - [test-maintenance](test-maintenance/README.md)
 - [test-property](test-property/README.md)
 - [test-unit](test-unit/README.md)
+- [trace](trace/README.md)
 - [verify](verify/README.md)
 
 ## Frontend
@@ -71,5 +77,10 @@ Find a skill by category. Each record states its own checked revision, evidence,
 - [summarize](summarize/README.md)
 - [terse](terse/README.md)
 - [write](write/README.md)
+
+## Tooling
+
+- [index](index/README.md)
+- [skill-review](skill-review/README.md)
 
 [How to evaluate a skill](README.md)

@@ -27,7 +27,7 @@ jobs:
           node-version: "22.22.2"
           package-manager-cache: false
       - name: Run all checks
-        run: uv run --locked check.py
+        run: uv run --locked check.py --check-index
 
   cli:
     name: CLI (${{ matrix.os }}, Node ${{ matrix.node }})
@@ -53,7 +53,7 @@ jobs:
           node-version: ${{ matrix.node }}
           package-manager-cache: false
       - name: Validate skills and catalogs
-        run: uv run --locked check.py validate
+        run: uv run --locked check.py validate --check-index
       - name: Run installer integration tests
         run: uv run --locked python -m unittest discover -s tests -p test_agentskills_cli.py -v
       - name: Verify packed CLI and native shell entrypoints

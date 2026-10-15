@@ -3,6 +3,7 @@
 import json
 import os
 from pathlib import Path
+import re
 import shutil
 import stat
 import subprocess
@@ -12,6 +13,14 @@ from npm_cli import npm_command
 
 
 ROOT = Path(__file__).resolve().parents[1]
+CONTENT_FIXTURES = (
+    ("workflow", "survey"), ("tooling", "index"), ("tooling", "skill-review"),
+    ("workflow", "spec-generator"), ("workflow", "trace"),
+    ("workflow", "review-map"), ("workflow", "dependency-review"),
+    ("workflow", "qa-checklist"), ("workflow", "preflight"),
+    ("workflow", "code-review"), ("workflow", "test"),
+    ("workflow", "queue"), ("git", "git-commit"), ("git", "git-worktree"),
+)
 
 
 def run(argv, cwd, env):
@@ -72,14 +81,21 @@ def main():
                 rules = base / (".codex/AGENTS.md" if global_scope else "AGENTS.md")
                 rules.parent.mkdir(parents=True, exist_ok=True)
                 rules.write_bytes(original)
-                shell_invoke(shell, "add", "--agent", "codex", "--skill", "survey", *scope, "--yes")
-                shell_invoke(shell, "add", "--agent", "claude", "--skill", "survey", *scope, "--yes")
+                names = [name for _, name in CONTENT_FIXTURES]
+                shell_invoke(shell, "add", "--agent", "codex", "--skill", *names, *scope, "--yes")
+                shell_invoke(shell, "add", "--agent", "claude", "--skill", *names, *scope, "--yes")
                 shared = base / ".agents/skills/survey"
-                for source in (ROOT / "skills/workflow/survey").rglob("*"):
-                    if source.is_file():
-                        installed = shared / source.relative_to(ROOT / "skills/workflow/survey")
-                        if installed.read_bytes() != source.read_bytes():
-                            raise RuntimeError(f"Packaged content differs: {installed}")
+                for category, name in CONTENT_FIXTURES:
+                    source_root = ROOT / "skills" / category / name
+                    for source in source_root.rglob("*"):
+                        if source.is_file():
+                            installed = base / ".agents/skills" / name / source.relative_to(source_root)
+                            if installed.read_bytes() != source.read_bytes():
+                                raise RuntimeError(f"Packaged content differs: {installed}")
+                    installed_root = base / ".agents/skills" / name
+                    for reference in re.findall(r"\]\((references/[^)]+)\)", (installed_root / "SKILL.md").read_text(encoding="utf-8")):
+                        if not (installed_root / reference).is_file():
+                            raise RuntimeError(f"Installed reference is missing: {name}/{reference}")
                 claude = base / ".claude/skills/survey"
                 if claude.resolve() != shared.resolve():
                     raise RuntimeError("Claude connection does not resolve to the shared source")
@@ -104,7 +120,7 @@ def main():
                 if not shared.is_dir() or not claude.is_dir() or rules.read_bytes() != original:
                     raise RuntimeError("Partial removal lost shared content or changed project prose")
                 shell_invoke(shell, "remove", "--agent", "claude", *scope, "--yes")
-                if shared.exists() or os.path.lexists(claude):
+                if any((base / ".agents/skills" / name).exists() or os.path.lexists(base / ".claude/skills" / name) for name in names):
                     raise RuntimeError("Final removal left skills or connections")
                 print(f"Packed CLI: {shell}, {'global' if global_scope else 'project'} lifecycle passed.")
         print("Packed CLI: bundled bytes, shared updates, rules preservation and shell shims passed.")

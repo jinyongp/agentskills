@@ -57,16 +57,26 @@ Each category links to its complete skill catalog and installation commands.
 
 | Category | Choose for | Skills |
 | --- | --- | --- |
-| [workflow](skills/workflow/README.md) | Planning, implementation, review, debugging, testing, and research | 27 |
+| [workflow](skills/workflow/README.md) | Planning, implementation, review, debugging, testing, and research | 33 |
 | [frontend](skills/frontend/README.md) | UI, accessibility, responsive layouts, and motion | 15 |
 | [git](skills/git/README.md) | Commits, branches, synchronization, conflicts, PRs, and worktrees | 6 |
 | [writing](skills/writing/README.md) | Documentation, drafting, editing, summaries, and conversation styles | 10 |
-| [tooling](skills/tooling/README.md) | Development tool setup and operation | 0 |
+| [tooling](skills/tooling/README.md) | Skill selection, skill review, and development tool operation | 2 |
 
 Choose by the task you need done; skills work independently. For example,
 `code-review` reports defects, `review-loop` reviews and fixes, and `verify` runs
 checks and reports evidence. Skills follow the
 [Agent Skills specification](https://agentskills.io/specification).
+
+For a compact entry point, install [index](skills/tooling/index/SKILL.md). Read its
+category catalog before loading the applicable skill instructions. Shared rules
+require this selection step when `index` is installed; without it, they use the
+agent's available skill metadata. The catalog covers this collection, so confirm
+that a listed skill is installed before using it.
+
+```bash
+npx @jinyongp/agentskills@latest add --agent codex --skill index
+```
 
 ## Manage installations
 
