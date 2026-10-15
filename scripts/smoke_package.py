@@ -9,12 +9,14 @@ import stat
 import subprocess
 import tempfile
 
+from skills_ref import read_properties, validate
+
 from npm_cli import npm_command
 
 
 ROOT = Path(__file__).resolve().parents[1]
 CONTENT_FIXTURES = (
-    ("workflow", "survey"), ("tooling", "index"), ("tooling", "skill-review"),
+    ("workflow", "survey"), ("tooling", "skill-review"),
     ("workflow", "spec-generator"), ("workflow", "trace"),
     ("workflow", "review-map"), ("workflow", "dependency-review"),
     ("workflow", "qa-checklist"), ("workflow", "preflight"),
@@ -45,6 +47,8 @@ def main():
         packed = json.loads(run([*npm_command(), "pack", "--json", "--ignore-scripts",
                                  "--pack-destination", str(temp)], ROOT, env))[0]
         archive = temp / packed["filename"]
+        if any(item["path"].startswith("skills/tooling/index/") for item in packed["files"]):
+            raise RuntimeError("npm must not contain a fixed index skill bundle")
         run([*npm_command(), "install", "--prefix", str(prefix), "--ignore-scripts",
              "--no-audit", "--no-fund", str(archive)], project, env)
         package = prefix / "node_modules/@jinyongp/agentskills"
@@ -96,6 +100,20 @@ def main():
                     for reference in re.findall(r"\]\((references/[^)]+)\)", (installed_root / "SKILL.md").read_text(encoding="utf-8")):
                         if not (installed_root / reference).is_file():
                             raise RuntimeError(f"Installed reference is missing: {name}/{reference}")
+                installed_index = base / ".agents/skills/index"
+                index_errors = validate(installed_index)
+                if index_errors:
+                    raise RuntimeError(f"Generated index is not a valid Agent Skill: {index_errors}")
+                catalog_base = Path(read_properties(installed_index).metadata["catalog-base"])
+                if catalog_base.resolve() != installed_index.resolve():
+                    raise RuntimeError("Generated catalog base differs from the installed source")
+                pages = list((installed_index / "references/catalog").glob("*.md"))
+                catalog_text = "\n".join(page.read_text(encoding="utf-8") for page in pages)
+                indexed_paths = re.findall(r"Path: `([^`]+)`", catalog_text)
+                if {Path(relative).parent.name for relative in indexed_paths} != set(names):
+                    raise RuntimeError("Generated index must contain exactly the installed task skills")
+                if not all((catalog_base / relative).is_file() for relative in indexed_paths):
+                    raise RuntimeError("Generated index points to a missing installed skill")
                 claude = base / ".claude/skills/survey"
                 if claude.resolve() != shared.resolve():
                     raise RuntimeError("Claude connection does not resolve to the shared source")
@@ -122,6 +140,8 @@ def main():
                 shell_invoke(shell, "remove", "--agent", "claude", *scope, "--yes")
                 if any((base / ".agents/skills" / name).exists() or os.path.lexists(base / ".claude/skills" / name) for name in names):
                     raise RuntimeError("Final removal left skills or connections")
+                if installed_index.exists() or os.path.lexists(base / ".claude/skills/index"):
+                    raise RuntimeError("Final removal left the generated index")
                 print(f"Packed CLI: {shell}, {'global' if global_scope else 'project'} lifecycle passed.")
         print("Packed CLI: bundled bytes, shared updates, rules preservation and shell shims passed.")
 

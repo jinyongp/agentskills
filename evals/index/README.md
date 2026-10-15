@@ -1,6 +1,91 @@
 # Index evaluation
 
+## CLI-generated installed index — 2026-10-16
+
+The npm CLI now generates `index` from the installed shared sources in the selected
+scope instead of shipping `skills/tooling/index/`. The source-tree index remains
+available for repository navigation and skills CLI compatibility. Earlier agent
+selection results below concern that static index and do not establish automatic
+activation or routing accuracy for the generated template.
+
+Runtime integration checks cover partial installation, two agents sharing a scope,
+exact paths to existing skill instructions, removal and final cleanup in project
+and global fixtures. Additional checks exercise replacing a previously owned
+static index, rejecting user edits, rebuilding missing owned output, and preserving
+the previous catalog after an injected replacement failure before retrying.
+Unchanged updates perform no content or record writes. An uninstalled agent's
+update must not succeed by refreshing another agent's index.
+
+A 180-entry renderer fixture preserves every intention and exact path through
+continuation pages, with no page exceeding 2,500 UTF-16 code units. Skill-body reads
+are rejected by the fixture; long paths fail explicitly with bounded diagnostics.
+The packed CLI verifies that the static index directory is absent, validates the
+generated Agent Skill format, and checks that the catalog contains exactly its
+selected installed task skills in both scopes.
+
+The actual published 0.3.1 tarball was downloaded and integrity-verified. Two
+temporary projects installed it with `survey` alone or `survey` plus the static
+index. The new unrestricted update generated a complete index for the 65 installed
+task skills in both projects, initialized missing discovery history, and preserved
+user instructions. A repeated update preserved all file hashes and timestamps;
+final removal restored the original project instructions.
+
+A native Windows project fixture with Node 22.22.2 additionally passed partial
+selection, automatic discovery of a newly added task, exact generated paths,
+directory junctions, removal refresh, an unchanged update and final cleanup.
+This was an isolated temporary project, not an update of the user's installations.
+The full WSL verification passed 66 source skill formats, 172 tests (one
+Windows-specific skip), skills CLI discovery/installation and packed CLI project
+and global lifecycles. Native Windows global execution and new behavioral agent
+selection trials were not run for this change. File generation does not enforce
+that the host loads the index automatically. Publication remains separate.
+
 ## Current coverage
+
+### Review-loop follow-up — 2026-10-16
+
+Sequential review covered CLI selection/history, projected ownership and installed
+paths, staging/rollback and confirmation checks, renderer/template output, npm
+contents, migration fixtures, test expectations and consumer/maintainer docs.
+The agreed scope remains a locally generated index of managed installations,
+partial task selection, automatic discovery of new names and preserved exclusions.
+Host-enforced loading, publication and modification of live installations remain
+outside this change.
+
+Six defects were reproduced and corrected:
+
+- A rules-only record's generated index prevented initialization of the first
+  actual partial task selection; unrestricted update then installed excluded tasks.
+- Explicitly removing a newly added task before discovery did not acknowledge its
+  name. Replacing history with the current bundle also forgot exclusions when
+  names disappeared and returned. Removal now acknowledges the name, and discovery
+  retains previously known names.
+- Inherited `constructor` properties were mistaken for exact skill ownership in
+  projected legacy state, producing a path to a removed agent copy. Ownership
+  checks now use own properties throughout the new projection.
+- An unselected indexed task could disappear while confirmation was open without
+  aborting the batch. Referenced files are checked again before applying changes.
+- A valid category such as `workflow-2` collided with another category's second
+  page. Continuation names now use `.page-N`, distinct from valid category names.
+- Resolving relative paths through a Windows junction could find only one of
+  three shared installed tasks. The generated frontmatter now supplies a canonical
+  `catalog-base`, and instructions explicitly resolve catalog paths against it.
+
+Four new integration tests and the extended renderer fixture failed before their
+fixes and pass afterward. The confirmation fixture first needed an explicit
+project argument to avoid an earlier scope prompt; that setup failure is not
+counted as a product reproduction. The native Windows alias probe independently
+observed three canonical paths but only one path through the alias; the corrected
+check reads the canonical base from the index through its junction and finds all
+three installed tasks.
+
+Final verification passed `uv run --locked check.py`: 66 source skill formats,
+176 tests with one Windows-only skip, skills CLI discovery/installation and npm
+package lifecycles in project/global scopes. Native Windows project checks passed
+on Node 22.22.2. Both actual published-0.3.1 upgrade fixtures passed again, including
+idempotence and user-prose preservation. No eligible finding remains in the
+reviewed scope. Windows global/native-host behavioral selection trials and
+publication were not performed.
 
 - Revision/date: uncommitted working tree based on
   `4d972c2103595674f2d84d7552da861b9a66e4b0`; 2026-10-15.

@@ -48,8 +48,55 @@ npx @jinyongp/agentskills@latest add --agent codex --rules-only --yes
 npx @jinyongp/agentskills@latest update --global --yes
 ```
 
-`update` reuses recorded selections. Newly available skills require `add`.
-Use `@latest` to run the newest published installer and bundled content.
+`update` refreshes installed skills and automatically includes skills added to the
+bundle since the last recorded catalog. There is no need to identify new names or
+run `add` after each release. Additions appear in the normal preview; omit `--yes`
+to review and confirm them. Use `@latest` to run the newest published installer
+and bundled content.
+
+The installer remembers task-skill names it has seen separately for each agent and
+scope, including names temporarily absent from a later bundle.
+Skills excluded during initial selection, or explicitly removed later, are not
+reinstalled just because they remain available. `--skill NAME ...` updates only
+the named installed skills and leaves discovery pending for the next unrestricted
+update. `--rules-only` updates rules without discovering or installing skills.
+Agents with only shared rules receive the generated index but no task skills.
+
+Records made by 0.3.1 and earlier contain no catalog history, so the installer
+cannot distinguish new skills from previously excluded ones. The first unrestricted
+update includes all missing bundled skills and records the catalog. Later updates
+can distinguish newly added skills. Existing ownership and local-edit checks still
+apply to every addition; unrelated content is never adopted or overwritten.
+
+### Automatically generated index
+
+`index` is generated locally by the CLI, not shipped as a fixed npm skill bundle.
+Every active managed installation receives it, including rules-only installations.
+It contains only task skills actually installed in this scope, with short catalog
+intentions and exact paths relative to the canonical `metadata.catalog-base`
+directory in its frontmatter. Use that base even when reading the index through
+an agent's symlink or junction. Pages are split at 2,500
+characters and include counts and continuation paths. Skill bodies are not loaded
+to build the index. Other tools' skills and plugins remain discoverable through
+the agent's own available metadata.
+
+The scope's index covers its shared installed sources, including skills connected
+to another agent. Its paths lead directly to those files; an agent connection is
+not a filesystem access boundary. Installing only selected skills never produces
+entries for other uninstalled bundled skills.
+
+`add`, `update`, and `remove` refresh the index automatically. A named or rules-only
+update also refreshes it without adding other task skills. Removing the last
+managed skill/rules installation removes its index connection and deletes the
+shared index when no connections remain. `index` cannot be removed independently.
+Owned static indexes from older releases are replaced automatically; edited or
+unowned indexes stop the operation for explicit conflict resolution. A missing
+owned generated index can be rebuilt by `update`.
+
+The index is saved after the selected task changes. If a batch fails, completed
+items remain; retry the command to reconcile the index with those completed items.
+Shared instructions ask agents to consult it, but generating the file does not
+force a host to load it automatically.
 
 ### Remove one skill and retain shared rules
 

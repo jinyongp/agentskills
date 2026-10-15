@@ -68,15 +68,13 @@ Choose by the task you need done; skills work independently. For example,
 checks and reports evidence. Skills follow the
 [Agent Skills specification](https://agentskills.io/specification).
 
-For a compact entry point, install [index](skills/tooling/index/SKILL.md). Read its
-category catalog before loading the applicable skill instructions. Shared rules
-require this selection step when `index` is installed; without it, they use the
-agent's available skill metadata. The catalog covers this collection, so confirm
-that a listed skill is installed before using it.
-
-```bash
-npx @jinyongp/agentskills@latest add --agent codex --skill index
-```
+The CLI automatically creates an `index` skill from the skills actually installed
+in the selected scope. It includes compact category pages, short intentions, and
+exact local paths. Installation, updates, and removal refresh it automatically;
+there is no separate index installation or generation command. Partial skill
+selections are supported, and uninstalled skills do not appear in the index.
+Shared rules direct agents to read it before choosing the applicable instructions.
+This is an instruction to the agent, not a host-enforced automatic-load guarantee.
 
 ## Manage installations
 
@@ -92,11 +90,17 @@ npx @jinyongp/agentskills@latest add
 
 ### Update installed skills
 
-Refresh recorded selections. To install newly available skills, use `add`.
+Refresh installed skills and automatically add newly bundled skills. You do not
+need to find their names or run a separate `add` command. Previously excluded or
+removed skills stay excluded once the installer has recorded the catalog.
 
 ```bash
 npx @jinyongp/agentskills@latest update
 ```
+
+Older installation records have no catalog history. Their first unrestricted
+update includes all missing bundled skills and records the current catalog.
+Use `--skill NAME ...` to update only specific installed skills.
 
 ### Inspect installations
 

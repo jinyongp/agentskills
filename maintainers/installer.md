@@ -112,4 +112,31 @@ copies per selected skill, preserving unmigrated records and completed progress.
 Check shared updates, last-connection removal, migration, and rollback with real
 filesystem operations in temporary projects and homes.
 
+Each agent record can also contain a `catalog` array of previously seen task names.
+Initial task installation records the available names, including intentionally
+unselected skills; an index-only/rules-only record does not count as a previous
+task selection. Explicit task removal also records the removed name, even before
+the next unrestricted update. Unrestricted `update` adds names absent from that history,
+refreshes installed skills, then advances the catalog only after selected changes
+succeed. Named updates and rules-only updates do not acknowledge new catalog
+entries. Keep historical names when a later package omits them so reintroduction
+does not restore excluded skills. Records without this optional field receive all missing bundled skills on
+their first unrestricted update. Preserve this compatibility path for version 1
+and version 2 records; never infer selection history from the current skill count.
+
+`lib/installed-index.js` renders the installed index using the runtime template
+`templates/installed-index.md.tmpl`. npm excludes `skills/tooling/index/`; that
+source-tree catalog is only for repository navigation and skills CLI compatibility.
+The runtime renderer filters category intentions by the projected installed state,
+uses exact local paths with a canonical `metadata.catalog-base` independent of
+agent aliases, and returns bounded files without reading skill bodies or
+writing during preflight. `skillOperation` applies the rendered files and agent
+connections with normal ownership checks, staging, record persistence and rollback.
+It runs after selected task/rules changes so retries can reconcile partial batches.
+Keep generated `index` out of task discovery history and automatic task additions.
+Category continuation filenames use a dot separator, which is forbidden in
+category names, to prevent collisions with valid names such as `workflow-2`.
+Recheck referenced installed files after confirmation as well as the generated
+index itself; unselected task files can change while the prompt is open.
+
 [Back to contributing](../CONTRIBUTING.md)

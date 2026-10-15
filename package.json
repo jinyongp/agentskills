@@ -15,8 +15,11 @@
   },
   "files": [
     "agentskills.js",
+    "lib/",
+    "templates/installed-index.md.tmpl",
     "rules/",
     "skills/",
+    "!skills/tooling/index/",
     "docs/",
     "LICENSE",
     "README.md"
