@@ -417,12 +417,15 @@ class ReleaseCommandTests(unittest.TestCase):
 
     def test_package_allowlist_rejects_maintainer_files_before_execution(self):
         with tempfile.TemporaryDirectory() as directory:
-            commands = unittest.mock.Mock(root=Path(directory))
-            commands.json.return_value = [{"name": "@example/skills", "version": "0.2.0",
-                                           "files": [{"path": "release.py"}]}]
-            with self.assertRaisesRegex(release.ReleaseError, "Unexpected packaged file: release.py"):
-                release.check_tarball(commands, {"name": "@example/skills", "version": "0.2.0", "files": ["skills/"]})
-            commands.run.assert_not_called()
+            for path in ("release.py", "skills/tooling/index/SKILL.md"):
+                with self.subTest(path=path):
+                    commands = unittest.mock.Mock(root=Path(directory))
+                    commands.json.return_value = [{"name": "@example/skills", "version": "0.2.0",
+                                                   "files": [{"path": path}]}]
+                    with self.assertRaisesRegex(release.ReleaseError, "Unexpected packaged file: " + path):
+                        release.check_tarball(commands, {"name": "@example/skills", "version": "0.2.0",
+                                                        "files": ["skills/", "!skills/tooling/index/"]})
+                    commands.run.assert_not_called()
 
 
 if __name__ == "__main__":

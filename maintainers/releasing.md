@@ -46,7 +46,9 @@ uv run release.py --help
    workflow through its releaseway npm action.
 2. Updates the package version, runs `uv run --locked check.py`, packs into a temporary
    directory, and exercises the tarball's help and full skill installation outside
-   the checkout. Installed resources are compared with their sources.
+   the checkout. Bundled resources are compared with their sources using the
+   packaging allowlist and exclusions. The generated index is format-validated
+   and checked against the installed task paths, rather than the source-tree index.
 3. Commits only release metadata and atomically pushes the branch and selected tag.
    It never force-pushes or pushes unrelated tags. The workflow rejects version mismatches.
 4. Waits up to two minutes for the matching tag/commit workflow and one hour for

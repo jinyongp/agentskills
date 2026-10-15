@@ -198,11 +198,19 @@ def check_tarball(commands: Commands, manifest: dict) -> None:
         info = packed[0]
         if (info["name"], info["version"]) != (manifest["name"], manifest["version"]):
             raise ReleaseError("Packed package identity does not match package.json.")
-        allowed = ["package.json", "README*", "LICENSE*", *manifest["files"]]
+        allowed = ["package.json", "README*", "LICENSE*", *(p for p in manifest["files"] if not p.startswith("!"))]
+        excluded = [p[1:] for p in manifest["files"] if p.startswith("!")]
+
+        def matches(path, patterns):
+            return any(path == pattern.rstrip("/") or path.startswith(pattern.rstrip("/") + "/")
+                       or fnmatch.fnmatchcase(path, pattern) for pattern in patterns)
+
+        def bundled(path):
+            return matches(path, allowed) and not matches(path, excluded)
+
         for entry in info["files"]:
             path = entry["path"]
-            if not any(path == p.rstrip("/") or path.startswith(p.rstrip("/") + "/")
-                       or fnmatch.fnmatchcase(path, p) for p in allowed):
+            if not bundled(path):
                 raise ReleaseError(f"Unexpected packaged file: {path}")
         bins = manifest.get("bin", {})
         if not isinstance(bins, dict) or len(bins) != 1:
@@ -215,15 +223,32 @@ def check_tarball(commands: Commands, manifest: dict) -> None:
             commands.run("npx", "--yes", "--package", str(tarball), binary,
                          *arguments, cwd=project, timeout=300)
         # The installed bundle must retain scripts, references and license notices.
+        expected_skills = set()
         for skill in commands.root.glob("skills/*/*/SKILL.md"):
+            if not bundled(skill.relative_to(commands.root).as_posix()):
+                continue
             source = skill.parent
+            expected_skills.add(source.name)
             installed = project / ".agents/skills" / source.name
             for path in source.rglob("*"):
                 if path.is_file() and "__pycache__" not in path.parts and path.suffix != ".pyc":
                     target = installed / path.relative_to(source)
                     if not target.is_file() or target.read_bytes() != path.read_bytes():
                         raise ReleaseError(f"Installed bundle differs: {path.relative_to(commands.root)}")
-        print("Package execution and bundled skill files passed.", flush=True)
+        from skills_ref import read_properties, validate
+        index = project / ".agents/skills/index"
+        problems = validate(index)
+        if problems:
+            raise ReleaseError(f"Generated index is invalid: {problems}")
+        index_base = (read_properties(index).metadata or {}).get("catalog-base")
+        if not isinstance(index_base, str) or Path(index_base).resolve() != index.resolve():
+            raise ReleaseError("Generated index has an incorrect catalog base.")
+        paths = [relative for page in (index / "references/catalog").glob("*.md")
+                 for relative in re.findall(r"Path: `([^`]+)`", page.read_text(encoding="utf-8"))]
+        expected_paths = {(project / ".agents/skills" / name / "SKILL.md").resolve() for name in expected_skills}
+        if len(paths) != len(expected_paths) or {(Path(index_base) / path).resolve() for path in paths} != expected_paths:
+            raise ReleaseError("Generated index does not match the installed task skills.")
+        print("Package execution, bundled skill files and generated index passed.", flush=True)
 
 
 def workflow_file(root: Path) -> str:
