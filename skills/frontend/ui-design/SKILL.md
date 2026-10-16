@@ -17,24 +17,25 @@ returns recommendations; requested edits authorize only the named scope.
 Recover agreed scope and simplifications before judging completeness; retain their
 rationale. Resolve consequential missing direction from evidence or a focused question.
 
-Read [references/craft.md](references/craft.md) when refining component defaults,
-spatial feedback, layered surfaces, or typography. Read only the applicable section.
+Read [references/craft.md](references/craft.md) for content grouping, hierarchy,
+component defaults, spatial feedback, layers, or typography. Read the matching section.
 Read [references/purpose.md](references/purpose.md) when choosing priorities for
 a landing page, task interface, reading surface, or showcase.
 
 ## Design decisions
 
 - Establish the user's primary action and information needs before choosing a
-  composition. Read relevant screens, content, and design guidance selectively;
-  report omitted areas and inspect necessary detail before drawing conclusions.
-- Let content determine sections, grouping, density, and navigation. Include a
-  chart for a real question, a metric with a defined meaning, and a section with
-  useful information. A familiar pattern is valid when it serves the task.
-- Check whether the primary action, current state, and task-critical information
-  can be located in the rendered view. When decoration competes with them, change
-  grouping or emphasis and recheck the task. Evaluate techniques in context; cards,
-  gradients, icons, and minimal layouts are choices, not automatic defects.
-  Preserve requested visual direction while identifying concrete usability costs.
+  layout. Inspect relevant screens, content, and guidance selectively; report
+  omissions and recover necessary detail before drawing conclusions.
+- Group content by task role: peers, label/value, state/action, sequence, or
+  claim/qualification. Keep labels and qualifications with what they describe.
+  Use these relationships for grouping, order, density, and navigation; charts
+  and metrics need a defined question or meaning.
+- Locate the next action, current state, and decisive facts in the rendered view.
+  When uniform styling obscures roles, regroup, label, reorder, or change emphasis;
+  swapping separators alone cannot repair the relationship. Compact metadata and
+  equal-weight peers can be valid. Preserve product identity; judge cards,
+  gradients, icons, and minimal layouts by concrete usability effects.
 - Use supplied or verified facts. Keep demonstration data visibly identified.
   Customer logos, testimonials, statistics, security claims, and product screenshots
   need real evidence; expose missing material instead of manufacturing credibility.

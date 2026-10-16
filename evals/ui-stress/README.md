@@ -1,5 +1,28 @@
 # UI stress evaluation
 
+## Relationship preservation — 2026-10-16
+
+Revision: working-tree changes to `SKILL.md` and `references/cases.md`.
+Evidence: parent instruction review in Codex; model version not exposed.
+These are inspection cases, not executed browser fixtures. Earlier verification
+below retains its original scope and date.
+
+| Scenario | Expected decision | Parent review |
+| --- | --- | --- |
+| A search result omits an optional property | Remaining values retain their identities; no misleading reassociation | Missing-field case makes the semantic failure explicit |
+| Translated setting labels wrap at a supported narrow width | Each label still identifies its value and control | Locale/width variation checks relationships beyond clipping |
+| An order's action text changes with its state | Action remains tied to the correct order and differs from current state | Item/state/action association included in the inspection |
+| A plan condition wraps away from its displayed price | Check whether the condition's applicability remains clear | Price/condition case covers the relationship |
+| A compact metadata row or peer options survive content changes | Leave the valid structure intact | Healthy counterpart guards against separator and density rules |
+
+No browser run, independent agent execution, or measured improvement is claimed.
+Format/index checks (66 skills), 176 existing tests (one skipped), skills@1.7.0
+installation fixtures, packed CLI checks, creator validation, and local links passed.
+Actual Codex and Claude project installations retained all four ui-stress files
+byte-for-byte and excluded evaluation records. Body: 3,528 characters.
+See the [paired UI design record](../ui-design/README.md) for commands, environment,
+resolved cache/dependency setup failures, and distribution-check details.
+
 | Request | Expected decision | Parent review |
 | --- | --- | --- |
 | Break a member list with long labels | Feed plausible fixture data through existing boundary | No markup edits to manufacture failures |

@@ -10,16 +10,41 @@ carry readable hierarchy, predictable feedback, and useful state behavior before
 offering customization. Reuse established tokens and primitives. Component APIs
 should make the intended use easy without accumulating options for hypothetical needs.
 
-For hierarchy, follow the selected task: locate its next action, distinguish current
-state from available actions, and read the required information in the intended order.
-If equal emphasis makes these compete, regroup related content or strengthen the
-task's priority. Equal weight can be correct for peer choices; size alone is not a
-hierarchy defect. Source tokens and screenshots cannot establish user comprehension.
-
 Distinguish acknowledgement from commitment: a press can show immediate feedback
 while activation still respects cancellation and control semantics. Deliberate
 confirmation must match the action and accessible alternatives, not a universal
 hold gesture. Explain consequential outcomes before committing them.
+
+## Information relationships and hierarchy
+
+Before choosing containers or type styles, identify what the user must decide or do,
+which facts belong together, and which information changes that decision. A shared
+row, border, badge treatment, or emphasis implies a relationship; check that it is
+the intended one. Increasing a heading's size cannot repair a wrong grouping.
+
+Use these examples to choose a representation, not as fields to add to every screen.
+Keep actual product content and deliberate density; unrelated chat context and an
+illustrative example are not requirements for the interface.
+
+| Relationship and typical task | Inspect and decide |
+| --- | --- |
+| Label/value in account settings | Can the reader tell which value each label describes? Keep the association through alignment, proximity, wording, and suitable semantics; obvious values need not gain redundant labels. |
+| Price/condition in plan selection | Can the buyer find the billing period and eligibility condition for the displayed price? Keep them associated; visual subordination must not hide a material condition. |
+| Item/state/action in order management | Can the user identify an order's payment and delivery states and which order an action affects? Keep status distinct from an available action and bind both to their item. |
+| Comparable properties in search results | Can the user compare the same property across results? Use consistent labels, order, or aligned columns; a separate card for every fact can obstruct comparison. |
+| Peer choices or supporting article metadata | Equal weight or a compact author/date row can be appropriate when roles are clear. Do not invent a priority or expand every value into a labeled block. |
+
+Choose grouping, labels, reading order, and emphasis together. A separator is useful
+inside a clear metadata group; punctuation changes, more badges, or extra cards do
+not establish missing relationships. Preserve those relationships in source order
+and accessible semantics as well as visually. See [GOV.UK summary lists](https://design-system.service.gov.uk/components/summary-list/)
+for label/value versus list/table decisions and [WCAG information and relationships](https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html)
+for preserving meaning when presentation changes.
+
+Inspect the rendered surface by following a task: find the relevant item and decisive
+facts, identify current state, and locate the action and its target. Recheck after
+regrouping. Equal weight and small type are not defects by themselves; source review
+or screenshots alone cannot establish user comprehension.
 
 ## Spatial continuity and direct manipulation
 

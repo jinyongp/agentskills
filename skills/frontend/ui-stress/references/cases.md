@@ -16,6 +16,19 @@ a proposal but do not automatically establish a current-contract failure.
 Display markup-like text through the intended escaping or rich-text boundary,
 without executing arbitrary fixture code.
 
+## Relationships under content changes
+
+Vary supported optional fields, translated labels, item states, and container widths.
+Check whether settings values stay associated with their labels, plan conditions
+with their prices, and order actions with their targets. A missing search-result
+field must not make the next value appear to describe a different property.
+Wrapping must preserve these associations and the task's information priority.
+
+Compare against a healthy case: a compact author/date row or equally weighted peer
+options can remain unchanged when meaning and access survive. Flag a specific lost
+relationship, misleading state, or inaccessible action; separator counts, uniform
+styling, and density alone do not establish a failure.
+
 ## Numbers, collections, and time
 
 Check zero/one and boundaries such as page size and page size plus one.

@@ -34,9 +34,10 @@ of [references/cases.md](references/cases.md) when selecting stress inputs.
   merely to populate a fixture.
 - Render at actual container widths and affected narrow/wide ranges. Exercise text
   enlargement, supported themes/locales, and relevant input methods. Inspect clipped
-  required text, unreachable actions, ambiguous formatting, fallback behavior, and
-  loss of information. Intentional scrolling or truncation can be correct if the
-  required information and task remain accessible.
+  required text, unreachable actions, ambiguous formatting, lost label/value or
+  item/action associations, fallback behavior, and loss of information.
+  Intentional scrolling or truncation can be correct when required information
+  and task actions remain accessible.
 - Distinguish a plausible hypothesis from an observed failure. Record the smallest
   reproduction, affected element/state, user effect, and suggested correction.
   Runtime access limits the conclusion; source inspection is not rendered verification.

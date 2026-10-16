@@ -1,5 +1,44 @@
 # UI design evaluation
 
+## Information relationships — 2026-10-16
+
+Revision: working-tree changes to `SKILL.md` and `references/craft.md`.
+Evidence: parent instruction review in Codex; model version not exposed.
+The core rule applies before layout selection; the conditionally loaded reference
+ships with the skill and supplies general examples. This file is maintainer evidence,
+not installed runtime guidance. Earlier checks below apply to their dated revisions.
+
+| Scenario | Expected decision | Parent review |
+| --- | --- | --- |
+| A plan picker separates promotional prices from billing and eligibility conditions | Associate material conditions with the applicable price; preserve supplied amounts and terms | Core claim/qualification rule and plan example cover the decision |
+| Order rows style status and available actions alike, with an unclear action target | Distinguish state from action and identify the affected order | Core role rule and order example cover the decision |
+| Account settings lose label/value pairing when stacked | Retain each value's association in visual and logical reading order | Label/value rule and source-order guidance cover the decision |
+| Search results scatter comparable properties into separate decorative cards | Preserve comparison of the same property across results | Comparison example supports consistent labels, order, or columns without prescribing one layout |
+| A compact author/date row is already clear | Retain useful metadata formatting, including a suitable separator | Explicit exception prevents punctuation bans and redundant labels |
+| A dense comparison table or peer choices already serve the task | Preserve density and equal emphasis where appropriate | No required card conversion or invented priority |
+| A brief includes an illustrative complaint unrelated to the product's content | Apply the failure principle without importing that example's fields into the UI | Reference separates examples from product requirements |
+
+The cases span independent common tasks rather than noun substitutions in the
+reported failure. This review establishes written decision coverage, not observed
+generation quality, reader comprehension, or comparative skill benefit.
+
+Executed verification in Linux/WSL with Node.js 26.10.0:
+
+- `uv run --locked check.py validate --check-index`: 66 skill formats and index freshness passed.
+- The test phase of `uv run --locked check.py`: 176 existing tests ran, one skipped; no failures.
+- `uv run --locked check.py smoke`: skills@1.7.0 discovery and bundled-resource fixture passed.
+- `uv run --locked check.py package`: packed CLI project/global lifecycle checks passed.
+- Creator validation passed for both changed skills; all five local Markdown links resolved.
+- Actual bundled CLI installation into a temporary project for Codex and Claude copied
+  all five ui-design files and all four ui-stress files byte-for-byte. Only the selected
+  skills and generated index were installed; evaluation records were absent.
+
+The initial full run stopped at smoke because the default npm cache was read-only;
+smoke and package passed with a temporary writable cache. Creator validation initially
+lacked PyYAML; a temporary `uv run --with pyyaml` environment resolved it without a
+repository dependency change. Final body sizes: ui-design 3,978 characters;
+ui-stress 3,528. No tests pinning prose or CSS were added.
+
 ## Accepted-scope review — 2026-10-07
 
 Parent instruction review; model version not recorded. Paired case:
