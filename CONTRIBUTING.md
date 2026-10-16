@@ -121,6 +121,12 @@ preferred libraries, and test quotas cannot substitute for contextual judgment.
 Mechanical inspection budgets protect agent input and require recoverable omissions;
 they are not writing-quality scores or caps on a requested complete deliverable.
 
+When generalizing a reported failure into reusable guidance, identify the failure
+mechanism and its applicable conditions. Use independent, ordinary scenarios
+for teaching examples and transfer checks; changing nouns in the reported example
+does not establish generality. Preserve exact inputs when reproducing that failure,
+and use supplied content when the actual deliverable requires it.
+
 Use existing coverage before adding lasting tests. Report observed, inferred, and
 unverified behavior separately. Format validation, installation, scripted replay,
 parent instruction review, and independent agent execution establish different things;
