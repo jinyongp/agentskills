@@ -12,6 +12,7 @@ Choose the Git operation you want to perform. Each skill preserves unrelated wor
 
 ## Manage local work
 
+- [git-ignore](git-ignore/SKILL.md) — Create or refine ignore rules while preserving scope, exceptions, and required files.
 - [git-branch](git-branch/SKILL.md) — Create, switch, rename, or delete a local branch.
 - [git-worktree](git-worktree/SKILL.md) — Create, inspect, or remove parallel checkouts.
 - [git-conflict](git-conflict/SKILL.md) — Resolve and continue a merge, rebase, or cherry-pick.

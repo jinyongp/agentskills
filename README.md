@@ -59,7 +59,7 @@ Each category links to its complete skill catalog and installation commands.
 | --- | --- | --- |
 | [workflow](skills/workflow/README.md) | Planning, implementation, review, debugging, testing, and research | 33 |
 | [frontend](skills/frontend/README.md) | UI, accessibility, responsive layouts, and motion | 15 |
-| [git](skills/git/README.md) | Commits, branches, synchronization, conflicts, PRs, and worktrees | 6 |
+| [git](skills/git/README.md) | Ignore rules, commits, branches, synchronization, conflicts, PRs, and worktrees | 7 |
 | [writing](skills/writing/README.md) | Documentation, drafting, editing, summaries, and conversation styles | 10 |
 | [tooling](skills/tooling/README.md) | Skill selection, skill review, and development tool operation | 2 |
 

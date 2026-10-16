@@ -37,7 +37,7 @@ Each listed skill remains usable alone. A listing does not prove installation.
 <!-- index:catalog:start -->
 
 - [Frontend](references/catalog/frontend.md) — UI, accessibility, responsive layouts, and motion (15 skills; 1 page).
-- [Git](references/catalog/git.md) — Commits, branches, synchronization, conflicts, PRs, and worktrees (6 skills; 1 page).
+- [Git](references/catalog/git.md) — Ignore rules, commits, branches, synchronization, conflicts, PRs, and worktrees (7 skills; 1 page).
 - [Tooling](references/catalog/tooling.md) — Skill selection, skill review, and development tool operation (2 skills; 1 page).
 - [Workflow](references/catalog/workflow.md) — Planning, implementation, review, debugging, testing, and research (33 skills; 2 pages).
 - [Writing](references/catalog/writing.md) — Documentation, drafting, editing, summaries, and conversation styles (10 skills; 1 page).
