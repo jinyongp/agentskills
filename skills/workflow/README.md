@@ -10,8 +10,8 @@ Choose a skill for the work you need done. These are independent workflows, not 
 - [trace](trace/SKILL.md) — Explain one codebase journey with source citations.
 - [research](research/SKILL.md) — Investigate an external question using primary evidence.
 - [domain-modeling](domain-modeling/SKILL.md) — Resolve ambiguous business terms and rules.
-- [spec-generator](spec-generator/SKILL.md) — Define product requirements, roles, and feature flows.
-- [plan](plan/SKILL.md) — Set scope, decisions, work units, and completion checks.
+- [spec-generator](spec-generator/SKILL.md) — Turn an idea or rough notes into product behavior, roles, scope, and feature flows.
+- [plan](plan/SKILL.md) — Plan implementation, work order, dependencies, and verification for the requested behavior.
 - [queue](queue/SKILL.md) — Draft task queues or preserve plans as local checklists.
 
 ## Implement and troubleshoot

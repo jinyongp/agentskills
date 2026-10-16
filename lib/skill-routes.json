@@ -1,0 +1,131 @@
+[
+  {
+    "id": "understand",
+    "title": "Understand or investigate",
+    "when": "Map a project, follow behavior, or investigate an external question.",
+    "choices": [
+      {"skill": "survey", "when": "Need a repository overview, relevant files, conventions, and commands before work; inspect without running project code."},
+      {"skill": "trace", "when": "Need to explain one existing behavior by following its trigger, calls, data effects, and outcome."},
+      {"skill": "research", "when": "Need external primary-source evidence or a comparison, beyond mapping local code."}
+    ]
+  },
+  {
+    "id": "define",
+    "title": "Define behavior or plan work",
+    "when": "Decide what to build, settle rules, plan implementation, or preserve settled work.",
+    "choices": [
+      {"skill": "spec-generator", "when": "An idea or rough notes need product behavior, user roles, scope, journeys, and acceptance criteria; what to build is still being defined."},
+      {"skill": "domain-modeling", "when": "Ambiguous business terms or conflicting rules block a decision; clarify their meaning with concrete scenarios."},
+      {"skill": "api-design", "when": "Design or review a consumer-facing API contract, including compatibility, errors, retries, and versioning."},
+      {"skill": "plan", "when": "Need an implementation approach, work order, dependencies, and verification for the requested behavior; do not regenerate settled requirements."},
+      {"skill": "prototype", "when": "Compare UI directions or resolve a state/business-rule question through an isolated interactive prototype."},
+      {"skill": "queue", "when": "Explicitly asked to register settled tasks or preserve a plan as a local checklist."},
+      {"skill": "handoff", "when": "Prepare or resume another session with decisions, progress, and context that the repository alone cannot recover."}
+    ]
+  },
+  {
+    "id": "change",
+    "title": "Implement or fix",
+    "when": "Change code, diagnose bugs or CI, upgrade dependencies, migrate data, or optimize.",
+    "choices": [
+      {"skill": "implement", "when": "Implement an authorized feature or refactor; use a narrower workflow when it already covers the requested change."},
+      {"skill": "debug", "when": "A reported bug or failing command needs reproduction, cause analysis, a scoped fix, and regression checks."},
+      {"skill": "ci-fix", "when": "An identified revision or pull request has failing CI that needs diagnosis and correction."},
+      {"skill": "dependency-update", "when": "Install a requested package/runtime upgrade or remediation, including compatible manifest and lockfile changes."},
+      {"skill": "db-migrate", "when": "Prepare, review, or run a schema change or data backfill with compatibility and recovery; live execution needs its identified target and authorization."},
+      {"skill": "optimize", "when": "Improve a demonstrated code bottleneck and compare matched before/after results; measurement alone does not authorize changes."}
+    ]
+  },
+  {
+    "id": "review",
+    "title": "Review or assess readiness",
+    "when": "Find defects, review and fix, assess a dependency or skill, or prepare human review.",
+    "choices": [
+      {"skill": "code-review", "when": "Review selected code changes for defects or recorded decision compliance and report findings without edits."},
+      {"skill": "review-loop", "when": "Review and fix confirmed defects iteratively within the authorized scope, then recheck affected behavior."},
+      {"skill": "security-review", "when": "Review specified code/configuration for exploitable security defects with attacker control and trust-boundary evidence."},
+      {"skill": "dependency-review", "when": "Assess adopting or changing a dependency for fit, maintenance, footprint, compatibility, and advisories; no installation."},
+      {"skill": "skill-review", "when": "Assess Agent Skill discovery, decision rules, standalone resources, and evaluation evidence; review alone makes no edits."},
+      {"skill": "review-map", "when": "Prepare a feature-grouped reading order and risk map for a human reviewer, without a defect verdict."},
+      {"skill": "close", "when": "Assess completion and commit readiness from existing evidence; do not start new implementation or checks."},
+      {"skill": "retro", "when": "Review a work session for observed process friction and propose improvements; do not change code or settings."}
+    ]
+  },
+  {
+    "id": "verify",
+    "title": "Verify, test, or prepare release",
+    "when": "Run checks, choose or write tests, measure performance, or prepare QA and rollout.",
+    "choices": [
+      {"skill": "verify", "when": "Choose and execute suitable checks for a change and report actual results and unchecked scope."},
+      {"skill": "test", "when": "Assess coverage gaps or choose meaningful test cases and boundaries; specialized test work can use the matching choice below directly."},
+      {"skill": "test-unit", "when": "Add focused checks for calculations, decisions, and state transitions without real infrastructure."},
+      {"skill": "test-integration", "when": "Check real dependency boundaries, persistence, serialization, or adapter wiring."},
+      {"skill": "test-contract", "when": "Check compatibility between consumers and providers of APIs, messages, or serialized data."},
+      {"skill": "test-e2e", "when": "Check a critical journey through the actual app or CLI to observable completion."},
+      {"skill": "test-property", "when": "Check justified invariants across generated inputs or state transitions with reproducible failures."},
+      {"skill": "test-maintenance", "when": "Improve an existing suite's redundancy, brittleness, flakiness, or cost while retaining meaningful detection."},
+      {"skill": "benchmark", "when": "Measure performance or compare baseline and candidate under matched workloads; optimization is a separate change request."},
+      {"skill": "qa-checklist", "when": "Prepare manual verification steps with preconditions, actions, and expected results; writing steps does not execute them."},
+      {"skill": "preflight", "when": "Identify deployment prerequisites and before/during/after rollout actions; do not deploy."}
+    ]
+  },
+  {
+    "id": "git",
+    "title": "Operate Git",
+    "when": "Manage ignore rules, branches, commits, conflicts, synchronization, worktrees, or pull requests.",
+    "choices": [
+      {"skill": "git-branch", "when": "Inspect, create, switch, rename, or delete an identified local branch."},
+      {"skill": "git-ignore", "when": "Create, review, debug, or simplify Git ignore rules, including scope, overlapping patterns, and exceptions; untracking and deletion are separate actions."},
+      {"skill": "git-commit", "when": "Inspect staging/commit hygiene, stage or split changes, or draft a commit message within the requested scope."},
+      {"skill": "git-conflict", "when": "Resolve existing merge, rebase, or cherry-pick conflicts and continue the authorized operation."},
+      {"skill": "git-sync", "when": "Fetch, pull, push, or check ahead/behind/diverged state for an identified branch."},
+      {"skill": "git-worktree", "when": "Create, inspect, remove, or maintain requested worktrees for parallel work."},
+      {"skill": "git-pr", "when": "Draft, create, or update a GitHub pull request title/description; review code through a review workflow."}
+    ]
+  },
+  {
+    "id": "writing",
+    "title": "Write, edit, or shape an answer",
+    "when": "Draft or revise prose, summarize sources, or apply requested language and delivery guidance.",
+    "choices": [
+      {"skill": "write", "when": "Draft new reader-facing prose from a brief or evidence; choose a more specific document workflow when it fits."},
+      {"skill": "rewrite", "when": "Revise existing prose for clarity and voice while preserving its meaning and qualifications."},
+      {"skill": "summarize", "when": "Compress a specified document, thread, transcript, or text faithfully."},
+      {"skill": "readme", "when": "Create, revise, or review a package README for consumers, including installation and first use."},
+      {"skill": "dev-docs", "when": "Create, revise, or review developer guides, API references, examples, or documentation structure."},
+      {"skill": "korean-writing", "when": "The deliverable is Korean reader-facing prose needing language guidance; Korean conversation alone is not a trigger."},
+      {"skill": "english-writing", "when": "The deliverable is English reader-facing prose needing language guidance; English conversation alone is not a trigger."},
+      {"skill": "brief", "when": "Asked for a scannable status, progress, or handover briefing; it does not replace the underlying task."},
+      {"skill": "clear", "when": "Asked for readable, answer-first explanations for ADHD or limited attention; keep essential depth."},
+      {"skill": "terse", "when": "Asked for blunt, terse conversation; brevity does not reduce authorized work or essential conditions."}
+    ]
+  },
+  {
+    "id": "interface",
+    "title": "Design or inspect an interface",
+    "when": "Handle visual hierarchy, responsive behavior, accessibility, mobile browsers, or UI content extremes.",
+    "choices": [
+      {"skill": "ui-design", "when": "Create, revise, or review interface composition, hierarchy, components, and meaningful states around actual tasks and content."},
+      {"skill": "responsive", "when": "Layout fails across widths, content sizes, or zoom: diagnose reflow, overflow, stacking, and access."},
+      {"skill": "mobile-web", "when": "Touch/hover, scrolling, viewport, safe-area, or on-screen keyboard behavior breaks in a mobile browser or PWA."},
+      {"skill": "accessibility", "when": "Implement or review semantics, keyboard operation, focus, perceivable states, contrast, or enlargement."},
+      {"skill": "ui-library", "when": "Choose components or a library for a concrete frontend capability gap; preserve project and explicit user choices."},
+      {"skill": "ui-stress", "when": "Exercise realistic content extremes, missing data, localization, and state boundaries through existing UI fixtures or previews."}
+    ]
+  },
+  {
+    "id": "motion",
+    "title": "Build or investigate motion",
+    "when": "Name, implement, debug, review, or measure web and native animation.",
+    "choices": [
+      {"skill": "animate", "when": "Implement web transitions, gestures, drawers, and feedback with project-compatible tools."},
+      {"skill": "animate-native", "when": "Implement React Native or Expo gestures, transitions, sheets, keyboard motion, or optional haptics."},
+      {"skill": "animation-debug", "when": "Diagnose and fix a concrete animation jump, flicker, delay, or interruption failure."},
+      {"skill": "animation-performance", "when": "Measure and improve demonstrated frame pacing or input responsiveness using matched runs."},
+      {"skill": "animation-review", "when": "Review a selected animation/component/diff for behavioral defects and usability costs; no implementation implied."},
+      {"skill": "animation-audit", "when": "Inventory motion broadly and prepare a prioritized evidence-backed improvement plan; no source changes."},
+      {"skill": "animation-opportunities", "when": "Find a few places where motion could improve feedback, orientation, or continuity; recommendations only."},
+      {"skill": "animation-vocabulary", "when": "Name or explain an effect from a description or reference; naming does not authorize implementation."}
+    ]
+  }
+]

@@ -1,6 +1,6 @@
 ---
 name: spec-generator
-description: "Create or revise product requirements, roles, constraints, and feature flows from an idea or evidence. Use for product specifications; implementation plans remain separate."
+description: "Define what a product or feature should do from an idea, notes, or evidence. Use for requirements, roles, scope, and feature flows; implementation plans remain separate."
 license: MIT
 metadata:
   author: jinyongp

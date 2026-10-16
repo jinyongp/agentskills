@@ -114,6 +114,16 @@ def main():
                     raise RuntimeError("Generated index must contain exactly the installed task skills")
                 if not all((catalog_base / relative).is_file() for relative in indexed_paths):
                     raise RuntimeError("Generated index points to a missing installed skill")
+                decisions = "\n".join(page.read_text(encoding="utf-8") for page in (installed_index / "references/routes").glob("*.md"))
+                decision_paths = re.findall(r"Path: `([^`]+)`", decisions)
+                if not decision_paths or not all((catalog_base / relative).is_file() for relative in decision_paths):
+                    raise RuntimeError("Decision routes must resolve to installed skill instructions")
+                if not {Path(relative).parent.name for relative in decision_paths} <= set(names):
+                    raise RuntimeError("Decision route contains an uninstalled skill")
+                if "Skill: `spec-generator`" not in decisions:
+                    raise RuntimeError("Product-definition decision is missing from the installed index")
+                if len((installed_index / "SKILL.md").read_text(encoding="utf-8").split("---", 2)[2].strip()) > 4000:
+                    raise RuntimeError("Installed index exceeds the skill body budget")
                 claude = base / ".claude/skills/survey"
                 if claude.resolve() != shared.resolve():
                     raise RuntimeError("Claude connection does not resolve to the shared source")

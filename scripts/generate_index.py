@@ -3,6 +3,14 @@
 import argparse
 from pathlib import Path
 import re
+import sys
+
+if __name__ == "__main__":
+    sys.dont_write_bytecode = True
+if __package__:
+    from .skill_routes import render_routes
+else:
+    from skill_routes import render_routes
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -14,21 +22,25 @@ MAX_PAGE_CHARS = 2500
 ENTRY = re.compile(r"^- \[([a-z0-9]+(?:-[a-z0-9]+)*)\]\(\1/SKILL\.md\) — (.+)$")
 
 
-def catalog_directory(root: Path) -> Path:
-    directory = root / INDEX / "references/catalog"
+def output_directory(root: Path, section: str) -> Path:
+    directory = root / INDEX / "references" / section
     for path in (root / INDEX, directory.parent, directory):
         if path.is_symlink():
             raise ValueError(f"Index output must not be a symlink: {path}")
     return directory
 
 
+def catalog_directory(root: Path) -> Path:
+    return output_directory(root, "catalog")
+
+
 def snapshot_index(root: Path) -> dict[Path, bytes]:
     manifest = root / INDEX / "SKILL.md"
     if not manifest.exists():
         return {}
-    directory = catalog_directory(root)
     result = {}
-    for path in [manifest, *sorted(directory.glob("*.md"))]:
+    pages = [page for section in ("catalog", "routes") for page in sorted(output_directory(root, section).glob("*.md"))]
+    for path in [manifest, *pages]:
         if path.is_symlink():
             raise ValueError(f"Index output must not be a symlink: {path}")
         content = path.read_bytes()
@@ -39,10 +51,10 @@ def snapshot_index(root: Path) -> dict[Path, bytes]:
 
 
 def restore_index(root: Path, snapshot: dict[Path, bytes]) -> None:
-    directory = catalog_directory(root)
-    for path in directory.glob("*.md"):
-        if path not in snapshot and path.read_bytes().startswith(GENERATED.encode()):
-            path.unlink()
+    for section in ("catalog", "routes"):
+        for path in output_directory(root, section).glob("*.md"):
+            if path not in snapshot and path.read_bytes().startswith(GENERATED.encode()):
+                path.unlink()
     for path, content in snapshot.items():
         if not path.exists() or path.read_bytes() != content:
             path.parent.mkdir(parents=True, exist_ok=True)
@@ -105,18 +117,14 @@ def render_index(root: Path) -> dict[Path, str]:
     body = manifest.read_text(encoding="utf-8")
     if body.count(START) != 1 or body.count(END) != 1 or body.index(START) > body.index(END):
         raise ValueError(f"Expected one index catalog block: {manifest}")
-    descriptions = {}
-    for line in (root / "README.md").read_text(encoding="utf-8").splitlines():
-        match = re.fullmatch(r"\| \[([a-z0-9-]+)\]\(skills/\1/README.md\) \| (.+?) \| \d+ \|", line)
-        if match:
-            descriptions[match[1]] = match[2]
-    output, routing = {}, []
+    output, routing, paths = {}, [], {}
     for category in sorted((root / "skills").iterdir()):
         if not category.is_dir():
             continue
         title, entries = read_category(category)
         if not entries:
             continue
+        paths.update({name: f"../../{category.name}/{name}/SKILL.md" for _, name, _ in entries if name != "index"})
         chunks, current, offset = [], [], 0
         for entry in entries:
             candidate = [*current, entry]
@@ -143,10 +151,19 @@ def render_index(root: Path) -> dict[Path, str]:
             offset += len(chunk)
         skills_label = "skill" if len(entries) == 1 else "skills"
         pages_label = "page" if len(chunks) == 1 else "pages"
-        routing.append(f"- [{title}](references/catalog/{category.name}.md) — {descriptions.get(category.name, title)} ({len(entries)} {skills_label}; {len(chunks)} {pages_label}).")
+        routing.append(f"- [{title}](references/catalog/{category.name}.md) — {len(entries)} {skills_label}; {len(chunks)} {pages_label}.")
+    route_files, decisions, unrouted = render_routes(root, paths, GENERATED, MAX_PAGE_CHARS)
+    output.update({root / INDEX / file: content for file, content in route_files.items()})
+    navigation = "\n".join(decisions) or "No matching decision routes. Use the full catalog or other available skill metadata."
+    if unrouted:
+        navigation += f"\n\n{len(unrouted)} skill(s) have no authored decision route; find them in the full catalog."
+    navigation += "\n\n## Full catalog\n\n" + "\n".join(routing)
     before, rest = body.split(START)
     _, after = rest.split(END)
-    output[manifest] = before + START + "\n\n" + "\n".join(routing) + "\n\n" + END + after
+    output[manifest] = before + START + "\n\n" + navigation + "\n\n" + END + after
+    generated_body = re.split(r"(?m)^---[ \t]*$", output[manifest], maxsplit=2)[-1].strip()
+    if len(generated_body) > 4000:
+        raise ValueError("Index body exceeds 4000 characters; shorten decision navigation")
     return output
 
 

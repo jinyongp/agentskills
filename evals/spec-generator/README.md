@@ -1,5 +1,18 @@
 # spec-generator evaluation
 
+## Task discovery — 2026-10-16
+
+Working-tree description and catalog summary now name deciding what a product or
+feature should do from an idea or notes. The workflow body is unchanged. The shared
+index decision route distinguishes that outcome from planning implementation of
+accepted behavior.
+[Independent selection rehearsals](../index/task-routing.json) selected this skill
+for requirements and `plan` for implementation planning in both variants; they do
+not establish a discovery improvement. Full checks passed 66 formats and 182 tests
+(one skipped), installation fixtures, and package lifecycles. An actual skills@1.7.0
+installation retained this skill's source bytes, and creator validation passed.
+Earlier evidence below retains its original revision and limits.
+
 ## Current coverage
 
 - Revision/date: Uncommitted changes based on 4d972c2103595674f2d84d7552da861b9a66e4b0; 2026-10-15.

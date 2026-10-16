@@ -192,7 +192,7 @@ class NewSkillTests(unittest.TestCase):
         shutil.copyfile(ROOT / "new_skill.py", self.root / "new_skill.py")
         scripts = self.root / "scripts"
         scripts.mkdir()
-        for name in ("validate_skills.py", "generate_index.py"):
+        for name in ("validate_skills.py", "generate_index.py", "skill_routes.py"):
             shutil.copyfile(ROOT / "scripts" / name, scripts / name)
         result = subprocess.run(
             [sys.executable, str(self.root / "new_skill.py"), "git", "git-review"],

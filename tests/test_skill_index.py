@@ -1,6 +1,7 @@
 """Exercise complete, bounded catalogs and automatic scaffold synchronization."""
 
 from pathlib import Path
+import json
 import os
 import re
 import shutil
@@ -24,6 +25,7 @@ class SkillIndexTests(unittest.TestCase):
         self.addCleanup(temp.cleanup)
         self.root = Path(temp.name)
         shutil.copytree(ROOT / "templates", self.root / "templates")
+        shutil.copytree(ROOT / "lib", self.root / "lib")
         (self.root / "evals").mkdir()
         (self.root / "README.md").write_text(
             "# Skills\n\n| [workflow](skills/workflow/README.md) | Plan, review, and verify changes | 0 |\n"
@@ -232,6 +234,7 @@ class SkillIndexTests(unittest.TestCase):
         script = self.root / "scripts/generate_index.py"
         script.parent.mkdir()
         shutil.copyfile(ROOT / "scripts/generate_index.py", script)
+        shutil.copyfile(ROOT / "scripts/skill_routes.py", script.with_name("skill_routes.py"))
         catalog = self.root / "skills/workflow/README.md"
         catalog.write_text(catalog.read_text().replace("No skills yet.", "unsupported " + "x" * 10_000))
         before = self.snapshot()
@@ -241,6 +244,92 @@ class SkillIndexTests(unittest.TestCase):
             self.assertLessEqual(len(result.stdout), 4000)
             self.assertEqual(result.stderr, "")
             self.assertEqual(self.snapshot(), before)
+
+    def test_task_routes_cover_distributed_skills_and_filter_partial_sources(self):
+        from scripts.skill_routes import read_routes
+        authored = {choice["skill"] for route in read_routes(ROOT) for choice in route["choices"]}
+        distributed = {p.parent.name for p in (ROOT / "skills").glob("*/*/SKILL.md")} - {"index"}
+        self.assertEqual(authored, distributed)
+        expected = {"spec-generator", "plan", "code-review", "review-loop"}
+        for name in expected:
+            self.add(name, "Selected task.")
+        self.add("new-task", "An additional task available through the catalog.")
+        self.write_catalogs()
+        update_index(self.root)
+        route_pages = list((self.root / INDEX / "references/routes").glob("*.md"))
+        combined = "\n".join(p.read_text() for p in route_pages)
+        self.assertEqual(set(re.findall(r"Skill: `([^`]+)`", combined)), expected)
+        for target in re.findall(r"Source: `([^`]+)`", combined):
+            self.assertTrue((self.root / INDEX / target).is_file())
+        self.assertIn("1 skill(s) have no authored decision route", (self.root / INDEX / "SKILL.md").read_text())
+        self.assertIn("`new-task`", (self.root / INDEX / "references/catalog/workflow.md").read_text())
+        self.assertEqual(index_errors(self.root), [])
+
+    def test_route_pagination_preserves_all_decisions_and_rejects_invalid_data_read_only(self):
+        expected = [f"skill-{n:03d}" for n in range(100)]
+        for name in expected:
+            self.add(name, "Task summary.")
+        self.write_catalogs()
+        route = {"id": "decide", "title": "Choose work", "when": "Choose a matching task.",
+                 "choices": [{"skill": name, "when": "Investigate " + "x" * 220} for name in expected]}
+        source = self.root / "lib/skill-routes.json"
+        source.write_text(json.dumps([route]))
+        update_index(self.root)
+        next_page, found = "references/routes/decide.md", []
+        while next_page:
+            text = (self.root / INDEX / next_page).read_text()
+            self.assertLessEqual(len(text), MAX_PAGE_CHARS)
+            self.assertIn("of 100;", text)
+            found.extend(re.findall(r"Skill: `([^`]+)`", text))
+            match = re.search(r"Next page: `([^`]+)`", text)
+            next_page = match[1] if match else None
+        self.assertEqual(found, expected)
+        original = snapshot_index(self.root)
+        for broken in (None, [route, route], [{**route, "id": "../outside"}],
+                       [{**route, "choices": [{"skill": "skill-000", "when": "bad\ncondition"}]}],
+                       [{**route, "id": f"route-{n}", "when": "x" * 300} for n in range(20)]):
+            source.write_text(json.dumps(broken))
+            with self.assertRaises(ValueError):
+                update_index(self.root)
+            self.assertEqual(snapshot_index(self.root), original)
+
+    def test_route_files_are_owned_rolled_back_and_removed_when_empty(self):
+        self.add("spec-generator", "Define behavior.")
+        self.write_catalogs()
+        update_index(self.root)
+        route_file = self.root / INDEX / "references/routes/define.md"
+        original = snapshot_index(self.root)
+        self.add("plan", "Plan implementation.")
+        self.write_catalogs()
+        write_bytes = Path.write_bytes
+        failed = False
+
+        def fail_once(path, content):
+            nonlocal failed
+            if path == route_file and not failed:
+                failed = True
+                raise OSError("injected decision route write failure")
+            return write_bytes(path, content)
+
+        with patch.object(Path, "write_bytes", fail_once):
+            with self.assertRaises(OSError):
+                update_index(self.root)
+        self.assertTrue(failed)
+        self.assertEqual(snapshot_index(self.root), original)
+        update_index(self.root)
+        manual = route_file.with_name("manual.md")
+        manual.write_text("Preserve local notes.")
+        with self.assertRaises(ValueError):
+            update_index(self.root)
+        self.assertEqual(manual.read_text(), "Preserve local notes.")
+        manual.unlink()
+        for name in ("spec-generator", "plan"):
+            shutil.rmtree(self.root / "skills/workflow" / name)
+        self.rows["workflow"] = []
+        self.write_catalogs()
+        update_index(self.root)
+        self.assertFalse(route_file.exists())
+        self.assertEqual(index_errors(self.root), [])
 
 
 if __name__ == "__main__":

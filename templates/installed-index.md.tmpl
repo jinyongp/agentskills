@@ -1,6 +1,6 @@
 ---
 name: index
-description: Select installed skills before starting a task using a compact catalog with exact local paths.
+description: Select installed skills by task, scope, and needed expertise through decision routes with exact local paths.
 license: MIT
 metadata:
   author: jinyongp
@@ -10,34 +10,34 @@ metadata:
 
 # Index
 
-Select applicable skills before starting a new substantive task. This catalog is
-generated from CLI-managed installations in this scope; it does not list every
-plugin or skill installed by other tools. Consider other available skill metadata
-when relevant. Installation does not mean every skill body should be loaded.
+Choose instructions for the requested outcome and permission, not a category or
+keyword alone. Acknowledgments need no selection. This index covers CLI-managed
+skills in this scope; consider other available skill metadata when relevant.
 
-1. Choose the relevant category below from the requested outcome. Read its pages
-   before opening candidate skill instructions. Pages contain at most 2,500
-   characters, entry counts, and exact continuation paths. Read further pages as
-   needed; a partial page cannot establish that no relevant skill exists.
-2. Resolve catalog paths against `metadata.catalog-base` in this file's
-   frontmatter, not the agent's symlink or junction directory. Follow those exact
-   local paths.
-   Read selected SKILL.md files before work: the task workflow plus applicable
-   platform or language guidance. Summaries do not replace full instructions.
-3. Preserve the requested scope: a review does not authorize fixes, and finding
-   a skill does not authorize installing more skills or changing configuration.
-4. Reuse instructions within the same task; reconsider selection when scope
-   changes. If no applicable installed skill exists, proceed within the user's
-   scope and identify any missing required instructions.
+1. Read the matching decision route below. Choices are alternatives, not a required
+   workflow sequence. Follow continuation pages if needed; use the full catalog
+   when no choice fits. A partial page cannot prove no applicable skill exists.
+2. Prefer the narrow workflow that covers the task. Add domain, platform, language,
+   or delivery guidance only when needed; do not load a generic workflow alongside
+   a specialist that already covers the work. Conversation language alone does not
+   trigger a writing skill. Honor explicitly requested skills when available.
+3. Read selected SKILL.md files before acting. Resolve every listed path against
+   `metadata.catalog-base`, not a symlink/junction directory. Summaries are not
+   instructions. Report missing required skills without installing them unasked.
+4. Preserve scope: review-only, planning, and measurement do not authorize edits,
+   publication, or deployment. Reuse loaded guidance; reconsider when scope changes.
 
-## Installed catalog
+## Choose by task
+
+{{routes}}
+
+## Full installed catalog
 
 {{catalog}}
 
-The CLI regenerates this skill after installation changes. Do not edit generated
-files; update the source skills or installation selection instead. Verify local
-paths if files were changed outside the CLI. Mention selected skills briefly when
-useful; do not create a separate selection report for every task.
+Routes and catalog pages stay within 2,500 characters, with counts and continuation
+paths. The CLI regenerates them after installation changes; do not edit generated
+files. Mention selection only when useful, without a separate routine report.
 
 ## Saved records
 

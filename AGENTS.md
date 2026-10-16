@@ -2,7 +2,7 @@
 
 This repository distributes standalone Agent Skills through its bundled CLI and the skills CLI.
 
-- Before a new substantive task, read `skills/tooling/index/SKILL.md`, select relevant catalog pages, and read the applicable skills before starting work. Reuse loaded instructions during the same task; reconsider selection when scope changes.
+- Before a new substantive task, read `skills/tooling/index/SKILL.md`, follow the matching task decision route or catalog fallback, and read the applicable skills before starting work. Reuse loaded instructions during the same task; reconsider selection when scope changes.
 - Write all documentation, skill instructions, references, catalogs, and evaluation notes in English.
 - Keep installable skills at `skills/<category>/<skill-name>/SKILL.md`.
 - Keep skill names unique across the repository and equal to their directory names.
@@ -11,7 +11,7 @@ This repository distributes standalone Agent Skills through its bundled CLI and 
 - Use skill-root-relative paths for bundled files. Repository instructions are for maintainers, not installed skill dependencies.
 - Keep templates under `templates/` with a `.tmpl` extension.
 - Prepare new skills with `uv run new_skill.py <category> <name>`, then write the generated instructions and evaluation cases.
-- Update the root and category catalogs when adding, moving, or removing a skill.
+- Keep root/category catalogs and authored task decision routes current when adding, moving, or removing a skill.
 - Follow `CONTRIBUTING.md` for authoring and verification.
 - Task skills follow current user instructions and repository tool requirements; tool-specific skills declare their scope and prerequisites.
 - Saved task records follow user/project paths; otherwise use .agents/artifacts/<run-id>/<skill-name>/ at the target project root. Include the self-contained convention from templates/saved-records.md.tmpl in every skill.

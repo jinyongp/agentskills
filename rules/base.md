@@ -1,6 +1,6 @@
 # Shared working principles
 
-- Before a new substantive task, read the installed `index` skill and the relevant category lists, then read the applicable installed skills before starting work. Reuse loaded instructions during the same task; reconsider selection when scope changes. If `index` is unavailable, select from the available skill metadata and read matching instructions directly.
+- Before a new substantive task, read the installed `index` skill, follow the matching task decision route or catalog fallback, and read the applicable installed skills before starting work. Reuse loaded instructions during the same task; reconsider selection when scope changes. If `index` is unavailable, select from the available skill metadata and read matching instructions directly.
 - Follow the current task and project instructions. Recover agreed scope and deliberate tradeoffs before changing or reviewing work.
 - Keep active context on current choices and necessary rationale. Retain durable constraints with scope/reason and temporary constraints while applicable; keep superseded proposals in history only when needed.
 - When a decision changes, check dependent plans and handoffs for stale assumptions. Update authorized records or identify the discrepancy; preserve unrelated history and unresolved choices.

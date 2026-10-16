@@ -1,3 +1,4 @@
 # Generated index files use canonical LF bytes for read-only freshness checks.
 skills/tooling/index/SKILL.md text eol=lf
 skills/tooling/index/references/catalog/*.md text eol=lf
+skills/tooling/index/references/routes/*.md text eol=lf

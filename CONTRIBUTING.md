@@ -57,6 +57,13 @@ Replace the generated guidance with actual instructions and fill in the evaluati
 Add resource directories only when needed. This command prepares the files;
 writing instructions, evaluating behavior, committing, and publishing are subsequent steps.
 
+Add a task-based choice to `lib/skill-routes.json` before completing a new skill.
+Preparation does not guess its selection condition. State the requested outcome and
+the boundary with nearby workflows; a category or keyword alone is not a decision.
+Both index generators use this source and omit unavailable choices. Full catalogs
+remain the fallback for unassigned tasks; tests require coverage of every distributed
+task skill and reject obsolete route targets. Refresh with the normal checks.
+
 ## File layout
 
 ```text

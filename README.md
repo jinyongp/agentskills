@@ -69,8 +69,11 @@ checks and reports evidence. Skills follow the
 [Agent Skills specification](https://agentskills.io/specification).
 
 The CLI automatically creates an `index` skill from the skills actually installed
-in the selected scope. It includes compact category pages, short intentions, and
-exact local paths. Installation, updates, and removal refresh it automatically;
+in the selected scope. It starts with task decisions that distinguish intended
+outcomes and permissions, then points to exact skill paths. Domain, platform,
+language, and delivery guidance can be added when needed; workflows are not a
+mandatory sequence. Full category catalogs remain available as a fallback.
+Installation, updates, and removal refresh it automatically;
 there is no separate index installation or generation command. Partial skill
 selections are supported, and uninstalled skills do not appear in the index.
 Shared rules direct agents to read it before choosing the applicable instructions.

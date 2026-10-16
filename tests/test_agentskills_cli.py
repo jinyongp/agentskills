@@ -521,6 +521,22 @@ class AgentskillsCliTests(unittest.TestCase):
                 self.run_cli("remove", "--agent", "codex", "--no-rules", *scope)
                 self.assertFalse(index.exists())
 
+    def test_task_decisions_refresh_with_partial_install_and_removal(self):
+        for name in ('spec-generator', 'plan'):
+            shutil.copytree(self.source / 'skills/workflow/alpha', self.source / 'skills/workflow' / name)
+        self.run_cli('add', '--agent', 'codex', '--skill', 'alpha', 'spec-generator', '--no-rules')
+        route = self.skill('index') / 'references/routes/define.md'
+        self.assertIn('Skill: `spec-generator`', route.read_text())
+        self.assertNotIn('Skill: `plan`', route.read_text())
+        self.run_cli('add', '--agent', 'codex', '--skill', 'plan', '--no-rules')
+        self.assertIn('Skill: `plan`', route.read_text())
+        self.run_cli('remove', '--skill', 'spec-generator', '--no-rules')
+        self.assertNotIn('Skill: `spec-generator`', route.read_text())
+        self.assertIn('Skill: `plan`', route.read_text())
+        self.run_cli('remove', '--skill', 'plan', '--no-rules')
+        self.assertFalse(route.exists())
+        self.assertTrue(self.skill('alpha').is_dir())
+
     def test_old_owned_bundled_index_is_replaced_and_user_edits_are_preserved(self):
         self.run_cli("add", "--agent", "codex", "--skill", "alpha", "--no-rules")
         index = self.skill("index")

@@ -47,6 +47,15 @@ examples with `commandLine()` using the current catalog; package identity comes
 from `package.json`. Verify printed commands through actual CLI execution when
 changing the interface, including selected scopes and paths requiring quoting.
 
+`lib/skill-routes.json` owns the authored task selection conditions. The source-tree
+Python generator and installed-index JavaScript renderer use the same definitions,
+filtering choices to available/installed skill paths. No model classifies tasks or
+rewrites routes during installation. Full catalogs retain skills outside the authored
+routes; the bundle's coverage test catches missing or obsolete task names.
+Keep route alternatives tied to outcomes and permission, not required workflow chains.
+Routes share the 2,500-character page limit, exact continuation paths, source-index
+ownership/rollback checks, and installed-index lifecycle handling.
+
 ## Package and lifecycle checks
 
 Run the ownership/update/removal integration checks with the normal test command.

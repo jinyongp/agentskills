@@ -1,5 +1,52 @@
 # Index evaluation
 
+## Task decision routes — 2026-10-16
+
+Revision: uncommitted changes based on `bf9da24e30f73f0f23e3ce93ffe13216c478f3c2`.
+Existing UI skill changes were preserved. The source-tree and installed indexes now
+start with task/permission decisions from `lib/skill-routes.json`. Nine routes cover
+all 65 distributed task skills. Categories remain the complete fallback; a task
+without an authored route remains visible there. Partial installations omit empty
+routes and unavailable choices. This is instruction selection, not a host-enforced
+classifier or a mandatory execution pipeline.
+
+Two fresh subagents received the same twelve requests and their respective index,
+without expected answers or conversation history. Both selected all expected skills,
+including specification versus implementation planning, read-only versus fixing
+reviews, dependency assessment versus upgrade, compound guidance, and no-task input.
+The candidate reported using decision routes without the category catalogs.
+[Requests, expectations, artifact hashes, selections, and reported reads](task-routing.json)
+record the selection rehearsal. Reads were agent-reported, not exported tool traces.
+
+No accuracy improvement was observed: both variants matched 12/12. The mixed batch
+reported eight candidate discovery files versus five baseline files; no token or
+reading-cost saving is claimed. One agent per variant and shared context across
+requests do not establish causal benefit, automatic activation, or underlying task
+quality. Actual task execution and native Windows runtime remain untested here.
+
+Executed checks in Linux/WSL, Node.js 26.10.0:
+
+- Full `uv run --locked check.py`: 66 formats, 182 existing/new tests (one skipped),
+  skills@1.7.0 discovery/installation, and packed CLI project/global lifecycles passed.
+- Source and installed renderer tests cover all task names, partial route filtering,
+  unknown-task fallback, exact paths, 100-choice route pagination, oversized navigation,
+  malformed definitions, empty-route removal, and source output ownership/rollback.
+- Skill-body reads remain prohibited during generation. Catalog and route pages stay
+  within 2,500 characters/code units; root bodies stay within 4,000.
+- Packed installation checks resolve route targets against the canonical index base
+  and reject references to uninstalled skills, including through agent connections.
+- An actual skills@1.7.0 installation of static index/spec-generator/plan copied every
+  source byte, retained bundled route links, resolved installed sibling entrypoints,
+  and excluded evaluation records. Creator checks passed for both index forms and
+  the revised product-specification description.
+
+Initial targeted checks exposed missing LF attributes for new route output and
+bytecode writes from the new CLI helper import; both were fixed without weakening
+read-only tests. The first full run also found an isolated scaffold fixture missing
+the new helper; its copied module set was corrected before the passing full run.
+These setup/output failures were retained as evidence, not counted as selection misses.
+No live installation was updated and no package was published.
+
 ## CLI-generated installed index — 2026-10-16
 
 The npm CLI now generates `index` from the installed shared sources in the selected

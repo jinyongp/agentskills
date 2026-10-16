@@ -72,13 +72,19 @@ apply to every addition; unrelated content is never adopted or overwritten.
 
 `index` is generated locally by the CLI, not shipped as a fixed npm skill bundle.
 Every active managed installation receives it, including rules-only installations.
-It contains only task skills actually installed in this scope, with short catalog
-intentions and exact paths relative to the canonical `metadata.catalog-base`
-directory in its frontmatter. Use that base even when reading the index through
-an agent's symlink or junction. Pages are split at 2,500
-characters and include counts and continuation paths. Skill bodies are not loaded
-to build the index. Other tools' skills and plugins remain discoverable through
-the agent's own available metadata.
+It contains only task skills actually installed in this scope. Start with a task
+decision route: define product behavior, plan work, implement, review, verify, write,
+operate Git, or handle interfaces/motion. Routes distinguish nearby tasks and
+permissions, with additional expertise selected only when needed. They are selection
+guidance, not an automatic execution pipeline.
+
+Both routes and full category catalogs give exact paths relative to the canonical
+`metadata.catalog-base` directory in the frontmatter. Use that base even when reading
+the index through an agent's symlink or junction. Pages are split at 2,500 characters
+and include counts and continuation paths. Empty routes are omitted; installed
+skills without an authored route remain discoverable in the full catalog. Skill
+bodies are not loaded to build the index. Other tools' skills and plugins remain
+discoverable through the agent's own available metadata.
 
 The scope's index covers its shared installed sources, including skills connected
 to another agent. Its paths lead directly to those files; an agent connection is

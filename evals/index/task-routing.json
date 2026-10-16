@@ -1,0 +1,56 @@
+{
+  "date": "2026-10-16",
+  "base_commit": "bf9da24e30f73f0f23e3ce93ffe13216c478f3c2",
+  "revision": "Uncommitted task-routing changes; earlier UI changes were preserved.",
+  "method": "Two fresh read-only subagents, one per variant, received the same batch of requests and the matching index entrypoint. Expected selections and prior conclusions were withheld. They selected instructions without performing the underlying tasks.",
+  "agent_model": "Not exposed; inherited session model.",
+  "read_paths_evidence": "Agent-reported file reads; tool traces and usage metrics were not exported.",
+  "cases": [
+    {"id": "A", "request": "We have rough notes for a community equipment-lending service. Turn them into product requirements covering users, borrowing and returns, and exclusions. Leave the stack undecided.", "expected": ["spec-generator"]},
+    {"id": "B", "request": "Product behavior has been approved. Plan the implementation order and verification for the change; do not reopen the product specification.", "expected": ["plan"]},
+    {"id": "C", "request": "Review the selected pull request for defects and report findings. Do not edit code.", "expected": ["code-review"]},
+    {"id": "D", "request": "Review the selected changes, fix confirmed defects, and repeat until the requested areas are resolved.", "expected": ["review-loop"]},
+    {"id": "E", "request": "A GitHub Actions job fails during dependency installation. Diagnose and correct that failure.", "expected": ["ci-fix"]},
+    {"id": "F", "request": "Explain how an upload travels from its request handler to stored data, following actual code.", "expected": ["trace"]},
+    {"id": "G", "request": "Assess a proposed package for fit, compatibility, maintenance, and footprint. Do not install it.", "expected": ["dependency-review"]},
+    {"id": "H", "request": "Upgrade the chosen dependency to the requested supported version and update the lockfile.", "expected": ["dependency-update"]},
+    {"id": "I", "request": "In a Korean conversation, draft the requested English troubleshooting guide for developers from supplied evidence.", "expected": ["dev-docs", "english-writing"]},
+    {"id": "J", "request": "The mobile browser navigation relies on hover and clips at a narrow width. Correct the affected behavior.", "expected": ["mobile-web", "responsive"]},
+    {"id": "K", "request": "Run existing project checks for the selected change and report results and unchecked scope.", "expected": ["verify"]},
+    {"id": "L", "request": "User says only: Thanks, that answers it.", "expected": []}
+  ],
+  "baseline": {
+    "entrypoint": "/tmp/agentskills-routing-baseline/SKILL.md",
+    "entrypoint_sha256": "252bb118a3882002b056a589782455d50dc7857e050c92afc29e7efa46305efa",
+    "skill_paths_base": "/home/jinyongp/.agents/skills",
+    "selections": {"A": ["spec-generator"], "B": ["plan"], "C": ["code-review"], "D": ["review-loop"], "E": ["ci-fix"], "F": ["trace"], "G": ["dependency-review"], "H": ["dependency-update"], "I": ["dev-docs", "english-writing"], "J": ["mobile-web", "responsive"], "K": ["verify"], "L": []},
+    "reported_discovery_reads": [
+      "/tmp/agentskills-routing-baseline/SKILL.md",
+      "/home/jinyongp/.agents/skills/index/references/catalog/workflow.md",
+      "/home/jinyongp/.agents/skills/index/references/catalog/workflow.page-2.md",
+      "/home/jinyongp/.agents/skills/index/references/catalog/frontend.md",
+      "/home/jinyongp/.agents/skills/index/references/catalog/writing.md"
+    ],
+    "reported_difficulties": "None; workflow continuation was needed for product specification, trace, and verification discovery."
+  },
+  "candidate": {
+    "entrypoint": "/tmp/agentskills-routing-candidate/SKILL.md",
+    "entrypoint_sha256": "e166a90bd95ad92575deb56fc8b20c6a4ef691576044e46557d491a5b01698a8",
+    "template_sha256": "56f4dcbc99d018977b70f074d9336f915ebd3b5810c9ac10c7330eba7d96bb3c",
+    "route_definitions_sha256": "9159e87e8213adbef0de0857b647e484428e6010e999c76b51941ab7adae21ac",
+    "skill_paths_base": "/home/jinyongp/workspace/jinyongp/agentskills/skills",
+    "selections": {"A": ["spec-generator"], "B": ["plan"], "C": ["code-review"], "D": ["review-loop"], "E": ["ci-fix"], "F": ["trace"], "G": ["dependency-review"], "H": ["dependency-update"], "I": ["dev-docs", "english-writing"], "J": ["mobile-web", "responsive"], "K": ["verify"], "L": []},
+    "reported_discovery_reads": [
+      "/tmp/agentskills-routing-candidate/SKILL.md",
+      "/tmp/agentskills-routing-candidate/references/routes/define.md",
+      "/tmp/agentskills-routing-candidate/references/routes/review.md",
+      "/tmp/agentskills-routing-candidate/references/routes/change.md",
+      "/tmp/agentskills-routing-candidate/references/routes/understand.md",
+      "/tmp/agentskills-routing-candidate/references/routes/writing.md",
+      "/tmp/agentskills-routing-candidate/references/routes/interface.md",
+      "/tmp/agentskills-routing-candidate/references/routes/verify.md"
+    ],
+    "reported_difficulties": "One combined entrypoint response was truncated and reread with bounded output. Verification matched on the first route page, so continuation was unnecessary. No category catalog was read."
+  },
+  "assessment": "Both variants matched all 12 expected selections. No accuracy increase was observed. The candidate reported eight unique discovery files versus five for the baseline across this mixed batch; no reading-cost reduction is claimed. This is one selection rehearsal per variant, not independent task execution per case or a controlled effectiveness/token study. Host activation and actual task completion remain untested."
+}

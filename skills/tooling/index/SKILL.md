@@ -1,6 +1,6 @@
 ---
 name: index
-description: "Select installed skills before starting a task. Read a compact catalog by category, then load only the applicable skill instructions."
+description: "Select skills by task, scope, and needed expertise through decision routes, then load the applicable instructions."
 license: MIT
 metadata:
   author: jinyongp
@@ -11,44 +11,55 @@ metadata:
 
 ## Scope
 
-Choose relevant installed skills before starting a new substantive task. This is
-a compact catalog of this collection, not an external search or installer.
-Each listed skill remains usable alone. A listing does not prove installation.
+Choose instructions for the requested outcome and permission, not a category or
+keyword alone. Acknowledgments need no selection. This index covers this collection;
+a listing does not prove installation. Consider other available skill metadata.
 
 ## Procedure
 
-1. Choose categories below from the requested outcome: explain, plan, implement,
-   review, fix, or execute. Read relevant category pages before opening candidate
-   SKILL.md files. Pages stay within 2,500
-   characters and give counts and exact continuation paths. Inspect further pages
-   as needed; a partial list cannot prove that no relevant skill exists.
-2. Match candidates to the session's available skills and exact paths, or inspect
-   known local skill locations. This collection's catalog includes skills that
-   may not be installed. Selection does not authorize installation.
-3. Read selected SKILL.md files before work: the task workflow plus relevant
-   platform, language, or presentation guidance. Preserve the requested scope:
-   code-review reports defects; review-loop also fixes them. Summaries do not
-   replace instructions, and repository paths are not installed paths.
-4. Reuse loaded instructions during the same task; reconsider when scope changes.
-   If no available skill fits, proceed within the user's scope.
+1. Read the matching decision route below. Choices are alternatives, not a required
+   workflow sequence. Follow continuation pages if needed; use the full catalog
+   when no choice fits. A partial page cannot prove no applicable skill exists.
+2. Prefer the narrow workflow that covers the task. Add domain, platform, language,
+   or delivery guidance only when needed; do not load a generic workflow alongside
+   a specialist that already covers the work. Conversation language alone does not
+   trigger a writing skill. Honor explicitly requested skills when available.
+3. Match candidate names to available installed metadata or sibling
+   `../<name>/SKILL.md`, then read selected instructions before acting. `Source`
+   fields locate repository files relative to this skill's root only in a source
+   checkout; they are not installed paths. Report missing required skills without
+   installing them unasked.
+4. Preserve scope: review-only, planning, and measurement do not authorize edits,
+   publication, or deployment. Reuse loaded guidance; reconsider when scope changes.
 
-## Choose a catalog
+## Choose by task
 
 <!-- index:catalog:start -->
 
-- [Frontend](references/catalog/frontend.md) — UI, accessibility, responsive layouts, and motion (15 skills; 1 page).
-- [Git](references/catalog/git.md) — Ignore rules, commits, branches, synchronization, conflicts, PRs, and worktrees (7 skills; 1 page).
-- [Tooling](references/catalog/tooling.md) — Skill selection, skill review, and development tool operation (2 skills; 1 page).
-- [Workflow](references/catalog/workflow.md) — Planning, implementation, review, debugging, testing, and research (33 skills; 2 pages).
-- [Writing](references/catalog/writing.md) — Documentation, drafting, editing, summaries, and conversation styles (10 skills; 1 page).
+- [Understand or investigate](references/routes/understand.md) — Map a project, follow behavior, or investigate an external question.
+- [Define behavior or plan work](references/routes/define.md) — Decide what to build, settle rules, plan implementation, or preserve settled work.
+- [Implement or fix](references/routes/change.md) — Change code, diagnose bugs or CI, upgrade dependencies, migrate data, or optimize.
+- [Review or assess readiness](references/routes/review.md) — Find defects, review and fix, assess a dependency or skill, or prepare human review.
+- [Verify, test, or prepare release](references/routes/verify.md) — Run checks, choose or write tests, measure performance, or prepare QA and rollout.
+- [Operate Git](references/routes/git.md) — Manage ignore rules, branches, commits, conflicts, synchronization, worktrees, or pull requests.
+- [Write, edit, or shape an answer](references/routes/writing.md) — Draft or revise prose, summarize sources, or apply requested language and delivery guidance.
+- [Design or inspect an interface](references/routes/interface.md) — Handle visual hierarchy, responsive behavior, accessibility, mobile browsers, or UI content extremes.
+- [Build or investigate motion](references/routes/motion.md) — Name, implement, debug, review, or measure web and native animation.
+
+## Full catalog
+
+- [Frontend](references/catalog/frontend.md) — 15 skills; 1 page.
+- [Git](references/catalog/git.md) — 7 skills; 1 page.
+- [Tooling](references/catalog/tooling.md) — 2 skills; 1 page.
+- [Workflow](references/catalog/workflow.md) — 33 skills; 2 pages.
+- [Writing](references/catalog/writing.md) — 10 skills; 1 page.
 
 <!-- index:catalog:end -->
 
 ## Result
 
-Continue the requested task using the selected instructions. Mention selected
-skills briefly when useful; do not produce a separate selection report or saved
-record for every task. Missing required instructions remain an explicit gap.
+Routes and catalog pages stay within 2,500 characters, with counts and continuation
+paths. Mention selection only when useful, without a separate routine report.
 
 ## Saved records
 
