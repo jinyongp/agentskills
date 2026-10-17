@@ -43,11 +43,11 @@ const OPTIONS = Object.fromEntries(Object.values(OPTION_GROUPS).flatMap(group =>
 const SCOPE_OPTIONS = Object.keys(OPTION_GROUPS.target.options);
 const EDIT_OPTIONS = Object.keys(OPTIONS);
 const COMMANDS = {
-  add: { description: 'Install selected skills and shared rules; prompt for unspecified choices.', options: EDIT_OPTIONS, mutates: true, selection: 'catalog', requiresAgent: true,
+  add: { description: 'Install selected skills and shared rules; prompt for unspecified choices.', options: EDIT_OPTIONS, mutates: true, defaultYes: true, selection: 'catalog', requiresAgent: true,
     examples: ctx => [{}, { agent: ctx.agents[0], names: ctx.skills.slice(0, 2), yes: true }, { agent: ctx.agents.at(-1), global: true, rulesOnly: true, yes: true }] },
-  update: { description: 'Refresh installed skills and automatically include newly bundled skills.', options: EDIT_OPTIONS, mutates: true, selection: 'installed', discoversSkills: true,
+  update: { description: 'Refresh installed skills and automatically include newly bundled skills.', options: EDIT_OPTIONS, mutates: true, defaultYes: true, selection: 'installed', discoversSkills: true,
     examples: ctx => [{}, { global: true, yes: true }, { names: ctx.skills.slice(0, 1), noRules: true, yes: true }] },
-  remove: { description: 'Remove recorded skills and rules; no selection means all in this scope.', options: EDIT_OPTIONS, mutates: true, selection: 'installed', removes: true,
+  remove: { description: 'Remove recorded skills and rules; no selection means all in this scope.', options: EDIT_OPTIONS, mutates: true, defaultYes: false, selection: 'installed', removes: true,
     examples: ctx => [{ names: ctx.skills.slice(0, 1), noRules: true }, { global: true }] },
   list: { description: 'Show available skills and recorded installations in this scope.', options: [...SCOPE_OPTIONS, 'help'], mutates: false,
     examples: ctx => [{}, { global: true, agent: ctx.agents[0] }] },
@@ -758,7 +758,11 @@ async function main() {
       if (!inspections.length) fail(`No matching installed items at ${stateFile}. Run ${commandLine('list')} with the same scope and agent options.`);
       console.log(preview(scope, base, operations, unchanged));
       if (!operations.length) { console.log('\nAlready up to date.'); return; }
-      if (prompt && !/^y(es)?$/i.test((await ask('Apply? [y/N] ')).trim())) { console.log(CANCELLED); return; }
+      if (prompt) {
+        const defaultYes = definition.defaultYes === true;
+        const answer = (await ask(`Apply? ${defaultYes ? '[Y/n]' : '[y/N]'} `)).trim();
+        if (!(defaultYes && answer === '') && !/^y(es)?$/i.test(answer)) { console.log(CANCELLED); return; }
+      }
       safe(base, path.relative(base, lock));
       try { handle = fs.openSync(lock, 'wx'); } catch (error) {
         if (error.code === 'EEXIST') fail(`Another operation may be running; inspect ${lock} before removing a stale lock`);

@@ -120,6 +120,9 @@ Without selection flags, `remove` targets all recorded skills and rules in scope
   once, agent connections, and separate rule changes.
 - Identical skills and managed rules are not rewritten. An unchanged selection
   succeeds without a confirmation prompt.
+- Final confirmation for `add` and `update` is `Apply? [Y/n]`: Enter applies.
+  For `remove` it is `Apply? [y/N]`: Enter cancels. Explicit `y` or `yes`
+  applies for every command; `n` or an unrecognized answer cancels.
 - Files and records are checked again after confirmation; edits during the prompt
   require a fresh inspection. Waiting for confirmation does not hold the installation lock.
 

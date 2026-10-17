@@ -387,7 +387,9 @@ class AgentskillsCliTests(unittest.TestCase):
             self.run_cli("list", *args, success=False)
         self.run_cli("list", "-a", "codex", "-g")
 
-    def confirm_after(self, args, mutate, response=b"y\n", wait_for=b"Apply? [y/N]"):
+    def confirm_after(self, args, mutate, response=b"y\n", wait_for=None):
+        if wait_for is None:
+            wait_for = b"Apply? [y/N]" if args[0] == "remove" else b"Apply? [Y/n]"
         if os.name == "nt":
             from windows_terminal import confirm_after
             return confirm_after(["node", str(self.cli), *args], self.project, self.env, mutate, response, wait_for)
@@ -940,11 +942,37 @@ class AgentskillsCliTests(unittest.TestCase):
         self.assertEqual(list(self.project.iterdir()), [])
         self.assertEqual(list(self.home.iterdir()), [])
 
+    def test_add_and_update_apply_on_empty_confirmation(self):
+        args = ["add", "--agent", "codex", "--project", str(self.project), "--skill", "alpha", "--no-rules"]
+        self.assertEqual(self.confirm_after(args, lambda: None, response=b"\n"), 0)
+        self.assertTrue(self.skill("alpha").is_dir())
+        source = self.source / "skills/workflow/alpha/SKILL.md"
+        source.write_bytes(source.read_bytes() + b"Updated guidance.\n")
+        self.assertEqual(self.confirm_after(["update"], lambda: None, response=b"\n"), 0)
+        self.assertEqual((self.skill("alpha") / "SKILL.md").read_bytes(), source.read_bytes())
+
+    def test_add_and_update_cancel_on_negative_or_invalid_confirmation(self):
+        self.run_cli("add", "--agent", "codex", "--skill", "alpha", "--no-rules")
+        installed = (self.skill("alpha") / "SKILL.md").read_bytes()
+        state = self.project / ".agents/agentskills.json"
+        original = state.read_bytes()
+        source = self.source / "skills/workflow/alpha/SKILL.md"
+        source.write_bytes(source.read_bytes() + b"Updated guidance.\n")
+        add = ["add", "--agent", "codex", "--project", str(self.project), "--skill", "beta", "--no-rules"]
+        for args in (add, ["update"]):
+            for response in (b"n\n", b"invalid\n"):
+                with self.subTest(command=args[0], response=response):
+                    self.assertEqual(self.confirm_after(args, lambda: None, response=response), 0)
+                    self.assertEqual(state.read_bytes(), original)
+                    self.assertEqual((self.skill("alpha") / "SKILL.md").read_bytes(), installed)
+                    self.assertFalse(self.skill("beta").exists())
+                    self.assertFalse(state.with_suffix(".json.lock").exists())
+
     def test_cancelling_confirmation_does_not_leave_a_lock_or_change_files(self):
         self.run_cli("add", "--agent", "codex", "--skill", "alpha")
         state = self.project / ".agents/agentskills.json"
         original = state.read_bytes()
-        for response, expected in ((b"n\n", 0), (b"\x03", 130)):
+        for response, expected in ((b"\n", 0), (b"n\n", 0), (b"invalid\n", 0), (b"\x03", 130)):
             with self.subTest(response=response):
                 result = self.confirm_after(["remove"], lambda: None, response=response)
                 # cmd.exe can report the native CTRL_C_EXIT status for the
