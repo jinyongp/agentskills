@@ -19,37 +19,36 @@ metadata:
 
 ## Procedure
 
-1. Identify the root, requested paths, and current changes. Start with counts and
-   filenames. Read applicable ancestor/nested `.gitignore`
-   files and inspect effective exclude sources with `git check-ignore -v`.
-   Use `git ls-files -- <paths>` for tracking; do not infer ignore sources. Limit pages
-   to 100 paths or 150 lines; report omitted counts and the next offset. Recover
-   all relevant pages before claiming complete coverage.
-2. Identify generated, private, and required files from project commands and
-   conventions. Do not copy unused templates or assume generated means disposable: lockfiles,
-   fixtures, shared settings, and agent instructions may need tracking.
-   Resolve ambiguity before excluding them.
-3. Choose scope: shared project policy belongs in `.gitignore`; repository-local
-   personal exclusions belong in Git's `info/exclude`; personal cross-project
-   exclusions belong in `core.excludesFile`. Resolve Git metadata paths with
-   `git rev-parse --git-path info/exclude`, including in worktrees. Follow the
-   requested destination; explain scope conflicts. Personal rules do not replace
-   shared policy needed by other clones.
-4. Before adding a rule, check whether the intended paths are already excluded.
-   Distinguish literal duplicates from overlapping coverage. Equal text in
-   different directories has different scope; equal rules separated by `!`
-   exceptions can intentionally exclude a path again. Within a precedence level,
-   the last match wins; deeper `.gitignore` files override ancestor rules.
-   Do not sort, deduplicate, or broaden rules mechanically. Remove redundant
-   rules only within the requested scope and with preserved behavior for excluded
-   and retained paths, including exceptions. Leave uncertain overlaps intact.
-5. Make the smallest edit. Patterns are relative to their ignore file: `/build/`
-   selects its direct build directory; `build/` also selects nested names.
-   Trailing `/` restricts matches to directories. An excluded parent prevents
-   `!` from restoring a child; keep required ancestors traversable. Preserve
-   `.env.example` or other intended templates when excluding local variants.
-   Preserve rule order, escaping, line endings, and a separating newline when
-   appending. Tracked files remain tracked; report them instead of untracking.
+1. Identify the root, requested paths, and changes. Start with counts and filenames.
+   Read applicable ancestor/nested `.gitignore` files; identify effective sources
+   with `git check-ignore -v` and tracking with `git ls-files -- <paths>`.
+   Limit pages to 100 paths or 150 lines; report omitted counts and next offset.
+   Recover relevant pages before claiming complete coverage.
+2. Identify generated, private, and required files from project evidence. Generated
+   does not mean disposable: lockfiles, fixtures, shared settings, and agent
+   instructions may need tracking. Resolve ambiguity; omit unused stack templates.
+3. Use `.gitignore` for shared policy, Git's `info/exclude` for repository-local
+   personal exclusions, and `core.excludesFile` for cross-project personal rules.
+   Resolve metadata with `git rev-parse --git-path info/exclude`, including in
+   worktrees. Honor requested destinations; explain scope conflicts. Personal
+   rules do not replace shared policy needed by other clones.
+4. Check existing coverage before adding rules. Distinguish duplicates from overlap:
+   equal text in different directories has different scope; repeated rules after
+   `!` exceptions can exclude again. Within one precedence level the last match
+   wins; deeper `.gitignore` files override ancestors. Do not sort, deduplicate,
+   or broaden mechanically. Remove redundant rules within scope only when excluded
+   and retained paths, including exceptions, keep their behavior. Preserve uncertain overlaps.
+5. Match intended scope, not automatically the root. For names with the same
+   excluded role across subprojects, omit leading `/` (`node_modules/`,
+   `*.log`); a trailing `/` restricts matches to directories. Use `/build/` for
+   only the ignore file's direct build directory; `build/` covers nested names.
+   Interior slashes also anchor paths relative to that ignore file. Before
+   widening scope, check nested names: `bin/` may contain authored scripts and
+   `dist/` may hold required distribution files. Do not enumerate subproject
+   copies when one recursive rule expresses the policy. Keep ancestors traversable
+   for `!` exceptions; excluded parents prevent restoring children. Preserve
+   templates such as `.env.example`, order, escaping, line endings, and
+   an append separator. Report tracked files instead of untracking them.
 6. Check representative excluded AND retained paths, nested same-name paths,
    and affected exceptions with `git check-ignore -v -n -- <paths>`.
    Verbose output for a `!` pattern means inclusion, not exclusion. Default checks

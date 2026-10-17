@@ -2,6 +2,29 @@
 
 Evidence below separates scripted Git mechanics from untested agent judgment.
 
+## Recursive scope selection — 2026-10-17
+
+Revision: working-tree changes after `427d799`. The skill now chooses scope from
+the excluded role across subprojects, rather than automatically anchoring rules
+to the root. Same-name authored or required content is checked before widening.
+Earlier evidence and body counts below refer to their dated revisions.
+
+Six scripted cases passed in an isolated temporary Git repository:
+
+| Scenario | Expected and observed result |
+| --- | --- |
+| Dependencies in root, application, and package directories | `node_modules/` excludes all three; source remains visible |
+| Disposable build output across subprojects | `dist/` excludes root and nested output |
+| Root-anchored dependency pattern | `/node_modules/` misses nested dependencies, reproducing the reported failure |
+| Authored scripts and distribution fixtures share output directory names | `/bin/` and `/dist/` exclude direct output while retaining `tools/bin/` and `fixtures/dist/` |
+| Repeated local log files | `*.log` excludes root and nested logs while retaining documentation |
+| Pattern with an interior slash | `apps/site/dist/` stays relative to its ignore file, despite having no leading slash |
+
+Environment: Linux/WSL, Git 2.43.0, Python 3.14.8. Replay verifies matching;
+parent instruction review covers role-based decisions. No independent agent run
+or measured improvement is claimed. No permanent helper or test was added for
+Git's own pattern matcher. SKILL.md body: 3,999 characters.
+
 ## Current coverage
 
 - Revision: initial working-tree version, 2026-10-16 (Asia/Seoul).
