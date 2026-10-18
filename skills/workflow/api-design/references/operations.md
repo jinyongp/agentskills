@@ -11,10 +11,9 @@ retry/recovery behavior without exposing secrets or internal implementation deta
 Resolve identity, ownership, tenant boundaries, and resource-level permission where
 the operation needs them; authentication alone does not establish authorization.
 
-For HTTP, use method and status semantics from
-[RFC 9110](https://www.rfc-editor.org/rfc/rfc9110.html). RPC, SDK exceptions, and
-message delivery have their own error boundaries; do not transfer HTTP conventions
-without checking the selected protocol and client behavior.
+For HTTP-specific rules, use [references/http.md](references/http.md). RPC, SDK
+exceptions, and message delivery have their own error boundaries; do not transfer
+HTTP conventions without checking the selected protocol and client behavior.
 
 ## Retries, duplicates, and concurrency
 

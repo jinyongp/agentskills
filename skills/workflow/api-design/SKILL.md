@@ -1,6 +1,6 @@
 ---
 name: api-design
-description: "Design or review consumer-facing APIs and interface changes using explicit semantics, compatibility, errors, retries, and version policy. Use for HTTP, RPC, SDK, or message contracts; preserve project protocols and distinguish design from implementation."
+description: "Design or review API contracts with resource-oriented HTTP defaults and concrete rules for methods, status codes, validation, retries, and compatibility. Also supports RPC, SDK, and message contracts while preserving their protocols."
 license: MIT
 metadata:
   author: jinyongp
@@ -15,10 +15,12 @@ Design, revise, or review the requested consumer-facing interface: HTTP, RPC, SD
 or message contract. Preserve chosen protocols, tooling, supported consumers, and
 project conventions. Design-only returns a contract/proposal; review-only returns
 findings. Implementation, publication, and live client/server changes need task scope.
-This skill works alone; accompanying language or test guidance refines the same task.
-Recover agreed capabilities and omissions before judging completeness; resolve
-uncertain intent before adding operation semantics or recovery flows.
+Default new HTTP APIs to resource-oriented design; preserve established contracts.
+Recover agreed scope and omissions; resolve unclear intent before adding semantics
+or recovery flows.
 
+Read [references/http.md](references/http.md) for HTTP design or review. Apply its
+rules; distinguish protocol constraints from design defaults.
 Read [references/compatibility.md](references/compatibility.md) for evolution,
 serialization, defaults, versions, or consumer migration. Read
 [references/operations.md](references/operations.md) for errors, authorization,
@@ -28,11 +30,11 @@ retries, concurrency, pagination, asynchronous work, or protocol semantics.
 
 1. Establish the consumer task, current interface, outcomes, supported versions,
    and contracts. Inspect relevant callers, specifications, examples, and tests.
-   Separate actual usage, promises, and assumptions; resolve compatibility conflicts.
+   Separate usage, promises, and assumptions.
 2. Define only the operations and concepts needed for the task. Prefer existing
    interface patterns and schema tools over a new protocol or framework. Choose names
    and boundaries from consumer meaning rather than internal database layout.
-   Resolve consequential unknowns; routine naming is not an approval gate.
+   Resolve consequential unknowns; settle routine naming directly.
 3. Specify inputs, outputs, units/encoding, required and optional values, defaults,
    absence/null semantics, side effects, and observable state changes. Identify who
    can act on which resources. Cover relevant success, invalid input, authorization,
@@ -52,8 +54,7 @@ retries, concurrency, pagination, asynchronous work, or protocol semantics.
    conformance. Reuse sufficient coverage; add tests for meaningful compatibility gaps.
 7. Keep changes and conclusions within inspected scope. Begin with selected operation/
    consumer summaries; retrieve relevant detail with omission counts and recovery queries.
-   Keep whole schemas and generated clients outside default input. New reducers need
-   bounded output and failure/recovery verification.
+   Keep full schemas/clients outside default input; verify reducer limits and failures.
 
 ## Result
 

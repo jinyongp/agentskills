@@ -1,5 +1,36 @@
 # API design evaluation
 
+## Resource-oriented HTTP rules — 2026-10-18
+
+Evaluated revision: working-tree changes adding `references/http.md`, its entrypoint
+route, and updated operation-reference routing. Evidence: parent instruction review
+in the current Codex session; model version not recorded. No independent execution
+or live provider/client conformance was performed for this update.
+
+| Case | Expected decision | Parent review |
+| --- | --- | --- |
+| New invoice API proposes `GET /cancelInvoice` | Use a resource-oriented POST transition with defined states and effects | Explicit resource/action and safe-method rules cover this |
+| PUT request updates one property while retaining every omitted writable field | Identify merge-only semantics; choose PATCH or explicit replacement semantics | Method table distinguishes replacement from partial updates |
+| JSON PATCH operation fails midway | Apply no partial patch; describe media type and recovery | Atomicity and patch-format rules explicit |
+| Successful list has no matches; individual resource is missing | Empty successful collection versus missing-resource status | Response rules distinguish both |
+| Invalid credentials, denied access, stale If-Match, invalid business state | Distinguish challenge, permission, precondition, and state-conflict outcomes | Status rules name 401/403/412/409 without treating all failures as conflicts |
+| New validation response versus existing suitable error schema | Stable machine discriminator and field locations; Problem Details optional | No forced envelope or error-format migration |
+| Small fixed list needs no pagination | Preserve an unpaginated contract | Page controls conditional on pagination being needed |
+| Idempotent PUT needs retry without deduplication keys | Evaluate operation idempotence first | Key-specific rules conditional on using keys |
+| Method is implemented but disallowed versus unknown to the server | Distinguish 405 with Allow from 501 | Status rules separate both conditions |
+| List uses offset with established requirements | Preserve justified offset choice; define ordering, limits, and data-change behavior | No universal cursor requirement |
+| Personalized response says Cache-Control: no-cache | Recognize storage/revalidation semantics; choose confidentiality policy deliberately | Cache rules separate no-cache, no-store, and private reuse |
+| Existing RPC operation or legacy HTTP path | Preserve protocol and supported consumers; report relevant defects without silent style migration | Scope and reference distinguish defaults from protocol constraints |
+| Synchronous single-resource API has no batch or async requirement | Apply relevant checks without adding features | Conditional sections and existing scope rule retained |
+
+Validation: `uv run check.py` passed: 67 skills validated; 184 tests ran with one
+skipped; selective installation, bundled files, and packed CLI lifecycle checks
+passed. Temporary uv/npm caches used; generated index unchanged.
+`git diff --check` passed. Current
+gaps: behavioral benefit, independent rule application, and runtime provider
+conformance remain untested.
+Earlier installation and execution results below apply only to their dated revisions.
+
 ## Accepted-scope review — 2026-10-07
 
 Parent instruction review; model version not recorded. Paired case:
