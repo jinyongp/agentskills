@@ -2,6 +2,49 @@
 
 ## Current coverage
 
+- Update/date: working tree based on `fa3fa9c`; 2026-10-21. Added a mandatory
+  recipient-context pass, conditional reader delegation, and general examples.
+- New-case expectation, set before execution: using
+  [equipment request notes](cases/equipment-review-notes.md), produce a proposal
+  understandable without those notes. Remove or explain the staff nickname and
+  omit unrelated move history. Preserve Tuesday review, two business days for a
+  decision/status update, same-day urgent escalation, budget/availability limits,
+  the four-week approval request, and unmeasured benefits. Do not imply delivery
+  guarantees, completed trials, or agreed staffing changes.
+- Actual result: an independent author, given the skill and notes without parent
+  history or expected conclusions, produced
+  [this proposal](results/equipment-review-proposal.md). Parent comparison with
+  the prepared expectations found the nickname and move history omitted, with
+  material deadlines, exceptions, limits, and the requested decision preserved.
+  The author reported reading the reader-review reference, using self-review,
+  and checking against notes. These are agent reports, not captured read traces;
+  no before-review draft was captured to establish what self-review changed.
+- A separate reader received only that proposal, the reader-review reference,
+  the intended audience (operations manager familiar with the coordinator role),
+  and the approval decision. It reported no consequential ambiguities and limited
+  its conclusion to recipient comprehension, without verifying source evidence or
+  feasibility. It received no notes, expected findings, or parent history. Neither
+  agent edited files, ran project tooling, or contacted external services.
+- Checks: 69 skill formats passed; 184 tests completed with one Windows-only skip;
+  selective installation/bundled-file checks and packed CLI lifecycle checks passed.
+  Index freshness, creator quick validation, and Git whitespace checks passed.
+  Initial attempts hit read-only shell/uv/npm caches; writable temporary caches
+  allowed checks to complete. A combined `smoke package` invocation was rejected
+  by the CLI; those checks then passed as separate invocations.
+- Current entrypoint body: 3,895 characters. SHA-256:
+  `37f7f04c2151621e3d5be36e73a2bed972b0d607af4235b20c86b2392fd4d495`.
+  Reader-review reference SHA-256:
+  `242c6a8d41540d4343efbd1012249a30d1cb173d009bc4d5e450e4541ffc0d9e`.
+- Environment: Linux/WSL, Codex; exact agent model/build and usage unknown.
+  Author self-review and a separate recipient pass were exercised. Automatic
+  delegation by an author, technical-case transfer under the revised instructions,
+  implicit discovery, and comparative benefit remain untested. Previous runs below
+  apply only to their recorded revision. That update clarified the repository-wide
+  general-example rule; the subsequent [collection example audit](../instruction-clarity/README.md)
+  records coverage of other skills.
+
+## Earlier coverage
+
 - Revision/date: working tree based on `2c41dad2b4ac97e737a6e15c865e02e10d108596`;
   2026-10-21. New original skill and bundled contract revision 1.
 - Evidence: parent instruction review, format/distribution checks, and two explicit

@@ -52,10 +52,10 @@ the portable contract and conditional evidence without imposing a document layou
    necessary rationale and accessible, precise source pointers; supply permitted
    excerpts or examples when access differs. Name missing artifacts and recovery
    needs. Never claim an inaccessible link transfers its contents.
-6. Check whether a new reader can explain the problem, the basis for the expectation,
-   constraints, and the next verification step from the packet and reachable sources.
-   Resolve or mark material ambiguity; unperformed checks remain pending. Update
-   dependent statements when decisions change, retaining reasons and accepted deferrals.
+6. Before delivery, read [references/reader-review.md](references/reader-review.md)
+   and review the draft from the recipient's available context. Revise supported
+   gaps, then check changes against sources. Unperformed checks remain pending;
+   preserve reasons and accepted deferrals when updating dependent statements.
 
 ## Result
 
