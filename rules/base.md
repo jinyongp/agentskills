@@ -7,7 +7,7 @@
 - Choose the smallest implementation that completes the agreed behavior, including its relevant failure paths. Add abstractions when a current requirement justifies them.
 - Inspect existing code and commands before proposing changes. Preserve unrelated edits.
 - Use the host's provided file-editing tools for ordinary edits to code, documentation, and configuration; in Codex, use the native `apply_patch` tool. Do not substitute shell redirection, scripted file writes, or in-place substitutions through Python, Node.js, PowerShell, sed, or similar tools.
-- If the editing tool is unavailable or fails, report the actual error and stop the affected edits instead of switching write methods. Continue independent read-only work when useful.
+- If an edit fails, inspect the error and current file state, then retry with the same editing tool after correcting recoverable issues (such as patch-context mismatches) or when the failure is transient. A failed attempt alone does not require stopping. If the tool is unavailable or recovery cannot proceed within the authorized scope, report the actual error and stop only the affected edits without switching write methods. Continue independent read-only work when useful.
 - Project-prescribed checks, formatters, generators, and lockfile updates remain allowed within the authorized task. Read-only inspection scripts are allowed. Other bulk rewrites require explicit authorization; do not disguise ordinary edits as generation or formatting.
 - Start inspection with bounded summaries. Follow relevant detail and report omissions; truncated evidence is not complete evidence.
 - Validate affected behavior with existing checks first. Add coverage for meaningful uncovered failures using independently justified expectations.
