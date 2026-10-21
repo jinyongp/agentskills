@@ -16,6 +16,7 @@ This repository distributes standalone Agent Skills through its bundled CLI and 
 - Task skills follow current user instructions and repository tool requirements; tool-specific skills declare their scope and prerequisites.
 - Saved task records follow user/project paths; otherwise use .agents/artifacts/<run-id>/<skill-name>/ at the target project root. Include the self-contained convention from templates/saved-records.md.tmpl in every skill.
 - Keep descriptions within 300 characters and SKILL.md bodies within 4,000 characters. Include only task-changing guidance; preserve essential context and boundaries.
+- Use synthetic, independent examples in all skills and supporting guidance; do not use the maintainer's own repositories or code as teaching material, even with names changed. Preserve actual tool usage, attribution, and exact inputs for reproductions and source-bound deliverables.
 - Load references only for a stated condition. Execute bundled helpers without reading their source by default.
 - Use scripts for repeated mechanical inspection or large-output reduction. Start with bounded summaries; request only relevant detail, with explicit omission counts and pagination.
 - Define and test inspection output limits, including large inputs and failures. Never treat truncated information as complete or shorten exact paths silently.

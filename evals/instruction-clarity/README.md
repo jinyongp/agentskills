@@ -1,5 +1,39 @@
 # Repository instruction clarity review
 
+## Teaching-example portability audit — 2026-10-21
+
+- Revision: working tree based on `fa3fa9c`, preserving the preceding proposal
+  update's uncommitted changes. Scope: the repository's 69 skills and four authoring
+  templates; external installed skills and historical evaluation outputs are not
+  instructional examples in this audit.
+- Method: searched all 288 files under `skills/` and `templates/` for owner/project
+  identifiers, local paths, source links, and example markers. Reviewed all 102
+  extracted candidate paragraphs across 143 nongenerated instructional/catalog
+  prose files, plus unmarked scenario tables and prose comparisons. Extraction
+  omitted frontmatter and the repeated saved-record fragment; those are metadata
+  and workflow conventions, not teaching cases. The 12 Python helpers were searched
+  for identifying names, paths, URLs, and example markers; no matches were found.
+  This is parent text review, not a fresh runtime or full helper source audit.
+- Correction: the git-commit reference used a bounded Git inspection feature as a
+  commit-message example, overlapping this repository's own functionality. Replaced
+  the message block with explicitly fictional search, shopping-cart, and client
+  changes while preserving optional scopes, breaking-change syntax, and the footer.
+  No other owner-specific teaching examples were identified in the reviewed text.
+- Retained: actual package installation commands, bundled-helper invocations,
+  author metadata, licenses, provenance, and technical source links. Those identify
+  the distributed product or its sources rather than illustrating unrelated rules
+  with the maintainer's code. Existing ordinary examples (invoices, account
+  relationships, request deadlines, and language revisions) remain independent.
+- Policy: repository-wide guidance now explicitly prohibits deriving teaching cases
+  from maintainer-owned repositories or code, including name-only substitutions.
+- Validation: `uv run check.py validate --check-index` passed for all 69 skills;
+  `git diff --check` passed. The final owner/path search across all 288 files left
+  only attribution/author metadata and the four actual package-install commands.
+  Runtime helpers, contracts, and dependencies were unchanged, so no new tests or
+  repeated runtime suite were needed. No behavior or comparative-benefit claim is made.
+
+## Earlier instruction review
+
 Parent instruction review on 2026-10-07; model version not recorded. Reviewed all
 49 skill entrypoints and their 33 bundled Markdown references. Scripts were assessed
 through their documented interfaces; this was not a fresh source audit of each helper.

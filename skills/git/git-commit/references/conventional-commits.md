@@ -33,10 +33,12 @@ Optional footers.
   subject are repository conventions, not requirements of the specification.
   Split independent concerns; do not invent effects from filenames alone.
 
+Illustrative messages for fictional search, shopping-cart, and client changes:
+
 ```text
-feat(git): add bounded inspection
-fix(parser): preserve empty values
-refactor(api)!: remove positional options
+feat(search): filter results by date
+fix(cart): avoid applying a discount twice
+refactor(client)!: require named options
 
 BREAKING CHANGE: pass options as a named object.
 ```

@@ -133,6 +133,14 @@ mechanism and its applicable conditions. Use independent, ordinary scenarios
 for teaching examples and transfer checks; changing nouns in the reported example
 does not establish generality. Preserve exact inputs when reproducing that failure,
 and use supplied content when the actual deliverable requires it.
+Apply this rule to every skill's instructions, references, and templates. Omit
+incidental project names, local paths, and session history from teaching examples;
+retain details that make the illustrated decision meaningful. Do not derive teaching
+examples from the maintainer's own repositories or code; changing names or removing
+paths does not make copied implementation details independent. Use synthetic cases
+from ordinary domains. Actual package installation and bundled-helper usage must
+still name the real tools; attribution remains exact. A regression fixture may
+preserve the original input, but is not itself a general teaching example.
 
 Use existing coverage before adding lasting tests. Report observed, inferred, and
 unverified behavior separately. Format validation, installation, scripted replay,
