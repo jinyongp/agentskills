@@ -4,8 +4,11 @@
 Find defects, review and fix, assess a dependency or skill, or prepare human review.
 
 Choose by the requested outcome and permission; these are alternatives, not a sequence.
-Page 1 of 1. Choices 1-8 of 8; 0 on other pages.
+Page 1 of 1. Choices 1-9 of 9; 0 on other pages.
 
+- Investigate a received proposal, independently check its claims, assess related problems and impact, and recommend a decision with a scoped plan; no implementation.
+  Skill: `proposal-assessment`
+  Source: `../../workflow/proposal-assessment/SKILL.md`
 - Review selected code changes for defects or recorded decision compliance and report findings without edits.
   Skill: `code-review`
   Source: `../../workflow/code-review/SKILL.md`

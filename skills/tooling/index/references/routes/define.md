@@ -4,8 +4,11 @@
 Decide what to build, settle rules, plan implementation, or preserve settled work.
 
 Choose by the requested outcome and permission; these are alternatives, not a sequence.
-Page 1 of 1. Choices 1-7 of 7; 0 on other pages.
+Page 1 of 1. Choices 1-8 of 8; 0 on other pages.
 
+- Prepare a proposal for another party to assess, preserving domain context, evidence, desired outcomes, and unknowns; drafting does not submit or implement it.
+  Skill: `proposal`
+  Source: `../../workflow/proposal/SKILL.md`
 - An idea or rough notes need product behavior, user roles, scope, journeys, and acceptance criteria; what to build is still being defined.
   Skill: `spec-generator`
   Source: `../../workflow/spec-generator/SKILL.md`

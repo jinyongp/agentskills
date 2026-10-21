@@ -19,6 +19,8 @@ Find a skill by category. Each record states its own checked revision, evidence,
 - [optimize](optimize/README.md)
 - [plan](plan/README.md)
 - [preflight](preflight/README.md)
+- [proposal](proposal/README.md)
+- [proposal-assessment](proposal-assessment/README.md)
 - [qa-checklist](qa-checklist/README.md)
 - [queue](queue/README.md)
 - [research](research/README.md)

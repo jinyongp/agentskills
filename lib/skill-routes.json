@@ -14,6 +14,7 @@
     "title": "Define behavior or plan work",
     "when": "Decide what to build, settle rules, plan implementation, or preserve settled work.",
     "choices": [
+      {"skill": "proposal", "when": "Prepare a proposal for another party to assess, preserving domain context, evidence, desired outcomes, and unknowns; drafting does not submit or implement it."},
       {"skill": "spec-generator", "when": "An idea or rough notes need product behavior, user roles, scope, journeys, and acceptance criteria; what to build is still being defined."},
       {"skill": "domain-modeling", "when": "Ambiguous business terms or conflicting rules block a decision; clarify their meaning with concrete scenarios."},
       {"skill": "api-design", "when": "Design or review a consumer-facing API contract, including compatibility, errors, retries, and versioning."},
@@ -41,6 +42,7 @@
     "title": "Review or assess readiness",
     "when": "Find defects, review and fix, assess a dependency or skill, or prepare human review.",
     "choices": [
+      {"skill": "proposal-assessment", "when": "Investigate a received proposal, independently check its claims, assess related problems and impact, and recommend a decision with a scoped plan; no implementation."},
       {"skill": "code-review", "when": "Review selected code changes for defects or recorded decision compliance and report findings without edits."},
       {"skill": "review-loop", "when": "Review and fix confirmed defects iteratively within the authorized scope, then recheck affected behavior."},
       {"skill": "security-review", "when": "Review specified code/configuration for exploitable security defects with attacker control and trust-boundary evidence."},

@@ -10,6 +10,7 @@ Choose a skill for the work you need done. These are independent workflows, not 
 - [trace](trace/SKILL.md) — Explain one codebase journey with source citations.
 - [research](research/SKILL.md) — Investigate an external question using primary evidence.
 - [domain-modeling](domain-modeling/SKILL.md) — Resolve ambiguous business terms and rules.
+- [proposal](proposal/SKILL.md) — Prepare proposals with the context and evidence needed for independent assessment.
 - [spec-generator](spec-generator/SKILL.md) — Turn an idea or rough notes into product behavior, roles, scope, and feature flows.
 - [plan](plan/SKILL.md) — Plan implementation, work order, dependencies, and verification for the requested behavior.
 - [queue](queue/SKILL.md) — Draft task queues or preserve plans as local checklists.
@@ -25,6 +26,7 @@ Choose a skill for the work you need done. These are independent workflows, not 
 
 ## Review and verify
 
+- [proposal-assessment](proposal-assessment/SKILL.md) — Investigate proposals, related problems, impact, alternatives, and a scoped follow-up plan.
 - [review-map](review-map/SKILL.md) — Map change risk and reading order for human review.
 - [code-review](code-review/SKILL.md) — Review changes for defects or recorded decision compliance.
 - [review-loop](review-loop/SKILL.md) — Review and fix agreed scope through completion.

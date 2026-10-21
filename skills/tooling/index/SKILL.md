@@ -51,7 +51,7 @@ a listing does not prove installation. Consider other available skill metadata.
 - [Frontend](references/catalog/frontend.md) — 15 skills; 1 page.
 - [Git](references/catalog/git.md) — 7 skills; 1 page.
 - [Tooling](references/catalog/tooling.md) — 2 skills; 1 page.
-- [Workflow](references/catalog/workflow.md) — 33 skills; 2 pages.
+- [Workflow](references/catalog/workflow.md) — 35 skills; 2 pages.
 - [Writing](references/catalog/writing.md) — 10 skills; 1 page.
 
 <!-- index:catalog:end -->
