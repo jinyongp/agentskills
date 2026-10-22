@@ -1,0 +1,21 @@
+{
+  "passed": 16,
+  "checks": [
+    "clamp, meter, status and rotation at 0",
+    "clamp, meter, status and rotation at 140",
+    "clamp, meter, status and rotation at 280",
+    "ArrowRight advances 10px",
+    "ArrowLeft reverses 10px",
+    "real mouse drag advances 160px",
+    "real drag clamps at 280px",
+    "drag reverses while captured",
+    "handle retains keyboard focus",
+    "released drag does not keep moving",
+    "synthetic pointercancel during real drag stops updates",
+    "lost pointer capture stops active drag",
+    "keyboard works after interrupted pointer drag",
+    "all 12000 items retained; final item visible and focusable",
+    "reduced motion keeps immediate keyboard position without animation",
+    "real drag works under reduced motion"
+  ]
+}

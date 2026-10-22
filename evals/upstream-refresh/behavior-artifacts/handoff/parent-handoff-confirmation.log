@@ -1,0 +1,26 @@
+test_boundary (test_preview.PreviewTests.test_boundary) ... ok
+test_configured_retention (test_preview.PreviewTests.test_configured_retention) ... FAIL
+test_old_archive (test_preview.PreviewTests.test_old_archive) ... ok
+
+======================================================================
+FAIL: test_configured_retention (test_preview.PreviewTests.test_configured_retention)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/agentskills-forward-20261022-YjceFn/handoff/tests/test_preview.py", line 9, in test_configured_retention
+    self.assertEqual(removal_plan([{'path':'archive/a.txt','age_days':20}], days),
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                     ['archive/a.txt'] if 20 > days else [])
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: [] != ['archive/a.txt']
+
+Second list contains 1 additional elements.
+First extra element 0:
+'archive/a.txt'
+
+- []
++ ['archive/a.txt']
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.001s
+
+FAILED (failures=1)

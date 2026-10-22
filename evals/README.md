@@ -46,6 +46,7 @@ Distinguish the evidence you obtained:
 - [Repository context review](context-review/README.md)
 - [Instruction clarity review](instruction-clarity/README.md)
 - [Instruction structure and preservation](instruction-structure/README.md)
+- [Upstream source refresh](upstream-refresh/README.md)
 - [Saved-record convention checks](saved-records/README.md)
 
 ## Iterative changes and independent expectations

@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Inventory drawer</title>
+<style>
+  body { font: 16px system-ui; margin: 32px; background: #f3f4f6; }
+  #panel { width: 560px; padding: 16px; background: white;
+    transform: translateX(0px) rotate(-2deg); }
+  #handle { cursor: grab; touch-action: none; }
+  #meter { height: 8px; background: #236939; transform-origin: left;
+    transform: scaleX(0); }
+  #items { height: 320px; overflow: auto; display: grid; grid-template-columns: 1fr 1fr; }
+  .item { margin: 2px; padding: 4px; border: 1px solid #777; }
+  #status { display: block; margin-block: 8px; }
+</style>
+<h1>Inventory</h1>
+<div id="panel">
+  <button id="handle" aria-label="Move inventory drawer">Move drawer (arrow keys or drag)</button>
+  <output id="status">0 px</output>
+  <div id="meter" role="progressbar" aria-label="Drawer position" aria-valuemin="0" aria-valuemax="280" aria-valuenow="0"></div>
+  <div id="items"></div>
+</div>
+<script>
+  const panel = document.querySelector('#panel');
+  const handle = document.querySelector('#handle');
+  const meter = document.querySelector('#meter');
+  const status = document.querySelector('#status');
+  const items = document.querySelector('#items');
+  let travel = 0;
+  let activePointer = null;
+  let startX = 0;
+  let startTravel = 0;
+  function setCount(n) {
+    items.replaceChildren();
+    const fragment = document.createDocumentFragment();
+    for (let i = 0; i < n; i++) {
+      const item = document.createElement('button');
+      item.className = 'item';
+      item.textContent = `Item ${i + 1}`;
+      fragment.append(item);
+    }
+    items.append(fragment);
+  }
+  function setTravel(value) {
+    travel = Math.max(0, Math.min(280, value));
+    // Keep per-frame values local so inventory descendants need no inherited update.
+    panel.style.transform = `translateX(${travel}px) rotate(-2deg)`;
+    meter.style.transform = `scaleX(${travel / 280})`;
+    meter.setAttribute('aria-valuenow', String(travel));
+    status.value = `${travel} px`;
+  }
+  handle.addEventListener('pointerdown', event => {
+    activePointer = event.pointerId;
+    startX = event.clientX;
+    startTravel = travel;
+    handle.setPointerCapture(event.pointerId);
+  });
+  handle.addEventListener('pointermove', event => {
+    if (event.pointerId === activePointer) setTravel(startTravel + event.clientX - startX);
+  });
+  for (const name of ['pointerup', 'pointercancel', 'lostpointercapture']) {
+    handle.addEventListener(name, () => { activePointer = null; });
+  }
+  handle.addEventListener('keydown', event => {
+    if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
+      event.preventDefault();
+      setTravel(travel + (event.key === 'ArrowRight' ? 10 : -10));
+    }
+  });
+  const percentile = (values, q) => [...values].sort((a,b) => a-b)[Math.floor((values.length-1)*q)];
+  window.demo = {
+    setCount, setTravel, lastRun: null,
+    async run({count = 4000, frames = 90} = {}) {
+      setCount(count);
+      setTravel(0);
+      await new Promise(requestAnimationFrame);
+      const intervals = [], work = [];
+      let previous;
+      for (let frame = 0; frame < frames; frame++) {
+        const timestamp = await new Promise(requestAnimationFrame);
+        if (previous !== undefined) intervals.push(timestamp - previous);
+        previous = timestamp;
+        const begin = performance.now();
+        setTravel((frame % 29) * 10);
+        work.push(performance.now() - begin);
+      }
+      const result = {count, frames, intervalP50: percentile(intervals, .5),
+        intervalP95: percentile(intervals, .95), intervalMax: Math.max(...intervals),
+        workP50: percentile(work, .5), workP95: percentile(work, .95),
+        workMax: Math.max(...work), intervals, work};
+      this.lastRun = result;
+      return result;
+    }
+  };
+  setCount(200);
+</script>
+</html>

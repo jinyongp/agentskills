@@ -1,5 +1,18 @@
 # verify evaluation
 
+## Independent execution — 2026-10-22
+
+[Completed readiness assessment](../upstream-refresh/behavior-results.md) obtained
+actual background results, rejected another target's PASS, distinguished failure
+from a blocked check, and recovered existing jobs without duplicate dispatches.
+The task passed; production providers and comparative benefit remain untested.
+
+## Upstream reinforcement — 2026-10-22
+
+[Source comparison and decision cases](../upstream-refresh/README.md) cover actual
+background-check results, target identity, and failed versus unverified outcomes.
+Evidence is parent instruction review; earlier results retain their original scope.
+
 ## Current coverage
 
 - **Focus:** Validation scope, scheduling, and reuse of evidence.

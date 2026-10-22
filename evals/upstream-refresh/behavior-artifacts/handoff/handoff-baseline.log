@@ -1,0 +1,8 @@
+test_boundary (test_preview.PreviewTests.test_boundary) ... ok
+test_configured_retention (test_preview.PreviewTests.test_configured_retention) ... ok
+test_old_archive (test_preview.PreviewTests.test_old_archive) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.000s
+
+OK

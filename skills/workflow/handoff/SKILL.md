@@ -24,8 +24,8 @@ Prepare or resume the same task in a shared repository.
    accepted deferrals, temporary constraints, blockers, and next action. Preserve only
    context unavailable from the repository, including agreed limits and why the
    selected scope is sufficient. Read
-   [references/current-context.md](references/current-context.md) when corrections
-   or changed decisions affect the packet.
+   [references/current-context.md](references/current-context.md) when corrections,
+   changed decisions, or potentially stale evidence affect the packet.
 2. **Lookups.** For recoverable facts, give file/section, narrow search,
    or scoped command. Include only lookups needed to resume. Repository instructions,
    plans, code, Git state, environment setup, and durable logs stay at their sources.

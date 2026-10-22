@@ -15,11 +15,23 @@ For measurement costs, inspect layout reads and invalidations. For paint/composi
 inspect affected surfaces, effects, and layer changes. Transform/opacity often reduce
 layout work but large surfaces, filters, and promotion can retain other costs.
 
+**Cost grows with content.** When a transform-driven interaction slows as descendants
+are added without framework renders, inspect per-frame custom-property writes on an
+ancestor. Inherited values can cause descendant style recalculation. Confirm that
+cost in the trace before changing the representation. Compare a direct transform
+on the moving element, or a supported non-inheriting registered property only when
+descendants do not need its value. Preserve transform composition and intended
+consumers; changing inheritance changes behavior. See
+[custom-property inheritance](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Cascading_variables/Using_custom_properties#inheritance_of_custom_properties)
+and [style-invalidation measurements](https://web.dev/blog/at-property-performance).
+
 Track visual values outside render-per-frame state where appropriate; semantic state
 still belongs in the framework. Prefer explicit transition properties and avoid
 competing transform owners. Verify any change to a library's transform representation
 with installed-version behavior and traces; hardware acceleration is not guaranteed.
-See [Motion values](https://motion.dev/docs/react-motion-value).
+A shorthand such as `x` does not establish its execution path across library versions.
+See [Motion values](https://motion.dev/docs/react-motion-value) and
+[Motion performance](https://motion.dev/docs/performance).
 
 Use layer promotion only for a measured issue and consider memory/rasterization cost.
 Lowering blur or adding will-change is not a universal fix. CPU throttling is a

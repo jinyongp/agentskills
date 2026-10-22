@@ -1,0 +1,7 @@
+{
+  "job_id": "job-657500f8e9",
+  "check": "config",
+  "target": "91faafbc9126577d6e677537c0d6c9db2c7fe94a435033ce142247bac9bd6b09",
+  "state": "completed",
+  "result_path": "ci_state/job-657500f8e9.result.json"
+}

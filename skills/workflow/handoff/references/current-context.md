@@ -1,6 +1,14 @@
 # Current decisions and constraints
 
-Read when persisting or forwarding corrections, rejections or changed decisions.
+Read when persisting or forwarding corrections, rejections, changed decisions,
+or potentially stale evidence.
+
+**Anchor time-sensitive claims.** For a carried observation that could change, retain
+its date and source lookup. Identify code evidence by repository/revision and any
+relevant uncommitted inputs; link an existing evidence record instead of duplicating
+Git state in the packet. This describes the observed snapshot, not the resumed
+workspace. Confirm the current state before reusing it. Preserve superseded claims
+in history only when needed, clearly separated from the current decision.
 
 - Record a selected design or preference as the current choice, with rationale
   needed to preserve its scope. Remove superseded alternatives from active context;

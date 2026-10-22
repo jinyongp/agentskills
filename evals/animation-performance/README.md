@@ -1,5 +1,18 @@
 # Animation performance evaluation
 
+## Independent execution — 2026-10-22
+
+[Completed browser task and evidence](../upstream-refresh/behavior-results.md)
+include matched baseline/candidate measurements, trace attribution, 16 interaction
+assertions, and parent preservation checks. The selected task passed; physical
+devices, comparative skill benefit, and automatic discovery remain untested.
+
+## Upstream reinforcement — 2026-10-22
+
+[Source comparison and decision cases](../upstream-refresh/README.md) cover the new
+conditional style-recalculation probe and inheritance/version limits. Evidence is
+parent instruction review; no application performance was measured.
+
 | Scenario | Request | Expected result | Parent review |
 | --- | --- | --- | --- |
 | Web stalls | Improve frame pacing in a selected drawer | Capture baseline, attribute cost, compare matched runs | Evidence precedes optimization |

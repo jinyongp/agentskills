@@ -1,0 +1,43 @@
+{
+  "pass": true,
+  "values": [
+    {
+      "input": -20,
+      "translation": 0,
+      "rotationDegrees": -1.999999842926156,
+      "meterScale": 0,
+      "status": "0 px"
+    },
+    {
+      "input": 0,
+      "translation": 0,
+      "rotationDegrees": -1.999999842926156,
+      "meterScale": 0,
+      "status": "0 px"
+    },
+    {
+      "input": 140,
+      "translation": 140,
+      "rotationDegrees": -1.999999842926156,
+      "meterScale": 0.5,
+      "status": "140 px"
+    },
+    {
+      "input": 280,
+      "translation": 280,
+      "rotationDegrees": -1.999999842926156,
+      "meterScale": 1,
+      "status": "280 px"
+    },
+    {
+      "input": 400,
+      "translation": 280,
+      "rotationDegrees": -1.999999842926156,
+      "meterScale": 1,
+      "status": "280 px"
+    }
+  ],
+  "itemCount": 12000,
+  "lastItem": "Item 12000",
+  "keyboardPosition": 150
+}

@@ -1,6 +1,16 @@
-# Reusing validation evidence
+# Validation results and reuse
 
-Read when deciding whether an earlier result still applies.
+Read for background/delegated checks or when deciding whether an earlier result
+still applies.
+
+**Confirm the result.** A successful launch, queue receipt, or delegation prompt
+does not establish that a check ran. Retain the job identity and obtain its actual
+result through the host's supported mechanism. Match the result to the requested
+command, target state, and outcome; a terminal worker status alone does not prove
+the required check passed. Report an observed check failure as failed. A missing or
+pending result, or a worker failure without check results, leaves that criterion
+unverified. Continue independent checks without launching duplicate work merely
+because the result is delayed.
 
 - Record the command, outcome, checked behavior, relevant code/configuration state,
   and environment with the evidence. A commit ID alone omits dirty and untracked

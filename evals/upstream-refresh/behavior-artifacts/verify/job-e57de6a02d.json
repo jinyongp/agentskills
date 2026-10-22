@@ -1,0 +1,7 @@
+{
+  "job_id": "job-e57de6a02d",
+  "check": "contract",
+  "target": "91faafbc9126577d6e677537c0d6c9db2c7fe94a435033ce142247bac9bd6b09",
+  "state": "worker_failed",
+  "error": "PARTNER_SANDBOX_TOKEN is unavailable; contract command was not executed"
+}

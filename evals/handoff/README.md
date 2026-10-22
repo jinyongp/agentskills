@@ -1,5 +1,18 @@
 # handoff evaluation
 
+## Independent execution — 2026-10-22
+
+[Writer and fresh-receiver execution](../upstream-refresh/behavior-results.md)
+preserved intentional dirty configuration, rejected stale passing evidence, found
+the current test failure, and retained scope/permission limits. Both tasks passed;
+this is selected-task evidence, not a comparative benefit study.
+
+## Upstream reinforcement — 2026-10-22
+
+[Source comparison and decision cases](../upstream-refresh/README.md) cover dated
+observations and snapshot-aware reuse without mandatory new records. Evidence is
+parent instruction review; earlier results retain their original scope.
+
 ## Current coverage
 
 - **Focus:** Transfer of current decisions, scope, and evidence across sessions.

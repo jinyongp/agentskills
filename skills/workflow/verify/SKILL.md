@@ -22,8 +22,7 @@ Run checks for requested behavior and preservation criteria.
 The optional runner needs Python 3.11+ on POSIX; checks need their own environment.
 On Windows, run checks directly with project log capture.
 
-Read [references/evidence.md](references/evidence.md) when reusing results across
-edits, configuration changes, or a handoff.
+Read [references/evidence.md](references/evidence.md) for background checks or reusing evidence.
 Read [references/cadence.md](references/cadence.md) when scheduling checks across
 several work units or preparing an expensive final check.
 
