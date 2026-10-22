@@ -9,12 +9,26 @@ metadata:
 
 # Animate
 
-## Scope
-
 Implement the requested web motion in its authorized area. Gestures, route
 transitions, sheets, drawers, and keyboard-aware interactions belong here too.
-Inspect local tokens, components, dependencies, and browser requirements first.
-Reuse the simplest capable existing mechanism; follow user tool requirements.
+
+## Core rules
+
+- **Preserve interaction.** Keep hit targets, source order, names, focus, and
+  operability during transitions. Use accessible primitives for dialogs and menus;
+  animation does not supply their behavior. Keyboard and explicit controls must
+  reach the same required outcome as gestures.
+- **Handle interruption.** Model resting, entering, exiting, interrupted, and
+  cancelled states as needed. Retarget from the current visual state; respect the
+  intended gesture outcome and relevant velocity. Clean up listeners, timers,
+  and stale completions.
+- **Retain reduced-motion behavior.** Keep information and actions while reducing
+  nonessential travel, parallax, looping, and overshoot. Use instant updates or
+  gentler feedback as appropriate. Hover is optional; essential actions must
+  remain available to touch and keyboard users.
+- **Use project tools.** Inspect tokens, components, dependencies, and browser
+  requirements first. Reuse the simplest capable existing mechanism and follow
+  user tool requirements. Unrelated cleanup and automatic installs are out of scope.
 
 Read [references/interactions.md](references/interactions.md) for gestures, sheets,
 route transitions, scroll effects, or viewport/keyboard coordination. Read
@@ -25,27 +39,16 @@ only when the project uses Motion for React. Read only relevant sections.
 
 ## Decisions and implementation
 
-- Establish the state change and user benefit: orientation, continuity, feedback,
+- **Purpose and response.** Establish the state change and user benefit: orientation, continuity, feedback,
   or explanation. Frequent actions need especially prompt feedback. Keep an instant
   response when animation would delay work; a request for motion still warrants
   explaining a concrete usability conflict.
-- Reuse product motion tokens and supported primitives. Choose easing or a spring
+- **Timing.** Reuse product motion tokens and supported primitives. Choose easing or a spring
   from the interaction, distance, and existing conventions, then tune the rendered
   result. Starting values are proposals, not universal acceptance thresholds.
-- Model resting, entering, exiting, interrupted, and cancelled states as needed.
-  Retarget from the current visual state; release must respect the intended gesture
-  outcome and relevant velocity. Clean up listeners, timers, and stale completions.
-- Prefer transform/opacity for cheap motion, while preserving layout and appearance.
+- **Rendering cost.** Prefer transform/opacity for cheap motion, while preserving layout and appearance.
   Layout animation can be justified by a real need; measure relevant cost instead of
   banning a property. Browser compositing and frame rate require evidence.
-- Preserve hit targets, source order, names, focus, and operability during transitions.
-  Use accessible component primitives for dialogs and menus; an animated shell
-  does not supply their behavior. Keyboard and explicit controls must reach the
-  same required outcome as gestures.
-- Implement a reduced-motion alternative that retains information and actions.
-  Reduce nonessential travel, parallax, looping, and overshoot; choose instant
-  updates or gentler feedback as appropriate. Pointer-driven hover is optional;
-  essential actions remain available to touch and keyboard users.
 
 ## Verify and deliver
 
@@ -55,7 +58,6 @@ tooling and representative load when relevant. Inspect the final implementation
 and reuse sufficient existing checks; add tests only for uncovered behavior.
 Report the behavior, tool choice, checks, and unverified conditions. If runtime
 access is unavailable, distinguish source inspection from observed motion.
-Keep unrelated cleanup and automatic dependency installation outside task scope.
 
 ## Saved records
 

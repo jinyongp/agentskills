@@ -9,12 +9,21 @@ metadata:
 
 # Prototype
 
-## Scope
-
 Build a prototype to answer a named design question: compare UI directions, or
 exercise a business rule/state model. Ordinary implementation and narrow repairs
 need no prototype. Preserve the requested surface and product constraints; stage
 larger explorations without automatically reducing them to one component.
+
+## Core rules
+
+- **Isolate exploration.** Use a preview route, component story, or standalone
+  artifact as appropriate. Keep production behavior intact. Reuse components and
+  tokens without production imports from disposable previews.
+- **Compare fairly.** Hold task, content, and relevant states comparable. Identify
+  demo data and simulated integrations. Claimed controls must work within the
+  simulation, with required narrow-layout, keyboard, and reduced-motion access.
+- **Separate integration.** Exploration alone does not authorize replacing the
+  production design. Use an already-made or delegated selection when applicable.
 
 Inspect the relevant context, stack and requirements; reuse project preview tools.
 For UI comparisons, read [references/comparison.md](references/comparison.md).
@@ -23,22 +32,15 @@ follow that branch instead of building compulsory visual alternatives.
 
 ## Build and compare
 
-- Name the decision each direction explores and what the comparison will reveal:
+- **Decision.** Name what each direction explores and what comparison will reveal:
   density may trade scanning space for visible rows; navigation may trade direct
   access for fewer simultaneous choices. Recolors suffice when palette is the decision.
   Choose the number from the brief and useful decision space;
   present each direction's benefit and cost without padding the set.
-- Use an isolated preview route, component story, or standalone artifact as appropriate.
-  Keep production behavior intact during exploration. Reuse shared components/tokens
-  without introducing production imports from disposable previews.
-- Hold the task, content, and relevant states comparable. Demonstration data is
-  identified; simulated integrations are explicit. Each variant's claimed controls
-  must work within that simulation, and required access must survive narrow layouts,
-  keyboard input, and reduced motion.
-- Show alternatives at realistic size and in context. A simple accessible selector
+- **Presentation.** Show alternatives at realistic size and in context. An accessible selector
   can switch versions; match project conventions rather than imposing fixed chrome.
   Compare more than the attractive resting state when the decision concerns a flow.
-- Exercise each variant with available project tools. Report source-only or static
+- **Verification.** Exercise each variant with project tools. Report source-only or static
   verification if previews cannot run. Return the exact preview location, brief
   direction/tradeoff comparison, checks, and gaps. Keep source dumps and unrelated
   screens outside default input; inspect relevant detail before claiming coverage.
@@ -46,8 +48,7 @@ follow that branch instead of building compulsory visual alternatives.
 ## Selection and integration
 
 Let the user select when selection is part of the request. If a choice was already
-made or delegated, use that authorization and explain the decision. Exploration alone
-does not authorize replacing the production design.
+made or delegated, use that authorization and explain the decision.
 
 Integrate the selected direction when requested. Follow local structure, remove
 disposable preview wiring created for this run unless retention is requested, and

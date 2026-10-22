@@ -45,6 +45,7 @@ Distinguish the evidence you obtained:
 - [Authored task execution](task-execution/README.md)
 - [Repository context review](context-review/README.md)
 - [Instruction clarity review](instruction-clarity/README.md)
+- [Instruction structure and preservation](instruction-structure/README.md)
 - [Saved-record convention checks](saved-records/README.md)
 
 ## Iterative changes and independent expectations

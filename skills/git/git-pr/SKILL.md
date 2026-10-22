@@ -9,45 +9,47 @@ metadata:
 
 # Git PR
 
-## Scope
+Draft or publish the requested GitHub PR text for the verified change.
 
-- Use Git; publishing also needs authenticated gh or a GitHub connector.
+## Core rules
+
+- **Verify identity.** Use Git; publishing also needs authenticated gh or a GitHub connector.
   Follow repository instructions/templates. Resolve repository, base, head owner/
   branch, and draft/ready state; use verified metadata for an existing PR.
-- Drafting authorizes text only. Reuse authorization for requested creation/update.
+- **Match authority.** Drafting authorizes text only. Reuse authorization for requested creation/update.
   Commits, review, merge/close, reviewers, labels, and assignments need their own scope.
-- Keep uncommitted work separate from published contents; preserve it.
+- **Published scope.** Keep uncommitted work separate from published contents; preserve it.
 
-## Procedure
+## Prepare and publish
 
-1. Inspect identity, branch and local-change summaries first. Distinguish local
+1. **Identity.** Inspect identity, branch and local-change summaries first. Distinguish local
    HEAD from the PR's published head, especially for forks. Verify authentication
    before remote writes without printing credentials.
-2. Determine the merge base. Start with committed file/commit summaries, then read
+2. **Change.** Determine the merge base. Start with committed file/commit summaries, then read
    relevant diff in bounded path/hunk queries: `git log <base>..<head>` and
    `git diff <base>...<head> -- <path>`. Independent base changes and uncommitted
    work are excluded. Refresh stale refs when needed; report shallow/fork limits.
    Inspect the complete requested change progressively; an empty change needs no PR.
-3. Write for a reviewer new to the task: concrete problem, resulting behavior,
+3. **Reader context.** Write for a reviewer new to the task: concrete problem, resulting behavior,
    actual checks, material limitations/migration. Follow the template, omit abandoned
    approaches, and preserve relevant existing context outside the requested edits.
    Use a before/after example or compact visual when it clarifies changed behavior.
    For consequential changes, name affected consumers/data, rollout needs, and
    whether reversal restores the prior state. Omit empty risk sections and avoid
    claiming observed results for checks that were not run.
-4. Return prepared text for drafting. For publication, verify the exact target/
+4. **Draft or publish.** Return prepared text for drafting. For publication, verify the exact target/
    published head; push only the selected branch when required and authorized by
    the PR request. No force-push, unrelated branches, or automatic tag publication.
-5. Check open PRs by target repository, head owner/branch, and base before creating.
+5. **Avoid duplicates.** Check open PRs by repository, head owner/branch, and base before creating.
    Reuse the applicable PR; disambiguate multiple matches. Use structured connector
    fields or gh's explicit repo/base/head/title options and `--body-file <file>`;
    editing uses the verified PR identity. Preserve literal text and real newlines
    in a temporary file outside the worktree. Quote arguments or use argument arrays.
-6. Honor requested draft/ready state and state missing readiness checks. Preview
+6. **Write safely.** Honor requested draft/ready state and state missing readiness checks. Preview
    text locally: `gh pr create --dry-run` can push and is not read-only.
    On uncertain write results, query before retrying; avoid duplicate creation or
    blind overwrites of concurrent edits.
-7. Read back URL, base/head and head commit, title/body, and draft state. Verify
+7. **Read back.** Read URL, base/head and head commit, title/body, and draft state. Verify
    the intended PR changed while unrelated fields/PRs stayed intact. Attach its
    URL when the host provides a task attachment tool.
 

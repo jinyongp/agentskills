@@ -9,23 +9,26 @@ metadata:
 
 # CI Fix
 
-## Scope
-
 Fix or diagnose CI for the named repository, revision, PR, and provider. Follow
 project tools and existing authorization. Diagnosis alone leaves source unchanged;
 pushes, reruns, replies, merges, and publication follow their requested scope.
 Do not weaken checks, permissions, branch protection, or accepted product limits.
 
+## Core rules
+
+- **Current revision only.** An older green run is stale evidence. Distinguish
+  failed, pending, cancelled, skipped, missing, infrastructure, and human-gated
+  checks. Failed authentication or lookup is not an empty or clean check set.
+- **Confirmed causes.** Keep observed causes separate from hypotheses; unrelated
+  local success does not disprove a remote failure.
+
 For GitHub status/log retrieval, read [references/github.md](references/github.md).
 When adding or editing Actions workflows, read [references/actions.md](references/actions.md).
 
-## Procedure
+## Diagnose and verify
 
-1. Identify the exact revision and failed jobs/steps, including matrix variants and
-   check origin. Distinguish failure, pending, cancelled, skipped, missing checks,
-   infrastructure errors, and human gates. A green run for an older commit is stale
-   evidence. An authentication or lookup failure is not an empty or clean check set.
-2. Start with status/count summaries and selected failure logs. Capture noisy finite
+1. **Target.** Identify exact revision, failed jobs/steps, matrix variants, and check origin.
+2. **Logs.** Start with status/count summaries and selected failures. Capture noisy finite
    commands with the Python 3.11+ POSIX helper, without reading its source:
 
    `python3 scripts/capture.py run --cwd <root> --log <new-path> -- <command> <args>`
@@ -37,20 +40,19 @@ When adding or editing Actions workflows, read [references/actions.md](reference
    or local execution, not remote CI success. Keep secrets out of shared excerpts.
    On native Windows, run commands directly and capture logs with project tools;
    share bounded excerpts with explicit omissions.
-3. Trace the failing assertion, compiler/lint error, dependency resolution, runtime
+3. **Cause.** Trace failing assertion, compiler/lint error, dependency resolution, runtime
    mismatch, or credential/resource failure to its cause. Reproduce with relevant
-   versions and project commands when practical. Keep observed causes separate from
-   hypotheses; unrelated local success does not disprove a remote failure.
-4. Correct confirmed causes within scope; preserve unrelated changes and checks.
+   versions and project commands when practical.
+4. **Correction.** Fix confirmed causes within scope; preserve unrelated changes and checks.
    When workflows change, prefer the latest compatible stable Action releases,
    verify them upstream, and preserve full SHA pins and explicit supported runner
    images. Use the project's updater, including actions-up where required; review
    its changes and compatibility rather than accepting output blindly.
-5. Run the affected local check. Add coverage only for a meaningful uncovered
+5. **Validation.** Run the affected local check. Add coverage only for meaningful uncovered
    behavior. For authorized pushes/reruns, identify the new run and head revision,
    then inspect its relevant checks and fresh failures. External review comments
    are claims to verify against the accepted contract, not automatic feature requests.
-6. Finish when the selected current-revision checks are verified successful.
+6. **Completion.** Finish when selected current-revision checks are verified successful.
    Pending, cancelled, skipped, missing, or approval-blocked checks remain explicit.
    Repeating the same failure needs new evidence; unavailable access, service
    outages, and human gates need a reported next action, not repeated code changes.

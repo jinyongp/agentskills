@@ -9,45 +9,44 @@ metadata:
 
 # English writing
 
-## Scope and composition
-
 Create, edit, or review the requested English passages. Follow the user's mode,
 audience, medium, and degree of intervention. This skill works alone; when a
 drafting or editing workflow is also loaded, refine its language within that
 workflow and return one result. Review-only requests produce findings, not edits.
 Select by deliverable language; preserve other-language quotations, code, and names.
 
-## Meaning and voice
+## Core rules
 
-Use supplied or verified evidence. Preserve attribution, negation, quantities,
+- **Meaning before brevity.** Preserve attribution, negation, quantities,
 conditions, uncertainty, commitments, and intentional personality. Editing does
-not authorize invented facts or translation. Inspect relevant adjacent context;
+not authorize invented facts or translation. Use supplied or verified evidence.
+- **Context before correction.** Inspect relevant adjacent context;
 for large sources, state inspected sections and material omissions. Ask only about
 ambiguities that materially affect meaning or the requested voice.
 
 ## English expression
 
-- Match vocabulary, rhythm, and directness to the reader and genre. Follow requested
+- **Register.** Match vocabulary, rhythm, and directness to the reader and genre. Follow requested
   spelling and usage conventions, or an established publication style; use them
   consistently. Retain exact quotations, identifiers, and proper names.
-- Keep subjects, verbs, and modifiers close enough to make relationships clear.
+- **Syntax.** Keep subjects, verbs, and modifiers close enough to make relationships clear.
   Resolve ambiguous pronouns and misplaced qualifiers. Split or reshape a sentence
   when relationships become hard to follow, not because it exceeds a fixed length.
-- Prefer concrete verbs when noun-heavy phrasing obscures the action:
+- **Concrete verbs.** When noun-heavy phrasing obscures the action,
   "conduct an assessment of" can become "assess". Keep established technical nouns
   and useful abstractions; scientific or legal prose may need greater precision.
-- Use active voice when the actor matters. Use passive voice when the process,
+- **Voice.** Use active voice when the actor matters. Use passive voice when the process,
   recipient, or unknown actor is the point. "The samples were stored at -20°C"
   need not acquire an invented researcher merely to avoid a passive construction.
-- Preserve modal strength and scope: may, can, should, and must are not interchangeable.
+- **Qualification.** Preserve modal strength and scope: may, can, should, and must are not interchangeable.
   Keep distinctions such as some versus all, association versus cause, and estimate
   versus measured result. Check that a moved only or not still modifies the same claim.
-- For praise or a vague implication, identify the supported fact or consequence;
+- **Claims and links.** For praise or a vague implication, identify the supported fact or consequence;
   state it directly, or cut the evaluation if it adds none. Check that therefore
   has a supported cause and however a real contrast; otherwise connect the actual
   relation or remove the connector. Keep intentional repetition,
   idioms, humor, contractions, or restrained formality when they suit the voice.
-- Use parallelism and punctuation to clarify relationships. Lists should group
+- **Relationships.** Use parallelism and punctuation to clarify relationships. Lists should group
   comparable items; paragraphs need connected thought. Em dashes, sentence fragments,
   and words such as "robust" are contextual choices, not proof of poor writing or
   AI authorship. Avoid mechanical synonym swaps or a forced conversational tone.

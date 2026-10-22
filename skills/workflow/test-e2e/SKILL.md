@@ -9,46 +9,45 @@ metadata:
 
 # Test E2E
 
-## Scope
+Verify a critical user journey from an actual application or CLI entrypoint to
+observable completion. Name the system boundary and what remains outside it.
 
-- Verify a critical user journey from an actual application or CLI entrypoint to
-  observable completion. Name the system boundary and what remains outside it.
-- Use the user's tools and project harness within the requested environment. Keep
-  relevant application components real; disclosed external substitutes limit the claim.
+## Core rules
 
-## Admission
-
-- Name the user outcome and failure that cheaper existing checks cannot expose.
+- **Added evidence.** Name the outcome and failure cheaper existing checks cannot expose.
   Reuse adequate coverage; a feature edit does not automatically need a new E2E case.
-- Keep representative journeys and distinct system failures. Do not repeat all unit
+- **Journey coverage.** Keep representative journeys and distinct failures. Do not repeat all unit
   branches, input combinations, or static/schema rules through the whole system.
-- Assert behavior, accessibility, and required compatibility. Exact text, attributes,
+- **Justified assertions.** Assert behavior, accessibility, and compatibility. Exact text, attributes,
   snapshots, ordering, or layout need a concrete contract rather than current source.
-- Keep setup, dependencies, execution, and upkeep proportional to added confidence.
+- **Proportionate cost.** Keep setup, dependencies, execution, and upkeep proportional to confidence.
 
-## Procedure
+Use user tools and the project harness in the requested environment. Keep relevant
+application components real; disclosed external substitutes limit the claim.
 
-1. Identify the user, entrypoint, meaningful actions, completion evidence, existing
+## Drive and verify the journey
+
+1. **Contract.** Identify user, entrypoint, actions, completion evidence, existing
    checks, and required components. Resolve missing expected behavior before choosing
    assertions; state the intended test environment and unavailable dependencies.
-2. Create owned accounts/data/resources or an isolated fixture using project tooling.
+2. **Isolation.** Create owned accounts/data/resources or an isolated project fixture.
    Setup may bypass unrelated journeys, but the behavior under test must follow the
    actual entrypoint and relevant real components. Preserve unrelated data and work.
-3. Drive the journey like its user. For UI, prefer semantic roles, accessible names,
+3. **Real entrypoint.** Drive the journey like its user. For UI, prefer semantic roles, accessible names,
    or a stable automation contract over incidental DOM structure and CSS classes.
    For CLI, use the actual command and relevant exit/output or resulting artifacts.
-4. Wait for observable readiness/completion with bounded conditions. Avoid fixed sleeps
+4. **Readiness.** Wait for observable readiness/completion with bounded conditions. Avoid fixed sleeps
    and retries that hide failures or repeat unsafe actions. Keep each case independent
    of execution order and prior test state.
-5. Verify the user-visible result and consequential state needed by the journey, not
+5. **Outcome.** Verify user-visible result and consequential state, not
    merely a mocked call or successful HTTP status. Check persistence after reload or
    a new read when required. Retain exact protocol or accessibility constraints where
    meaningful; omit incidental rendering details.
-6. For a known defect, confirm the scenario exposes it when the prior faulty state is
+6. **Regression.** Confirm a known defect is exposed when the prior faulty state is
    available. Run the selected journey and required checks; distinguish application,
    harness, and infrastructure failures. A substituted component leaves its actual
    integration unverified.
-7. Capture native failure evidence when useful: selected logs, trace, screenshot, or
+7. **Evidence and cleanup.** Capture useful native evidence: selected logs, trace, screenshot, or
    output artifact. Return a bounded summary first and inspect relevant details only.
    Clean up owned resources; do not broaden the suite to meet test-count targets.
 

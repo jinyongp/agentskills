@@ -9,19 +9,25 @@ metadata:
 
 # Debug
 
-## Scope
+Diagnose the reported symptom and apply a scoped fix when authorized.
 
-- Investigate the reported symptom in the named target. Apply fixes only when
+## Core rules
+
+- **Fix authority.** Investigate the named target. Apply fixes only when
   requested or already authorized; otherwise return diagnosis and a proposed fix.
-- Preserve unrelated work. Reproduction does not authorize live data changes,
+- **Preservation.** Preserve unrelated work. Reproduction does not authorize live data changes,
   publishing, broad cleanup, or disabling controls to make a failure disappear.
 
-## Procedure
+- **Discriminating evidence.** Form a testable cause and choose a check that
+  distinguishes alternatives. State each probe's prediction before running it;
+  inspect only needed state. Separate observations from hypotheses.
 
-1. Establish expected versus observed behavior, trigger/input, affected environment,
+## Reproduce, diagnose, correct
+
+1. **Baseline.** Establish expected/observed behavior, trigger/input, environment,
    and relevant revision. Reuse current evidence and repository commands.
    Ask for missing inputs only when they block meaningful investigation.
-2. Reproduce the smallest useful failure in an isolated fixture where practical.
+2. **Reproduce.** Use the smallest useful failure in an isolated fixture where practical.
    Define a verdict for the exact symptom, not just successful exit. Reduce inputs
    or steps one at a time while checking that the same failure remains; stop when
    further reduction adds little diagnostic value. Preserve the original case.
@@ -36,21 +42,19 @@ metadata:
    On native Windows, run reproductions directly and capture logs with project tools.
    Commands run with existing permissions; choose their side effects deliberately.
    The default 300-second timeout kills the command's process group.
-3. Read only relevant evidence. Search the log or use
+3. **Evidence.** Read relevant detail. Search the log or use
    `python3 scripts/reproduce.py log --log <path> --offset <byte-offset>`.
    Required pages follow `next_offset`; omission counts are explicit.
    Keep credentials and unrelated output out of shared excerpts.
-4. Distinguish product failure from test/setup/infrastructure problems. If the
+4. **Classification.** Distinguish product failure from test/setup/infrastructure problems. If the
    symptom does not reproduce, record what was tried and the remaining gap.
    A successful unrelated command does not disprove the reported bug.
-5. Form a testable cause and choose a check that distinguishes it from alternatives.
-   State what each probe predicts before running it; inspect only the needed state.
-   Trace relevant inputs, state, and callers; change one variable at a time.
-   Separate confirmed observations from hypotheses. Avoid broad speculative edits.
-6. When fixes are authorized, correct the demonstrated cause with the smallest
+5. **Cause.** Trace relevant inputs, state, and callers; change one variable at a
+   time. Avoid broad speculative edits.
+6. **Correction.** When authorized, correct the demonstrated cause with the smallest
    scoped change. Add regression coverage when it proves the failure and matters;
    do not write tests that only repeat the implementation.
-7. Rerun the original, unreduced scenario and affected checks. Remove temporary
+7. **Regression.** Rerun the original, unreduced scenario and affected checks. Remove temporary
    instrumentation owned by this investigation; retain useful evidence separately.
    Broaden validation only for shared effects, failures, or unresolved risks.
    Preserve pre-existing user changes.

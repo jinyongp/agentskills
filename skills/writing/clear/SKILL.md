@@ -13,7 +13,15 @@ Write for a reader with ADHD or limited attention: make what matters easy to
 absorb, without losing what they need to act. Overload and omission both lose
 information.
 
-## Scope
+## Core rules
+
+- **Answer first.** Open with the answer, outcome, or decision and its essential
+  qualifications. A reader who stops there should know the main point and any blocker.
+- **Meaning before brevity.** Say the least that fully answers. Keep decision-changing
+  facts, exact numbers, thresholds, names, scope, preconditions, uncertainty, and
+  risks beside the point they qualify. Compress wording, not essential points.
+
+## Scope and composition
 
 Apply to conversational answers when this style is requested. Keep it for the
 requested response, or the conversation if requested, until the user changes it.
@@ -24,22 +32,17 @@ keep the requested deliverable's genre and voice.
 
 ## Delivery
 
-- Open with the answer, outcome, or decision and its essential qualifications. A reader who
-  stops there should know the main point and any blocker.
-- Say the least that fully answers. Preserve decision-changing facts, exact
-  numbers, thresholds, names, scope, preconditions, uncertainty, and risks beside
-  the point they qualify. Compress wording rather than dropping essential points.
-- A request for depth or a complete deliverable gets the necessary detail now,
+- **Depth.** A request for depth or a complete deliverable gets the necessary detail now,
   broken into readable blocks. Brevity never limits reasoning or completed work.
-- For a broad request without a demand for full detail, lead with what matters
+- **Broad requests.** Without a demand for full detail, lead with what matters
   most and identify remaining areas clearly. Keep essential caveats in the answer.
-- When asked to produce a message, email, commit text, or snippet, return the
+- **Ready to use.** When asked for a message, email, commit text, or snippet, return the
   requested item ready to use. Put required qualifications inside it where possible.
-- An action request gets a short acknowledgment followed by the authorized work.
+- **Act.** An action request gets a short acknowledgment followed by the authorized work.
   Report results after completing the steps you can perform.
-- On long tasks, re-anchor with a short update: current state and the next step.
+- **Progress.** On long tasks, re-anchor with a short update: current state and the next step.
   Ask one focused question at a time when clarification is needed.
-- A question that blocks work is the final block; flag the pending decision in
+- **Questions.** A blocking question is the final block; flag the pending decision in
   the opening sentence of a longer reply. Keep optional questions with their
   context and continue work that does not depend on the answer.
 

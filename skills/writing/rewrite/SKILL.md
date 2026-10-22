@@ -9,26 +9,30 @@ metadata:
 
 # Rewrite
 
-## Scope
-
 Revise the supplied or selected prose for its intended readers and medium.
 Follow the requested language, voice, degree of editing, and publication format.
 An editing request authorizes the selected text; publication needs its own scope.
 For a review-only request, return supported recommendations without editing files.
 
-## Procedure
+## Core rules
 
-1. Identify the message, reader, and constraints from the source and request.
+- **Preserve claims.** Keep names, numbers, dates, quotations, citations, terms,
+  commitments, uncertainty, and exceptions accurate. Distinguish source claims
+  from verified facts. Add detail only from supplied or verified evidence within
+  scope; expose gaps instead of inventing specificity or strengthening claims.
+- **Preserve voice.** Keep intentional humor, formality, unusual phrasing, and
+  personality. Judge phrases in context; punctuation or vocabulary alone does not
+  establish poor writing or AI authorship. Avoid word bans and mechanical scrubbing.
+
+## Revise and compare
+
+1. **Intent.** Identify message, reader, and constraints from the source and request.
    Ask only when an unresolved choice materially affects meaning or disclosure.
    Use a supplied voice sample as evidence of desired rhythm and vocabulary.
-2. Read the selected text and enough adjacent context to preserve its meaning.
+2. **Context.** Read selected text and enough adjacent context to preserve meaning.
    For long documents, select relevant sections and follow references as needed;
    track omitted sections and limit conclusions to what was inspected.
-3. Keep names, numbers, dates, quotations, citations, technical terms, commitments,
-   uncertainty, and exceptions accurate. Distinguish source claims from verified
-   facts. Add factual detail only from supplied or verified evidence within scope;
-   expose material gaps rather than invent specificity or silently strengthen claims.
-4. Organize the answer or requested action and its supporting passages.
+3. **Organization.** Arrange the answer or requested action and supporting passages.
    - **Order:** Put a buried answer before its support in instructional/decision
      prose; preserve deliberate narrative sequencing. Group examples with their
      point and explain needed concepts before relying on them.
@@ -38,10 +42,7 @@ For a review-only request, return supported recommendations without editing file
      claim or qualification. Retain needed steps, reasons, qualifications, and effects;
      relocate competing topics. Missing examples need evidence, a labeled hypothetical
      illustration, or a narrower claim.
-5. Preserve intentional humor, formality, unusual phrasing, and author personality.
-   Judge a phrase in context: punctuation or vocabulary alone does not establish
-   poor writing or AI authorship. Avoid blanket word bans and mechanical scrubbing.
-6. Compare the revision with the source for changed meaning, lost qualifications,
+4. **Fidelity.** Compare the revision with the source for changed meaning, lost qualifications,
    invented evidence, and unnecessary edits. A request for substantial compression
    may omit secondary material; preserve decision-changing context and disclose
    material omissions. Resolve clarity problems without flattening the voice.

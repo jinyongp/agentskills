@@ -165,6 +165,26 @@ limiting repeated review to changed effects and invalidated evidence.
 
 ## Writing instructions for agents
 
+**Put the task's decisive rules first.** Open with the intended result, then the
+decisions and boundaries most likely to change the work. Give each important rule
+a short, meaningful bold label. Use headings that fit the task; a shared sequence
+of Scope, Procedure, and Result is not required.
+
+**Keep meaning intact when shortening.** Keep each rule's trigger, action, reason,
+and applicable exception together. Preserve negation, quantities, uncertainty,
+authorization, and failure behavior. Split crowded sentences before deleting
+qualifications. Do not impose fragmentary grammar or a shorter length as a goal.
+
+**Select context for its recipient.** Keep details that change a decision or make
+evidence interpretable. Replace incidental internal names with their roles or omit
+them. Preserve exact identifiers in source-bound evidence and actual reproductions;
+do not present a generalized command as one that was executed.
+
+**Check decisions, not decoration.** Compare old and new rules for lost conditions
+and test representative tasks with independent expectations. Headings, bold text,
+format passes, and fewer characters do not establish improved behavior. Keep
+essential rules in each installable skill; do not require a shared runtime guide.
+
 For each description or reference link, name the task or decision that should
 trigger it. List genuinely different branches, not multiple synonyms for one task.
 Keep guidance needed on every branch in SKILL.md; load substantial branch-specific

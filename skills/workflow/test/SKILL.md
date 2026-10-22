@@ -9,55 +9,53 @@ metadata:
 
 # Test
 
-## Scope
+Design, add, or revise automated tests within the requested scope.
 
-- Design, add, or revise automated tests in the requested scope. Reuse user-selected
-  tools and repository conventions; preserve unrelated code, tests, and configuration.
-- Assess lasting coverage before adding it. Running existing checks alone does not
-  require new test code. Test pruning follows the requested maintenance scope.
-- Choose coverage here when the boundary is unclear. Integration work exercises real
-  dependencies; suite maintenance assesses existing tests and their ongoing cost.
+## Core rules
+
+- **Independent expectations.** Protect an agreed contract and named failure. Preserve scope limits;
+  ground expectations in requirements or independent examples, not current output. Read
+  [references/oracles.md](references/oracles.md) for coupled code/test generation
+  or uncertain expectations.
+- **Coverage before additions.** Reuse existing checks. Add a regression only for a meaningful gap;
+  a change, commit, or coverage target alone is not a reason to add a test.
+- **Stable boundary.** Use the smallest boundary exposing the failure. Preserve
+  freedom to rename helpers, reorganize files, or replace algorithms without changing
+  tests when the protected behavior remains equivalent.
+- **Relevant assertions.** Exact literals, static HTML attributes,
+  JSON shapes, ordering, snapshots, and architecture rules need a concrete behavioral,
+  accessibility, compatibility, or explicit project-policy reason.
+- **Static checks.** Reuse lint, type, schema, or architecture checks for mechanical rules;
+  runtime tests cover semantics/integration they cannot establish. Do not duplicate
+  validators with ad hoc assertions.
+- **Distinct failures.** Choose cases by mechanism and meaningful boundaries. Repeat
+  coverage across layers only for additional evidence, such as real wiring or
+  serialization. Avoid exhaustive combinations without a supported risk.
+- **Proportionate cost.** Keep setup, dependencies, mocks, and runtime proportional to confidence.
+  Prefer outcomes over incidental call counts/order. Isolate nondeterminism; use
+  interaction assertions when the interaction itself is a required contract.
+- **Failures before expectations.** Investigate before revising assertions. Update changed contracts or
+  remove incidental constraints while retaining coverage of the intended behavior.
+
+Use user-selected tools and repository conventions; preserve unrelated code/tests/
+configuration. Assess lasting coverage before adding it; running checks alone needs
+no new tests. Pruning follows maintenance scope. Use this skill when the boundary
+is unclear; integration exercises real dependencies, maintenance assesses suite cost.
 
 Read [references/case-ideas.md](references/case-ideas.md) for test-idea requests
 or uncovered-case discovery. Ideas-only scope creates and executes no tests.
 
-## Principles
+## Choose and verify coverage
 
-- Protect an agreed contract and named failure. Preserve deliberate scope limits;
-  ground expectations in requirements or independent examples, not current output. Read
-  [references/oracles.md](references/oracles.md) for coupled code/test generation
-  or uncertain expectations.
-- Reuse existing coverage first. Add a regression case only for a meaningful gap;
-  a change, commit, or coverage target alone is not a reason to add a test.
-- Test through the smallest stable boundary that can expose the failure. Preserve
-  freedom to rename helpers, reorganize files, or replace algorithms without changing
-  tests when the protected behavior remains equivalent.
-- Assert only contract-relevant details. Exact literals, static HTML attributes,
-  JSON shapes, ordering, snapshots, and architecture rules need a concrete behavioral,
-  accessibility, compatibility, or explicit project-policy reason.
-- Use existing lint, type, schema, or architecture checks for mechanical rules;
-  runtime tests cover semantics/integration they cannot establish. Do not duplicate
-  validators with ad hoc assertions.
-- Choose cases by distinct failure mechanisms and meaningful boundaries. Repeat
-  coverage across layers only for additional evidence, such as real wiring or
-  serialization. Avoid exhaustive combinations without a supported risk.
-- Keep setup, dependencies, mocks, and runtime proportional to the confidence gained.
-  Prefer outcomes over incidental call counts/order. Isolate nondeterminism; use
-  interaction assertions when the interaction itself is a required contract.
-- Investigate failures before revising expectations. Update changed contracts or
-  remove incidental constraints while retaining coverage of the intended behavior.
-
-## Procedure
-
-1. Identify the failure, justified expectation, existing coverage, and useful static
+1. **Need.** Identify failure, justified expectation, existing coverage, and useful static
    checks. Resolve missing requirements; current output alone is not an oracle.
-2. Choose: reuse, extend an existing test, add a test, use a static check, perform
-   one-off validation, or add nothing. Explain the material coverage gap and cost
+2. **Decision.** Choose reuse, extension, a new test, static check,
+   one-off validation, or no addition. Explain the coverage gap and cost
    briefly; an adequate existing check is a valid stopping point.
-3. Implement only the selected in-scope change. For a reproducible defect, confirm
+3. **Implementation.** Make only the selected change. For a reproducible defect, confirm
    the chosen check detects it and passes after correction when the prior faulty
    state is available. A check that never detects its target needs investigation.
-4. Run affected checks and required repository validation. Distinguish test failures
+4. **Validation.** Run affected checks and repository validation. Distinguish test failures
    from setup failures; state unexecuted checks and limits. Read bounded summaries
    first and only relevant failure detail afterward.
 

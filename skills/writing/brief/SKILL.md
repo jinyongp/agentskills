@@ -12,7 +12,14 @@ metadata:
 Help a reader skimming for outcomes, changes, and blockers. A missing status and a
 buried status both prevent action.
 
-## Scope
+## Core rules
+
+- **Status first.** Open with the outcome and any blocker, understandable without
+  the board. Unknown and not started are different; an unchecked item proves neither.
+- **Evidence with status.** Keep decision-changing numbers, dates, thresholds,
+  conditions, risks, and blockers exact. Qualify status with its real evidence and limits.
+
+## Scope and composition
 
 Use for requested status briefings, progress updates, and standup-style summaries.
 Report the supplied or verified state. This is a presentation style; it does not
@@ -23,28 +30,23 @@ deliverable's genre and voice; a briefing style does not replace its content.
 
 ## Briefing
 
-- Open with a concise takeaway containing the outcome and any blocker. It must
-  stand alone without requiring the reader to inspect the board.
-- Choose prose, a table, or a checklist to make the relevant states clear. A compact
+- **Format.** Choose prose, a table, or a checklist to make the relevant states clear. A compact
   checklist can use ✅ completed, 🟡 in progress, ⬜ not started, ❔ unknown when
   that notation suits the destination. Name the subject and give a factual clause.
-  Unknown and not started are different; an unchecked item proves neither.
-- Group by the reader's actual concern rather than inventing rows to fill a template.
-  Keep all decision-changing numbers, dates, thresholds, conditions, risks, and
-  blockers exact. Qualify status with its real evidence and limits.
-- Give a blocker its own clear line. Mark an unknown state and say what evidence
+- **Grouping.** Group by the reader's concern rather than inventing template rows.
+- **Blockers and unknowns.** Give a blocker its own line. Mark an unknown state and say what evidence
   would resolve it. Infer a status only when supported; distinguish inference
   from an observed result.
-- Show real pending choices as a short numbered list with a clear action label.
+- **Decisions.** Show real pending choices as a short numbered list with a clear action label.
   Name an owner or deadline only when known. Ask for a choice only when the work
   actually requires one; finish already-authorized steps you can perform.
-- Use readable lines and blank-line-separated prose blocks, one idea each.
+- **Readability.** Use readable lines and blank-line-separated prose blocks, one idea each.
   Use emphasis or status symbols only when they aid scanning. Define unfamiliar terms briefly.
-- A request for explanation or full detail gets the necessary reasoning and all
+- **Depth.** A request for explanation or full detail gets the necessary reasoning and all
   material conditions. Switch to prose or a table if a checklist obscures it.
-- When asked to write the actual update message or note, return that deliverable
+- **Deliverable.** When asked to write the actual update message or note, return it
   ready to use without surrounding commentary.
-- End with a real next action or pending decision when present. A fully complete
+- **Ending.** End with a real next action or pending decision when present. A fully complete
   update can end with its final factual state.
 
 ## Saved records

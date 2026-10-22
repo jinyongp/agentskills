@@ -9,56 +9,58 @@ metadata:
 
 # Db Migrate
 
-## Scope
+Prepare, review, or execute a scoped schema change, backfill, or data transfer.
+Identify engine/version, migration tool, target environment, and affected data.
 
-Prepare, review, or execute the requested schema change, backfill, or data transfer.
-Identify the engine/version, migration tool, target environment, and affected data.
-Authoring or review alone does not authorize live execution. Reuse existing execution
-authorization for the identified target; destructive loss needs explicit scope.
-Preserve user work, credentials, applied migration history, and unrelated records.
+## Core rules
+
+- **Targeted authority.** Authoring/review does not authorize live execution. Reuse
+  execution authority for the identified target; destructive loss needs explicit scope.
+  Preserve user work, credentials, applied history, and unrelated records.
+- **Engine semantics.** Verify locks, transactions, implicit commits, rewrites,
+  online/concurrent features, and failure state for the engine/version and tool.
+  Use official docs where semantics matter; SQL behavior is not portable between
+  engines. Resolve material unknowns before dependent execution.
+- **Recovery.** Establish recovery before destructive execution; a
+  reverse schema change does not prove deleted/transformed data is recoverable.
 
 Read [references/rollout.md](references/rollout.md) for mixed application versions,
 schema transitions, constraints, or deployment order. Read
 [references/data-recovery.md](references/data-recovery.md) for backfills, concurrent
 writes, interruption, retry, irreversible changes, or recovery planning.
 
-## Procedure
+## Prepare, rehearse, execute
 
-1. Establish the required final contract and current schema/data/migration state.
+1. **Baseline.** Establish final contract and current schema/data/migration state.
    Inspect relevant consumers, writers, constraints, volume estimates, and pending
    migrations through bounded queries. Keep sensitive rows and full dumps outside
    default input; report selection/omissions and recover necessary evidence.
-2. Verify engine/version and tool behavior for the proposed operations: locks,
-   transactions, implicit commits, rewrites, online/concurrent features, and failure
-   state. Use official documentation where semantics matter; one engine's behavior
-   is not portable SQL. Resolve material unknowns before dependent execution.
-3. Choose a proportional sequence. For mixed deployments, maintain old/new reader
+2. **Compatibility sequence.** For mixed deployments, maintain old/new reader
    and writer compatibility, backfill safely, switch consumers, and remove obsolete
    structures only when no required consumer remains. A new empty database may need
    no staged rollout. Preserve already-applied history; follow tool policy for new
    corrective migrations rather than silently rewriting ledger entries or checksums.
-4. Define data mapping, invariants, rejected/conflicting records, concurrent-write
+3. **Data policy.** Define mapping, invariants, rejected/conflicting records, concurrent-write
    policy, execution budget, and stopping conditions. Use bounded batches and durable
-   progress when scale requires them. Establish recovery before destructive execution;
-   a reverse schema change is not proof that deleted or transformed data is recoverable.
-5. Prepare scoped migrations using project tooling. Rehearse on an isolated fixture
+   progress when scale requires them.
+4. **Rehearsal.** Prepare scoped migrations with project tools. Rehearse on an isolated fixture
    with relevant existing, empty, invalid, and partially migrated states. Verify required
    results, consumer compatibility, and interruption/retry where relevant. Reuse
    existing checks; add coverage only for a meaningful uncovered migration contract.
-6. For authorized execution, confirm the exact target and preconditions. Run the
+5. **Execution.** When authorized, confirm exact target and preconditions. Run the
    supported sequence with appropriate timeouts and observability. Bound operational
    load; stop on violated invariants or budget. On partial, timed-out, or uncertain
    outcomes, inspect actual schema, ledger, job, and data state before retrying.
-7. Verify final invariants and affected consumers, not only command success or row
+6. **Verify.** Check final invariants and consumers, not only command success or row
    count. Record applied/pending steps, rejected records, and recovery status. Preserve
    partial evidence and unrelated data; repairs or restoration follow their own scope.
 
 ## Result
 
-Return the plan or actual applied state, engine/tool assumptions, compatibility order,
-data checks, execution evidence, and remaining steps. Distinguish fixture rehearsal
+Return plan/applied state, engine/tool assumptions, compatibility order, data checks,
+execution evidence, and remaining steps. Distinguish fixture rehearsal
 from target execution and recovery from a proposed reverse script. Report irreversible
-effects and untested engine/load conditions; never imply safe production operation
+effects and untested engine/load conditions; do not imply safe production operation
 from a small fixture or an unverified backup.
 
 ## Saved records

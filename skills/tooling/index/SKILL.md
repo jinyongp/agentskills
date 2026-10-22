@@ -9,28 +9,30 @@ metadata:
 
 # Index
 
-## Scope
-
 Choose instructions for the requested outcome and permission, not a category or
 keyword alone. Acknowledgments need no selection. This index covers this collection;
 a listing does not prove installation. Consider other available skill metadata.
 
-## Procedure
+## Core rules
 
-1. Read the matching decision route below. Choices are alternatives, not a required
+- **Choose narrowly.** Prefer the workflow that covers the task. Add domain,
+  platform, language, or delivery guidance only when needed; do not load a generic
+  workflow alongside a specialist that already covers the work. Conversation
+  language alone does not trigger a writing skill. Honor explicitly requested skills.
+- **Read before acting.** Summaries are not instructions. Read selected SKILL.md
+  files; report missing required skills without installing them unasked.
+- **Keep permission boundaries.** Review, planning, and measurement do not authorize
+  edits, publication, or deployment. Reuse guidance; reconsider when scope changes.
+
+## Select and load
+
+1. **Find the route.** Read the matching decision route below. Choices are alternatives, not a required
    workflow sequence. Follow continuation pages if needed; use the full catalog
    when no choice fits. A partial page cannot prove no applicable skill exists.
-2. Prefer the narrow workflow that covers the task. Add domain, platform, language,
-   or delivery guidance only when needed; do not load a generic workflow alongside
-   a specialist that already covers the work. Conversation language alone does not
-   trigger a writing skill. Honor explicitly requested skills when available.
-3. Match candidate names to available installed metadata or sibling
+2. **Resolve installed paths.** Match names to available installed metadata or sibling
    `../<name>/SKILL.md`, then read selected instructions before acting. `Source`
    fields locate repository files relative to this skill's root only in a source
-   checkout; they are not installed paths. Report missing required skills without
-   installing them unasked.
-4. Preserve scope: review-only, planning, and measurement do not authorize edits,
-   publication, or deployment. Reuse loaded guidance; reconsider when scope changes.
+   checkout; they are not installed paths.
 
 ## Choose by task
 

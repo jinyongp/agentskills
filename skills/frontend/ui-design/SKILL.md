@@ -9,13 +9,23 @@ metadata:
 
 # Ui Design
 
-## Scope
-
 Create, revise, or review the requested interface using its real tasks, content,
 and product identity. Reuse existing components and design conventions. A review
 returns recommendations; requested edits authorize only the named scope.
 Recover agreed scope and simplifications before judging completeness; retain their
 rationale. Resolve consequential missing direction from evidence or a focused question.
+
+## Core rules
+
+- **Real evidence.** Use supplied or verified facts; identify demo data. Logos,
+  testimonials, statistics, security claims, and product screenshots need evidence.
+  Expose missing material instead of manufacturing credibility.
+- **Honest actions.** Controls must fulfill their stated action. If an integration
+  is outside scope, provide an honest preview or clearly unavailable state and
+  report its limits. Local simulation is not a live integration.
+- **Usable states.** Keep essential information and actions usable across supported
+  widths, input, zoom, and themes. Use accessible primitives; decoration and motion
+  must preserve legibility, focus, and reduced-motion needs.
 
 Read [references/craft.md](references/craft.md) for content grouping, hierarchy,
 component defaults, spatial feedback, layers, or typography. Read the matching section.
@@ -24,30 +34,21 @@ a landing page, task interface, reading surface, or showcase.
 
 ## Design decisions
 
-- Establish the user's primary action and information needs before choosing a
+- **Primary task.** Establish action and information needs before choosing a
   layout. Inspect relevant screens, content, and guidance selectively; report
   omissions and recover necessary detail before drawing conclusions.
-- Group content by task role: peers, label/value, state/action, sequence, or
+- **Relationships.** Group by task role: peers, label/value, state/action, sequence, or
   claim/qualification. Keep labels and qualifications with what they describe.
   Use these relationships for grouping, order, density, and navigation; charts
   and metrics need a defined question or meaning.
-- Locate the next action, current state, and decisive facts in the rendered view.
+- **Hierarchy.** Locate next action, current state, and decisive facts in the rendered view.
   When uniform styling obscures roles, regroup, label, reorder, or change emphasis;
   swapping separators alone cannot repair the relationship. Compact metadata and
   equal-weight peers can be valid. Preserve product identity; judge cards,
   gradients, icons, and minimal layouts by concrete usability effects.
-- Use supplied or verified facts. Keep demonstration data visibly identified.
-  Customer logos, testimonials, statistics, security claims, and product screenshots
-  need real evidence; expose missing material instead of manufacturing credibility.
-- Make controls fulfill their stated action. Where an integration is outside scope,
-  provide an honest preview or clearly unavailable state and report the limitation.
-  Describe prototype behavior accurately; local simulation is not a live integration.
-- Design reachable empty, loading, error, success, and unavailable states with useful
+- **Reachability.** Design empty, loading, error, success, and unavailable states with useful
   explanation or recovery. Avoid adding states or controls without a current need.
-- Keep essential information and actions usable across supported widths, input
-  methods, zoom, and themes. Prefer established accessible primitives. Decoration
-  and motion should preserve legibility, focus, and reduced-motion needs.
-- Resolve product character from supplied screens, tokens, assets, or a voice sample.
+- **Identity.** Resolve product character from screens, tokens, assets, or a voice sample.
   Carry those cues into the changed surface; explain departures tied to a user task.
   Label proposed cues as design choices when identity evidence is absent.
 

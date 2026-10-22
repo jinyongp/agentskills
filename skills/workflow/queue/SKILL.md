@@ -9,11 +9,13 @@ metadata:
 
 # Queue
 
-## Scope
+Turn settled work into a draft queue or explicitly requested task records.
 
-- Turn settled work into a queue. Resolve material planning decisions before
+## Core rules
+
+- **Settled work first.** Resolve material planning decisions before
   registering their dependent work; independent settled items can proceed.
-- Drafting a queue creates no task records. Registration requires a user request
+- **Registration authority.** Drafting creates no task records. Registration requires a user request
   and the destination/tool selected by the user or project; ask only if missing.
   Use that tool's documented commands without installing or switching trackers.
 
@@ -21,32 +23,32 @@ For a requested local checklist, read
 [references/checklists.md](references/checklists.md). Preserve the supplied
 structure in that mode instead of applying the regrouping steps below.
 
-## Procedure
+## Group and register
 
-1. Recover the current goal, accepted scope, actionable items and source references.
+1. **Scope.** Recover current goal, accepted scope, actionable items and source references.
    Exclude headings, rejected proposals, vague reminders and optional extensions.
-2. Group by independently verifiable outcomes. A file or checklist line is not
+2. **Outcomes.** Group independently verifiable work. A file or checklist line is not
    automatically a task; keep coupled steps together and consolidate duplicates
    without losing acceptance conditions. Preserve meaningful domain wording.
    Prefer a narrow working slice across layers. For large migrations, separate
    compatibility setup, caller batches, and cleanup only where checks support it.
    Record when intermediate work needs a shared integration result to pass.
-3. Give each task an action and observable result. Preserve supplied priorities;
+3. **Dependencies.** Give each task an action and observable result. Preserve priorities;
    shared files or preferred order alone do not establish dependencies. Connect
    tasks only when later work needs an earlier result or state. Include explicit
    validation/review work; do not append unrequested quality or closeout tasks.
-4. For a draft, return the queue with unresolved items clearly separated.
+4. **Draft or inspect.** For a draft, separate unresolved items clearly.
    Name each in-scope blocking question, its evidence, and affected work; keep
    accepted exclusions outside the executable queue. For cross-session tasks,
    link accepted decisions, relevant paths and completion checks, not chat history.
    For registration, inspect existing tasks in the selected scope before writing.
    Start with summaries; use the tool's filters and bounded pages to recover the
    relevant records. Partial listings cannot prove that a duplicate is absent.
-5. Reuse matching task IDs; ambiguous matches need resolution, not silent updates.
+5. **Register safely.** Reuse matching IDs; resolve ambiguous matches without silent updates.
    Register unambiguous new tasks and wire dependencies using confirmed IDs.
    If a write fails or its outcome is unknown, inspect resulting records before
    retrying. Preserve successful IDs and report remaining work separately.
-6. Read back the affected tasks and dependency links. Report a draft as a draft
+6. **Read back.** Verify affected tasks and dependency links. Report a draft as a draft
    and registration as confirmed only for records actually found at the destination.
 
 ## Result

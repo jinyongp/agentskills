@@ -17,6 +17,8 @@ an ordinary document without requiring the author to adopt this vocabulary.
   and reasons that affect validity, solution, scope, or verification. Explain which
   constraints belong to the consumer and which the target promises. Keep necessary
   service-specific knowledge, including why a superficially simpler answer fails.
+  Omit incidental consumer identifiers and history. Describe roles instead of
+  internal aliases unless their exact identity affects the evidence or decision.
 - **Claim status and sources:** distinguish observations, desired behavior, accepted
   decisions, causal hypotheses, and solution suggestions. Record provenance and
   tested state for material claims. Code behavior alone does not establish intended

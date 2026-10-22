@@ -9,38 +9,40 @@ metadata:
 
 # Git Conflict
 
-## Scope
+Reconcile an existing Git conflict and complete only the authorized operation.
 
-- Use Git, an editor, and repository checks. Resolve an existing conflict;
+## Core rules
+
+- **Existing conflict only.** Use Git, an editor, and repository checks;
   inspection-only stays read-only. Starting integration and pushing are separate.
-- Identify the active operation with status and Git-aware paths
+- **Identify the operation.** Use status and Git-aware paths
   (`git rev-parse --git-path <state>` works with linked worktrees). Without an active
   operation, establish unresolved entries' origin before choosing continuation.
-- Abort, skip, hook bypass, and discarding changes need authorization.
+- **Preserve work.** Abort, skip, hook bypass, and discarding changes need authorization.
 
-## Procedure
+## Reconcile and continue
 
-1. Start with operation/unmerged-path summaries and bounded queries; read relevant
+1. **Inspect scope.** Start with operation/unmerged-path summaries and bounded queries; read relevant
    paths/commits next. Preserve unrelated working and staged changes. Continuation
    must not commit unrelated staging; separate it reversibly or pause.
-2. Where present, inspect `git show :1:<path>` (base), `:2:<path>` (current), and
+2. **Understand both sides.** Where present, inspect `git show :1:<path>` (base), `:2:<path>` (current), and
    `:3:<path>` (incoming) with bounded reads. Added/deleted paths may lack stages.
    During rebase, current means upstream plus replayed commits; incoming means
    the replayed feature commit. Never assume ours always means the original feature.
-3. Reconcile both intended behaviors and relevant tests/call sites. If requirements
+3. **Resolve intent.** Reconcile both intended behaviors and relevant tests/call sites. If requirements
    are mutually exclusive and evidence cannot settle them, ask for that decision
    while preserving the conflict. Removing markers alone is not correctness.
-4. Edit only affected paths. Choose rename/delete/binary versions from evidence.
+4. **Edit narrowly.** Edit only affected paths. Choose rename/delete/binary versions from evidence.
    For generated files or lockfiles, resolve inputs then use the project generator;
    inspect output and preserve dependency intent. Do not blanket-select a side.
-5. Stage explicit resolved paths via `git add -- <path>` or `git rm -- <path>`.
+5. **Validate staging.** Stage resolved paths via `git add -- <path>` or `git rm -- <path>`.
    Inspect their cached diff, automatically merged changes, and
    `git diff --cached --check`; ensure no unresolved index entries remain and run
    focused checks. Preserve the resolution on failure; inspect hook edits before retry.
-6. For authorized completion, use the matching merge/rebase/cherry-pick
+6. **Continue when authorized.** Use the matching merge/rebase/cherry-pick
    `--continue`; resolve-only can stop at validated staging. Reinspect each later
    conflict in a replay sequence. Inspect empty commits before any skip decision.
-7. Verify status, unmerged entries, resulting behavior/history, ended operation
+7. **Verify.** Check status, unmerged entries, resulting behavior/history, ended operation
    when applicable, and preservation of unrelated work.
 
 ## Result

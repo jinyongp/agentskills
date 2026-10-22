@@ -7,15 +7,22 @@ constraints, evidence limits, requested decision, and next verification step.
 
 ## Check context and relevance
 
-- Locate names, paths, shorthand, and references such as "the project" or "as
+- **Select useful context.** Locate names, paths, shorthand, and references such as "the project" or "as
   agreed" whose meaning depends on private context. Explain their role when it
   changes assessment; remove incidental identifiers and work history.
-- Keep concrete details that affect validity, reproduction, scope, or preservation.
+- **Preserve decisive detail.** Keep concrete details that affect validity, reproduction, scope, or preservation.
   Do not generalize away a meaningful distinction or rewrite recorded commands as
   though a simplified example had been executed. Label illustrative examples.
-- Check whether each concern changes a reader's understanding or next action.
+- **Diagnose a passage.** Check whether each concern changes a reader's understanding or next action.
   Report a specific ambiguity and its consequence; stylistic preferences and
   missing optional detail do not justify new requirements or investigations.
+
+An internal job name is usually replaceable by its role. Do not demand the
+consumer's full configuration merely because a command names that job. Transfer
+the triggering conditions needed for assessment; include exact commands when
+their identity matters to evidence or an actual reproduction. If a missing source
+or condition blocks a claim, obtain it, qualify that claim, or name its recovery
+path. A general statement that the draft was reviewed does not resolve the gap.
 
 For example, a staff nickname for a weekly equipment review adds no useful meaning
 unless the recipient knows it; describe the review's purpose and timing instead.

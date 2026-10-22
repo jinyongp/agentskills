@@ -9,11 +9,13 @@ metadata:
 
 # Plan
 
-## Scope
+Plan the requested outcome with executable work units and observable completion.
 
-- Plan the user's requested outcome. Planning alone authorizes relevant inspection,
+## Core rules
+
+- **Planning boundary.** Planning alone authorizes relevant inspection,
   not implementation, task creation, or external writes.
-- Reuse current repository facts and accepted decisions; link their sources instead
+- **Current contract.** Reuse repository facts and accepted decisions; link their sources instead
   of copying them. Keep the plan proportional to the work.
 
 Read [references/design-scope.md](references/design-scope.md) when comparing a
@@ -21,37 +23,37 @@ simpler alternative, added infrastructure, or the completeness of a proposed sol
 Read [references/work-units.md](references/work-units.md) when splitting a larger
 plan or drafting tasks from settled work items.
 
-## Procedure
+## Resolve and plan
 
-1. State the outcome, scope, constraints, and observable completion criteria.
+1. **Outcome.** State scope, constraints, and observable completion criteria.
    Inspect only facts needed to identify the affected behavior and dependencies.
    Preserve agreed limits, deliberate omissions, and rationale at their source or
    in the plan. Define success and recovery within that contract; distinguish required
    behavior from optional extensions. Absence alone is not an unmet requirement.
-2. Separate source-backed facts, user decisions, assumptions, unresolved choices,
+2. **Decisions.** Separate source-backed facts, user decisions, assumptions, unresolved choices,
    and accepted deferrals. Check relevant repository facts before asking the user.
    A deferral is a deliberate scope boundary, not missing clarity. Ask only when
    the answer changes behavior, contracts, data, permissions, cost, or dependent work.
    Readiness follows resolved blocking choices, not a score or fixed interview count.
    Routine details and already authorized work need no extra approval gate.
-3. For a necessary decision, explain the impact and recommend a supported option.
+3. **Blocking choices.** Explain impact and recommend a supported option.
    Keep the question visible in conversation. Resolve dependent decisions before
    committing to affected steps; independent preparation can continue.
-4. Compare viable approaches by requirement coverage, readability, and maintenance
+4. **Work units.** Compare viable approaches by requirement coverage, readability, and maintenance
    cost. Check existing code, standard/platform features, and installed tools for fit.
    Justify added structure by a current need or concrete maintenance benefit; name
    where a simpler option falls short. Keep accepted behavior intact when simplifying.
    Give each work unit an outcome, relevant paths, and completion evidence. Add a
    dependency when it needs another unit's output or state, not merely a preferred
    order. Include migration/recovery when needed.
-5. Tie each plausible failure to a useful check. Distinguish per-unit checks from
+5. **Validation.** Tie each plausible failure to a useful check. Distinguish per-unit checks from
    required final integration checks; a scheduled check remains pending.
    Use not-needed when a check would add no useful signal.
-6. Review the plan against the latest request. Express current choices positively;
+6. **Current context.** Review against the latest request. Express current choices positively;
    keep necessary rationale and unresolved questions distinct. Read
    [references/current-context.md](references/current-context.md) when a correction
    or changed decision affects the plan or dependent records.
-7. Return a short inline plan unless a destination was requested. If implementation
+7. **Deliver.** Return a short inline plan unless a destination was requested. If implementation
    is also authorized, continue once blocking choices are resolved; otherwise stop
    after the plan.
 

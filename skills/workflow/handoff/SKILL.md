@@ -9,63 +9,65 @@ metadata:
 
 # Handoff
 
-## Scope
+Prepare or resume the same task in a shared repository.
 
-- Continue the same task in a shared repository. Keep the context needed to decide
-  and act; use repository sources for facts the receiver can recover.
-- Preparing a handoff uses existing authorization; it does not grant permission
+## Core rules
+
+- **Transfer missing context.** Keep needed decision/action context; link repository
+  facts the receiver can recover.
+- **No new authority.** Preparing a handoff uses existing authorization; it grants no permission
   to send messages, start agents, publish, commit, or expand the task.
 
 ## Prepare
 
-1. Identify the goal, user decisions and rationale, material assumptions and sources,
+1. **Current decisions.** Identify goal, user decisions/reasons, assumptions/sources,
    accepted deferrals, temporary constraints, blockers, and next action. Preserve only
    context unavailable from the repository, including agreed limits and why the
    selected scope is sufficient. Read
    [references/current-context.md](references/current-context.md) when corrections
    or changed decisions affect the packet.
-2. For recoverable facts, give a precise lookup: file and section, narrow search,
+2. **Lookups.** For recoverable facts, give file/section, narrow search,
    or scoped command. Include only lookups needed to resume. Repository instructions,
    plans, code, Git state, environment setup, and durable logs stay at their sources.
-3. Use the requested or established language; preserve exact identifiers and quotes.
+3. **Packet.** Use requested/established language; preserve exact identifiers and quotes.
    Omit empty fields. Use an inline packet unless a file or target was requested.
    Include relevant lookups without broad inspections just to fill the packet.
-4. Preserve otherwise unavailable evidence that changes the next decision: command,
+4. **Evidence.** Preserve otherwise unavailable evidence that changes the next decision: command,
    result, tested scope/state, or a failed approach's observed cause. Keep audit
    history separate from active instructions. Current queries cannot prove past
    success; pending checks and blockers remain pending.
-5. Check that the next action has its target, current decision, and required input
+5. **Transfer check.** Ensure the next action has target, decision, and required input
    in the packet or a specific lookup. Confirm referenced files exist and selectors
    locate the needed section; keep broad or mutating commands as pending work.
    If another checkout lacks local changes or an attachment,
-   identify the missing artifact and its transfer method. Exclude credentials.
+   name the missing artifact and transfer method. Exclude credentials.
 
 ## Packet
 
-Use only the fields needed for this task:
+Use only needed fields:
 
-- **Context:** missing intent, decisions and reasons, assumptions and sources,
+- **Context:** missing intent, decisions/reasons, assumptions/sources,
   deferrals, constraints, authorization boundaries, and unresolved choices.
 - **Next:** first concrete action, remaining order where unclear, and blocking input.
-- **Lookups:** exact source or bounded query, its purpose, and when it is needed.
-  Use task-relevant selectors only; avoid copied file inventories, Git state,
-  source text, logs, and instructions already available in the repository.
+- **Lookups:** exact source/bounded query, purpose, and read condition. Use relevant
+  selectors; avoid copying repository file inventories, Git state, source, logs,
+  and instructions.
 - **Evidence:** relevant results not stored elsewhere, their tested state, remaining
   checks, and pending external actions with a way to confirm their outcome.
 
 ## Resume
 
-1. Read the packet and applicable repository instructions. Follow relevant lookups
+1. **Recover state.** Read packet and repository instructions. Follow relevant lookups
    to recover current state; inspect only the paths and refs needed for the next
    action. Preserve staged, unstaged, untracked, and unrelated user work.
-2. Resolve material conflicts between the recorded intent and current instructions
+2. **Resolve conflicts.** Reconcile recorded intent with current instructions
    or workspace before affected edits. Ask only for missing context that blocks
    progress; continue independent work when possible.
-3. Start with the next action within current authorization. Reuse evidence only
+3. **Act.** Start with the next action within current authorization. Reuse evidence only
    when its tested scope and state still apply; otherwise rerun the relevant check.
    Confirm pending external outcomes before retrying them.
-4. Update the handoff when transferring again. Name inaccessible context and
-   required recovery instead of claiming the transfer is complete.
+4. **Transfer.** When handing off again, update the packet. Name inaccessible
+   context and required recovery instead of claiming a complete transfer.
 
 ## Saved records
 

@@ -9,49 +9,48 @@ metadata:
 
 # Test Property
 
-## Scope
+Check independently justified invariants over generated inputs or state transitions.
+This input/assertion technique works at unit or integration boundaries.
 
-- Check independently justified invariants over generated inputs or state transitions.
-  This is an input/assertion technique usable at unit or integration boundaries.
-- Use the user's tools and existing property framework when suitable. Choose the
-  smallest stable boundary that exposes the risk; preserve unrelated work.
+## Core rules
 
-## Admission
-
-- Name the invariant, valid input domain, and failure mechanism missed by adequate
+- **Added evidence.** Name invariant, valid domain, and failure missed by adequate
   existing examples or static checks. Generation alone is not additional confidence.
-- Derive the property from requirements or independent reasoning. Round trips,
+- **Independent law.** Derive the property from requirements or independent reasoning. Round trips,
   idempotence, or equivalent implementations need a real contract; two components
   sharing the same wrong assumption can agree and still violate it.
-- Exact values, shapes, ordering, or architecture constraints need a concrete contract.
+- **Justified constraints.** Exact values, shapes, ordering, or architecture need a concrete contract.
   Reuse static/schema validation for declarative constraints.
-- Keep generation, setup, execution, and future maintenance proportional to the added
+- **Proportionate cost.** Keep generation, setup, execution, and maintenance proportional to added
   evidence. A property need not be asserted again at every system layer.
 
-## Procedure
+Use user tools and the existing property framework when suitable. Choose the
+smallest stable boundary exposing the risk; preserve unrelated work.
 
-1. Identify the meaningful domain, permitted states, invariant, expected rejection
+## Generate, shrink, replay
+
+1. **Contract.** Identify meaningful domain, permitted states, invariant, expected rejection
    behavior, and existing coverage. Resolve an unknown contract before inventing a law.
    Choose properties that distinguish plausible bad implementations from valid ones.
-2. Generate the domain directly, including relevant boundaries and relationships
+2. **Domain.** Generate directly, including relevant boundaries and relationships
    between fields. Separate valid and intentionally invalid cases when their contracts
    differ. Avoid excessive filtering or exclusions that discard the defect-triggering
    region merely to obtain a passing or faster test.
-3. Exercise a stable interface and assert the required invariant, not current internal
+3. **Assertion.** Exercise a stable interface and assert the invariant, not current internal
    layout or a reimplementation of the production algorithm. Control nondeterminism
    and reset owned state between cases; generation must not leak live side effects.
-4. Use native search and shrinking when supported. Set a run/time budget using framework
+4. **Budget.** Use native search/shrinking when supported. Set a run/time budget with framework
    controls; report limits that restrict the explored domain. Prefer reducing execution
    budget over silently weakening the required input domain. Passing sampled cases is
    evidence, not a proof over all possible inputs.
-5. Capture the smallest reported failing input and replay information: relevant state,
+5. **Replay.** Capture smallest reported failing input, state,
    framework/runtime versions, and native replay token or seed when applicable.
    A seed alone is not necessarily portable across versions. Confirm reproduction
    without depending on the local example cache or previous cases.
-6. Confirm a known faulty behavior violates the property when available, then verify
+6. **Regression.** Confirm a known fault violates the property when available, then verify
    correction and affected project checks. Retain a minimized example when it protects
    a useful regression, preferably in existing coverage rather than a duplicate suite.
-7. Inspect bounded native summaries first; fetch only relevant counterexample/shrink
+7. **Evidence.** Inspect bounded summaries first; fetch relevant counterexample/shrink
    detail. Keep original failure evidence in a saved record when needed. Explain setup
    failures, unstable reproduction, omitted domains, and remaining uncertainty.
 

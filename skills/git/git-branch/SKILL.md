@@ -9,23 +9,26 @@ metadata:
 
 # Git Branch
 
-## Scope
+Manage the requested local Git branches while preserving existing work.
 
-- Use Git in the target worktree; follow repository instructions and branch names.
-- Manage only requested local references. Remote publication/deletion and history
+## Core rules
+
+- **Local scope.** Manage only requested local references. Remote publication/deletion and history
   rewriting need their own scope. Listing is read-only.
-- Preserve staged, unstaged, and untracked work. Forced replacement/deletion needs
+- **Preserve work.** Preserve staged, unstaged, and untracked work. Forced replacement/deletion needs
   authorization for the named branch and commits that would be lost.
 
-## Procedure
+Use Git in the target worktree; follow repository instructions and branch names.
 
-1. Inspect current/target refs, dirty/index state, active operations, and target
+## Inspect, change, verify
+
+1. **Check usage.** Inspect current/target refs, dirty/index state, active operations, and target
    worktree usage with bounded queries. Start with status, not all file contents.
    Pause a switch during an unrelated merge/rebase/cherry-pick.
-2. Resolve the requested starting point; current HEAD is appropriate for branching
+2. **Verify the base.** Resolve the requested starting point; current HEAD is appropriate for branching
    from current work. A fresh remote base needs an authorized fetch. Validate
    `git check-ref-format --branch <name>`; an existing name must not be reset.
-3. Use the smallest action, substituting quoted arguments:
+3. **Choose the action.** Use the smallest action, substituting quoted arguments:
    - Create and switch: `git switch -c <name> <start-point>`.
    - Create only: `git branch <name> <start-point>`.
    - Switch local: `git switch --no-guess <name>`.
@@ -33,10 +36,10 @@ metadata:
    - Rename: `git branch -m <old> <new>`.
    - Delete: inspect unique commits and their intended integration target before
      `git branch -d <name>`; Git's merged check alone does not establish that target.
-4. A normal switch can carry compatible local work; verify its content and staging.
+4. **Handle refusal safely.** A normal switch can carry compatible local work; verify its content and staging.
    If Git rejects an overwrite or a branch occupied by another worktree, stop and
    report it. Do not automatically stash, commit, discard work, or delete a worktree.
-5. Verify resulting refs/checkout and preserved changes. Leave other branches,
+5. **Verify.** Check resulting refs/checkout and preserved changes. Leave other branches,
    remote refs, and global configuration unchanged.
 
 ## Result

@@ -9,12 +9,20 @@ metadata:
 
 # Mobile Web
 
-## Scope
-
 Implement or diagnose mobile browser and PWA behavior in the requested area.
 This covers touch/hover, scroll ownership, viewport/chrome changes, safe areas,
 and keyboards. React Native implementation and general motion design have different
 mechanisms; a native web build still needs its browser behavior verified.
+
+## Core rules
+
+- **Preserve input alternatives.** Keep mouse, keyboard, touch, and assistive input
+  usable together. Use platform capabilities instead of guessing device type from
+  width or user-agent strings. Hover enhances; required actions need alternatives.
+- **Keep fields reachable.** Focused fields and essential actions must remain
+  reachable through keyboard, orientation, and content changes. Preserve user zoom
+  and readable inputs. A viewport unit alone may not track the keyboard; disabling
+  zoom does not fix the underlying layout/input problem.
 
 Inspect selected controls, containers, viewport configuration, local platform
 handling, and supported browsers. Follow project tools and current user choices.
@@ -23,26 +31,19 @@ when a platform symptom needs implementation detail.
 
 ## Diagnose and implement
 
-- Reproduce the actual symptom and identify the owning layer: control, scroll
+- **Owning layer.** Reproduce the symptom and identify its layer: control, scroll
   container, viewport, or browser behavior. Check orientation, display mode, and
   keyboard state when relevant. A narrow desktop viewport alone does not reproduce
   a mobile keyboard, browser chrome, or every touch interaction.
-- Keep mouse, keyboard, touch, and assistive input usable together. Use platform
-  capabilities rather than guessing device type from width or user-agent strings.
-  Hover is an enhancement; required actions have reachable alternatives.
-- Provide prompt press feedback without committing an action prematurely. Respect
+- **Press feedback.** Respond promptly without committing an action prematurely. Respect
   cancellation and the control's activation semantics. Suppress browser tap feedback
   only where a usable replacement exists; retain visible focus and selection of
   meaningful text. Avoid blanket selection or context-menu suppression.
-- Choose viewport sizing from the layout's needs, not a universal height recipe.
+- **Viewport.** Choose sizing from the layout's needs, not a universal height recipe.
   Dynamic browser chrome, scroll containers, and the visual viewport affect different
   regions. Account for safe areas only where necessary and reuse existing insets or
   keyboard avoidance instead of layering duplicate compensation.
-- Keep focused fields and essential actions reachable as the keyboard opens,
-  orientation changes, and content grows. Preserve user zoom and readable inputs.
-  Do not assume a viewport unit alone tracks the keyboard or disabling zoom fixes
-  the underlying layout/input problem.
-- Configure touch and overscroll behavior at the relevant gesture/scroll boundary.
+- **Scroll boundaries.** Configure touch and overscroll at the relevant gesture/scroll boundary.
   Preserve required page scrolling, pinch zoom, browser navigation, and intentional
   pull-to-refresh unless a scoped interaction requires a documented tradeoff.
   Handle cancellation and nested scroll; a custom gesture is not a substitute for

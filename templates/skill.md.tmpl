@@ -11,21 +11,28 @@ metadata:
 
 # My Skill
 
-## Scope
+State the task and intended result in one clear sentence.
 
-State the trigger, required inputs/tools, and action boundary in a short list.
-Keep only guidance that changes the agent's decisions.
+## Core rules
 
-## Procedure
+- **Decisive rule.** State the most important task-specific decision first. Keep
+  its trigger, action, reason, and exception together.
+- **Scope and preservation.** State required inputs/tools, authorization boundaries,
+  and behavior that must survive. Preserve conditions and uncertainty when shortening.
 
-1. Start with a bounded summary. Bundle a script when repeated mechanical
-   inspection or large-output reduction needs it; execute it without reading its source.
-2. Request only relevant detail. State output limits, omissions, and pagination.
-   Link references with the condition that requires them, not as mandatory reading.
-3. Perform the task within scope; preserve necessary context and existing work.
-4. Verify the requested result and handle concrete failures.
+## Workflow
 
-## Result
+1. **Inspect.** Start with a bounded summary, then relevant detail. Define inspection
+   limits, omissions, and pagination when needed. Bundle a helper for repeated
+   mechanical inspection; execute it without reading its source by default.
+2. **Act.** State task-specific decisions and actions. Link conditional references
+   beside the decision that needs them. Use meaningful headings instead of this
+   skeleton when they make the task clearer.
+3. **Verify.** Check the requested outcome and concrete failure paths. Retain
+   necessary context, conditions, and exceptions; omit incidental internal names.
 
-Define the result, evidence, and remaining blockers briefly. Keep the body within
-4,000 characters; move conditional detail into references rather than losing context.
+## Deliver
+
+Define the result, evidence, and remaining blockers. Keep only task-changing
+guidance within 4,000 characters. Move conditional detail into references; keep
+essential rules self-contained. Concision must not change the meaning.

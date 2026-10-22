@@ -9,11 +9,21 @@ metadata:
 
 # Ui Stress
 
-## Scope
-
 Exercise a selected web or native UI with realistic content and state boundaries.
 This is UI resilience inspection, not a service load test or visual redesign.
 Review requests return findings; corrections follow the user's authorized scope.
+
+## Core rules
+
+- **Plausible boundaries.** Use realistic values and supported contract limits.
+  An unknown limit does not prove arbitrary input is supported. Invalid values
+  belong in error-path checks only where the boundary can receive them.
+- **Real data path, safe fixtures.** Feed cases through existing data boundaries,
+  not markup edits that force a break. Stories or fixtures may suffice; new controls
+  are optional and stay out of shipped behavior. Do not mutate live APIs for fixtures.
+- **Observed failures.** Distinguish hypotheses from rendered failures. Record the
+  smallest reproduction, element/state, user effect, and suggested correction.
+  Runtime access limits conclusions; source inspection is not rendered verification.
 
 Map only relevant rendered fields, sources, consumer contracts, and local fixtures.
 Use existing stories, previews, mocks, or data boundaries. Read the matching section
@@ -21,26 +31,17 @@ of [references/cases.md](references/cases.md) when selecting stress inputs.
 
 ## Exercise meaningful cases
 
-- Choose plausible values and supported contract limits: long and short labels,
+- **Inputs.** Choose long and short labels,
   missing optional fields, counts near meaningful boundaries, and supported locales.
-  A limit not found is unknown; it is not proof that the product accepts arbitrary
-  input. Invalid values belong in error-path checks when that boundary can receive them.
-- Include relevant empty, single-item, loading, failure, partial, permission, and
+- **States.** Include relevant empty, single-item, loading, failure, partial, permission, and
   collection-boundary states. Vary cases independently when combinations would hide
   the cause. Use synthetic data and reserved example domains; preserve real records.
-- Feed cases through the existing data boundary rather than editing markup to force
-  a break. An existing story or fixture may suffice; a new toggle/harness is optional.
-  Keep disposable controls outside shipped behavior. Do not call live mutating APIs
-  merely to populate a fixture.
-- Render at actual container widths and affected narrow/wide ranges. Exercise text
+- **Rendering.** Use actual container widths and affected narrow/wide ranges. Exercise text
   enlargement, supported themes/locales, and relevant input methods. Inspect clipped
   required text, unreachable actions, ambiguous formatting, lost label/value or
   item/action associations, fallback behavior, and loss of information.
   Intentional scrolling or truncation can be correct when required information
   and task actions remain accessible.
-- Distinguish a plausible hypothesis from an observed failure. Record the smallest
-  reproduction, affected element/state, user effect, and suggested correction.
-  Runtime access limits the conclusion; source inspection is not rendered verification.
 
 ## Fix, coverage, and report
 

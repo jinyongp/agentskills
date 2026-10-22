@@ -9,38 +9,40 @@ metadata:
 
 # QA Checklist
 
-## Scope
-
 Prepare a manual verification plan for changed behavior. The result is for a
 person using the selected application, API, CLI, or other observable surface.
 Writing a plan does not execute tests or authorize mutations in a live system.
 Honor the requested environment and language; deployment is not a prerequisite.
+
+## Core rules
+
+- **Observable steps.** Pair actions with visible expected outcomes and relevant
+  persisted/async effects. Make waits observable; arbitrary sleeps are not completion.
+- **Reader-facing detail.** Keep internal classes, implementation details, and
+  developer chores out of the walkthrough. Keep technical names the person must
+  use, such as endpoints/options. Unresolved behavior or setup is a dependency,
+  not permission to invent a pass criterion.
 
 When inspecting a Git change, use Git and Python 3.11+. Execute the bundled
 `python3 scripts/inspect_changes.py --repo <root>` without reading its source.
 Read [references/change-inspection.md](references/change-inspection.md) for
 target selection, layer distinctions, and bounded file/diff pages.
 
-## Procedure
+## Prepare the walkthrough
 
-1. Establish changed behavior, the comparison target, and intended acceptance.
+1. **Contract.** Establish changed behavior, comparison target, and intended acceptance.
    Read relevant requirements, existing contracts, and touched callers; code output
    alone does not settle what should happen. Pin commit comparisons for detail.
-2. Select observable scenarios for the change and adjacent flows affected by its
+2. **Scenarios.** Select observable cases and adjacent flows affected by
    dependencies. Cover meaningful success, rejection, access, state, or recovery
    behavior. A refactor can merit checking preserved behavior when coupling changes;
    a formatting-only change can have no useful manual steps.
-3. State necessary setup: environment/build, suitable test data/accounts, permissions,
+3. **Setup.** State environment/build, suitable test data/accounts, permissions,
    flags, and prior state. Identify destructive steps and use owned test data or
    a suitable isolated target. Do not turn this plan into instructions to alter
    production configuration or bypass access controls.
-4. Write actionable steps in a practical order. Pair each action with the visible
-   expected outcome and relevant persisted/async effects. Make waits observable
-   where timing matters; arbitrary sleeps are not evidence of completion.
-5. Keep internal classes, implementation-only details, and developer chores out of
-   the walkthrough. Use technical names when the person must use them, such as an
-   API endpoint or CLI option. If intended behavior or setup is unresolved, surface
-   that dependency instead of fabricating a pass criterion.
+4. **Actions and outcomes.** Order actionable steps practically, using the core
+   observability and reader-context rules.
 
 ## Result
 

@@ -9,12 +9,19 @@ metadata:
 
 # Ui Library
 
-## Scope
-
 Choose a frontend library or component for a concrete capability question. Honor a
 specified tool; evaluate its fit and limitations rather than replacing it with a
 favorite. Ordinary implementation does not require a dependency-selection exercise.
 A recommendation alone does not authorize installation or migration.
+
+## Core rules
+
+- **Current capability first.** Prefer a capable existing dependency or platform
+  primitive. CSS/native APIs may suffice for a simple effect. A complex accessible
+  interaction can justify an established primitive; decide from the actual gap,
+  without assuming hand-written code or a new package is always wrong.
+- **Verify fit.** Current documentation, versions, platform constraints, and
+  integration behavior matter; popularity alone does not establish correctness.
 
 Inspect the relevant manifest/lockfile entries, framework, platform, rendering model,
 supported browsers, design system, and dependency policy through targeted project
@@ -24,22 +31,18 @@ or integration tradeoffs.
 
 ## Decide
 
-- Identify the required outcome and hard constraints: accessible interaction,
+- **Requirements.** Identify outcome and hard constraints: accessible interaction,
   SSR/hydration, native/web support, rendering scale, licensing, or bundle limits.
   Distinguish required behavior from optional convenience.
-- Prefer a capable existing dependency or platform primitive. For a simple effect,
-  CSS or native APIs may be sufficient. A complex accessible interaction can justify
-  an established primitive; assess the actual gap instead of assuming hand-written
-  code or a new package is always wrong.
-- Check candidate facts against official documentation, repository/release evidence,
+- **Sources.** Check facts against official documentation, repository/release evidence,
   and relevant license files. Verify current versions and compatibility before
   recommending APIs or commands. Recent release frequency alone does not prove
   reliability, abandonment, or fitness. Mark unavailable or uncertain evidence.
-- Compare only credible candidates that meet the constraints. Evaluate integration
+- **Comparison.** Compare credible candidates meeting the constraints. Evaluate integration
   cost, API stability, accessibility behavior, customization, performance evidence,
   maintenance, and replacement cost where relevant. React-specific tools do not
   automatically fit Solid, Vue, Astro boundaries, or React Native.
-- Recommend a preferred path and its reason, including staying with the existing
+- **Decision.** Recommend a path and reason, including staying with the existing
   tool when adequate. Explain material tradeoffs or remaining uncertainty; an
   exhaustive catalog and forced menu add little when one choice clearly fits.
   Keep the user's requested comparison breadth.

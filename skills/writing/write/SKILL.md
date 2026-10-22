@@ -9,40 +9,41 @@ metadata:
 
 # Write
 
-## Scope
-
 Create new reader-facing prose in the requested language, medium, and voice.
 Use the brief and supplied evidence; ask only for gaps that materially affect the
 message. Writing permission covers the selected deliverable; publication has its
 own scope. For existing prose, follow the requested editing scope instead.
 
-## Procedure
+## Core rules
 
-1. Identify what the reader needs to understand or do. Infer the structure from
+- **Evidence before specificity.** Distinguish supplied claims, verified facts,
+  and interpretation. Preserve conditions, attribution, uncertainty, and exceptions.
+  Use evidence for numbers, quotations, results, and concrete examples; label
+  hypothetical examples. Expose gaps instead of inventing facts or personal experience.
+- **Reader purpose first.** Organize around what the reader should understand or
+  do. Keep qualifications beside claims and examples beside their points. Narrative
+  may reveal its answer later; instructional and decision prose lead with it.
+
+## Draft and check
+
+1. **Purpose.** Identify what the reader needs to understand or do. Infer structure from
    that purpose and the destination; match a supplied voice sample where available.
-2. Read relevant source material selectively. For large inputs, track sections
+2. **Sources.** Read relevant material selectively. For large inputs, track sections
    inspected and material gaps; retrieve context needed for claims before drafting.
    When the brief is raw notes, separate collecting useful material from ordering
    the argument. Preserve supplied anecdotes, quotations and distinctive wording
    as sources; drafting need not consume every fragment or rewrite the source file.
-3. Distinguish supplied claims, verified facts, and interpretation. Preserve
-   conditions, attribution, uncertainty, and exceptions. Use evidence for numbers,
-   quotations, results, and concrete examples; label hypothetical examples clearly.
-   Surface missing evidence rather than inventing specificity or personal experience.
-4. Organize around what the reader should understand or do. In instructional or
-   decision prose, state the answer before its support; narrative may reveal it later.
-   Introduce terms before relying on them, keep qualifications beside their claims,
-   and group each example with the point it explains. Use headings for findable topics
+3. **Structure.** Introduce terms before relying on them. Use headings for findable topics
    and lists for comparable items or ordered steps; connect reasoning in prose.
    Check what the audience already knows; establish missing ideas before later
    passages depend on them. Keep a paragraph when removing it loses a needed step,
    reason, qualification or intended effect. Avoid definition-heavy openings.
-5. For praise or a conclusion, identify the claim or evidence it adds. Replace an
+4. **Substance.** For praise or a conclusion, identify the claim or evidence it adds. Replace an
    unsupported evaluation with the supplied fact; remove a restatement that adds no
    consequence or qualification. Keep intentional personality and repetition. Judge
    wording in context; word bans, sentence quotas, and AI detectors cannot establish
    quality or authorship.
-6. Check the draft against the brief and evidence for missing context, changed
+5. **Fidelity.** Check the draft against the brief and evidence for missing context, changed
    certainty, unsupported promises, accidental implications, and register drift.
 
 ## Language and composition

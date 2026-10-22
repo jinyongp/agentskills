@@ -9,39 +9,42 @@ metadata:
 
 # Spec Generator
 
-## Scope
-
 Create or revise a product specification from an idea, notes, sketches, research,
 or an existing document. Capture the intended product behavior and limits;
 implementation scheduling, code changes, and publication need their own request.
 Follow the requested language, structure, and destination. Return inline unless
 a file is requested or an existing specification is being updated.
 
+## Core rules
+
+- **Separate decisions.** Distinguish confirmed requirements, proposed defaults,
+  and unresolved choices. Resolve ambiguity affecting permissions, data lifecycle,
+  external effects, or acceptance. Reuse project constraints; ask about technology
+  only when it changes a product decision or a technical specification is requested.
+- **Preserve scope.** Keep agreed omissions. Missing evidence is an open question,
+  not permission to invent features, audiences, or reliability requirements.
+- **Observable acceptance.** Every promised outcome needs a concrete acceptance
+  example; distinguish requirements from illustrations and optional extensions.
+
 Read [references/feature-flows.md](references/feature-flows.md) when expanding a
 specification into feature flows or reconciling changes across product documents.
 
-## Procedure
+## Define behavior
 
-1. Recover the product goal, actors, current evidence, and accepted exclusions.
+1. **Context.** Recover goal, actors, evidence, and accepted exclusions.
    For an existing product, inspect relevant behavior and definitions rather than
    treating a sketch or today's implementation as the whole requirement.
-2. Separate confirmed requirements, proposed defaults, and unresolved decisions.
-   Resolve ambiguity that changes permissions, data lifecycle, external effects,
-   or acceptance. Reuse known project constraints; ask about technology only when
-   it changes a product decision or the user requests a technical specification.
-3. Describe important journeys: who starts them, required state, observable
+2. **Choices.** Resolve consequential ambiguity under the decision rules.
+3. **Journeys.** Describe who starts them, required state, observable
    outcomes, and relevant rejection or recovery behavior. Include background,
    API, or staff journeys when required; a feature need not have a screen.
-4. Make shared rules explicit: ownership and access, meaningful state transitions,
+4. **Shared rules.** Specify ownership/access, meaningful state transitions,
    data retention/deletion, integrations, and limits that affect a journey.
-   Preserve agreed omissions. Missing evidence is an open question, not permission
-   to invent another feature, audience, or reliability requirement.
-5. Organize around the reader's decisions. Useful sections include purpose,
+5. **Organization.** Follow the reader's decisions. Useful sections include purpose,
    actors, journeys, constraints, acceptance, exclusions, and open questions;
    adapt them to the product instead of imposing a universal document layout.
    Keep technical choices separate from product behavior when either is unsettled.
-6. Check each promised outcome against a concrete acceptance example. Distinguish
-   a requirement from an illustrative scenario or optional extension. When editing,
+6. **Acceptance.** Check promised outcomes against examples. When editing,
    update affected passages and references while preserving unrelated content.
 
 ## Result

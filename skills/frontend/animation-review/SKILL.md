@@ -9,40 +9,42 @@ metadata:
 
 # Animation Review
 
-## Scope
-
 Review the selected motion or changed component on web or React Native. Resolve
 the target, platform, intended behavior, and applicable product conventions.
-Keep source edits, dependency changes, and publication within separate user
-authorization. Repository-wide inventory is outside a selected review's coverage.
-Recover agreed interaction limits and their rationale before reporting missing
-behavior; resolve unknown intent rather than proposing an expanded interaction.
+
+## Core rules
+
+- **Contract before preferences.** Recover agreed interaction limits and reasons
+  before reporting missing behavior. Resolve unknown intent instead of expanding
+  the interaction. Findings need a violated contract or concrete user cost.
+- **Selected review only.** Source edits, dependency changes, and publication need
+  separate authorization. Repository-wide inventory is outside selected coverage.
 
 Read [references/criteria.md](references/criteria.md) when assessing timing,
 gesture continuity, performance, or platform-specific evidence.
 
 ## Review
 
-1. Begin with counts and relevant paths, then inspect selected code, callers, and
+1. **Coverage.** Begin with counts and paths, then inspect selected code, callers, and
    states. Use available bounded inspection tools; report omissions and recover
    required detail before conclusions. Pin comparison revisions where applicable.
-2. Establish what the motion communicates and how often the action occurs. Respect
+2. **Purpose.** Establish what motion communicates and action frequency. Respect
    intentional brand motion, local tokens, and documented tradeoffs. Judge observed
    delay and lost usability, not departure from a preferred preset.
-3. Exercise or trace entry, exit, rapid retrigger, reversal, cancellation, and
+3. **Lifecycle.** Exercise or trace entry, exit, rapid retrigger, reversal, cancellation, and
    unmounting. Check stale completions, remount flashes, jumps, and continuity of
    position or velocity. Separate a real failure path from a theoretical preference.
-4. For gestures, sheets, and screen transitions, verify scroll/gesture arbitration,
+4. **Input and platform.** For gestures, sheets, and screen transitions, verify scroll/gesture arbitration,
    alternate controls, dismissal, focus, and navigation behavior as applicable.
    On web, include pointer cancellation and keyboard/viewport access. On native,
    include system back, platform gestures, safe areas, and on-screen keyboard behavior.
-5. Check reduced motion and meaningful feedback: actions and state remain perceivable
+5. **Reduced motion.** Check reduced-motion behavior and feedback: actions and state remain perceivable
    and operable. Essential controls must work without hover, dragging, or haptics.
    Avoid treating an attribute or preference hook as proof of correct behavior.
-6. Investigate suspected frame drops with appropriate profiling. Web properties do
+6. **Performance.** Investigate suspected frame drops with profiling. Web properties do
    not guarantee compositing; native worklet/native-driver use does not guarantee
    smoothness. Report release/debug build, environment, and load for measurements.
-7. Confirm each candidate against surrounding behavior and task requirements.
+7. **Findings.** Confirm each candidate against surrounding behavior and task requirements.
    Merge shared causes; distinguish functional/accessibility defects, evidenced
    usability costs, and optional aesthetic suggestions. A clean review is valid.
 

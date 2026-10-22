@@ -9,35 +9,37 @@ metadata:
 
 # Responsive
 
-## Scope
-
 Implement or review layout behavior in the requested area. Follow the supported
 browsers, sizes, component system, and existing breakpoints. Change a breakpoint
 when content demonstrates a failure, not merely to match a device list.
 Review-only work returns findings; source changes follow the user's edit scope.
 
-## Procedure
+## Core rules
 
-1. Inspect the affected layout, real content, and local sizing conventions. Begin
+- **Preserve access.** Keep information priority and logical source order when
+  stacking or moving content. Navigation and essential actions stay discoverable.
+  Hiding secondary presentation must retain required information access.
+- **Fix the overflow source.** Check intrinsic sizing, fixed tracks, unbroken text,
+  media, and viewport constraints. Allow wrapping/shrinking while keeping meaningful
+  content and focus visible. Decorative cropping is valid; clipping required text
+  or controls does not fix a layout.
+
+## Reproduce and adapt
+
+1. **Inspect.** Read affected layout, real content, and local sizing conventions. Begin
    with selected components and rendered states; disclose omitted areas and inspect
    relevant detail before claiming a page-wide conclusion.
-2. Reproduce the failure at its width and content conditions. Sweep narrow,
+2. **Reproduce.** Use the failing width and content conditions. Sweep narrow,
    intermediate, and wide widths, especially either side of an affected breakpoint.
    Use as many layout states as the content needs; a working two-state layout is valid.
-3. Preserve information priority and logical source order when stacking or relocating
-   content. Keep navigation and essential actions discoverable. Hiding secondary
-   presentation must retain access to its information when the task requires it.
-4. Find the actual overflow source: intrinsic sizing, fixed tracks, unbroken text,
-   media, or viewport constraints. Allow appropriate wrapping and shrinking; keep
-   meaningful content and focus visible. Intentional cropping is valid for decorative
-   media. Do not mask a broken layout by clipping required text or controls.
-5. Keep genuinely two-dimensional tables, diagrams, and code usable through localized
+3. **Two-dimensional content.** Keep genuinely two-dimensional tables, diagrams,
+   and code usable through localized
    scrolling or another appropriate presentation. Distinguish intended scrolling
    from accidental page overflow. Preserve labels and keyboard access.
-6. Exercise long labels, realistic data extremes, enlarged text, and relevant empty
+4. **Content extremes.** Exercise long labels, realistic data, enlarged text, and relevant empty
    or failure states. Fixed pixel values and existing sizing rules may remain when
    behavior works; reflow does not require a universal CSS unit or a new dependency.
-7. On mobile, check orientation, browser chrome, safe areas, sticky elements, and
+5. **Mobile.** Check orientation, browser chrome, safe areas, sticky elements, and
    on-screen keyboard effects where relevant. Focused inputs and submission controls
    must remain reachable; do not force scroll or add padding without an actual need.
    Verify touch affordances and alternatives to hover for required actions.

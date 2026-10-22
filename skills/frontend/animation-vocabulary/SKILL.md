@@ -9,11 +9,18 @@ metadata:
 
 # Animation Vocabulary
 
-## Scope
-
 Name or explain the motion described or shown by the user, on web or native.
 A vocabulary question calls for terminology, not code edits or a motion audit.
 Use the user's language and preserve any requested depth or format.
+
+## Core rules
+
+- **Name the visible effect.** Separate the effect from easing, physical behavior,
+  orchestration, and implementation. A spring can drive a slide; an implementation
+  technique is not necessarily the effect's name.
+- **Keep uncertainty explicit.** When several terms fit, give the observable
+  distinction. Ask for a needed observation only when that distinction matters;
+  missing evidence does not justify a precise name.
 
 Read only the relevant section of [references/glossary.md](references/glossary.md)
 when mapping an effect or distinguishing close terms: appearance, continuity,
@@ -22,19 +29,14 @@ aid, not an exhaustive authority or a closed vocabulary.
 
 ## Map the effect
 
-1. Extract observable behavior: which object changes, which property appears to
+1. **Observe.** Extract which object changes, which property appears to
    change, what triggers it, and whether it follows input continuously or plays
    afterward. Use selected relevant evidence; a single frame cannot reveal timing.
-2. Name the recognized term that best fits. Separate a visual effect from its easing,
-   physical behavior, orchestration, and implementation. A spring can drive a slide;
-   an implementation technique is not necessarily the visible effect's name.
-3. When multiple terms fit, give the key observable distinction. Ask one short
-   question or request the needed observation only when that distinction matters.
-   Keep uncertainty explicit instead of assigning a precise name to missing evidence.
-4. Describe a compound effect using its actual parts when no single term fits.
+2. **Match.** Name the recognized term that best fits the observations.
+3. **Compound effects.** Describe actual parts when no single term fits.
    Acknowledge common aliases and tool-specific naming. Do not invent an official
    label or restrict a valid term merely because it is absent from the glossary.
-5. Keep the answer proportional: lead with the term and a brief explanation tied
+4. **Answer.** Lead with the term and a proportional explanation tied
    to the user's example. Add close alternatives or implementation hints only when
    they help the request; tool/library selection remains a separate decision.
 

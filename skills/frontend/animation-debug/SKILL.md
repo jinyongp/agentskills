@@ -9,12 +9,19 @@ metadata:
 
 # Animation Debug
 
-## Scope
-
 Diagnose a concrete web or React Native motion symptom. Preserve diagnosis-only
 requests; apply a correction when requested or implied by a fix task. Keep the
 interaction and project tool choices intact. A general motion audit or unrelated
 backend performance task is outside this scope.
+
+## Core rules
+
+- **Distinguish the symptom.** Separate discontinuity, delayed acknowledgement,
+  poor timing, and missed frames. A smooth but slow curve is not frame jank; a
+  screenshot establishes neither. State a hypothesis and the observation that
+  distinguishes it from alternatives. Source-only hypotheses stay unverified.
+- **Cause before tuning.** Correct the demonstrated cause within authorized scope;
+  a library migration needs evidence of a capability gap.
 
 Start with the affected interaction, expected behavior, reproduction sequence,
 platform/build, and relevant code. Inspect selected components and their state owners
@@ -24,24 +31,20 @@ symptom needs a diagnostic probe. Full repositories and traces stay outside defa
 
 ## Diagnose and correct
 
-- Reproduce at normal speed and identify the first incorrect transition. Slow playback
+- **Reproduce.** At normal speed, identify the first incorrect transition. Slow playback
   can expose ordering or geometry, but does not establish normal-speed performance.
   Include rapid reversal, cancellation, or concurrent input when it triggers the issue.
-- Separate discontinuity, delayed acknowledgement, poor timing, and missed frames.
-  A smooth but slow curve is not frame jank. A static screenshot cannot establish
-  either. State the leading hypothesis and the observation that distinguishes it
-  from alternatives; source-only hypotheses stay explicitly unverified.
-- Trace ownership of visual values, layout, mounting, and semantic state. Look for
+- **Ownership.** Trace visual values, layout, mounting, and semantic state. Look for
   competing transforms, remounts, stale completion, changed measurements, and gesture
   arbitration before changing easing. Check preference changes and skipped playback
   when controls depend on an animation event.
-- Test a small discriminating change or instrument the affected interval. Preserve
+- **Probe.** Test a small discriminating change or instrument the affected interval. Preserve
   baseline behavior and remove temporary instrumentation afterward. For missed frames,
   inspect the relevant rendering/runtime trace before asserting the bottleneck.
-- Correct the demonstrated cause within authorized scope. Retarget from current
+- **Correct.** Retarget from current
   state where needed, preserve relevant release velocity, and keep input/focus and
   final state valid after cancellation. Tune timing against local conventions when
-  timing is the cause. A library migration needs evidence of a capability gap.
+  timing is the cause.
 
 ## Verify and report
 

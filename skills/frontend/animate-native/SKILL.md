@@ -9,9 +9,22 @@ metadata:
 
 # Animate Native
 
-## Scope
+Implement requested motion in React Native or Expo.
 
-Implement requested motion in React Native or Expo. Inspect relevant components,
+## Core rules
+
+- **Retarget safely.** Model entry, exit, interruption, reversal, and cancellation.
+  Preserve current position and relevant release velocity. Clean up subscriptions
+  and stale callbacks; completion must not overwrite newer navigation or interaction.
+- **Preserve access.** Keep hit targets, accessible names/states, and input
+  alternatives usable throughout motion. Core interactions should remain usable
+  if gestures, haptics, or nonessential animation are unavailable.
+- **Motion preferences.** Respect reduced-motion settings and supported live changes.
+  Preserve information/actions with instant or gentler alternatives. Haptics are
+  optional semantic feedback on supported platforms; success/access must not depend
+  on a vibration happening.
+
+Inspect relevant components,
 navigation, platform requirements, installed versions, architecture, and local motion
 tokens with bounded project tooling. Preserve current user tool choices and reuse a
 capable existing animation/gesture system. New dependencies need a concrete gap and
@@ -24,30 +37,20 @@ a React Native web build also requires verification of its web-specific behavior
 
 ## Implement
 
-- Define the state change, user benefit, trigger, and completion criteria. Frequent
+- **Purpose.** Define state change, user benefit, trigger, and completion criteria. Frequent
   actions need prompt acknowledgement, not a universal animation ban. Tune distance,
   duration, easing, or a spring using local conventions and observed interaction.
-- Model entry, exit, interruption, reversal, and cancellation. Preserve current
-  position and relevant release velocity. Clean up subscriptions and stale callbacks;
-  animation completion must not overwrite a newer navigation or interaction state.
-- For drag/swipe/sheets, resolve nested scrolling, gesture ownership, release outcomes,
+- **Gestures and navigation.** For drag/swipe/sheets, resolve nested scrolling, gesture ownership, release outcomes,
   safe areas, and alternate controls. Use established accessible primitives. Restore
   focus or accessibility focus where appropriate and respect platform back/dismiss
   behavior rather than introducing competing navigation handlers.
-- Keep focused fields and essential controls reachable around keyboard and viewport
+- **Keyboard.** Keep focused fields and essential controls reachable around keyboard and viewport
   changes. Coordinate with existing keyboard handling and navigation; measure the
   actual platform behavior before adding compensation or another library.
-- Choose the execution path from the workload. High-frequency updates should avoid
+- **Runtime.** Choose execution from the workload. High-frequency updates should avoid
   unnecessary React rerenders and JS/UI-thread crossings. A suitable native driver
   or worklet may help; layout and rendering still have cost. Profile a concrete
   problem instead of asserting every JS animation or layout property is wrong.
-- Respect reduced-motion settings, including changes during use when supported.
-  Preserve information and actions through instant or gentler alternatives. Haptics
-  are optional, semantic feedback with a supported platform path; success and
-  accessibility must not depend on a vibration happening.
-- Preserve hit targets, accessible names/states, and input alternatives throughout
-  motion. Core interactions should remain usable if a gesture, haptic capability,
-  or nonessential animation is unavailable.
 
 ## Verify and report
 

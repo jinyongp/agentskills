@@ -9,36 +9,38 @@ metadata:
 
 # Domain Modeling
 
-## Scope
-
 Clarify business concepts when overloaded terms, conflicting rules, or uncertain
 relationships affect a requested decision. Reading established terminology alone
 needs no modeling session. Preserve accepted product limits and context boundaries.
 Analysis stays inline unless documentation edits are requested or already in scope;
 modeling does not authorize code changes, renames, migrations, or external writes.
 
-## Procedure
+## Core rules
 
-1. Locate existing domain definitions and decisions for the selected area. Start
+- **Intent is not implementation.** Compare stated intent, definitions, and
+  observed code behavior. Report contradictions with sources; current code does
+  not settle intended policy. Keep unresolved rules explicit instead of choosing
+  the easiest implementation.
+- **Context matters.** Keep distinct names across contexts when meanings differ.
+  Invented scenarios are probes, not established requirements.
+
+## Clarify and record
+
+1. **Sources.** Locate definitions and decisions for the selected area. Start
    with relevant headings and symbol searches, then inspect necessary definitions
    and callers. Report missing contexts rather than treating a partial search as
    proof that a concept or rule is absent.
-2. Identify the specific ambiguity: one word for different concepts, different
-   words for one concept, or a disputed relationship or lifecycle rule. Keep names
-   distinct across contexts when their meanings genuinely differ.
-3. Test the distinction with concrete business scenarios. For example, can one
+2. **Ambiguity.** Identify one word for different concepts, different words for one
+   concept, or a disputed relationship or lifecycle rule.
+3. **Scenarios.** Test the distinction concretely. For example, can one
    customer own two accounts, and can an account exist without an active user?
-   Mark invented scenarios as probes, not established requirements. Ask only
-   questions whose answers change the current model or dependent work.
-4. Compare stated intent, existing definitions, and observed code behavior. Report
-   contradictions with their sources; current implementation alone does not settle
-   intended policy. Keep an unresolved rule explicit instead of silently choosing
-   whichever version is easier to implement.
-5. Settle a term's meaning, relevant relationships/invariants, and distinguishing
+   Ask only questions whose answers change the model or dependent work.
+4. **Reconcile.** Apply the intent/evidence distinction to the disputed scenarios.
+5. **Meaning.** Settle the term, relevant relationships/invariants, and distinguishing
    example. Keep implementation names as source pointers rather than mixing file
    mechanics into the business definition. Recheck the disputed scenarios against
    the agreed meaning, including a legitimate case it must still allow.
-6. When recording is authorized, update the existing glossary or equivalent in
+6. **Record when authorized.** Update the existing glossary or equivalent in
    place; create a small glossary only when settled terms need a durable home.
    Follow project destinations. Propose a decision record only when the choice is
    costly to reverse, surprising without context, and reflects a real tradeoff.

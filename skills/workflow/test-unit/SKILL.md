@@ -9,44 +9,43 @@ metadata:
 
 # Test Unit
 
-## Scope
+Test calculations, decisions, and state transitions through a stable interface in
+the requested scope. A unit may include cooperating helpers; one test per function
+or class is not required.
 
-- Test calculations, decisions, and state transitions through a stable interface in
-  the requested scope. A unit may include cooperating helpers; one test per function
-  or class is not a requirement.
-- Use the user's tools and existing project harness. Preserve unrelated work.
-  Real service wiring and full user journeys need other evidence.
+## Core rules
 
-## Admission
-
-- Name the uncovered failure and independently justified expected behavior.
+- **Independent expectation.** Name the uncovered failure and independently justified behavior.
   Reuse existing coverage; a code change or coverage quota alone does not justify a test.
-- Prefer existing type, lint, or schema checks for declarative constraints. Runtime
+- **Right check.** Prefer type, lint, or schema checks for declarative constraints. Runtime
   validation of external inputs still needs evidence when static checks cannot prove it.
-- Exact values, attributes, shapes, ordering, and structural rules constrain tests
+- **Contract details.** Exact values, attributes, shapes, ordering, and structure constrain tests
   only when required by behavior, accessibility, compatibility, or explicit policy.
-- Keep setup, dependencies, runtime, and future edits proportional to added confidence.
+- **Proportionate cost.** Keep setup, dependencies, runtime, and edits proportional to confidence.
 
-## Procedure
+Use user tools and the project harness; preserve unrelated work. Real service
+wiring and full user journeys need other evidence.
 
-1. Identify the stable input/output or state contract, existing cases, and missing
+## Select and exercise cases
+
+1. **Need.** Identify stable input/output or state contract, existing cases, and missing
    failure mechanism. Ask only when missing requirements prevent a valid expectation.
-2. Select cases that distinguish the missing failure: for an exclusive limit, check
+2. **Cases.** Distinguish the missing failure: for an exclusive limit, check
    the limit and a valid neighboring value; for a state transition, exercise its
    relevant starting state and outcome. Use boundaries from the contract, not invented
    extremes. Extend existing coverage before adding a fixture. Parameterize similar
    scenarios when it improves clarity; retain distinguishable failure reports.
-3. Exercise behavior without asserting helper names, internal object layout, or an
+3. **Behavior.** Exercise without asserting helper names, internal object layout, or an
    algorithm choice. Derive expectations from requirements or checked examples,
    rather than duplicating production calculations or copying current output.
-4. Use real lightweight collaborators when practical. Substitute time, randomness,
+4. **Collaborators.** Use real lightweight components when practical. Substitute time, randomness,
    I/O, or expensive dependencies only as needed; state unverified real semantics.
    Check returned results or observable state. Call counts/order need their own
    required interaction contract.
-5. For a reproducible defect, show that the check detects the prior faulty state when
+5. **Regression.** For a reproducible defect, show detection of the prior faulty state when
    available and passes after correction. Make cases independent of execution order
    and shared mutable fixtures. A passing mock does not prove the actual dependency.
-6. Run affected and required project checks. Inspect bounded reports and relevant
+6. **Validation.** Run affected and required checks. Inspect bounded reports and relevant
    failure detail. Distinguish setup failures from behavioral failures; report gaps
    rather than expanding the suite to reach an arbitrary percentage.
 

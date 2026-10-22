@@ -9,24 +9,28 @@ metadata:
 
 # Retro
 
-## Scope
-
 Review the specified session, or the current session when none is named, for
 observed friction in how work was done. This is process analysis, not another
 code audit. Return proposals by default; apply only explicitly requested or
 already authorized improvements within their selected project/settings scope.
 
-## Procedure
+## Core rules
 
-1. Recover the goal, accepted limits, and relevant primary session evidence:
+- **Observed friction.** Tie each candidate to an event, consequence, and smallest
+  preventive change. Distinguish recurring patterns from a single high-impact
+  failure. A missing hook or large file alone is no finding. Do not invent elapsed
+  time, token savings, or agent motives.
+- **Proportionate correction.** Reuse existing mechanisms and preserve accepted
+  tradeoffs. A session does not automatically justify another permanent rule.
+
+## Investigate and propose
+
+1. **Evidence.** Recover goal, accepted limits, and primary session evidence:
    failed commands, repeated searches, corrections, retries, or missed checks.
    Start with an index/summary and inspect only relevant log spans; redact secrets.
    Name unavailable logs and narrow conclusions to the inspected evidence.
-2. For each candidate, identify the event, its consequence, and the smallest
-   change likely to prevent recurrence. Distinguish recurring patterns from a
-   single high-impact failure. A missing hook or a large file alone is no finding;
-   avoid unsupported claims about elapsed time, token savings, or agent motives.
-3. Check existing mechanisms before proposing additions:
+2. **Candidates.** Apply the event/consequence criteria before proposing a change.
+3. **Existing mechanisms.** Check before adding:
    - Repeated navigation: improve the relevant pointer or query, retaining one
      maintained definition instead of duplicating repository facts.
    - Mechanical mistake: reuse a suitable existing check; repair its wiring when
@@ -38,12 +42,12 @@ already authorized improvements within their selected project/settings scope.
      omissions. Introduce a helper only for repeated mechanical work.
    - Missing access: identify the needed evidence and least access that supplies it;
      access grants, credentials, and service changes retain their own authorization.
-4. Rank proposals by observed impact, recurrence evidence, implementation cost,
+4. **Priority.** Rank by observed impact, recurrence evidence, implementation cost,
    and uncertainty. Keep accepted tradeoffs intact; do not reopen excluded features
    or recommend deleting an instruction solely because this session did not use it.
    When instructions conflict, express the current choice at its authoritative
    source and preserve only necessary decision history separately.
-5. If implementation is requested, apply the selected improvements and verify the
+5. **Authorized changes.** Apply selected improvements when requested and verify the
    motivating failure where practical. Report expected benefit separately from
    observed recovery; one successful replay does not establish general productivity.
 

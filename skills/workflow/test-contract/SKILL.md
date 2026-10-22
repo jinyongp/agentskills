@@ -9,45 +9,44 @@ metadata:
 
 # Test Contract
 
-## Scope
+Verify compatibility between a named consumer and provider of an API, message,
+command output, or serialized data. Identify the interface and relevant versions.
 
-- Verify compatibility between a named consumer and provider of an API, message,
-  command output, or serialized data. Identify the interface and relevant versions.
-- Use the user's tools and existing contract/schema checks. Stay within requested
-  changes and local verification; publishing contracts needs its own authorization.
+## Core rules
 
-## Admission
-
-- Name the consumer expectation and uncovered incompatibility. Reuse existing checks;
+- **Independent contract.** Name the consumer expectation and uncovered incompatibility. Reuse checks;
   current provider output alone is not an independent contract.
-- Shape validation belongs to a suitable existing schema tool. Add runtime evidence
+- **Schema ownership.** Use suitable existing schema validation. Add runtime evidence
   only for missing provider conformance or consumer interpretation.
-- Exact field names, values, ordering, and errors are justified when consumers depend
+- **Exact constraints.** Field names, values, ordering, and errors are justified when consumers depend
   on them. Match only the documented constraint; allow variation only where permitted.
-- Keep fixtures, dependencies, and version combinations proportional to actual support
+- **Proportionate coverage.** Keep fixtures, dependencies, and versions proportional to support
   obligations. Contract checks do not prove the full deployment or user journey.
 
-## Procedure
+Use the user's tools and existing contract/schema checks. Stay within requested
+changes and local verification; publishing contracts needs its own authorization.
 
-1. Find the authoritative agreement: consumer usage, approved interface specification,
+## Exercise compatibility
+
+1. **Agreement.** Find consumer usage, approved interface specification,
    supported version policy, and existing contract fixtures. Resolve conflicts before
    choosing expectations; do not infer requirements by snapshotting all current output.
-2. Select representative interactions and distinct compatibility risks: required
+2. **Risks.** Select representative interactions and distinct risks: required
    fields, types, units, encoding, absent/null values, error semantics, or evolution.
    Test only relevant supported combinations; avoid an arbitrary Cartesian matrix.
-3. Verify that the real consumer can produce or interpret contract-conforming samples.
+3. **Consumer.** Verify that the real consumer can produce or interpret conforming samples.
    For consumer-driven tools, verify recorded expectations against the actual provider.
    A mock that matches its own setup or an unverified generated file is insufficient.
-4. Exercise real provider behavior through a stable interface with controlled provider
+4. **Provider.** Exercise real behavior through a stable interface with controlled provider
    state. Isolate owned test data. Record the provider version/revision and exact
    contract/consumer version tested; report unavailable verification as a gap.
-5. Use semantic matchers for permitted variability and retain exact constraints where
+5. **Matching.** Use semantic matchers for permitted variability and exact constraints where
    necessary. Check additive or breaking changes against actual compatibility rules;
    an extra field is not automatically compatible with every consumer.
-6. Confirm a reproducible incompatible state fails when available, then verify the
+6. **Regression.** Confirm a reproducible incompatible state fails when available, then verify the
    corrected state and required project checks. Keep schema checks centralized and
    avoid duplicating internal business branches or complete user flows.
-7. Inspect bounded verification summaries and selected mismatch details. Review
+7. **Review.** Inspect bounded summaries and selected mismatches. Review
    contract updates against changed requirements; do not auto-accept new snapshots
    or broaden matchers solely to make verification pass.
 
