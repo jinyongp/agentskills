@@ -7,6 +7,11 @@ constraints, evidence limits, requested decision, and next verification step.
 
 ## Check context and relevance
 
+- **Check the requested decision.** Can the recipient tell what to assess or decide?
+  Flag passages that turn proposed goals or evaluation ideas into assigned work,
+  completion obligations, or deployment commitments without supporting instructions.
+  Preserve delivery criteria and rollout scope when explicitly requested or agreed;
+  do not impose a fixed proposal layout or remove useful success measures.
 - **Select useful context.** Locate names, paths, shorthand, and references such as "the project" or "as
   agreed" whose meaning depends on private context. Explain their role when it
   changes assessment; remove incidental identifiers and work history.

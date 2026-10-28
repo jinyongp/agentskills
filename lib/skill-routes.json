@@ -42,7 +42,7 @@
     "title": "Review or assess readiness",
     "when": "Find defects, review and fix, assess a dependency or skill, or prepare human review.",
     "choices": [
-      {"skill": "proposal-assessment", "when": "Investigate a received proposal, independently check its claims, assess related problems and impact, and recommend a decision with a scoped plan; no implementation."},
+      {"skill": "proposal-assessment", "when": "Investigate a received proposal, independently check its claims, assess related problems and impact, and recommend a justified decision; detailed plans when requested, no implementation."},
       {"skill": "code-review", "when": "Review selected code changes for defects or recorded decision compliance and report findings without edits."},
       {"skill": "review-loop", "when": "Review and fix confirmed defects iteratively within the authorized scope, then recheck affected behavior."},
       {"skill": "security-review", "when": "Review specified code/configuration for exploitable security defects with attacker control and trust-boundary evidence."},

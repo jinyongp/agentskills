@@ -1,6 +1,6 @@
 # Proposal information contract
 
-Revision: 1. This information contract is shared by proposal preparation and
+Revision: 2. This information contract is shared by proposal preparation and
 assessment. Its fields describe meaning, not mandatory headings or a serialization
 format. Use the requested issue, RFC, memo, or other format. A recipient can assess
 an ordinary document without requiring the author to adopt this vocabulary.
@@ -23,9 +23,15 @@ an ordinary document without requiring the author to adopt this vocabulary.
   decisions, causal hypotheses, and solution suggestions. Record provenance and
   tested state for material claims. Code behavior alone does not establish intended
   policy; an author's assertion alone does not independently establish behavior.
-- **Outcome and preservation:** give observable success, its rationale, and existing
-  behavior that must remain valid. Separate requirements from illustrative examples
-  and preferred implementation. Deliberate omissions remain scope boundaries.
+- **Decision and commitments:** state what the recipient is asked to assess or
+  decide. Distinguish proposing an approach, accepting it, assigning work, and
+  authorizing execution. Do not infer owners, delivery deadlines, or deployment
+  duties from a desired outcome. Preserve explicitly requested or agreed scope.
+- **Outcome and preservation:** explain expected value, possible success measures,
+  and existing behavior that must remain valid. Distinguish proposed targets from
+  accepted requirements and preferred mechanisms. Evaluation ideas are not recipient
+  completion duties. Detailed acceptance or rollout plans belong only where requested
+  or agreed. Deliberate omissions remain scope boundaries.
 - **Options and gaps:** include relevant workarounds, alternatives, tradeoffs,
   constraints, exclusions, and unresolved questions. Mark unknown information;
   do not invent a cause, impact estimate, or recipient commitment to fill a field.
@@ -37,7 +43,7 @@ an ordinary document without requiring the author to adopt this vocabulary.
   regression range only when known and useful. A failed attempt is still evidence
   about that attempt's conditions, not proof the report is false.
 - **Feature or process proposal:** show a concrete use case, the limits of existing
-  methods, and acceptance examples. A bug reproduction and proven root cause are
+  methods, and examples of expected benefit. A bug reproduction and proven root cause are
   not submission requirements.
 - **Performance claim:** preserve workload, measurement method, environment,
   baseline/candidate state, and observed results. Explain a requested target;

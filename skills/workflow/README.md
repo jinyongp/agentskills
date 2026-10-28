@@ -26,7 +26,7 @@ Choose a skill for the work you need done. These are independent workflows, not 
 
 ## Review and verify
 
-- [proposal-assessment](proposal-assessment/SKILL.md) — Investigate proposals, related problems, impact, alternatives, and a scoped follow-up plan.
+- [proposal-assessment](proposal-assessment/SKILL.md) — Investigate proposal claims, related problems, impact, and alternatives to recommend a justified decision; detailed plans when requested.
 - [review-map](review-map/SKILL.md) — Map change risk and reading order for human review.
 - [code-review](code-review/SKILL.md) — Review changes for defects or recorded decision compliance.
 - [review-loop](review-loop/SKILL.md) — Review and fix agreed scope through completion.

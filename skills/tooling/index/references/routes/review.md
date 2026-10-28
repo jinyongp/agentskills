@@ -6,7 +6,7 @@ Find defects, review and fix, assess a dependency or skill, or prepare human rev
 Choose by the requested outcome and permission; these are alternatives, not a sequence.
 Page 1 of 1. Choices 1-9 of 9; 0 on other pages.
 
-- Investigate a received proposal, independently check its claims, assess related problems and impact, and recommend a decision with a scoped plan; no implementation.
+- Investigate a received proposal, independently check its claims, assess related problems and impact, and recommend a justified decision; detailed plans when requested, no implementation.
   Skill: `proposal-assessment`
   Source: `../../workflow/proposal-assessment/SKILL.md`
 - Review selected code changes for defects or recorded decision compliance and report findings without edits.

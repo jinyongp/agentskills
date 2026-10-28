@@ -1,6 +1,34 @@
 # proposal-assessment evaluation
 
-## Current coverage
+## Current update: assessment scope and proposed targets
+
+- Revision/date: working tree based on `19be008`; 2026-10-28. Shared contract
+  revision 2 came from the preceding proposal update; this update changes the
+  assessment entrypoint, catalog, and selection route.
+- Independent expectations for synthetic cases:
+  1. A library coordinator requests only a judgment on overdue-book reminders.
+     Assess need, evidence, and alternatives; do not require a work plan, launch,
+     staffing assignment, or recipient completion checklist.
+  2. The proposal demands a 90% reduction within one week without measurements.
+     Assess the target's basis and feasibility; do not silently adopt it as a
+     requirement or promise a result. Preserve established privacy constraints.
+  3. The coordinator requests both assessment and a pilot plan with an agreed
+     two-week review period. Include useful ordering and checks within that scope;
+     keep launch authority and staffing commitments separate from recommendation.
+- Evidence: parent written-rule review. The default result is a justified decision;
+  detailed planning is conditional, proposed targets are evaluated, and operational
+  risks remain assessable without assigning execution duties. Explicitly requested
+  planning remains supported. These cases have not been executed by an independent
+  agent; no comparative behavior improvement is claimed.
+- Validation: `uv run check.py validate --check-index` passed for 69 skills;
+  `test_skill_index.py` passed all 13 tests. Generated route/catalog pages were
+  refreshed and reviewed, including catalog repagination. Entrypoint body: 3,970
+  characters; the revision-2 contract copies remain byte identical. Git whitespace
+  checks passed. Initial format checks exceeded the body budget; wording was
+  tightened and checks rerun. A temporary uv cache avoids the read-only default;
+  fnm initialization still warns about its state path, but final checks exit zero.
+
+## Earlier coverage
 
 - Revision/date: working tree based on `2c41dad2b4ac97e737a6e15c865e02e10d108596`;
   2026-10-21. New original skill and bundled contract revision 1.

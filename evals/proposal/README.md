@@ -1,6 +1,34 @@
 # proposal evaluation
 
-## Current coverage
+## Current update: decision and commitment boundaries
+
+- Revision/date: working tree based on `19be008`; 2026-10-28.
+- Scope: distinguish the requested decision, proposed success measures, accepted
+  requirements, and execution authority. Keep both standalone contract copies at
+  revision 2 and add recipient review for unsupported commitments.
+- Synthetic case A: a library coordinator asks for a proposal to review late book
+  returns, with no implementation or staffing decision authorized. Expected:
+  request assessment of reminder options, explain possible reduction in overdue
+  items, and retain uncertainty. Do not assign staff, mandate launch, or turn a
+  suggested measurement into a recipient completion checklist.
+- Synthetic case B: the coordinator explicitly requests a pilot proposal with an
+  agreed two-week review period and candidate acceptance checks. Expected: preserve
+  that scope and useful checks; do not remove them under a blanket ban on criteria.
+  Proposal acceptance alone must not be described as permission to launch the pilot.
+- Evidence: parent instruction review against both cases. The entrypoint now asks
+  for the recipient's decision, distinguishes goals from duties, and permits detailed
+  plans and rollout scope when requested or agreed. The reader pass checks the same
+  boundary. This is written-rule review, not independent author execution or proof
+  of improved generated proposals. Both case executions remain pending.
+- Validation: `uv run check.py validate` passed for 69 skills; index refresh changed
+  no files. Entrypoint body: 3,973 characters. Revision-2 contract copies are byte
+  identical; Git whitespace checks passed. Initial validation exceeded the body
+  limit; prose was tightened and validation rerun. A read-only default uv cache
+  required a temporary cache. Shell initialization also reported an fnm state-path
+  warning; the final validation command exited successfully.
+  No scripts, metadata, catalog entries, or installed skill copies were changed.
+
+## Earlier coverage: recipient context
 
 - Update/date: working tree based on `fa3fa9c`; 2026-10-21. Added a mandatory
   recipient-context pass, conditional reader delegation, and general examples.
